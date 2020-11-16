@@ -7,7 +7,7 @@ AdlerZentrum-BackEnd is a asp core backend repo for adler zentrum company
 
 # Features
 
-  - user Managemnt system.
+  - User managemnt system.
 
 ### Databse commands 
 
