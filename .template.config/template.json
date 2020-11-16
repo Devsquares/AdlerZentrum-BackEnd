@@ -1,0 +1,36 @@
+{
+  "author": "Mukesh Murugan",
+  "classifications": [],
+  "description": "An ASP.NET Core WebAPI Solution Template that is built with Loosely-Coupled and Inverted-Dependency / Onion Architecture along with various other essential integrations.",
+  "name": "Clean Architecture WebAPI",
+  "defaultName": "Vybes.WebApi",
+  "identity": "Vybes.WebApi.CSharp",
+  "groupIdentity": "Vybes.WebApi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "shortName": "Vybes.WebApi",
+  "sourceName": "Vybes.WebApi",
+  "guids": [],
+  "primaryOutputs": [
+    {
+      "path": "WebApi\\WebApi.csproj"
+    },
+    {
+      "path": "Domain\\Domain.csproj"
+    },
+    {
+      "path": "Infrastructure.Shared\\Infrastructure.Shared.csproj"
+    },
+    {
+      "path": "Infrastructure.Persistence\\Infrastructure.Persistence.csproj"
+    },
+    {
+      "path": "Application\\Application.csproj"
+    },
+    {
+      "path": "Infrastructure.Identity\\Infrastructure.Identity.csproj"
+    }
+  ]
+}
