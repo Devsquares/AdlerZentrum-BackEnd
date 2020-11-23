@@ -26,7 +26,8 @@ namespace Infrastructure.Persistence.Contexts
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
-        public DbSet<Address> Addresses { get; set; }   
+        public DbSet<Level> Levels { get; set; }
+        public DbSet<Sublevel> SubLevels { get; set; }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
@@ -34,11 +35,11 @@ namespace Infrastructure.Persistence.Contexts
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.Created = _dateTime.NowUtc;
+                        entry.Entity.CreatedDate = _dateTime.NowUtc;
                         entry.Entity.CreatedBy = _authenticatedUser.UserId;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModified = _dateTime.NowUtc;
+                        entry.Entity.LastModifiedDate = _dateTime.NowUtc;
                         entry.Entity.LastModifiedBy = _authenticatedUser.UserId;
                         break;
                 }

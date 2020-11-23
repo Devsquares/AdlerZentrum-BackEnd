@@ -41,8 +41,6 @@ namespace WebApi
 
                     await Infrastructure.Persistence.Seeds.DefaultRoles.SeedAsync(userManager, roleManager);
                     await Infrastructure.Persistence.Seeds.DefaultSuperAdmin.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Persistence.Seeds.DefaultBasicUser.SeedAsync(userManager, roleManager);
-                    await Infrastructure.Persistence.Seeds.DefaultBusinessUser.SeedAsync(userManager, roleManager);
                     Log.Information("Finished Seeding Default Data");
                     Log.Information("Application Starting");
                 }

@@ -48,7 +48,6 @@ namespace WebApi
             services.AddApiVersioningExtension();
             services.AddHealthChecks();
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
-            //Email setting Mohamed Reda
             services.Configure<MailSettings>(_config.GetSection("MailSettings"));
             services.AddTransient<IEmailService, EmailService>();
         }

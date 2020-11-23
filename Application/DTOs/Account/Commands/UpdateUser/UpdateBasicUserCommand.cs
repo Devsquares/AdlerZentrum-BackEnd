@@ -14,16 +14,14 @@ namespace Application.DTOs.Account.Commands.UpdateAccount
     public class UpdateBasicUserCommand : IRequest<Response<int>>
     {
         public string Id { get; set; }
-
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
         public string Language { get; set; }
         public string FaxNumber { get; set; }
         public string PhoneNumber { get; set; }
         public string TelefonNumber { get; set; }
-
         public string Title { get; set; }
+
 
         public class UpdateAccountCommandHandler : IRequestHandler<UpdateBasicUserCommand, Response<int>>
         {

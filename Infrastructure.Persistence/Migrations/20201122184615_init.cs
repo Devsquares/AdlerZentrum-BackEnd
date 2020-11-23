@@ -9,26 +9,20 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Addresses",
+                name: "Levels",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedBy = table.Column<string>(nullable: true),
-                    Created = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModified = table.Column<DateTime>(nullable: true),
-                    FullName = table.Column<string>(nullable: true),
-                    Address1 = table.Column<string>(nullable: true),
-                    Address2 = table.Column<string>(nullable: true),
-                    PostCode = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: true)
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
+                    table.PrimaryKey("PK_Levels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,28 +61,36 @@ namespace Infrastructure.Persistence.Migrations
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     Active = table.Column<bool>(nullable: false),
-                    Deleted = table.Column<bool>(nullable: false),
-                    AddressId = table.Column<int>(nullable: false),
-                    InvoiceAddressId = table.Column<int>(nullable: false),
-                    DeliveryAddressId = table.Column<int>(nullable: false),
-                    Language = table.Column<string>(nullable: true),
-                    FaxNumber = table.Column<string>(nullable: true),
-                    TelefonNumber = table.Column<string>(nullable: true),
-                    BusinessStatus = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
-                    ContactEmail = table.Column<string>(nullable: true),
-                    ContactTelefonNumber = table.Column<string>(nullable: true),
-                    ContactPhoneNumber = table.Column<string>(nullable: true),
-                    ContactFaxNumber = table.Column<string>(nullable: true),
-                    ContactLanguge = table.Column<string>(nullable: true),
-                    APE = table.Column<string>(nullable: true),
-                    SIRET = table.Column<string>(nullable: true),
-                    CompanyName = table.Column<string>(nullable: true),
-                    CommercialName = table.Column<string>(nullable: true)
+                    Deleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubLevels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    name = table.Column<string>(nullable: true),
+                    LevelId = table.Column<int>(nullable: false),
+                    NumberOflessons = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubLevels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubLevels_Levels_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Levels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,6 +242,11 @@ namespace Infrastructure.Persistence.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SubLevels_LevelId",
+                table: "SubLevels",
+                column: "LevelId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "User",
                 column: "NormalizedEmail");
@@ -269,9 +276,6 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Addresses");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
@@ -281,6 +285,9 @@ namespace Infrastructure.Persistence.Migrations
                 name: "RoleClaims");
 
             migrationBuilder.DropTable(
+                name: "SubLevels");
+
+            migrationBuilder.DropTable(
                 name: "UserClaims");
 
             migrationBuilder.DropTable(
@@ -288,6 +295,9 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "Levels");
 
             migrationBuilder.DropTable(
                 name: "Role");

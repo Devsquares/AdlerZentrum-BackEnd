@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -27,6 +28,9 @@ namespace Application.DTOs.Account
         [Required]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        public Roles Role { get; set; }
 
     }
 }

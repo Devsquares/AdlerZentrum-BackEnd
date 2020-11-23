@@ -54,48 +54,64 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("RefreshToken");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Address", b =>
+            modelBuilder.Entity("Domain.Entities.Level", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Address1")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Address2")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("City")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<string>("PostCode")
+                    b.Property<string>("name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Levels");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Sublevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("LevelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOflessons")
+                        .HasColumnType("int");
+
+                    b.Property<string>("name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LevelId");
+
+                    b.ToTable("SubLevels");
                 });
 
             modelBuilder.Entity("Infrastructure.Persistence.Models.ApplicationUser", b =>
@@ -103,51 +119,18 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<string>("APE")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<bool>("Active")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BusinessStatus")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("CommercialName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("CompanyName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<string>("ContactEmail")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("ContactFaxNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("ContactLanguge")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("ContactPhoneNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("ContactTelefonNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<bool>("Deleted")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("DeliveryAddressId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
@@ -156,16 +139,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("FaxNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("FirstName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<int>("InvoiceAddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Language")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("LastName")
@@ -194,16 +168,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("SIRET")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("TelefonNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Title")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -358,6 +323,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Infrastructure.Persistence.Models.ApplicationUser", null)
                         .WithMany("RefreshTokens")
                         .HasForeignKey("ApplicationUserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Sublevel", b =>
+                {
+                    b.HasOne("Domain.Entities.Level", null)
+                        .WithMany("SubLevels")
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

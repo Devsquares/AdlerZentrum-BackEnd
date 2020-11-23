@@ -37,15 +37,17 @@ namespace Infrastructure.Persistence
                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
             #region Repositories
-            services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>)); 
-            services.AddTransient<IAddressRepositoryAsync, AddressRepositoryAsync>();   
+            services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
 
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
             #region Services
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
             #endregion
+
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
             services.AddAuthentication(options =>
             {

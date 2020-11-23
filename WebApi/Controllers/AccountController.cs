@@ -81,16 +81,7 @@ namespace WebApi.Controllers
             else
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
-        //CUSTOM:MEB:BEGIN:10.09.2020:Accept Users
-        //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
-        [HttpPost("accept-business-user")]
-        public async Task<IActionResult> AcceptBusinessUser(AcceptBusinessUserRequest model)
-        {
-            await _accountService.AcceptBusinessUser(model, Request.Headers["origin"]);
-            return Ok();
-        }
-        //CUSTOM:MEB:END:10.09.2020:Accept Users
+
 
         // GET: api/<controller>
         [HttpGet("GetAllUsers")]

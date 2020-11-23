@@ -13,13 +13,10 @@ namespace Infrastructure.Persistence.Seeds
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Roles
-            await roleManager.CreateAsync(new IdentityRole(Roles.SuperAdmin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Moderator.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Basic.ToString()));
-            await roleManager.CreateAsync(new IdentityRole(Roles.Business.ToString())); //CUSTOM:MRA:06.09.2020:Added business role
-
-
+            foreach (var role in Enum.GetValues(typeof(Roles)))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role.ToString()));
+            }
         }
     }
 }

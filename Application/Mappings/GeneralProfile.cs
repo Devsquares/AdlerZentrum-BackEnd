@@ -1,6 +1,8 @@
 ﻿using Application.DTOs.Account.Queries.GetAllUsers;
-using Application.Features.Address.Commands.CreateAddress;
-using Application.Features.Address.Queries.GetAllAddresses; 
+using Application.DTOs.Level.Commands;
+using Application.DTOs.Level.Queries;
+using Application.Filters;
+using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 
@@ -10,12 +12,17 @@ namespace Application.Mappings
     {
         public GeneralProfile()
         {
-            CreateMap<Address, GetAllAddressesViewModel>().ReverseMap();
-            CreateMap<CreateAddressCommand, Address>();
-            CreateMap<GetAllAddressesQuery, GetAllAddressesParameter>();
- 
+            CreateMap<Level, GetAllLevelsViewModel>().ReverseMap();
+            CreateMap<CreateLevelCommand, Level>();
+            CreateMap<GetAllLevelsQuery, PagedResponse<Level>>();
+
+
             CreateMap<Account, GetAllUsersViewModel>().ReverseMap();
             CreateMap<GetAllUsersQuery, GetAllUsersParameter>();
+
+            // Filter 
+            CreateMap<GetAllLevelsQuery, RequestParameter>();
+
 
         }
     }

@@ -16,17 +16,11 @@ using System.Security.Cryptography;
 using System.Text;
 using Application.Enums;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Primitives;
 using Application.DTOs.Email;
 using Domain.Entities;
-using AutoMapper;
-using Application.Interfaces.Repositories;
-using Application.Features.Address.Commands.CreateAddress;
-using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Application.DTOs.Account.Commands.UpdateAccount;
 using Infrastructure.Persistence.Models;
+using Application.Filters;
 
 namespace Infrastructure.Persistence.Services
 {
@@ -104,7 +98,7 @@ namespace Infrastructure.Persistence.Services
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
+                    await _userManager.AddToRoleAsync(user, Roles.Guest.ToString());
 
                     var verificationUri = await SendVerificationEmail(user, origin);
 
@@ -135,22 +129,7 @@ namespace Infrastructure.Persistence.Services
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                UserName = request.UserName,
-                Language = request.Language,
-                PhoneNumber = request.PhoneNumber,
-                FaxNumber = request.FaxNumber,
-                TelefonNumber = request.TelefonNumber,
-                BusinessStatus = "pending",
-                Title = request.Title,
-                ContactEmail = request.ContactEmail,
-                ContactTelefonNumber = request.ContactTelefonNumber,
-                ContactPhoneNumber = request.ContactPhoneNumber,
-                ContactFaxNumber = request.ContactFaxNumber,
-                ContactLanguge = request.ContactLanguge,
-                APE = request.APE,
-                SIRET = request.SIRET,
-                CompanyName = request.CompanyName,
-                CommercialName = request.CommercialName
+                UserName = request.UserName
             };
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
@@ -173,9 +152,9 @@ namespace Infrastructure.Persistence.Services
 
                     IAddressRepositoryAsync addressRepositoryAsync = new IAddressRepositoryAsync();
                     await addressRepositoryAsync.AddAsync(address);*/
-                    user.AddressId = 0; //TODO: this should be fixed
+                    //user.AddressId = 0; //TODO: this should be fixed
 
-                    await _userManager.AddToRoleAsync(user, Roles.Business.ToString());
+                    await _userManager.AddToRoleAsync(user, Roles.Guest.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
                     await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "vybesshop213@gmail", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
@@ -312,42 +291,7 @@ namespace Infrastructure.Persistence.Services
             }
         }
 
-        //CUSTOM:MEB:BEGIN:10.09.2020:Accept Users
-       
-        public async Task<Response<string>> AcceptBusinessUser(AcceptBusinessUserRequest model, StringValues stringValues)
-        {
-
-            var account = await _userManager.FindByEmailAsync(model.Email);
-
-            // always return ok response to prevent email enumeration
-            //if (account == null) return;
-
-            bool validCurrentStatus = account.BusinessStatus.Equals("pending");
-            bool validRole = await _userManager.IsInRoleAsync(account, Roles.Business.ToString());
-            bool validNewStatus = model.BusinessStatus != null && model.BusinessStatus.Equals("approved");
-            if (validCurrentStatus && validRole && validNewStatus)
-            {
-                account.BusinessStatus = model.BusinessStatus;
-                await _userManager.UpdateAsync(account);
-                
-            }
-            //return new Response<string>(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/Account/authenticate endpoint.");
-
-            return new Response<string>(account.Id, message: "Business Stattus approved {account.UserName}");
-
-            /*var code = await _userManager.GeneratePasswordResetTokenAsync(account);
-            var route = "api/account/reset-password/";
-            var _enpointUri = new Uri(string.Concat($"{origin}/", route));
-            var emailRequest = new EmailRequest()
-            {
-                Body = $"You reset token is - {code}",
-                To = model.Email,
-                Subject = "Reset Password",
-            };
-            await _emailService.SendAsync(emailRequest);*/
-        }
-        //CUSTOM:MEB:END:10.09.2020:Accept Users
-
+        
         public async Task<Account> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -425,6 +369,50 @@ namespace Infrastructure.Persistence.Services
             await _userManager.DeleteAsync(user);
         }
 
+        public Task<Account> GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<Account>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<Account>> GetPagedReponseAsync(int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyList<Account>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Account> AddAsync(Account entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(Account entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(Account entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetCount(Account entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetCount(FilteredRequestParameter filteredRequestParameter)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

@@ -20,8 +20,8 @@ namespace Infrastructure.Persistence.Seeds
             {
                 UserName = "superadmin",
                 Email = "superadmin@gmail.com",
-                FirstName = "Mukesh",
-                LastName = "Murugan",
+                FirstName = "super",
+                LastName = "admin",
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true
             };
@@ -30,12 +30,9 @@ namespace Infrastructure.Persistence.Seeds
                 var user = await userManager.FindByEmailAsync(defaultUser.Email);
                 if (user == null)
                 {
-                    await userManager.CreateAsync(defaultUser, "123Pa$$word!");
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Basic.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Moderator.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
+
+                    await userManager.CreateAsync(defaultUser, "123P@$$word!");
                     await userManager.AddToRoleAsync(defaultUser, Roles.SuperAdmin.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Business.ToString()); //CUSTOM:MRA:06.09.2020:Added business role
                 }
 
             }

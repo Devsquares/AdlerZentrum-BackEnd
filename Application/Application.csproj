@@ -22,8 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Tags\" />
-    <Folder Include="DTOs\Account\Queries\" />
-    <Folder Include="DTOs\Account\Queries\GetAllUsers\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
