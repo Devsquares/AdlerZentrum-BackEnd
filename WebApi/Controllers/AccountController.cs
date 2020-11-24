@@ -49,31 +49,27 @@ namespace WebApi.Controllers
             return Ok(await _accountService.RegisterAsync(request, origin));
         }
 
-        [HttpPost("register-business")]
-        public async Task<IActionResult> RegisterBusinessAsync(RegisterBusinessRequest request)
-        {
-            var origin = Request.Headers["origin"];
-            return Ok(await _accountService.RegisterBusinessAsync(request, origin));
-        }
-
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string userId, [FromQuery] string code)
         {
             var origin = Request.Headers["origin"];
             return Ok(await _accountService.ConfirmEmailAsync(userId, code));
         }
+
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest model)
         {
             await _accountService.ForgotPassword(model, Request.Headers["origin"]);
             return Ok();
         }
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
 
             return Ok(await _accountService.ResetPassword(model));
         }
+
         private string GenerateIPAddress()
         {
             if (Request.Headers.ContainsKey("X-Forwarded-For"))
@@ -108,20 +104,8 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPut("updateBusiness-{id}")]
-        public async Task<IActionResult> Put(string id, UpdateBusinessUserCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
-            return Ok(await Mediator.Send(command));
-        }
-
-        // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
         public async Task<IActionResult> Delete(string id)
         {
             return Ok(await Mediator.Send(new DeleteUserByIdCommand { Id = id }));

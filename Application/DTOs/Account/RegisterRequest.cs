@@ -32,5 +32,16 @@ namespace Application.DTOs.Account
         [Required]
         public Roles Role { get; set; }
 
+        [Required]
+        public string Country {get;set;}
+
+        [Required]
+        public DateTime DateOfBirth {get;set;}
+
+        [Required]
+        public string Profilephoto {get;set;}
+
+        [Required]
+        public Address Address {get;set;}
     }
 }
