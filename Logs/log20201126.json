@@ -1,0 +1,16 @@
+2020-11-26 12:19:47.111 +02:00 [Warning] Role "4d52ef79-25e8-4fd5-99ce-c266f28ea2a3" validation failed: "DuplicateRoleName".
+
+2020-11-26 12:19:47.181 +02:00 [Warning] Role "f1e58eb5-dc1c-4e6d-9561-8c94b44f4e10" validation failed: "DuplicateRoleName".
+
+2020-11-26 12:19:47.190 +02:00 [Warning] Role "0a54e6d0-ce38-4bce-98ca-f0a5d213492a" validation failed: "DuplicateRoleName".
+
+2020-11-26 12:19:47.203 +02:00 [Warning] Role "6407eade-e748-4624-b818-2ec07bde879a" validation failed: "DuplicateRoleName".
+
+2020-11-26 12:19:47.205 +02:00 [Warning] Role "7aabb009-4e3b-4068-8656-74b62052bc7e" validation failed: "DuplicateRoleName".
+
+2020-11-26 12:19:47.210 +02:00 [Warning] Role "6500c7db-7618-4aae-a5e0-969f6ef55ed8" validation failed: "DuplicateRoleName".
+
+2020-11-26 12:19:47.317 +02:00 [Information] Finished Seeding Default Data
+
+2020-11-26 12:19:47.317 +02:00 [Information] Application Starting
+

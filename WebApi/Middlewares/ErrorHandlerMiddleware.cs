@@ -31,7 +31,7 @@ namespace WebApi.Middlewares
                 response.ContentType = "application/json";
                 var responseModel = new Response<string>() { Succeeded = false, Message = error?.Message };
                 
-                switch (error)
+                switch (error) 
                 {
                     case Application.Exceptions.ApiException e:
                         // custom application error

@@ -7,6 +7,6 @@ namespace Domain.Entities
 {
     public class TeacherGroupInstanceAssignment : AuditableBaseEntity
     {
-
+        public Account Teacher { get; set; }
     }
 }

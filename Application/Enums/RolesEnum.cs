@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.Enums
 {
-    public enum Roles
+    public enum RolesEnum
     {
         SuperAdmin,
         Supervisor,

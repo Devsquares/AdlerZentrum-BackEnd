@@ -7,6 +7,7 @@ namespace Domain.Entities
 {
     public class TimeSlot : AuditableBaseEntity
     {
-
+        public string Name { get; set; }
+        public int Status { get; set; }
     }
 }

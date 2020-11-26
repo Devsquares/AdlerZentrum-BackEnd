@@ -31,7 +31,7 @@ namespace Application.DTOs.Account
         public string ConfirmPassword { get; set; }
 
         [Required]
-        public Roles Role { get; set; }
+        public RolesEnum Role { get; set; }
 
         [Required]
         public string Country {get;set;}

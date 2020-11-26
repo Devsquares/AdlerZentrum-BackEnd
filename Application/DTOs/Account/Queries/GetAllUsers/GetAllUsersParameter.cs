@@ -11,7 +11,7 @@ namespace Application.DTOs.Account.Queries.GetAllUsers
         public string Role { get; set; }
         public GetAllUsersParameter()
         {
-            this.Role = Roles.Guest.ToString();
+            this.Role = RolesEnum.Guest.ToString();
             this.PageNumber = 1;
             this.PageSize = 10;
         }

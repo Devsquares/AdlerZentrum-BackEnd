@@ -41,7 +41,7 @@ namespace Application.DTOs.Account
 
 
         [Required]
-        public Roles Role { get; set; }
+        public RolesEnum Role { get; set; }
 
     }
 }
