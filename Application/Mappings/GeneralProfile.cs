@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Account.Queries.GetAllUsers;
+using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.Level.Commands;
 using Application.DTOs.Level.Queries;
 using Application.Filters;
@@ -22,7 +23,8 @@ namespace Application.Mappings
 
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
-
+            CreateMap<GetAllUsersQuery, RequestParameter>();
+            CreateMap<GetAllGroupInstancesQuery, RequestParameter>();
 
         }
     }

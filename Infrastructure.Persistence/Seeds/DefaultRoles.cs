@@ -13,7 +13,7 @@ namespace Infrastructure.Persistence.Seeds
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //Seed Roles
-            foreach (var role in Enum.GetValues(typeof(Roles)))
+            foreach (var role in Enum.GetValues(typeof(RolesEnum)))
             {
                 await roleManager.CreateAsync(new IdentityRole(role.ToString()));
             }

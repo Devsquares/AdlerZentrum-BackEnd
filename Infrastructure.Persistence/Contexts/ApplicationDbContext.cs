@@ -28,6 +28,8 @@ namespace Infrastructure.Persistence.Contexts
         }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Sublevel> SubLevels { get; set; }
+        public DbSet<GroupInstance> GroupInstances { get; set; }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())

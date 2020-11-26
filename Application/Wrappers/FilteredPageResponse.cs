@@ -31,10 +31,10 @@ namespace Application.Wrappers
             this.FilterRange = lowerCaseDict(FilterRange);
             this.FilterValue = lowerCaseDict(FilterValue);
             this.FilterSearch = lowerCaseDict(FilterSearch);
-            this.Data = data;
-            this.Message = null;
-            this.Succeeded = true;
-            this.Errors = null;
+            this.data = data;
+            this.message = null;
+            this.succeeded = true;
+            this.errors = null;
             this.SortBy = SortBy;
             this.SortType = SortType;
             this.NoPaging = NoPaging;
@@ -51,10 +51,10 @@ namespace Application.Wrappers
             this.SortBy = filteredRequestParameter.SortBy;
             this.SortType = filteredRequestParameter.SortType;
             this.NoPaging = filteredRequestParameter.NoPaging;
-            this.Data = data;
-            this.Message = null;
-            this.Succeeded = true;
-            this.Errors = null;
+            this.data = data;
+            this.message = null;
+            this.succeeded = true;
+            this.errors = null;
             this.Count = Count;
         }
 

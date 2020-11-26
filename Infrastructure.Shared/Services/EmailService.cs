@@ -16,7 +16,7 @@ namespace Infrastructure.Shared.Services
         public MailSettings _mailSettings { get; }
         public ILogger<EmailService> _logger { get; }
 
-        public EmailService(IOptions<MailSettings> mailSettings,ILogger<EmailService> logger)
+        public EmailService(IOptions<MailSettings> mailSettings, ILogger<EmailService> logger)
         {
             _mailSettings = mailSettings.Value;
             _logger = logger;
@@ -26,7 +26,6 @@ namespace Infrastructure.Shared.Services
         {
             try
             {
-                // create message
                 var email = new MimeMessage();
                 email.Sender = MailboxAddress.Parse(request.From ?? _mailSettings.EmailFrom);
                 email.To.Add(MailboxAddress.Parse(request.To));

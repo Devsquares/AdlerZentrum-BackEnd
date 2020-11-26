@@ -9,6 +9,26 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Address",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    Street = table.Column<string>(nullable: true),
+                    HouseNumber = table.Column<int>(nullable: false),
+                    City = table.Column<string>(nullable: true),
+                    PostalCode = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Levels",
                 columns: table => new
                 {
@@ -18,7 +38,7 @@ namespace Infrastructure.Persistence.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
-                    name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,11 +81,22 @@ namespace Infrastructure.Persistence.Migrations
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     Active = table.Column<bool>(nullable: false),
-                    Deleted = table.Column<bool>(nullable: false)
+                    Deleted = table.Column<bool>(nullable: false),
+                    Country = table.Column<string>(nullable: true),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
+                    Profilephoto = table.Column<string>(nullable: true),
+                    Avatar = table.Column<string>(nullable: true),
+                    AddressId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_Address_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,6 +278,11 @@ namespace Infrastructure.Persistence.Migrations
                 column: "LevelId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_AddressId",
+                table: "User",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "User",
                 column: "NormalizedEmail");
@@ -304,6 +340,9 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Address");
         }
     }
 }

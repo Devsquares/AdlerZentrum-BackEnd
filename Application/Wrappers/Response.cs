@@ -9,20 +9,20 @@ namespace Application.Wrappers
         public Response()
         {
         }
-        public Response(T data,string message = null)
+        public Response(T data, string message = null)
         {
-            Succeeded = true;
-            Message = message;
-            Data = data;
+            succeeded = true;
+            this.message = message;
+            this.data = data;
         }
-        public Response(string message)
+        public Response(string _message)
         {
-            Succeeded = false;
-            Message = message;
+            succeeded = false;
+            message = _message;
         }
-        public bool Succeeded { get; set; }
-        public string Message { get; set; }
-        public List<string> Errors { get; set; }
-        public T Data { get; set; }
+        public bool succeeded { get; set; }
+        public string message { get; set; }
+        public List<string> errors { get; set; }
+        public T data { get; set; }
     }
 }

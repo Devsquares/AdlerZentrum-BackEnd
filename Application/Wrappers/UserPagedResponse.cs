@@ -15,10 +15,10 @@ namespace Application.Wrappers
             this.PageNumber = pageNumber;
             this.PageSize = pageSize;
             this.Role = role;
-            this.Data = data;
-            this.Message = null;
-            this.Succeeded = true;
-            this.Errors = null;
+            this.data = data;
+            this.message = null;
+            this.succeeded = true;
+            this.errors = null;
         }
     }
 }

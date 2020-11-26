@@ -32,10 +32,10 @@ namespace Infrastructure.Persistence.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
-        public AccountService(UserManager<ApplicationUser> userManager, 
-            RoleManager<IdentityRole> roleManager, 
-            IOptions<JWTSettings> jwtSettings, 
-            IDateTimeService dateTimeService, 
+        public AccountService(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IOptions<JWTSettings> jwtSettings,
+            IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService)
         {
@@ -92,17 +92,18 @@ namespace Infrastructure.Persistence.Services
                 LastName = request.LastName,
                 UserName = request.UserName
             };
+
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.Guest.ToString());
+                    await _userManager.AddToRoleAsync(user, RolesEnum.Student.ToString());
 
                     var verificationUri = await SendVerificationEmail(user, origin);
 
-                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "vybesshop213@gmail", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else
@@ -116,14 +117,14 @@ namespace Infrastructure.Persistence.Services
             }
         }
 
-        public async Task<Response<string>> RegisterBusinessAsync(RegisterBusinessRequest request, string origin)
+        public async Task<Response<string>> AddAccountAsync(RegisterRequest request, string origin, int role)
         {
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName != null)
             {
                 throw new ApiException($"Username '{request.UserName}' is already taken.");
             }
-            
+
             var user = new ApplicationUser
             {
                 Email = request.Email,
@@ -131,32 +132,22 @@ namespace Infrastructure.Persistence.Services
                 LastName = request.LastName,
                 UserName = request.UserName
             };
+
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
-                //validation of create business user
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
-
-                    /*var address = new Address
+                    if (!checkeRole(request.Role, role))
                     {
-                        Address1 = request.Address1,
-                        Address2 = request.Address2,
-                        City = request.City,
-                        Country = request.Country,
-                        PostCode = request.PostCode,
-                        FullName = request.FirstName + request.LastName
-                    };
+                        throw new ApiException($"You are not autrized to create account with role {request.Role}.");
+                    }
+                    await _userManager.AddToRoleAsync(user, RolesEnum.Student.ToString());
 
-
-                    IAddressRepositoryAsync addressRepositoryAsync = new IAddressRepositoryAsync();
-                    await addressRepositoryAsync.AddAsync(address);*/
-                    //user.AddressId = 0; //TODO: this should be fixed
-
-                    await _userManager.AddToRoleAsync(user, Roles.Guest.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
-                    await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { From = "vybesshop213@gmail", To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+
+
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else
@@ -170,7 +161,29 @@ namespace Infrastructure.Persistence.Services
             }
         }
 
+        private bool checkeRole(RolesEnum registrationUserRole, int creatorUserRole)
+        {
+            bool result = false;
+            switch (registrationUserRole)
+            {
+                case RolesEnum.SuperAdmin:
+                    if (creatorUserRole == (int)RolesEnum.SuperAdmin) result = true;
+                    break;
+                case RolesEnum.Supervisor:
+                    if (creatorUserRole == (int)RolesEnum.SuperAdmin) result = true;
+                    break;
+                case RolesEnum.Secretary:
+                    if (creatorUserRole == (int)RolesEnum.SuperAdmin || creatorUserRole == (int)RolesEnum.Supervisor) result = true;
+                    break;
+                case RolesEnum.Teacher:
+                    if (creatorUserRole == (int)RolesEnum.SuperAdmin || creatorUserRole == (int)RolesEnum.Supervisor) result = true;
+                    break;
 
+                default:
+                    break;
+            }
+            return result;
+        }
 
         private async Task<JwtSecurityToken> GenerateJWToken(ApplicationUser user)
         {
@@ -218,7 +231,7 @@ namespace Infrastructure.Persistence.Services
             // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
-        
+
         private async Task<string> SendVerificationEmail(ApplicationUser user, string origin)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -227,7 +240,10 @@ namespace Infrastructure.Persistence.Services
             var _enpointUri = new Uri(string.Concat($"{origin}/", route));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
-            //Email Service Call Here
+            //TODO: Email Service Call Here
+
+            await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+
             return verificationUri;
         }
 
@@ -236,7 +252,7 @@ namespace Infrastructure.Persistence.Services
             var user = await _userManager.FindByIdAsync(userId);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new Response<string>(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/Account/authenticate endpoint.");
             }
@@ -281,7 +297,7 @@ namespace Infrastructure.Persistence.Services
             var account = await _userManager.FindByEmailAsync(model.Email);
             if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
             var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return new Response<string>(model.Email, message: $"Password Resetted.");
             }
@@ -291,7 +307,7 @@ namespace Infrastructure.Persistence.Services
             }
         }
 
-        
+
         public async Task<Account> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -308,7 +324,8 @@ namespace Infrastructure.Persistence.Services
             List<Account> accounts = new List<Account>();
             int count = 0, taken = 0;
             IList<ApplicationUser> users = await _userManager.GetUsersInRoleAsync(role);
-            foreach (ApplicationUser user in users) {
+            foreach (ApplicationUser user in users)
+            {
                 count++;
                 if (count < (pageNumber - 1) * pageSize)
                     continue;
@@ -321,7 +338,7 @@ namespace Infrastructure.Persistence.Services
                 if (taken >= pageSize)
                     break;
             }
-            
+
             return accounts.AsReadOnly();
         }
 
@@ -331,7 +348,7 @@ namespace Infrastructure.Persistence.Services
                 return null;
             Account account = new Account();
             Reflection.CopyProperties(user, account);
-            account.Roles = (List<string>) await _userManager.GetRolesAsync(user);
+            account.Role = Convert.ToInt32(_userManager.GetRolesAsync(user).Result.FirstOrDefault());
             return account;
         }
 
@@ -412,6 +429,16 @@ namespace Infrastructure.Persistence.Services
         public int GetCount(FilteredRequestParameter filteredRequestParameter)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<Account> GetByClaimsPrincipalAsync(ClaimsPrincipal claimsPrincipal)
+        {
+            var user = _userManager.GetUserAsync(claimsPrincipal);
+            if (user == null)
+            {
+                throw new ApiException("No user found.");
+            }
+            return getAccountFromAppUser(user.Result);
         }
     }
 

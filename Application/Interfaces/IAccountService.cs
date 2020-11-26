@@ -4,6 +4,7 @@ using Application.Wrappers;
 using Domain.Entities;
 using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Application.Interfaces
@@ -12,7 +13,7 @@ namespace Application.Interfaces
     {
         Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress);
         Task<Response<string>> RegisterAsync(RegisterRequest request, string origin);
-        Task<Response<string>> RegisterBusinessAsync(RegisterBusinessRequest request, string origin);
+        Task<Response<string>> AddAccountAsync(RegisterRequest request, string origin, int role);
         Task<Response<string>> ConfirmEmailAsync(string userId, string code);
         Task ForgotPassword(ForgotPasswordRequest model, string origin);
         Task<Response<string>> ResetPassword(ResetPasswordRequest model);
@@ -21,5 +22,6 @@ namespace Application.Interfaces
         Task UpdateAsync(UpdateBasicUserCommand updateUserCommand);
         Task UpdateAsync(UpdateBusinessUserCommand updateUserCommand);
         Task DeleteAsync(string id);
+        Task<Account> GetByClaimsPrincipalAsync(ClaimsPrincipal user);
     }
 }

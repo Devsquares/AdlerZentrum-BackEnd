@@ -7,6 +7,6 @@ namespace Domain.Entities
 {
     public class GroupCondition : AuditableBaseEntity
     {
-
+        public int Status { get; set; }
     }
 }

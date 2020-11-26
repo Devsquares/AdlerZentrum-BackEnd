@@ -2,16 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Authors>Mukesh Murugan</Authors>
-    <Company>codewithmukesh</Company>
-    <RepositoryUrl>https://github.com/iammukeshm/Vybes.WebApi</RepositoryUrl>
     <RepositoryType>Public</RepositoryType>
-    <PackageProjectUrl>https://www.codewithmukesh.com/blog/aspnet-core-webapi-clean-architecture/</PackageProjectUrl>
     <Version>1.1.0</Version>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <!-- <DocumentationFile>Vybes.WebApi.xml</DocumentationFile> -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'"> 
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
@@ -45,6 +41,10 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure.Persistence\Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\Infrastructure.Shared\Infrastructure.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logs\" />
   </ItemGroup>
 
 </Project>

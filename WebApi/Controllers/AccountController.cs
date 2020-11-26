@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApi.Controllers
 {
@@ -24,6 +25,7 @@ namespace WebApi.Controllers
     {
         private readonly IAccountService _accountService;
         private IMediator _mediator;
+
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
         //Email send Mohamed Reda 2-10-2020
@@ -47,6 +49,15 @@ namespace WebApi.Controllers
         {
             var origin = Request.Headers["origin"];
             return Ok(await _accountService.RegisterAsync(request, origin));
+        }
+
+        [HttpPost("addAccount")]
+        public async Task<IActionResult> AddAccountAsync(RegisterRequest request)
+        {
+            var origin = Request.Headers["origin"];
+            var account = _accountService.GetByClaimsPrincipalAsync(HttpContext.User);
+            if (account.Result == null) return Forbid();
+            return Ok(await _accountService.AddAccountAsync(request, origin, account.Result.Role));
         }
 
         [HttpGet("confirm-email")]
@@ -78,8 +89,6 @@ namespace WebApi.Controllers
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
 
-
-        // GET: api/<controller>
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersParameter filter)
         {
@@ -87,7 +96,6 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllUsersQuery() { Role = filter.Role, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
 
-        // GET: api/<controller>
         [HttpGet("GetUserById")]
         public async Task<IActionResult> GetUserById(string id)
         {

@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using Domain.Settings;
 using Newtonsoft.Json;
 using Application.Wrappers;
+using Domain.Entities;
 
 namespace Infrastructure.Persistence
 {
@@ -46,6 +47,7 @@ namespace Infrastructure.Persistence
             #region Services
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
+            services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
             #endregion
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
