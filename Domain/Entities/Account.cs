@@ -16,5 +16,6 @@ namespace Domain.Entities
         public bool Active { get; set; }
         public bool Deleted { get; set; }
         public int Role { get; set; }
+        public string Phone { get; set; }
     }
 }

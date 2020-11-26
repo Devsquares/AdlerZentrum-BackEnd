@@ -34,15 +34,21 @@ namespace Application.DTOs.Account
         public RolesEnum Role { get; set; }
 
         [Required]
-        public string Country {get;set;}
+        public string Country { get; set; }
 
         [Required]
-        public DateTime DateOfBirth {get;set;}
+        public DateTime DateOfBirth { get; set; }
 
         [Required]
-        public string Profilephoto {get;set;}
+        public string Profilephoto { get; set; }
 
         [Required]
-        public Address Address {get;set;}
+        public Address Address { get; set; }
+
+        [Required]
+        public string Phone { get; set; }
+
+        [Required]
+        public int GroupInstanceId { get; set; }
     }
 }

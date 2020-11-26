@@ -13,11 +13,9 @@ namespace Infrastructure.Persistence.Repositories
     {
         private readonly DbSet<Level> _levels;
 
-
         public LevelRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             _levels = dbContext.Set<Level>();
-
         }
     }
 }
