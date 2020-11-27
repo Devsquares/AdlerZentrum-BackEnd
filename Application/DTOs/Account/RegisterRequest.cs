@@ -46,7 +46,7 @@ namespace Application.DTOs.Account
         public Address Address { get; set; }
 
         [Required]
-        public string Phone { get; set; }
+        public string PhoneNumber{ get; set; }
 
         [Required]
         public int GroupInstanceId { get; set; }

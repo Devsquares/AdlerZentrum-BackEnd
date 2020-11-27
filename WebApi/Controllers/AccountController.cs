@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using Application.Filters;
 
 namespace WebApi.Controllers
 {
@@ -89,12 +90,20 @@ namespace WebApi.Controllers
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
 
-        [HttpGet("GetAllUsers")]
-        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersParameter filter)
+        [HttpGet("GetAllUsersByRole")]
+        public async Task<IActionResult> GetAllUsersByRole([FromQuery] GetAllUsersParameter filter)
         {
 
             return Ok(await Mediator.Send(new GetAllUsersQuery() { Role = filter.Role, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
+
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers([FromQuery] RequestParameter filter)
+        {
+
+            return Ok(await Mediator.Send(new GetAllUsersQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber, Role = null }));
+        }
+
 
         [HttpGet("GetUserById")]
         public async Task<IActionResult> GetUserById(string id)
@@ -102,7 +111,7 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetUserByIdQuery { Id = id }));
         }
 
-        [HttpPut("updateBasic-{id}")]
+        [HttpPut("update-{id}")]
         public async Task<IActionResult> Put(string id, UpdateBasicUserCommand command)
         {
             if (id != command.Id)

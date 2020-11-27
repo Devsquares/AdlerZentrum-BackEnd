@@ -11,26 +11,23 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Account.Commands.UpdateAccount
 {
-    public class UpdateBasicUserCommand : IRequest<Response<int>>
+    public class UpdateBasicUserCommand : IRequest<Response<Domain.Entities.Account>>
     {
         public string Id { get; set; }
+        public string Email { get; set; }
+        public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Language { get; set; }
-        public string FaxNumber { get; set; }
         public string PhoneNumber { get; set; }
-        public string TelefonNumber { get; set; }
-        public string Title { get; set; }
 
-
-        public class UpdateAccountCommandHandler : IRequestHandler<UpdateBasicUserCommand, Response<int>>
+        public class UpdateAccountCommandHandler : IRequestHandler<UpdateBasicUserCommand, Response<Domain.Entities.Account>>
         {
             private readonly IAccountService _AccountRepository;
             public UpdateAccountCommandHandler(IAccountService AccountRepository)
             {
                 _AccountRepository = AccountRepository;
             }
-            public async Task<Response<int>> Handle(UpdateBasicUserCommand command, CancellationToken cancellationToken)
+            public async Task<Response<Domain.Entities.Account>> Handle(UpdateBasicUserCommand command, CancellationToken cancellationToken)
             {
                 var Account = await _AccountRepository.GetByIdAsync(command.Id);
 
@@ -40,10 +37,21 @@ namespace Application.DTOs.Account.Commands.UpdateAccount
                 }
                 else
                 {
-                    await _AccountRepository.UpdateAsync(command);
-                    return new Response<int>(Account.Id);
+                    var res = await _AccountRepository.UpdateAsync(command);
+                    if (res.Succeeded)
+                    {
+                        Reflection.CopyProperties(command,Account);
+                        return new Response<Domain.Entities.Account>(Account, res.Succeeded.ToString());
+                    }
+                    else
+                    {
+
+                        return new Response<Domain.Entities.Account>(Account);
+                    }
                 }
             }
         }
     }
 }
+
+

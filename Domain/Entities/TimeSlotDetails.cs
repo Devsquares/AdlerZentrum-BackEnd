@@ -8,7 +8,7 @@ namespace Domain.Entities
     public class TimeSlotDetails : AuditableBaseEntity
     {
         public int TimeSlotId { get; set; }
-        public TimeSlot TimeSlot { get; set; }
+        public virtual TimeSlot TimeSlot { get; set; }
         public int WeekDay { get; set; }
 
         public DateTime TimeFrom { get; set; }

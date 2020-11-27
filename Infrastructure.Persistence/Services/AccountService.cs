@@ -26,14 +26,14 @@ namespace Infrastructure.Persistence.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
-        public AccountService(UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
+        public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
+            Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
@@ -323,7 +323,17 @@ namespace Infrastructure.Persistence.Services
         {
             List<Account> accounts = new List<Account>();
             int count = 0, taken = 0;
-            IList<ApplicationUser> users = await _userManager.GetUsersInRoleAsync(role);
+            IList<ApplicationUser> users;
+
+            // TODO: skip and take.
+            if (role == null)
+            {
+                users = _userManager.Users.ToList();
+            }
+            else
+            {
+                users = await _userManager.GetUsersInRoleAsync(role);
+            }
             foreach (ApplicationUser user in users)
             {
                 count++;
@@ -348,32 +358,8 @@ namespace Infrastructure.Persistence.Services
                 return null;
             Account account = new Account();
             Reflection.CopyProperties(user, account);
-            account.Role = Convert.ToInt32(_userManager.GetRolesAsync(user).Result.FirstOrDefault());
+            //account.Role = Convert.ToInt32(_userManager.GetRolesAsync(user).Result.FirstOrDefault());
             return account;
-        }
-
-        public async Task UpdateAsync(UpdateBasicUserCommand updateUserCommand)
-        {
-            if (updateUserCommand == null)
-                return;
-            var user = await _userManager.FindByIdAsync(updateUserCommand.Id);
-            if (user == null)
-                return;
-            Reflection.CopyProperties(updateUserCommand, user);
-            await _userManager.UpdateAsync(user);
-        }
-
-        public async Task UpdateAsync(UpdateBusinessUserCommand updateUserCommand)
-        {
-            if (updateUserCommand == null)
-                return;
-            var user = await _userManager.FindByIdAsync(updateUserCommand.Id);
-            if (user == null)
-                return;
-            if (!_userManager.IsInRoleAsync(user, "BUSINESS").Result)
-                throw new ApiException("the user " + updateUserCommand.Id + " is not a business user.");
-            Reflection.CopyProperties(updateUserCommand, user);
-            await _userManager.UpdateAsync(user);
         }
 
         public async Task DeleteAsync(string id)
@@ -439,6 +425,22 @@ namespace Infrastructure.Persistence.Services
                 throw new ApiException("No user found.");
             }
             return getAccountFromAppUser(user.Result);
+        }
+
+        public Task<Response<string>> AddAccountAsync(RegisterRequest request, string origin, string role)
+        {
+            throw new NotImplementedException();
+        }
+
+        async Task<IdentityResult> IAccountService.UpdateAsync(UpdateBasicUserCommand updateUserCommand)
+        {
+            if (updateUserCommand == null)
+                return null;
+            var user = await _userManager.FindByIdAsync(updateUserCommand.Id);
+            if (user == null)
+                return null;
+            Reflection.CopyProperties(updateUserCommand, user);
+            return await _userManager.UpdateAsync(user);
         }
     }
 

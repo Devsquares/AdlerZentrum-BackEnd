@@ -1,5 +1,6 @@
 using Application.Filters;
 using Application.Interfaces;
+using Domain.Common;
 using Domain.Settings;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -82,8 +83,9 @@ namespace Infrastructure.Persistence.Repository
                     .OrderBy(sortBy, sortASC)
                     .AsNoTracking()
                     .ToListAsync();
-            
+
         }
+
 
         public Expression<Func<T, bool>> IsMatchedExpression(FilteredRequestParameter filteredRequestParameter)
         {
@@ -94,6 +96,7 @@ namespace Infrastructure.Persistence.Repository
 
             var parameterExpression = Expression.Parameter(typeof(T));
             var binaryExpression = Expression.Equal(Expression.Constant(1), Expression.Constant(1));
+
             foreach (string key in filterValue.Keys)
             {
                 string value;
@@ -106,17 +109,76 @@ namespace Infrastructure.Persistence.Repository
                 if (propertyType == typeof(string))
                 {
                     binaryExpression = Expression.AndAlso(binaryExpression, Expression.Equal(propertyOrField, Expression.Constant(value)));
-                } else if (propertyType == typeof(int))
+                }
+                else if (propertyType == typeof(int))
                 {
                     binaryExpression = Expression.AndAlso(binaryExpression, Expression.Equal(propertyOrField, Expression.Constant(int.Parse(value))));
-                } else if (propertyType  == typeof(DateTime))
+                }
+                else if (propertyType == typeof(DateTime))
                 {
                     //TODO: convert to date
                 }
                 //TODO: other data type?   
             }
+            foreach (string key in filterRange.Keys)
+            {
+                string range;
+                filterRange.TryGetValue(key, out range);
+                string value1 = range.Split('-')[0];
+                string value2 = range.Split('-')[1];
+
+                var propertyOrField = Expression.PropertyOrField(parameterExpression, key);
+
+                var propertyInfo = (PropertyInfo)propertyOrField.Member;
+                var propertyType = propertyInfo.PropertyType;
+                var propertyName = propertyInfo.Name;
+                if (propertyType == typeof(string))
+                {
+                    binaryExpression = Expression.AndAlso(binaryExpression, Expression.LessThanOrEqual(propertyOrField, Expression.Constant(value1)));
+                    binaryExpression = Expression.AndAlso(binaryExpression, Expression.GreaterThanOrEqual(propertyOrField, Expression.Constant(value2)));
+                }
+                else if (propertyType == typeof(int))
+                {
+                    binaryExpression = Expression.AndAlso(binaryExpression, Expression.LessThanOrEqual(propertyOrField, Expression.Constant(value1)));
+                    binaryExpression = Expression.AndAlso(binaryExpression, Expression.GreaterThanOrEqual(propertyOrField, Expression.Constant(value2)));
+                }
+                else if (propertyType == typeof(DateTime))
+                {
+                    //TODO: convert to date
+                }
+            }
+            foreach (string key in filterArray.Keys)
+            {
+                List<string> array;
+                filterArray.TryGetValue(key, out array);
+                var propertyOrField = Expression.PropertyOrField(parameterExpression, key);
+                var propertyInfo = (PropertyInfo)propertyOrField.Member;
+                var propertyType = propertyInfo.PropertyType;
+                var propertyName = propertyInfo.Name;
+                var innerBinaryExpression = Expression.Equal(Expression.Constant(0), Expression.Constant(1));
+                foreach (string value in array)
+                {
+                    if (propertyType == typeof(string))
+                    {
+                        innerBinaryExpression = Expression.AndAlso(innerBinaryExpression, Expression.Equal(propertyOrField, Expression.Constant(value)));
+                    }
+                    else if (propertyType == typeof(int))
+                    {
+                        innerBinaryExpression = Expression.AndAlso(innerBinaryExpression, Expression.Equal(propertyOrField, Expression.Constant(int.Parse(value))));
+                    }
+                    else if (propertyType == typeof(DateTime))
+                    {
+                        //TODO: convert to date
+                    }
+                    //TODO: other data type?   
+                }
+                binaryExpression = Expression.AndAlso(binaryExpression, innerBinaryExpression);
+
+
+            }
             return Expression.Lambda<Func<T, bool>>(binaryExpression, parameterExpression);
         }
+
 
 
         public async Task<T> AddAsync(T entity)
@@ -273,7 +335,7 @@ namespace Infrastructure.Persistence.Repository
                 {
                     newArray.Add("'" + value + "'");
                 }
-                newWhere = key + " in (" +  string.Join(",", newArray.ToArray()) + ")";
+                newWhere = key + " in (" + string.Join(",", newArray.ToArray()) + ")";
             }
 
             newWhere = AddToWhere(where, newWhere);

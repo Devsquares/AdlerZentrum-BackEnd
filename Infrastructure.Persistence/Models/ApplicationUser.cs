@@ -19,8 +19,6 @@ namespace Infrastructure.Persistence.Models
         public string Avatar { get; set; }
         public Address Address { get; set; }
 
-        public string Phone { get; set; }
-
         public List<RefreshToken> RefreshTokens { get; set; }
         public bool OwnsToken(string token)
         {

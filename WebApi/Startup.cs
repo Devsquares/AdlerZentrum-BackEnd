@@ -37,7 +37,7 @@ namespace WebApi
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseMySql(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence"));
+                options.UseSqlServer(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence"));
             });
 
             services.AddApplicationLayer();
