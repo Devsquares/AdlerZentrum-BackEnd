@@ -21,6 +21,8 @@ namespace Application.Mappings
             CreateMap<ApplicationUser, GetAllUsersViewModel>().ReverseMap();
             CreateMap<GetAllUsersQuery, GetAllUsersParameter>();
 
+            CreateMap<GroupInstance, GetAllGroupInstancesViewModel>().ReverseMap();
+
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();

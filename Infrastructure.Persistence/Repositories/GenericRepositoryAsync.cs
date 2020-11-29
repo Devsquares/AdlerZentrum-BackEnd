@@ -52,7 +52,7 @@ namespace Infrastructure.Persistence.Repository
                 .ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
+        public virtual async Task<IReadOnlyList<T>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
         {
             bool noPaging = filteredRequestParameter.NoPaging;
             if (noPaging)
