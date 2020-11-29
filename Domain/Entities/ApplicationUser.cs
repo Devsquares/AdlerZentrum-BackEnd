@@ -1,11 +1,9 @@
-﻿using Application.DTOs.Account;
-using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using Domain.Settings;
+using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Persistence.Models
+namespace Domain.Entities
 {
     public class ApplicationUser : IdentityUser
     {
@@ -18,7 +16,7 @@ namespace Infrastructure.Persistence.Models
         public string Profilephoto { get; set; }
         public string Avatar { get; set; }
         public Address Address { get; set; }
-
+        public IdentityRole Role { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
         public bool OwnsToken(string token)
         {

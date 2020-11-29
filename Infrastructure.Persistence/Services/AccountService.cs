@@ -1,5 +1,4 @@
-﻿using Application.DTOs.Account;
-using Application.Exceptions;
+﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Wrappers;
 using Domain.Settings;
@@ -18,9 +17,11 @@ using Application.Enums;
 using System.Threading.Tasks;
 using Application.DTOs.Email;
 using Domain.Entities;
-using Application.DTOs.Account.Commands.UpdateAccount;
-using Infrastructure.Persistence.Models;
 using Application.Filters;
+using Application.DTOs.Account;
+using Application.DTOs.Account.Commands.UpdateAccount;
+using Org.BouncyCastle.Ocsp;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Services
 {
@@ -32,6 +33,7 @@ namespace Infrastructure.Persistence.Services
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
+
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -52,7 +54,7 @@ namespace Infrastructure.Persistence.Services
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                throw new ApiException($"No Accounts Registered with {request.Email}.");
+                throw new ApiException($"No ApplicationUsers Registered with {request.Email}.");
             }
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
             if (!result.Succeeded)
@@ -61,7 +63,7 @@ namespace Infrastructure.Persistence.Services
             }
             if (!user.EmailConfirmed)
             {
-                throw new ApiException($"Account Not Confirmed for '{request.Email}'.");
+                throw new ApiException($"ApplicationUser Not Confirmed for '{request.Email}'.");
             }
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
             AuthenticationResponse response = new AuthenticationResponse();
@@ -104,51 +106,7 @@ namespace Infrastructure.Persistence.Services
                     var verificationUri = await SendVerificationEmail(user, origin);
 
 
-                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
-                }
-                else
-                {
-                    throw new ApiException($"{result.Errors}");
-                }
-            }
-            else
-            {
-                throw new ApiException($"Email {request.Email } is already registered.");
-            }
-        }
-
-        public async Task<Response<string>> AddAccountAsync(RegisterRequest request, string origin, int role)
-        {
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-            if (userWithSameUserName != null)
-            {
-                throw new ApiException($"Username '{request.UserName}' is already taken.");
-            }
-
-            var user = new ApplicationUser
-            {
-                Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                UserName = request.UserName
-            };
-
-            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
-            if (userWithSameEmail == null)
-            {
-                var result = await _userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded)
-                {
-                    if (!checkeRole(request.Role, role))
-                    {
-                        throw new ApiException($"You are not autrized to create account with role {request.Role}.");
-                    }
-                    await _userManager.AddToRoleAsync(user, RolesEnum.Student.ToString());
-
-                    var verificationUri = await SendVerificationEmail(user, origin);
-
-
-                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your account by visiting this URL {verificationUri}");
+                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
                 else
                 {
@@ -242,7 +200,7 @@ namespace Infrastructure.Persistence.Services
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
             //TODO: Email Service Call Here
 
-            await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
+            await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your ApplicationUser by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
 
             return verificationUri;
         }
@@ -254,7 +212,7 @@ namespace Infrastructure.Persistence.Services
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
-                return new Response<string>(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/Account/authenticate endpoint.");
+                return new Response<string>(user.Id, message: $"ApplicationUser Confirmed for {user.Email}. You can now use the /api/ApplicationUser/authenticate endpoint.");
             }
             else
             {
@@ -275,13 +233,13 @@ namespace Infrastructure.Persistence.Services
 
         public async Task ForgotPassword(ForgotPasswordRequest model, string origin)
         {
-            var account = await _userManager.FindByEmailAsync(model.Email);
+            var ApplicationUser = await _userManager.FindByEmailAsync(model.Email);
 
             // always return ok response to prevent email enumeration
-            if (account == null) return;
+            if (ApplicationUser == null) return;
 
-            var code = await _userManager.GeneratePasswordResetTokenAsync(account);
-            var route = "api/account/reset-password/";
+            var code = await _userManager.GeneratePasswordResetTokenAsync(ApplicationUser);
+            var route = "api/ApplicationUser/reset-password/";
             var _enpointUri = new Uri(string.Concat($"{origin}/", route));
             var emailRequest = new EmailRequest()
             {
@@ -294,9 +252,9 @@ namespace Infrastructure.Persistence.Services
 
         public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
         {
-            var account = await _userManager.FindByEmailAsync(model.Email);
-            if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
-            var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
+            var ApplicationUser = await _userManager.FindByEmailAsync(model.Email);
+            if (ApplicationUser == null) throw new ApiException($"No ApplicationUsers Registered with {model.Email}.");
+            var result = await _userManager.ResetPasswordAsync(ApplicationUser, model.Token, model.Password);
             if (result.Succeeded)
             {
                 return new Response<string>(model.Email, message: $"Password Resetted.");
@@ -308,58 +266,20 @@ namespace Infrastructure.Persistence.Services
         }
 
 
-        public async Task<Account> GetByIdAsync(string id)
+        public async Task<ApplicationUser> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 throw new ApiException("No user found with id " + id);
             }
-            return await getAccountFromAppUser(user);
-
+            return user;
         }
 
-        public async Task<IReadOnlyList<Account>> GetPagedReponseUsersAsync(string role, int pageNumber, int pageSize)
+        public async Task<IReadOnlyList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize)
         {
-            List<Account> accounts = new List<Account>();
-            int count = 0, taken = 0;
-            IList<ApplicationUser> users;
-
-            // TODO: skip and take.
-            if (role == null)
-            {
-                users = _userManager.Users.ToList();
-            }
-            else
-            {
-                users = await _userManager.GetUsersInRoleAsync(role);
-            }
-            foreach (ApplicationUser user in users)
-            {
-                count++;
-                if (count < (pageNumber - 1) * pageSize)
-                    continue;
-
-                Account account = await getAccountFromAppUser(user);
-                accounts.Add(account);
-
-
-                taken++;
-                if (taken >= pageSize)
-                    break;
-            }
-
-            return accounts.AsReadOnly();
-        }
-
-        public async Task<Account> getAccountFromAppUser(ApplicationUser user)
-        {
-            if (user == null)
-                return null;
-            Account account = new Account();
-            Reflection.CopyProperties(user, account);
-            //account.Role = Convert.ToInt32(_userManager.GetRolesAsync(user).Result.FirstOrDefault());
-            return account;
+            List<ApplicationUser> users = _userManager.Users.Include(u => u.Role).ToList();
+            return users.AsReadOnly();
         }
 
         public async Task DeleteAsync(string id)
@@ -372,64 +292,54 @@ namespace Infrastructure.Persistence.Services
             await _userManager.DeleteAsync(user);
         }
 
-        public Task<Account> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<Account>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<Account>> GetPagedReponseAsync(int pageNumber, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IReadOnlyList<Account>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Account> AddAsync(Account entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAsync(Account entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteAsync(Account entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetCount(Account entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetCount(FilteredRequestParameter filteredRequestParameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Account> GetByClaimsPrincipalAsync(ClaimsPrincipal claimsPrincipal)
+        public Task<ApplicationUser> GetByClaimsPrincipalAsync(ClaimsPrincipal claimsPrincipal)
         {
             var user = _userManager.GetUserAsync(claimsPrincipal);
             if (user == null)
             {
                 throw new ApiException("No user found.");
             }
-            return getAccountFromAppUser(user.Result);
+            return user;
         }
 
-        public Task<Response<string>> AddAccountAsync(RegisterRequest request, string origin, string role)
+        public async Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, string role)
         {
-            throw new NotImplementedException();
+            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+            if (userWithSameUserName != null)
+            {
+                throw new ApiException($"Username '{request.UserName}' is already taken.");
+            }
+            ApplicationUser user = new ApplicationUser();
+            Reflection.CopyProperties(request, user);
+
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (userWithSameEmail == null)
+            {
+                var result = await _userManager.CreateAsync(user, request.Password);
+                if (result.Succeeded)
+                {
+                    //RolesEnum userRole = (RolesEnum)Enum.Parse(typeof(RolesEnum), role);
+                    //if (!checkeRole((RolesEnum)request.Role, 0))
+                    //{
+                    //    throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
+                    //}
+                    await _userManager.AddToRoleAsync(user, request.Role);
+
+                    //var verificationUri = await SendVerificationEmail(user, origin);
+
+                    return new Response<string>(user.Id, message: $"User Registered.");
+
+                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
+                }
+                else
+                {
+                    throw new ApiException($"{result.Errors}");
+                }
+            }
+            else
+            {
+                throw new ApiException($"Email {request.Email } is already registered.");
+            }
         }
 
         async Task<IdentityResult> IAccountService.UpdateAsync(UpdateBasicUserCommand updateUserCommand)

@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Application.DTOs.GroupInstance.Queries.GetAll
 {
-    public class GroupInstanceRequestParameter : FilteredRequestParameter
-    { 
+    public class GroupInstanceByTeacherRequestParameter : RequestParameter
+    {
+        public string teacherId { get; set; }
     }
 }

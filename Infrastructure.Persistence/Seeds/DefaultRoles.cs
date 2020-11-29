@@ -1,10 +1,11 @@
-﻿using Infrastructure.Persistence.Models;
+﻿
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Enums;
+using Domain.Entities;
 
 namespace Infrastructure.Persistence.Seeds
 {

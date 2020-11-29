@@ -11,8 +11,9 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Serilog;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
-using Infrastructure.Persistence.Models;
+
 using Microsoft.Extensions.DependencyInjection;
+using Domain.Entities;
 
 namespace WebApi
 {
@@ -46,6 +47,7 @@ namespace WebApi
                 }
                 catch (Exception ex)
                 {
+                    // TODO make logger service
                     Log.Warning(ex, "An error occurred seeding the DB");
                 }
                 finally

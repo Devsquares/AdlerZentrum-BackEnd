@@ -53,12 +53,10 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("addAccount")]
-        public async Task<IActionResult> AddAccountAsync(RegisterRequest request)
+        public async Task<IActionResult> AddAccountAsync(AddAccountRequest request)
         {
             var origin = Request.Headers["origin"];
-            var account = _accountService.GetByClaimsPrincipalAsync(HttpContext.User);
-            if (account.Result == null) return Forbid();
-            return Ok(await _accountService.AddAccountAsync(request, origin, account.Result.Role));
+            return Ok(await _accountService.AddApplicationUserAsync(request, origin, request.Role));
         }
 
         [HttpGet("confirm-email")]
@@ -100,8 +98,7 @@ namespace WebApi.Controllers
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] RequestParameter filter)
         {
-
-            return Ok(await Mediator.Send(new GetAllUsersQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber, Role = null }));
+            return Ok(await Mediator.Send(new GetAllUsersQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
 
 

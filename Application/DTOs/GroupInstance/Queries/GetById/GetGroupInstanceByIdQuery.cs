@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Level.Queries
+namespace Application.DTOs.GroupInstance.Queries
 {
     public class GetGroupInstanceByIdQuery : IRequest<Response<Domain.Entities.GroupInstance>>
     {

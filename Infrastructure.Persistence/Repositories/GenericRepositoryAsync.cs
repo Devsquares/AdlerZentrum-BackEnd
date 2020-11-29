@@ -86,7 +86,6 @@ namespace Infrastructure.Persistence.Repository
 
         }
 
-
         public Expression<Func<T, bool>> IsMatchedExpression(FilteredRequestParameter filteredRequestParameter)
         {
             Dictionary<string, string> filterValue = LowerCaseDict(filteredRequestParameter.FilterValue);
@@ -178,8 +177,6 @@ namespace Infrastructure.Persistence.Repository
             }
             return Expression.Lambda<Func<T, bool>>(binaryExpression, parameterExpression);
         }
-
-
 
         public async Task<T> AddAsync(T entity)
         {

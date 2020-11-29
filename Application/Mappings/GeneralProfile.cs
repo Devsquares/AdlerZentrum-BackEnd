@@ -18,13 +18,14 @@ namespace Application.Mappings
             CreateMap<GetAllLevelsQuery, PagedResponse<Level>>();
 
 
-            CreateMap<Account, GetAllUsersViewModel>().ReverseMap();
+            CreateMap<ApplicationUser, GetAllUsersViewModel>().ReverseMap();
             CreateMap<GetAllUsersQuery, GetAllUsersParameter>();
 
+            CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
             CreateMap<GetAllUsersQuery, RequestParameter>();
-            CreateMap<GetAllGroupInstancesQuery, RequestParameter>();
+            CreateMap<GetAllGroupInstancesQuery, FilteredRequestParameter>();
 
         }
     }
