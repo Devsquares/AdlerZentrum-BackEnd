@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Infrastructure.Persistence.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Contexts
@@ -29,6 +28,8 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<Level> Levels { get; set; }
         public DbSet<Sublevel> SubLevels { get; set; }
         public DbSet<GroupInstance> GroupInstances { get; set; }
+        public DbSet<TeacherGroupInstanceAssignment> TeacherGroupInstances { get; set; }
+        public DbSet<PromoCode> PromoCodes { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -60,12 +61,12 @@ namespace Infrastructure.Persistence.Contexts
             base.OnModelCreating(builder);
             builder.Entity<ApplicationUser>(entity =>
             {
-                entity.ToTable(name: "User");
+                entity.ToTable(name: "ApplicationUsers");
             });
 
             builder.Entity<IdentityRole>(entity =>
             {
-                entity.ToTable(name: "Role");
+                entity.ToTable(name: "Roles");
             });
             builder.Entity<IdentityUserRole<string>>(entity =>
             {

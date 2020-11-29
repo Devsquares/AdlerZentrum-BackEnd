@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace Application.DTOs.Account
 {
-    public class RegisterRequest
+    public class AddAccountRequest
     {
         [Required]
         public string FirstName { get; set; }
@@ -34,8 +34,6 @@ namespace Application.DTOs.Account
         public string Country { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Profilephoto { get; set; }
-        public Address Address { get; set; }
         public string PhoneNumber { get; set; }
-        public int GroupInstanceId { get; set; }
     }
 }

@@ -7,6 +7,11 @@ namespace Domain.Entities
 {
     public class TeacherGroupInstanceAssignment : AuditableBaseEntity
     {
-        public Account Teacher { get; set; }
+        public string TeacherId { get; set; }
+        public virtual ApplicationUser Teacher { get; set; }
+
+        public int GroupInstanceId { get; set; }
+        public virtual GroupInstance GroupInstance { get; set; }
+
     }
 }

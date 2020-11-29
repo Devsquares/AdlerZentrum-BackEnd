@@ -10,6 +10,12 @@
     <Compile Remove="Migrations\20200627124316_Updates.Designer.cs" />
     <Compile Remove="Migrations\20200724180907_New.cs" />
     <Compile Remove="Migrations\20200724180907_New.Designer.cs" />
+    <Compile Remove="Migrations\20201128124956_teacher to group instacne.cs" />
+    <Compile Remove="Migrations\20201128124956_teacher to group instacne.Designer.cs" />
+    <Compile Remove="Migrations\20201128142804_teacher to group instacne.cs" />
+    <Compile Remove="Migrations\20201128142804_teacher to group instacne.Designer.cs" />
+    <Compile Remove="Migrations\20201128150325_teacher to group instacne.cs" />
+    <Compile Remove="Migrations\20201128150325_teacher to group instacne.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,7 @@
 ﻿using Application.DTOs.BasicData;
 using Application.Enums;
+using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,5 +17,6 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new GetAllRolesQuery()));
         }
+
     }
 }

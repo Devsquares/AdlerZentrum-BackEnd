@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Account.Commands.UpdateAccount
 {
-    public class UpdateBasicUserCommand : IRequest<Response<Domain.Entities.Account>>
+    public class UpdateBasicUserCommand : IRequest<Response<Domain.Entities.ApplicationUser>>
     {
         public string Id { get; set; }
         public string Email { get; set; }
@@ -20,14 +20,14 @@ namespace Application.DTOs.Account.Commands.UpdateAccount
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
 
-        public class UpdateAccountCommandHandler : IRequestHandler<UpdateBasicUserCommand, Response<Domain.Entities.Account>>
+        public class UpdateAccountCommandHandler : IRequestHandler<UpdateBasicUserCommand, Response<Domain.Entities.ApplicationUser>>
         {
             private readonly IAccountService _AccountRepository;
             public UpdateAccountCommandHandler(IAccountService AccountRepository)
             {
                 _AccountRepository = AccountRepository;
             }
-            public async Task<Response<Domain.Entities.Account>> Handle(UpdateBasicUserCommand command, CancellationToken cancellationToken)
+            public async Task<Response<Domain.Entities.ApplicationUser>> Handle(UpdateBasicUserCommand command, CancellationToken cancellationToken)
             {
                 var Account = await _AccountRepository.GetByIdAsync(command.Id);
 
@@ -40,13 +40,13 @@ namespace Application.DTOs.Account.Commands.UpdateAccount
                     var res = await _AccountRepository.UpdateAsync(command);
                     if (res.Succeeded)
                     {
-                        Reflection.CopyProperties(command,Account);
-                        return new Response<Domain.Entities.Account>(Account, res.Succeeded.ToString());
+                        Reflection.CopyProperties(command, Account);
+                        return new Response<Domain.Entities.ApplicationUser>(Account, res.Succeeded.ToString());
                     }
                     else
                     {
 
-                        return new Response<Domain.Entities.Account>(Account);
+                        return new Response<Domain.Entities.ApplicationUser>(Account);
                     }
                 }
             }

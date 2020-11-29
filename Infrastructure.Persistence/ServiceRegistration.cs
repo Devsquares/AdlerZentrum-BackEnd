@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Infrastructure.Persistence.Contexts;
-using Infrastructure.Persistence.Models;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +47,8 @@ namespace Infrastructure.Persistence
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
             services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
+            services.AddTransient<ITeacherGroupInstanceAssignmentRepositoryAsync, TeacherGroupInstanceAssignmentRepositoryAsync>();
+            services.AddTransient<IPromoCodeRepositoryAsync, PromoCodeRepositoryAsync>();
             #endregion
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
