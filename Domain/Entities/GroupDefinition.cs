@@ -12,7 +12,7 @@ namespace Domain.Entities
 
         public virtual Sublevel Sublevel { get; set; }
 
-        public int TimeSoltId { get; set; }
+        public int TimeSlotId { get; set; }
 
         public virtual TimeSlot TimeSlot { get; set; }
 
@@ -30,12 +30,12 @@ namespace Domain.Entities
 
         public DateTime EndDate { get; set; }
 
-        public DateTime FinalTestDate { get; set; }
+        public DateTime? FinalTestDate { get; set; }
 
         public int MaxInstances { get; set; }
 
         public int Serial { get; set; }
 
-        public int Status { get; set; }
+        public int? Status { get; set; }
     }
 }

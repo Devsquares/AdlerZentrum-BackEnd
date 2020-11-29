@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Identity;
 
 using Microsoft.Extensions.DependencyInjection;
 using Domain.Entities;
+using MediatR;
+using Infrastructure.Persistence.Repositories;
+using Application.Interfaces.Repositories;
 
 namespace WebApi
 {

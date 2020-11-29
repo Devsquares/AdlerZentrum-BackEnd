@@ -40,6 +40,8 @@ namespace WebApi
                 options.UseSqlServer(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence"));
             });
 
+            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddApplicationLayer();
             services.AddPersistenceInfrastructure(_config);
             services.AddSharedInfrastructure(_config);

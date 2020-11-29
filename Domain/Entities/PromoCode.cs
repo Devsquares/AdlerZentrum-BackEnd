@@ -8,6 +8,6 @@ namespace Domain.Entities
     public class PromoCode : AuditableBaseEntity
     {
         public string Name { get; set; }
-        public int Status { get; set; }
+        public int? Status { get; set; }
     }
 }
