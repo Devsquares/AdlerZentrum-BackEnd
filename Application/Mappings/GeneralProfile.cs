@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Account.Queries.GetAllUsers;
+﻿using Application.DTOs.Account;
+using Application.DTOs.Account.Queries.GetAllUsers;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.Level.Commands;
 using Application.DTOs.Level.Queries;
@@ -19,6 +20,7 @@ namespace Application.Mappings
 
 
             CreateMap<ApplicationUser, GetAllUsersViewModel>().ReverseMap();
+            CreateMap<ApplicationUser, AccountViewModel>().ReverseMap();
             CreateMap<GetAllUsersQuery, GetAllUsersParameter>();
 
             CreateMap<GroupInstance, GetAllGroupInstancesViewModel>().ReverseMap();

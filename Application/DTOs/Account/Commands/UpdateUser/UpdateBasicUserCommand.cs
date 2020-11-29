@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,23 +12,31 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Account.Commands.UpdateAccount
 {
-    public class UpdateBasicUserCommand : IRequest<Response<Domain.Entities.ApplicationUser>>
+    public class UpdateBasicUserCommand : IRequest<Response<AccountViewModel>>
     {
         public string Id { get; set; }
-        public string Email { get; set; }
-        public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public virtual bool Active { get; set; }
+        public virtual bool Deleted { get; set; }
+        public string Country { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Profilephoto { get; set; }
+        public string Avatar { get; set; }
         public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string UserName { get; set; }
 
-        public class UpdateAccountCommandHandler : IRequestHandler<UpdateBasicUserCommand, Response<Domain.Entities.ApplicationUser>>
+        public class UpdateAccountCommandHandler : IRequestHandler<UpdateBasicUserCommand, Response<AccountViewModel>>
         {
             private readonly IAccountService _AccountRepository;
-            public UpdateAccountCommandHandler(IAccountService AccountRepository)
+            private readonly IMapper _mapper;
+            public UpdateAccountCommandHandler(IAccountService AccountRepository, IMapper mapper)
             {
                 _AccountRepository = AccountRepository;
+                _mapper = mapper;
             }
-            public async Task<Response<Domain.Entities.ApplicationUser>> Handle(UpdateBasicUserCommand command, CancellationToken cancellationToken)
+            public async Task<Response<AccountViewModel>> Handle(UpdateBasicUserCommand command, CancellationToken cancellationToken)
             {
                 var Account = await _AccountRepository.GetByIdAsync(command.Id);
 
@@ -41,12 +50,13 @@ namespace Application.DTOs.Account.Commands.UpdateAccount
                     if (res.Succeeded)
                     {
                         Reflection.CopyProperties(command, Account);
-                        return new Response<Domain.Entities.ApplicationUser>(Account, res.Succeeded.ToString());
+
+                        var userViewModel = _mapper.Map<AccountViewModel>(Account);
+                        return new Response<AccountViewModel>(userViewModel, res.Succeeded.ToString());
                     }
                     else
                     {
-
-                        return new Response<Domain.Entities.ApplicationUser>(Account);
+                        return new Response<AccountViewModel>("Faild to update");
                     }
                 }
             }
