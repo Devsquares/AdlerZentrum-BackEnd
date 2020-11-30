@@ -37,7 +37,7 @@ namespace WebApi
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence"));
+                options.UseMySQL(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence"));
             });
 
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
