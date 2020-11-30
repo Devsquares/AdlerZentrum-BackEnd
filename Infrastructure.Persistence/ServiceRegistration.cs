@@ -49,6 +49,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
             services.AddTransient<ITeacherGroupInstanceAssignmentRepositoryAsync, TeacherGroupInstanceAssignmentRepositoryAsync>();
             services.AddTransient<IPromoCodeRepositoryAsync, PromoCodeRepositoryAsync>();
+            services.AddTransient<IGroupConditionRepositoryAsync, GroupConditionRepositoryAsync>();
             #endregion
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));

@@ -12,6 +12,6 @@ namespace Domain.Entities
 
         public int GroupInstanceId { get; set; }
         public virtual GroupInstance GroupInstance { get; set; }
-
+        public bool IsDefault { get; set; }
     }
 }
