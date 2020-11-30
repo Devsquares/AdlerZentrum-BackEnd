@@ -7,6 +7,8 @@ namespace Domain.Entities
 {
     public class LessonDefinition : AuditableBaseEntity
     {
-
+        public int SublevelId { get; set; }
+        public virtual Sublevel Sublevel { get; set; }
+        public int Order { get; set; }
     }
 }

@@ -7,6 +7,7 @@ namespace Domain.Entities
 {
     public class QuestionDetails : AuditableBaseEntity
     {
-
+        public int QuestionId { get; set; }
+        public int SingleQuestionId { get; set; }
     }
 }

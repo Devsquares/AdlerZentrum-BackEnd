@@ -30,6 +30,8 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<GroupInstance> GroupInstances { get; set; }
         public DbSet<TeacherGroupInstanceAssignment> TeacherGroupInstances { get; set; }
         public DbSet<PromoCode> PromoCodes { get; set; }
+        public DbSet<Homework> Homeworks { get; set; }
+        public DbSet<LessonInstance> LessonInstances { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
