@@ -38,18 +38,18 @@ namespace Infrastructure.Persistence
             }
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
-
+            services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
+            services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
+            services.AddTransient<ITeacherGroupInstanceAssignmentRepositoryAsync, TeacherGroupInstanceAssignmentRepositoryAsync>();
+            services.AddTransient<IPromoCodeRepositoryAsync, PromoCodeRepositoryAsync>();
+            services.AddTransient<IGroupConditionRepositoryAsync, GroupConditionRepositoryAsync>();
+            services.AddTransient<ILessonInstanceRepositoryAsync, LessonInstanceRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             #region Services
             services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
-            services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
-            services.AddTransient<ITeacherGroupInstanceAssignmentRepositoryAsync, TeacherGroupInstanceAssignmentRepositoryAsync>();
-            services.AddTransient<IPromoCodeRepositoryAsync, PromoCodeRepositoryAsync>();
-            services.AddTransient<IGroupConditionRepositoryAsync, GroupConditionRepositoryAsync>();
             #endregion
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));

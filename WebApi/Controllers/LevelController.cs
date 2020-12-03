@@ -33,7 +33,6 @@ namespace WebApi.Controllers
         }
 
 
-
         [HttpPut("update")]
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Put(int id, UpdateLevelCommand command)
@@ -44,7 +43,6 @@ namespace WebApi.Controllers
             }
             return Ok(await Mediator.Send(command));
         }
-
 
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
