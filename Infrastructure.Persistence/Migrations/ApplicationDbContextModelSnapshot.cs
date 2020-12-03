@@ -63,7 +63,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Active")
+                    b.Property<short>("Active")
                         .HasColumnType("bit");
 
                     b.Property<int?>("AddressId")
@@ -82,14 +82,14 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("Deleted")
+                    b.Property<short>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed")
+                    b.Property<short>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
@@ -98,7 +98,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
-                    b.Property<bool>("LockoutEnabled")
+                    b.Property<short>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
@@ -118,7 +118,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
+                    b.Property<short>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("Profilephoto")
@@ -130,7 +130,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<bool>("TwoFactorEnabled")
+                    b.Property<short>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
@@ -551,7 +551,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupInstanceId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDefault")
+                    b.Property<short>("IsDefault")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
