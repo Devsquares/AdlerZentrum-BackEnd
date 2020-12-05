@@ -72,7 +72,7 @@ namespace Infrastructure.Persistence.Migrations
                     LessonDefinitionId = table.Column<int>(nullable: false),
                     MaterialDone = table.Column<int>(nullable: false),
                     MaterialToDo = table.Column<int>(nullable: false),
-                    HomeworkId = table.Column<int>(nullable: false)
+                    HomeworkId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

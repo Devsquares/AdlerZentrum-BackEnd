@@ -18,16 +18,27 @@ namespace WebApi.Controllers
             }));
         }
 
-        //[HttpPost("SubmitLessonInstanceStudent")]
-        ////[Authorize(Roles = "SuperAdmin")]
-        //public async Task<IActionResult> SubmitLessonInstanceStudent(int id, CreateLevelCommand command)
-        //{
-        //    if (id != command.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return Ok(await Mediator.Send(command));
-        //}
+        [HttpPost("SubmitLessonInstanceStudent")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> SubmitLessonInstanceStudent(int id, CreateLessonInstanceStudentCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut("UpdateLessonInstanceStudent")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> UpdateLessonInstanceStudent(int id, UpdateLessonInstanceStudentCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
 
         //[HttpPost("CreateHomeWork")]
         ////[Authorize(Roles = "SuperAdmin")]

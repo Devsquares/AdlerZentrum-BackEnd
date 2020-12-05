@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Account;
 using Application.DTOs.Account.Queries.GetAllUsers;
+using Application.DTOs.GroupCondition.Queries;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.Level.Commands;
 using Application.DTOs.Level.Queries;
@@ -24,12 +25,14 @@ namespace Application.Mappings
             CreateMap<GetAllUsersQuery, GetAllUsersParameter>();
 
             CreateMap<GroupInstance, GetAllGroupInstancesViewModel>().ReverseMap();
+            CreateMap<GroupCondition, GetAllGroupConditionViewModel>().ReverseMap();
 
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
             CreateMap<GetAllUsersQuery, RequestParameter>();
             CreateMap<GetAllGroupInstancesQuery, FilteredRequestParameter>();
+            CreateMap<Application.DTOs.GroupCondition.Queries.GetAllGroupConditionsQuery, FilteredRequestParameter>();
 
         }
     }

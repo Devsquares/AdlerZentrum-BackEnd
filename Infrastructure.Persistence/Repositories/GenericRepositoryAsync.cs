@@ -44,12 +44,22 @@ namespace Infrastructure.Persistence.Repository
 
         public async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize)
         {
-            return await _dbContext
-                .Set<T>()
+            return await _dbContext.Set<T>()
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public IQueryable<T> MyQueryWithDynamicInclude<T>(string includeProperties) where T : class
+        {
+            string[] includes = includeProperties.Split(';');
+            var query = _dbContext.Set<T>().AsQueryable();
+
+            foreach (string include in includes)
+                query = query.Include(include);
+
+            return query;
         }
 
         public virtual async Task<IReadOnlyList<T>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
@@ -435,5 +445,14 @@ namespace Infrastructure.Persistence.Repository
             return newDict;
         }
 
+        public async Task<IReadOnlyList<T>> GetPagedIncludeReponseAsync(int pageNumber, int pageSize, string Include)
+        {
+            var query = MyQueryWithDynamicInclude<T>(Include);
+            return await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+        }
     }
 }

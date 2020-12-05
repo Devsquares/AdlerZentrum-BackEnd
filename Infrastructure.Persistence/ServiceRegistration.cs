@@ -44,6 +44,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IPromoCodeRepositoryAsync, PromoCodeRepositoryAsync>();
             services.AddTransient<IGroupConditionRepositoryAsync, GroupConditionRepositoryAsync>();
             services.AddTransient<ILessonInstanceRepositoryAsync, LessonInstanceRepositoryAsync>();
+            services.AddTransient<ILessonInstanceStudentRepositoryAsync, LessonInstanceStudentRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

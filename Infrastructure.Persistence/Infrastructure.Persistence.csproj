@@ -14,6 +14,12 @@
   <ItemGroup>
     <Compile Remove="Migrations\20201203112413_lessonInstance.cs" />
     <Compile Remove="Migrations\20201203112413_lessonInstance.Designer.cs" />
+    <Compile Remove="Migrations\20201205202313_nu.cs" />
+    <Compile Remove="Migrations\20201205202313_nu.Designer.cs" />
+    <Compile Remove="Migrations\20201205202519_LessonInstanceStudent.cs" />
+    <Compile Remove="Migrations\20201205202519_LessonInstanceStudent.Designer.cs" />
+    <Compile Remove="Migrations\20201205202620_LessonInstanceStudent.cs" />
+    <Compile Remove="Migrations\20201205202620_LessonInstanceStudent.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,14 +41,11 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

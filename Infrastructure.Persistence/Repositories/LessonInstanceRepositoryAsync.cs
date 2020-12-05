@@ -19,7 +19,12 @@ namespace Infrastructure.Persistence.Repositories
         }
         public IEnumerable<LessonInstance> GetByGroupInstanceId(int GroupInstanceId)
         {
-            return lessonInstances.Where(x => x.GroupInstanceId == GroupInstanceId);
+            return lessonInstances
+                .Include(x => x.GroupInstance)
+                .Include(x => x.LessonDefinition)
+                .Include(x => x.Homework)
+                .Include(x => x.LessonInstanceStudents)
+                .Where(x => x.GroupInstanceId == GroupInstanceId);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Application.DTOs.Level.Queries
         public async Task<PagedResponse<IEnumerable<GetAllLevelsViewModel>>> Handle(GetAllLevelsQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<RequestParameter>(request);
-            var user = await _levelService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
+            var user = await _levelService.GetPagedIncludeReponseAsync(validFilter.PageNumber, validFilter.PageSize, "SubLevels");
             var userViewModel = _mapper.Map<IEnumerable<GetAllLevelsViewModel>>(user);
             return new PagedResponse<IEnumerable<GetAllLevelsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
         }
