@@ -31,7 +31,7 @@ namespace Application.DTOs.TimeSlot.Queries
         public async Task<PagedResponse<IEnumerable<GetAllTimeSlotsViewModel>>> Handle(GetAllTimeSlotsQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<RequestParameter>(request);
-            var user = await _TimeSlotService.GetPagedIncludeReponseAsync(validFilter.PageNumber, validFilter.PageSize, "TimeSlotDetails");
+            var user = await _TimeSlotService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, "TimeSlotDetails");
             var userViewModel = _mapper.Map<IEnumerable<GetAllTimeSlotsViewModel>>(user);
             return new PagedResponse<IEnumerable<GetAllTimeSlotsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
         }
