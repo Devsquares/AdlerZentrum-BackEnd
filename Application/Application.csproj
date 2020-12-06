@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\HomeWork\Queries\" />
+    <Folder Include="DTOs\Disqualification\" />
     <Folder Include="Features\Tags\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
