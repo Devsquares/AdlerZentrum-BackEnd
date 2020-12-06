@@ -33,7 +33,7 @@ namespace Infrastructure.Persistence
             {
                 services.AddDbContext<ApplicationDbContext>(options =>
                options.UseMySql(
-                   configuration.GetConnectionString("DefaultConnection"),
+                   configuration.GetConnectionString("DefaultConnection"), 
                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
             #region Repositories
@@ -45,6 +45,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IGroupConditionRepositoryAsync, GroupConditionRepositoryAsync>();
             services.AddTransient<ILessonInstanceRepositoryAsync, LessonInstanceRepositoryAsync>();
             services.AddTransient<ILessonInstanceStudentRepositoryAsync, LessonInstanceStudentRepositoryAsync>();
+            services.AddTransient<IHomeWorkSubmitionRepositoryAsync, HomeWorkSubmitionRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
