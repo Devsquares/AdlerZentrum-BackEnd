@@ -46,6 +46,8 @@ namespace Infrastructure.Persistence
             services.AddTransient<ILessonInstanceRepositoryAsync, LessonInstanceRepositoryAsync>();
             services.AddTransient<ILessonInstanceStudentRepositoryAsync, LessonInstanceStudentRepositoryAsync>();
             services.AddTransient<IHomeWorkSubmitionRepositoryAsync, HomeWorkSubmitionRepositoryAsync>();
+            services.AddTransient<ITimeSlotRepositoryAsync, TimeSlotRepositoryAsync>();
+            
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

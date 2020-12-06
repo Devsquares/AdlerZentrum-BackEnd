@@ -22,6 +22,7 @@ namespace WebApi.Controllers
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> SubmitLessonInstanceStudent(int id, CreateLessonInstanceStudentCommand command)
         {
+            // TODO check last lesson attand.
             if (id != command.Id)
             {
                 return BadRequest();

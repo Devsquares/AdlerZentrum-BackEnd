@@ -4,6 +4,7 @@ using Application.DTOs.GroupCondition.Queries;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.Level.Commands;
 using Application.DTOs.Level.Queries;
+using Application.DTOs.TimeSlot.Queries;
 using Application.Filters;
 using Application.Wrappers;
 using AutoMapper;
@@ -27,12 +28,15 @@ namespace Application.Mappings
             CreateMap<GroupInstance, GetAllGroupInstancesViewModel>().ReverseMap();
             CreateMap<GroupCondition, GetAllGroupConditionViewModel>().ReverseMap();
 
+            CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
+
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
+            CreateMap<GetAllTimeSlotsQuery, RequestParameter>();
             CreateMap<GetAllUsersQuery, RequestParameter>();
             CreateMap<GetAllGroupInstancesQuery, FilteredRequestParameter>();
-            CreateMap<Application.DTOs.GroupCondition.Queries.GetAllGroupConditionsQuery, FilteredRequestParameter>();
+            CreateMap<GetAllGroupConditionsQuery, FilteredRequestParameter>();
 
         }
     }
