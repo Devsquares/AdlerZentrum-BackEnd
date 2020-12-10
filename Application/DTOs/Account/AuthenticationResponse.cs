@@ -12,6 +12,7 @@ namespace Application.DTOs.Account
         public List<string> Roles { get; set; }
         public bool IsVerified { get; set; }
         public string JWToken { get; set; }
+        public bool ChangePassword { get; set; }
         [JsonIgnore]
         public string RefreshToken { get; set; }
     }

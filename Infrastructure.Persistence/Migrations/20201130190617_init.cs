@@ -143,7 +143,7 @@ namespace Infrastructure.Persistence.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
-                    name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     LevelId = table.Column<int>(nullable: false),
                     NumberOflessons = table.Column<int>(nullable: false)
                 },

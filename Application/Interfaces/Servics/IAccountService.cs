@@ -13,7 +13,7 @@ namespace Application.Interfaces
     {
         Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress);
         Task<Response<string>> RegisterAsync(RegisterRequest request, string origin);
-        Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, string role);
+        Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, int role);
         Task<Response<string>> ConfirmEmailAsync(string userId, string code);
         Task ForgotPassword(ForgotPasswordRequest model, string origin);
         Task<Response<string>> ResetPassword(ResetPasswordRequest model);
