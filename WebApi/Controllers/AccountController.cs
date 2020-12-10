@@ -36,8 +36,6 @@ namespace WebApi.Controllers
         public AccountController(IAccountService accountService, IEmailService emailService)
         {
             _accountService = accountService;
-
-            //Email send Mohamed Reda 2-10-2020
             _emailService = emailService;
         }
         [HttpPost("authenticate")]
