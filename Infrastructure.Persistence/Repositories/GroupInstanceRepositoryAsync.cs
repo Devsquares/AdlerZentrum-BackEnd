@@ -57,7 +57,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public IReadOnlyList<GroupInstanceStudents> GetStudents(int groupId)
         {
-            return groupInstances.Where(x => x.Id == groupId).FirstOrDefault()?.Students.ToList();
+            return groupInstances.Include(x => x.Students).Where(x => x.Id == groupId).FirstOrDefault()?.Students.ToList();
         }
     }
 }

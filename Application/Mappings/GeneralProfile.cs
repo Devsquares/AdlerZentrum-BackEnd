@@ -2,6 +2,7 @@
 using Application.DTOs.Account.Queries.GetAllUsers;
 using Application.DTOs.GroupCondition.Queries;
 using Application.DTOs.GroupInstance.Queries;
+using Application.DTOs.HomeWorkSubmitionDTO.Queries;
 using Application.DTOs.Level.Commands;
 using Application.DTOs.Level.Queries;
 using Application.DTOs.Pricing.Queries;
@@ -32,6 +33,8 @@ namespace Application.Mappings
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
 
+            CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>().ReverseMap();
+            
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
