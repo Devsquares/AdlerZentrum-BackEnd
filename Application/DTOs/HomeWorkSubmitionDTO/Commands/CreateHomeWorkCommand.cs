@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.DTOs
+{
     public class CreateHomeWorkSubmitionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
