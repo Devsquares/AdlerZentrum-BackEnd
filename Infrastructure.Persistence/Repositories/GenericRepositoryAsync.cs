@@ -50,8 +50,16 @@ namespace Infrastructure.Persistence.Repository
                 .AsNoTracking()
                 .ToListAsync();
         }
-
-        public IQueryable<T> MyQueryWithDynamicInclude<T>(string includeProperties) where T : class
+        public async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize, string Include)
+        {
+            var query = MyQueryWithDynamicInclude<T>(Include);
+            return await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+        private IQueryable<T> MyQueryWithDynamicInclude<T>(string includeProperties) where T : class
         {
             string[] includes = includeProperties.Split(';');
             var query = _dbContext.Set<T>().AsQueryable();
@@ -444,15 +452,6 @@ namespace Infrastructure.Persistence.Repository
             }
             return newDict;
         }
-
-        public async Task<IReadOnlyList<T>> GetPagedIncludeReponseAsync(int pageNumber, int pageSize, string Include)
-        {
-            var query = MyQueryWithDynamicInclude<T>(Include);
-            return await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .AsNoTracking()
-                .ToListAsync();
-        }
+      
     }
 }

@@ -11,7 +11,7 @@ namespace Application.Interfaces
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize);
-        Task<IReadOnlyList<T>> GetPagedIncludeReponseAsync(int pageNumber, int pageSize, string Include);
+        Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize, string Include);
         Task<IReadOnlyList<T>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter);
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
