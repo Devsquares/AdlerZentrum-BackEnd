@@ -76,6 +76,7 @@ namespace Infrastructure.Persistence.Services
             response.IsVerified = user.EmailConfirmed;
             var refreshToken = GenerateRefreshToken(ipAddress);
             response.RefreshToken = refreshToken.Token;
+            response.ChangePassword = user.ChangePassword;
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
         }
 
@@ -302,7 +303,7 @@ namespace Infrastructure.Persistence.Services
             return user;
         }
 
-        public async Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, string role)
+        public async Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, int role)
         {
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName != null)
@@ -315,21 +316,21 @@ namespace Infrastructure.Persistence.Services
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
+                user.ChangePassword = true;
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
-                    //RolesEnum userRole = (RolesEnum)Enum.Parse(typeof(RolesEnum), role);
-                    //if (!checkeRole((RolesEnum)request.Role, 0))
-                    //{
-                    //    throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
-                    //}
-                    await _userManager.AddToRoleAsync(user, request.Role);
+                    RolesEnum userRole = (RolesEnum)role;
+                    // get it from claim.
+                    if (!checkeRole((RolesEnum)request.Role, 0))
+                    {
+                        throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
+                    }
+                    await _userManager.AddToRoleAsync(user, userRole.ToString());
 
-                    //var verificationUri = await SendVerificationEmail(user, origin);
+                    var verificationUri = await SendVerificationEmail(user, origin);
 
-                    return new Response<string>(user.Id, message: $"User Registered.");
-
-                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
+                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
                 else
                 {
