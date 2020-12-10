@@ -32,6 +32,7 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<PromoCode> PromoCodes { get; set; }
         public DbSet<Homework> Homeworks { get; set; }
         public DbSet<LessonInstance> LessonInstances { get; set; }
+        public DbSet<HomeWorkSubmition> HomeWorkSubmitions { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

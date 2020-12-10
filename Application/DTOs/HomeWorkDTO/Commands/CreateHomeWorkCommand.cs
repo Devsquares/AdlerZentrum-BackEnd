@@ -46,7 +46,7 @@ namespace Application.DTOs.HomeWork.Commands
                 await _HomeWorkRepository.AddAsync(HomeWork);
                 var students = _groupInstanceRepositoryAsync.GetStudents(HomeWork.GroupInstanceId);
 
-                await _mediator.Publish(new CreateHomeWorkSubmitionCommand { HomeWorkId = HomeWork.Id, Students = students });
+                await _mediator.Send(new CreateHomeWorkSubmitionCommand { HomeWorkId = HomeWork.Id, Students = students });
                 return new Response<int>(HomeWork.Id);
 
             }
