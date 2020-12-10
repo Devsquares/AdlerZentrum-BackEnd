@@ -6,6 +6,6 @@ namespace Application.Interfaces.Repositories
 {
     public interface IGroupInstanceRepositoryAsync : IGenericRepositoryAsync<GroupInstance>
     {
-
+        IReadOnlyList<GroupInstanceStudents> GetStudents(int groupId);
     }
 }

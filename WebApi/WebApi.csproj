@@ -5,6 +5,7 @@
     <RepositoryType>Public</RepositoryType>
     <Version>1.1.0</Version>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <UserSecretsId>942a6117-fdaa-4a1f-976a-7987bdc957e7</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'"> 
@@ -44,6 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ImageStorage\" />
     <Folder Include="Logs\" />
   </ItemGroup>
 

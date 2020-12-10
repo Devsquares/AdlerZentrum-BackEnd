@@ -21,8 +21,13 @@ namespace Application.DTOs.Account
         public string Email { get; set; }
         [Required]
         [MinLength(6)]
-        public string UserName { get; set; }
-
+        public string UserName { get; set; } 
+        [Required]
+        public int Role { get; set; }
+        public string Country { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Profilephoto { get; set; }
+        public string PhoneNumber { get; set; }
         [Required]
         [MinLength(6)]
         public string Password { get; set; }
@@ -30,7 +35,7 @@ namespace Application.DTOs.Account
         [Required]
         [Compare("Password")]
         public string ConfirmPassword { get; set; } 
-        public int Role { get; set; }
+        public string Role { get; set; }
         public string Country { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Profilephoto { get; set; }

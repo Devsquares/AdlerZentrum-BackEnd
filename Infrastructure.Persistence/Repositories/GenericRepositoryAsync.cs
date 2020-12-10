@@ -49,7 +49,8 @@ namespace Infrastructure.Persistence.Repository
                 .Take(pageSize)
                 .AsNoTracking()
                 .ToListAsync();
-        }
+        } 
+
         public async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize, string Include)
         {
             var query = MyQueryWithDynamicInclude<T>(Include);
@@ -215,7 +216,7 @@ namespace Infrastructure.Persistence.Repository
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync()
         {
             return await _dbContext
                  .Set<T>()
