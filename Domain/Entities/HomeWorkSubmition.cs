@@ -11,5 +11,6 @@ namespace Domain.Entities
         public int HomeworkId { get; set; }
         public Homework Homework { get; set; }
         public string Text { get; set; }
+        public int Status { get; set; }
     }
 }

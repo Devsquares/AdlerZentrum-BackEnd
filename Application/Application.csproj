@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\HomeWorkSubmitionDTO\Queries\**" />
+    <EmbeddedResource Remove="DTOs\HomeWorkSubmitionDTO\Queries\**" />
+    <None Remove="DTOs\HomeWorkSubmitionDTO\Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="FluentValidation" Version="9.1.2" />
@@ -23,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\DisqualificationDTO\" />
-    <Folder Include="DTOs\HomeWorkDTO\Queries\" />
     <Folder Include="DTOs\Disqualification\" />
     <Folder Include="Features\Tags\" />
     <Folder Include="Helpers\" />

@@ -10,14 +10,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.HomeWorkSubmition.Commands
-{
+namespace Application.DTOs
     public class CreateHomeWorkSubmitionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public string StudentId { get; set; } 
+        public string StudentId { get; set; }
         public string URL { get; set; }
-        public int HomeworkId { get; set; } 
+        public int HomeworkId { get; set; }
         public string Text { get; set; }
 
         public class CreateHomeWorkSubmitionCommandHandler : IRequestHandler<CreateHomeWorkSubmitionCommand, Response<int>>

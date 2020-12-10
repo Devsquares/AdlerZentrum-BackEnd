@@ -1,4 +1,4 @@
-﻿using Application.DTOs.HomeWorkSubmition.Commands;
+﻿using Application.DTOs.HomeWorkSubmitionDTO.Commands;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
