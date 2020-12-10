@@ -48,6 +48,8 @@ namespace Infrastructure.Persistence
             services.AddTransient<IHomeWorkSubmitionRepositoryAsync, HomeWorkSubmitionRepositoryAsync>();
             services.AddTransient<ITimeSlotRepositoryAsync, TimeSlotRepositoryAsync>();
             services.AddTransient<IPricingRepositoryAsync, PricingRepositoryAsync>();
+            services.AddTransient<IHomeWorkRepositoryAsync, HomeWorkRepositoryAsync>();
+        
 
             #endregion
 

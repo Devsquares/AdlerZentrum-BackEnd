@@ -11,5 +11,7 @@ namespace Domain.Entities
         public int MinCharacters { get; set; }
         public int Points { get; set; }
         public int BonusPoints { get; set; }
+        public int Status { get; set; }
+        public int GroupInstanceId { get; set; }
     }
 }

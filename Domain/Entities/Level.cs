@@ -6,7 +6,11 @@ namespace Domain.Entities
 {
     public class Level : AuditableBaseEntity
     {
+        public Level()
+        {
+            SubLevels = new HashSet<Sublevel>();
+        }
         public string Name { get; set; }
-        public virtual ICollection<Sublevel> SubLevels { get; set; }
+        public virtual ICollection<Sublevel> SubLevels { get; private set; }
     }
 }

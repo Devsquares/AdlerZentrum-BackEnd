@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.HomeWorkSubmition.Commands
+namespace Application.DTOs
 {
     public class CreateHomeWorkSubmitionCommand : IRequest<Response<int>>
     {

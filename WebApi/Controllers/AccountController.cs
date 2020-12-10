@@ -26,12 +26,8 @@ namespace WebApi.Controllers
     {
         private readonly IAccountService _accountService;
         private IMediator _mediator;
-
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-
-        //Email send Mohamed Reda 2-10-2020
         private readonly IEmailService _emailService;
-
 
         public AccountController(IAccountService accountService, IEmailService emailService)
         {

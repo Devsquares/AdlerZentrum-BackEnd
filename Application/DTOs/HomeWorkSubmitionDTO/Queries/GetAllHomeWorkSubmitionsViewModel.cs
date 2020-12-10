@@ -1,12 +1,9 @@
-﻿using Domain.Common;
-using System.Data;
+﻿using Domain.Entities;
 
-namespace Domain.Entities
+namespace Application.DTOs.HomeWorkSubmitionDTO.Queries
 {
-    public class HomeWorkSubmition : AuditableBaseEntity
+    public class GetAllHomeWorkSubmitionsViewModel
     {
-        public string StudentId { get; set; }
-        public ApplicationUser Student { get; set; }
         public string URL { get; set; }
         public int HomeworkId { get; set; }
         public Homework Homework { get; set; }

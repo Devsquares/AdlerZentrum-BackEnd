@@ -20,6 +20,7 @@ namespace Domain.Entities
         public string Avatar { get; set; }
         public Address Address { get; set; }
         public IdentityRole Role { get; set; }
+        public bool ChangePassword { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
         public bool OwnsToken(string token)
         {

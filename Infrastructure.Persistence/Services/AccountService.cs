@@ -92,7 +92,8 @@ namespace Infrastructure.Persistence.Services
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                UserName = request.UserName
+                UserName = request.UserName,
+
             };
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
@@ -315,15 +316,17 @@ namespace Infrastructure.Persistence.Services
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
-                var result = await _userManager.CreateAsync(user, request.Password);
+                user.ChangePassword = true;
+                var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    //RolesEnum userRole = (RolesEnum)Enum.Parse(typeof(RolesEnum), role);
-                    //if (!checkeRole((RolesEnum)request.Role, 0))
-                    //{
-                    //    throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
-                    //}
-                    await _userManager.AddToRoleAsync(user, request.Role);
+                    RolesEnum userRole = (RolesEnum)Enum.Parse(typeof(RolesEnum), role);
+                    if (!checkeRole((RolesEnum)request.Role, 0))
+                    {
+                        throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
+                    }
+
+                    await _userManager.AddToRoleAsync(user, userRole.ToString());
 
                     //var verificationUri = await SendVerificationEmail(user, origin);
 

@@ -8,9 +8,13 @@ namespace Domain.Entities
 {
     public class TimeSlot : AuditableBaseEntity
     {
+        public TimeSlot()
+        {
+            TimeSlotDetails = new HashSet<TimeSlotDetails>();
+        }
         public string Name { get; set; }
         public int? Status { get; set; }
         
-        public virtual ICollection<TimeSlotDetails> TimeSlotDetails { get; set; }
+        public virtual ICollection<TimeSlotDetails> TimeSlotDetails { get; private set; }
     }
 }

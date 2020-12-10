@@ -1,4 +1,5 @@
-﻿using Application.DTOs.HomeWorkSubmition.Commands;
+﻿using Application.DTOs;
+using Application.DTOs.HomeWork.Commands;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -15,6 +16,26 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
             return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPost("CreateAdditionalHomework")]
+        public async Task<IActionResult> CreateAdditionalHomework(int id, CreateHomeWorkCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
+        }
+         
+        [HttpGet("GetHomeworkForStudent")]
+        public async Task<IActionResult> GetByGroupInstance([FromQuery] GetAllHomeWorkSubmitionsQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
+            {
+                StudentId = filter.StudentId,
+                GroupInstanceId = filter.GroupInstanceId
+            }));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Enums;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
