@@ -20,13 +20,8 @@ namespace WebApi.Controllers
 
         [HttpPost("SubmitLessonInstanceStudent")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> SubmitLessonInstanceStudent(int id, CreateLessonInstanceStudentCommand command)
+        public async Task<IActionResult> SubmitLessonInstanceStudent(CreateLessonInstanceStudentCommand command)
         {
-            // TODO check last lesson attand.
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
             return Ok(await Mediator.Send(command));
         }
 

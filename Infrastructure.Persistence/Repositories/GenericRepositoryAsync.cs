@@ -28,7 +28,6 @@ namespace Infrastructure.Persistence.Repository
             return _dbContext.Set<T>().Count();
         }
 
-
         public int GetCount(FilteredRequestParameter filteredRequestParameter)
         {
             return _dbContext
@@ -49,7 +48,7 @@ namespace Infrastructure.Persistence.Repository
                 .Take(pageSize)
                 .AsNoTracking()
                 .ToListAsync();
-        } 
+        }
 
         public async Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize, string Include)
         {
@@ -203,7 +202,12 @@ namespace Infrastructure.Persistence.Repository
             await _dbContext.SaveChangesAsync();
             return entity;
         }
-
+        public async Task<bool> AddBulkAsync(List<T> entity)
+        {
+            await _dbContext.Set<T>().AddRangeAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
         public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -453,6 +457,6 @@ namespace Infrastructure.Persistence.Repository
             }
             return newDict;
         }
-      
+
     }
 }
