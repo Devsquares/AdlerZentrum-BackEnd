@@ -14,6 +14,7 @@ namespace Application.Interfaces
         Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize, string Include);
         Task<IReadOnlyList<T>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter);
         Task<T> AddAsync(T entity);
+        Task<bool> AddBulkAsync(List<T> entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
         int GetCount(T entity);
