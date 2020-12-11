@@ -18,5 +18,11 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllRolesQuery()));
         }
 
+        [HttpGet("GetAlHomeWorkSubmitionStatus")]
+        public async Task<IActionResult> GetAlHomeWorkSubmitionStatus()
+        {
+            return Ok(await Mediator.Send(new GetAllHomeworkSubmtionStatusEnumQuery()));
+        }
+
     }
 }

@@ -29,9 +29,10 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(CreateHomeWorkSubmitionCommand command, CancellationToken cancellationToken)
             {
-                var HomeWorkSubmition = new Domain.Entities.HomeWorkSubmition();
-
+                var HomeWorkSubmition = new HomeWorkSubmition();
+                HomeWorkSubmition.DueDate = DateTime.Now.AddDays(1);
                 Reflection.CopyProperties(command, HomeWorkSubmition);
+
                 await _HomeWorkSubmitionRepository.AddAsync(HomeWorkSubmition);
                 return new Response<int>(HomeWorkSubmition.Id);
 

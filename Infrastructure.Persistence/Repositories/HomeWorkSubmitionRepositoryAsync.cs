@@ -17,10 +17,17 @@ namespace Infrastructure.Persistence.Repositories
             homeWorkSubmitions = dbContext.Set<HomeWorkSubmition>();
         }
 
-        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllAsync(string studentId, int groupInstanceId)
+        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllAsync(int groupInstanceId)
+        {
+            return await homeWorkSubmitions.Include(x => x.Homework)
+            .Where(x => x.Homework.GroupInstanceId == groupInstanceId).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllForStudentAsync(string studentId, int groupInstanceId)
         {
             return await homeWorkSubmitions.Include(x => x.Homework)
              .Where(x => x.StudentId == studentId && x.Homework.GroupInstanceId == groupInstanceId).ToListAsync();
         }
+
     }
 }
