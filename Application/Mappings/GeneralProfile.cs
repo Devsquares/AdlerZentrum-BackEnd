@@ -7,10 +7,12 @@ using Application.DTOs.Level.Commands;
 using Application.DTOs.Level.Queries;
 using Application.DTOs.Pricing.Queries;
 using Application.DTOs.TimeSlot.Queries;
+using Application.Enums;
 using Application.Filters;
 using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
+using System;
 
 namespace Application.Mappings
 {
@@ -33,8 +35,11 @@ namespace Application.Mappings
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
 
-            CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>().ReverseMap();
-            
+            //CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>().ReverseMap();
+            CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>()
+                             .ForMember(destination => destination.Status,
+                 opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
+
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();

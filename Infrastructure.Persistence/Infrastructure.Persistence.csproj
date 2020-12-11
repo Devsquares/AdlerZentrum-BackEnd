@@ -22,6 +22,8 @@
     <Compile Remove="Migrations\20201205202620_LessonInstanceStudent.Designer.cs" />
     <Compile Remove="Migrations\20201210174819_check.cs" />
     <Compile Remove="Migrations\20201210174819_check.Designer.cs" />
+    <Compile Remove="Migrations\20201211112349_homeworkCorrection.cs" />
+    <Compile Remove="Migrations\20201211112349_homeworkCorrection.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

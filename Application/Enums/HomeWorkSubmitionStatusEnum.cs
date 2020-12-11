@@ -7,8 +7,9 @@ namespace Application.Enums
     public enum HomeWorkSubmitionStatusEnum
     {
         Pending = 0,
-        Solved = 1,
-        Corrected = 2,
-        Missed = 3
+        Draft = 1,
+        Solved = 2,
+        Corrected = 3,
+        Missed = 4
     }
 }
