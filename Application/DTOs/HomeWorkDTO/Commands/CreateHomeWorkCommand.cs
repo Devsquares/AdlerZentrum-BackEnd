@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.HomeWork.Commands
+namespace Application.DTOs
 {
     public class CreateHomeWorkCommand : IRequest<Response<int>>
     {

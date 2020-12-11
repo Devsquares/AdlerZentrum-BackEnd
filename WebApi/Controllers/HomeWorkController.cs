@@ -18,6 +18,13 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpPost("SubmitHomeWorkForStudent")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> SubmitHomeWorkForStudent(HomeworkCorrectionCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
         [HttpPost("CreateAdditionalHomework")]
         public async Task<IActionResult> CreateAdditionalHomework(int id, CreateHomeWorkCommand command)
         {
