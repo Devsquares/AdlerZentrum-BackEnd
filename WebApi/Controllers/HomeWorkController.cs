@@ -1,4 +1,5 @@
-﻿using Application.DTOs; 
+﻿using Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -17,9 +18,9 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPost("SubmitHomeWorkForStudent")]
+        [HttpPost("SubmitHomeWorkCorrection")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> SubmitHomeWorkForStudent(HomeworkCorrectionCommand command)
+        public async Task<IActionResult> SubmitHomeWorkCorrection(HomeworkCorrectionCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
@@ -35,12 +36,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetHomeworkForStudent")]
-        public async Task<IActionResult> GetByGroupInstance([FromQuery] GetAllHomeWorkSubmitionsForStudentQuery filter)
+        //[Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetByGroupInstance()
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsForStudentQuery()
             {
-                StudentId = filter.StudentId,
-                GroupInstanceId = filter.GroupInstanceId
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value
             }));
         }
 
@@ -50,6 +52,15 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
             {
                 GroupInstanceId = filter.GroupInstanceId
+            }));
+        }
+
+        [HttpGet("GetHomeworkSubmitionById")]
+        public async Task<IActionResult> GetHomeworkSubmitionById([FromQuery] GetHomeWorkSubmitionByIdQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetHomeWorkSubmitionByIdQuery()
+            {
+                HomeWorkSubmitionId = filter.HomeWorkSubmitionId
             }));
         }
     }

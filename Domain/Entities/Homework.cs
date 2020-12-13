@@ -13,5 +13,8 @@ namespace Domain.Entities
         public int BonusPoints { get; set; }
         public int Status { get; set; }
         public int GroupInstanceId { get; set; }
+        public GroupInstance GroupInstance { get; set; }
+        public int LessonInstanceId { get; set; }
+        public virtual LessonInstance LessonInstance { get; set; }
     }
 }

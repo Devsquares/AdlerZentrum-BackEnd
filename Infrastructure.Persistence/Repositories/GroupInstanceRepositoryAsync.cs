@@ -13,10 +13,18 @@ namespace Infrastructure.Persistence.Repositories
     public class GroupInstanceRepositoryAsync : GenericRepositoryAsync<GroupInstance>, IGroupInstanceRepositoryAsync
     {
         private readonly DbSet<GroupInstance> groupInstances;
+        private readonly DbSet<GroupInstanceStudents> groupInstanceStudents;
         public GroupInstanceRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             groupInstances = dbContext.Set<GroupInstance>();
+            groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
         }
+
+        public int? GetActiveGroupInstance(string userId)
+        {
+            return groupInstanceStudents.Where(x => x.StudentId == userId && x.IsDefault == true).FirstOrDefault()?.GroupInstanceId;
+        }
+
         public override async Task<IReadOnlyList<GroupInstance>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
         {
             bool noPaging = filteredRequestParameter.NoPaging;

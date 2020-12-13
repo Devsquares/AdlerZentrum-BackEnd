@@ -22,31 +22,35 @@ using Application.DTOs.Account;
 using Application.DTOs.Account.Commands.UpdateAccount;
 using Org.BouncyCastle.Ocsp;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces.Repositories;
 
 namespace Infrastructure.Persistence.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
-        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
+        private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
 
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
-            IEmailService emailService)
+            IEmailService emailService,
+            IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
             _dateTimeService = dateTimeService;
             _signInManager = signInManager;
-            this._emailService = emailService;
+            _emailService = emailService;
+            _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -65,7 +69,15 @@ namespace Infrastructure.Persistence.Services
             {
                 throw new ApiException($"ApplicationUser Not Confirmed for '{request.Email}'.");
             }
-            JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            int? activeGroup = null;
+            if (roles.Contains("Student"))
+            {
+                activeGroup = _groupInstanceRepositoryAsync.GetActiveGroupInstance(user.Id);
+            }
+
+            JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user, roles, activeGroup);
             AuthenticationResponse response = new AuthenticationResponse();
             response.Id = user.Id;
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -76,6 +88,7 @@ namespace Infrastructure.Persistence.Services
             response.IsVerified = user.EmailConfirmed;
             var refreshToken = GenerateRefreshToken(ipAddress);
             response.RefreshToken = refreshToken.Token;
+            response.ActiveGroupInstance = activeGroup;
             response.ChangePassword = user.ChangePassword;
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
         }
@@ -100,15 +113,20 @@ namespace Infrastructure.Persistence.Services
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
+
+                //TODO need to be change
+                user.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, RolesEnum.Student.ToString());
 
-                    var verificationUri = await SendVerificationEmail(user, origin);
+                    //var verificationUri = await SendVerificationEmail(user, origin);
 
 
-                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
+                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
+
+                    return new Response<string>(user.Id, message: $"User Registered.");
                 }
                 else
                 {
@@ -145,11 +163,9 @@ namespace Infrastructure.Persistence.Services
             return result;
         }
 
-        private async Task<JwtSecurityToken> GenerateJWToken(ApplicationUser user)
+        private async Task<JwtSecurityToken> GenerateJWToken(ApplicationUser user, IList<string> roles, int? activeGroup)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
-            var roles = await _userManager.GetRolesAsync(user);
-
             var roleClaims = new List<Claim>();
 
             for (int i = 0; i < roles.Count; i++)
@@ -165,8 +181,8 @@ namespace Infrastructure.Persistence.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id),
-                //new Claim("ip", ipAddress)
+                new Claim(JwtRegisteredClaimNames.Sid, user.Id),
+                new Claim("GroupInstance",activeGroup.ToString())
             }
             .Union(userClaims)
             .Union(roleClaims);
@@ -318,6 +334,9 @@ namespace Infrastructure.Persistence.Services
             if (userWithSameEmail == null)
             {
                 user.ChangePassword = true;
+                //TODO need to be change
+                user.EmailConfirmed = true;
+
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
@@ -329,9 +348,11 @@ namespace Infrastructure.Persistence.Services
                     }
                     await _userManager.AddToRoleAsync(user, userRole.ToString());
 
-                    var verificationUri = await SendVerificationEmail(user, origin);
+                    //var verificationUri = await SendVerificationEmail(user, origin);
 
-                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
+                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
+
+                    return new Response<string>(user.Id, message: $"User Registered.");
                 }
                 else
                 {

@@ -25,6 +25,13 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpPost("LessonReport")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> LessonReport(CreateLessonInstanceReportCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
         [HttpPut("UpdateLessonInstanceStudent")]
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> UpdateLessonInstanceStudent(int id, UpdateLessonInstanceStudentCommand command)

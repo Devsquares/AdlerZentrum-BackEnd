@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201213145200_add groupinstacne to homework")]
+    partial class addgroupinstacnetohomework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -414,9 +416,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("LessonInstanceId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MinCharacters")
                         .HasColumnType("int");
 
@@ -432,8 +431,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GroupInstanceId");
-
-                    b.HasIndex("LessonInstanceId");
 
                     b.ToTable("Homeworks");
                 });
@@ -487,6 +484,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupInstanceId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("HomeworkId")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -506,6 +506,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GroupInstanceId");
+
+                    b.HasIndex("HomeworkId");
 
                     b.HasIndex("LessonDefinitionId");
 
@@ -1056,12 +1058,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
-                        .WithMany()
-                        .HasForeignKey("LessonInstanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
@@ -1080,6 +1076,10 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.Homework", "Homework")
+                        .WithMany()
+                        .HasForeignKey("HomeworkId");
 
                     b.HasOne("Domain.Entities.LessonDefinition", "LessonDefinition")
                         .WithMany()

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using WebApi.Extensions;
 using WebApi.Services;
+using WebApi.Middlewares;
 
 namespace WebApi
 {
@@ -70,7 +71,7 @@ namespace WebApi
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthorization(); 
             app.UseSwaggerExtension();
             app.UseErrorHandlingMiddleware();
             app.UseHealthChecks("/health");

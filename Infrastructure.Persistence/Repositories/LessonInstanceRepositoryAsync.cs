@@ -22,7 +22,6 @@ namespace Infrastructure.Persistence.Repositories
             return lessonInstances
                 .Include(x => x.GroupInstance)
                 .Include(x => x.LessonDefinition)
-                .Include(x => x.Homework)
                 .Include(x => x.LessonInstanceStudents)
                 .Where(x => x.GroupInstanceId == GroupInstanceId);
         }
