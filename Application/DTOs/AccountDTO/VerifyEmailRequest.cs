@@ -11,7 +11,7 @@ namespace Application.DTOs.Account
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        public string Token { get; set; }
+        public string CurrentPassword { get; set; }
         [Required]
         [MinLength(6)]
         public string Password { get; set; }
