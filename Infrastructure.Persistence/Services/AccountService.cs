@@ -275,7 +275,7 @@ namespace Infrastructure.Persistence.Services
             var result = await _userManager.ChangePasswordAsync(ApplicationUser, model.CurrentPassword, model.Password);
             if (result.Succeeded)
             {
-                ApplicationUser.ChangePassword = true;
+                ApplicationUser.ChangePassword = false;
                 await _userManager.UpdateAsync(ApplicationUser);
                 return new Response<string>(model.Email, message: $"Password Resetted.");
             }
