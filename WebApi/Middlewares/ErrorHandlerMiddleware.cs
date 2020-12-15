@@ -7,6 +7,9 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http.Extensions;
+using Serilog;
 
 namespace WebApi.Middlewares
 {
@@ -27,6 +30,7 @@ namespace WebApi.Middlewares
             }
             catch (Exception error)
             {
+                Log.Error(error?.Message);
                 var response = context.Response;
                 response.ContentType = "application/json";
                 var responseModel = new Response<string>() { succeeded = false, message = error?.Message };
