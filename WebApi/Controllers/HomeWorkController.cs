@@ -46,6 +46,14 @@ namespace WebApi.Controllers
             }));
         }
 
+        [HttpGet("GetBounsRequests")]
+        // [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> GetBounsRequests()
+        {
+            return Ok(await Mediator.Send(new GetHomeworkBounsRequestsQuery()));
+        }
+
+
         [HttpGet("GetHomeworkSubmition")]
         public async Task<IActionResult> GetHomeworkSubmition([FromQuery] GetAllHomeWorkSubmitionsQuery filter)
         {
