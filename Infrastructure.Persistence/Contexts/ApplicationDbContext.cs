@@ -34,6 +34,10 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<Homework> Homeworks { get; set; }
         public DbSet<LessonInstance> LessonInstances { get; set; }
         public DbSet<HomeWorkSubmition> HomeWorkSubmitions { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<SingleQuestion> SingleQuestions { get; set; }
+        public DbSet<QuestionDetails> QuestionDetails { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

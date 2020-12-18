@@ -16,7 +16,7 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public int GroupDefinitionId { get; set; }
-        public int Serail { get; set; }
+        public int Serial { get; set; }
         public int? Status { get; set; }
 
         public class UpdateLessonInstanceCommandHandler : IRequestHandler<UpdateLessonInstanceCommand, Response<int>>

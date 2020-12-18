@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201216171353_fixSingleQuestion")]
+    partial class fixSingleQuestion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -169,9 +171,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -190,6 +189,37 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("SingleQuestionId");
 
                     b.ToTable("Choice");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ChoiceAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SingleQuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChoiceAnswer");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupCondition", b =>
@@ -315,8 +345,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("Serial")
-                        .HasColumnType("text");
+                    b.Property<int>("Serail")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -433,9 +463,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("BonusPoints")
                         .HasColumnType("int");
 
-                    b.Property<int>("BonusPointsStatus")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -462,8 +489,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<string>("TeacherId")
-                        .HasColumnType("varchar(85)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .HasColumnType("text");
@@ -473,8 +500,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("GroupInstanceId");
 
                     b.HasIndex("LessonInstanceId");
-
-                    b.HasIndex("TeacherId");
 
                     b.ToTable("Homeworks");
                 });
@@ -543,9 +568,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<int>("MaterialToDo")
                         .HasColumnType("int");
-
-                    b.Property<string>("Serial")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -734,6 +756,8 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("QuestionTypeId");
+
                     b.HasIndex("TestId");
 
                     b.ToTable("Questions");
@@ -770,14 +794,45 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("QuestionDetails");
                 });
 
+            modelBuilder.Entity("Domain.Entities.QuestionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QuestionType");
+                });
+
             modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("AnswerIsTrueOrFalse")
-                        .HasColumnType("bit");
+                    b.Property<int>("AnswerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AnswerId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
@@ -803,6 +858,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnswerId1");
 
                     b.HasIndex("QuestionId");
 
@@ -1297,10 +1354,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("LessonInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
@@ -1342,6 +1395,12 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
+                    b.HasOne("Domain.Entities.QuestionType", "QuestionType")
+                        .WithMany()
+                        .HasForeignKey("QuestionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Test", null)
                         .WithMany("Questions")
                         .HasForeignKey("TestId");
@@ -1349,6 +1408,10 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
                 {
+                    b.HasOne("Domain.Entities.ChoiceAnswer", "Answer")
+                        .WithMany()
+                        .HasForeignKey("AnswerId1");
+
                     b.HasOne("Domain.Entities.Question", null)
                         .WithMany("SingleQuestions")
                         .HasForeignKey("QuestionId");

@@ -15,7 +15,7 @@ namespace Application.DTOs.GroupInstance.Commands
     public class CreateGroupInstanceCommand : IRequest<Response<int>>
     {
         public int GroupDefinitionId { get; set; }
-        public int Serail { get; set; }
+        public int Serial { get; set; }
         public int? Status { get; set; }
 
         public class CreateGroupInstanceCommandHandler : IRequestHandler<CreateGroupInstanceCommand, Response<int>>

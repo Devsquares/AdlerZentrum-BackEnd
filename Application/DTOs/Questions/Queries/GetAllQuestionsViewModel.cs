@@ -1,12 +1,13 @@
-using Domain.Common;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Entities
+namespace Application.DTOs
 {
-    public class Question : AuditableBaseEntity
+    public class GetAllQuestionsViewModel
     {
+        public int Id { get; set; }
         public int QuestionTypeId { get; set; }
         public int Order { get; set; }
         public string Text { get; set; }
@@ -14,5 +15,6 @@ namespace Domain.Entities
         public string AudioPath { get; set; }
         public int NoOfRepeats { get; set; }
         public virtual ICollection<SingleQuestion> SingleQuestions { get; set; }
+
     }
 }

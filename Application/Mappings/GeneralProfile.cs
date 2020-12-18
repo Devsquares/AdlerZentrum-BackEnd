@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Account;
+using Application.DTOs;
 using Application.DTOs.Account.Queries.GetAllUsers;
 using Application.DTOs.GroupCondition.Queries;
 using Application.DTOs.GroupInstance.Queries;
@@ -35,10 +36,18 @@ namespace Application.Mappings
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
 
+
+            CreateMap<SingleQuestion, GetAllSingleQuestionsViewModel>().ReverseMap();
+            CreateMap<Question, GetQuestionViewModel>().ReverseMap();
+
             //CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>().ReverseMap();
             CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>()
                              .ForMember(destination => destination.Status,
                  opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
+
+            CreateMap<Homework, GetAllomeworkBounsViewModel>()
+            .ForMember(destination => destination.GroupInstanceSerial, opts => opts.MapFrom(source => source.GroupInstance.Serial))
+            .ForMember(destination => destination.LessonInstanceSerial, opts => opts.MapFrom(source => source.LessonInstance.Serial));
 
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
             // Filter 
@@ -46,6 +55,8 @@ namespace Application.Mappings
             CreateMap<GetAllTimeSlotsQuery, RequestParameter>();
             CreateMap<GetAllPricingQuery, RequestParameter>();
             CreateMap<GetAllUsersQuery, RequestParameter>();
+            CreateMap<GetAllSingleQuestionsQuery, RequestParameter>();
+            CreateMap<GetAllQuestionsQuery, RequestParameter>();
             CreateMap<GetAllGroupInstancesQuery, FilteredRequestParameter>();
             CreateMap<GetAllGroupConditionsQuery, FilteredRequestParameter>();
 

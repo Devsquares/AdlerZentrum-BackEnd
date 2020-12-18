@@ -19,6 +19,7 @@ namespace Domain.Entities
         public virtual LessonDefinition LessonDefinition { get; set; }
         public int MaterialDone { get; set; }
         public int MaterialToDo { get; set; } 
+        public string Serial { get; set; }
         //public int? HomeworkId { get; set; }
         //public virtual Homework Homework { get; set; }
         public virtual ICollection<LessonInstanceStudent> LessonInstanceStudents { get; private set; }

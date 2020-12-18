@@ -40,7 +40,7 @@ namespace Application.DTOs
                 var HomeWork = new Homework();
 
                 Reflection.CopyProperties(command, HomeWork);
-                HomeWork.Status = (int)AdditionalHomeworkStatusEnum.New;
+                HomeWork.BonusPointsStatus = (int)BonusPointsStatusEnum.New;
 
                 // Create HomeWorkSubmition for each student. HomeWorkSubmitionStatusEnum.Pending if without bouns. 
                 await _HomeWorkRepository.AddAsync(HomeWork);
@@ -78,6 +78,5 @@ namespace Application.DTOs
                 }
             }
         }
-
     }
 }

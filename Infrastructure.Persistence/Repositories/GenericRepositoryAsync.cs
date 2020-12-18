@@ -61,7 +61,7 @@ namespace Infrastructure.Persistence.Repository
         }
         private IQueryable<T> MyQueryWithDynamicInclude<T>(string includeProperties) where T : class
         {
-            string[] includes = includeProperties.Split(';');
+            string[] includes = includeProperties.Split(',');
             var query = _dbContext.Set<T>().AsQueryable();
 
             foreach (string include in includes)
