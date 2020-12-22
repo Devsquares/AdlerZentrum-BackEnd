@@ -24,5 +24,12 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllHomeworkSubmtionStatusEnumQuery()));
         }
 
+          [HttpGet("getDateTime")]
+        public async Task<IActionResult> getDateTime()
+        {
+            return Ok(DateTime.Now.ToString());
+        }
+
+
     }
 }

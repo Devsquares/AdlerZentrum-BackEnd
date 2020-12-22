@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Application.Interfaces.Repositories
 {
@@ -8,5 +9,7 @@ namespace Application.Interfaces.Repositories
     {
         IReadOnlyList<GroupInstanceStudents> GetStudents(int groupId);
         int? GetActiveGroupInstance(string userId);
+        void AddStudentToTheGroupInstance(int groupId, string studentId);
+        Task<GroupInstance> GetByIdAsync(int id);
     }
 }

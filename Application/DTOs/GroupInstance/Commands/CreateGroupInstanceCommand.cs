@@ -15,8 +15,9 @@ namespace Application.DTOs.GroupInstance.Commands
     public class CreateGroupInstanceCommand : IRequest<Response<int>>
     {
         public int GroupDefinitionId { get; set; }
-        public int Serail { get; set; }
+        public int Serial { get; set; }
         public int? Status { get; set; }
+        public int? TeacherId { get; set; }
 
         public class CreateGroupInstanceCommandHandler : IRequestHandler<CreateGroupInstanceCommand, Response<int>>
         {
@@ -28,7 +29,6 @@ namespace Application.DTOs.GroupInstance.Commands
             public async Task<Response<int>> Handle(CreateGroupInstanceCommand command, CancellationToken cancellationToken)
             {
                 var groupInstance = new Domain.Entities.GroupInstance();
-
                 Reflection.CopyProperties(command, groupInstance);
                 await _groupInstanceRepositoryAsync.AddAsync(groupInstance);
                 return new Response<int>(groupInstance.Id);

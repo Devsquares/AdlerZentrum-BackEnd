@@ -47,9 +47,12 @@ namespace Infrastructure.Persistence
             services.AddTransient<ILessonInstanceStudentRepositoryAsync, LessonInstanceStudentRepositoryAsync>();
             services.AddTransient<IHomeWorkSubmitionRepositoryAsync, HomeWorkSubmitionRepositoryAsync>();
             services.AddTransient<ITimeSlotRepositoryAsync, TimeSlotRepositoryAsync>();
-            services.AddTransient<IPricingRepositoryAsync, PricingRepositoryAsync>();
             services.AddTransient<IHomeWorkRepositoryAsync, HomeWorkRepositoryAsync>();
-        
+            services.AddTransient<IPricingRepositoryAsync, PricingRepositoryAsync>();
+            services.AddTransient<ISingleQuestionRepositoryAsync, SingleQuestionRepositoryAsync>();
+            services.AddTransient<IQuestionRepositoryAsync, QuestionRepositoryAsync>();
+            services.AddTransient<ILessonDefinitionRepositoryAsync, LessonDefinitionRepositoryAsync>();
+            services.AddTransient<ITestRepositoryAsync, TestRepositoryAsync>();
 
             #endregion
 

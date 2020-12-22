@@ -29,8 +29,7 @@ namespace Application.DTOs.Account
 
         [Required]
         [Compare("Password")]
-        public string ConfirmPassword { get; set; } 
-        public string Role { get; set; }
+        public string ConfirmPassword { get; set; }  
         public string Country { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Profilephoto { get; set; }

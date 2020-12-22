@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Account;
+using Application.DTOs;
 using Application.DTOs.Account.Queries.GetAllUsers;
 using Application.DTOs.GroupCondition.Queries;
 using Application.DTOs.GroupInstance.Queries;
@@ -35,17 +36,39 @@ namespace Application.Mappings
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
 
+
+            CreateMap<SingleQuestion, GetAllSingleQuestionsViewModel>().ReverseMap();
+            CreateMap<Question, GetQuestionViewModel>().ReverseMap();
+
             //CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>().ReverseMap();
             CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>()
                              .ForMember(destination => destination.Status,
                  opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
 
-            CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
+            CreateMap<Homework, GetAllomeworkBounsViewModel>()
+            .ForMember(destination => destination.GroupInstanceSerial, opts => opts.MapFrom(source => source.GroupInstance.Serial))
+            .ForMember(destination => destination.TeacherName, opts => opts.MapFrom(source => source.Teacher.FirstName + source.Teacher.LastName))
+            .ForMember(destination => destination.LessonOrder, opts => opts.MapFrom(source => source.LessonInstance.Serial))
+            .ForMember(destination => destination.SubLevel, opts => opts.MapFrom(source => source.GroupInstance.GroupDefinition.Sublevel.Name))
+            .ForMember(destination => destination.LessonInstanceSerial, opts => opts.MapFrom(source => source.LessonInstance.Serial));
+
+            CreateMap<LessonInstance, LessonInstanceViewModel>().ReverseMap();
+            CreateMap<GroupInstance, GroupInstanceViewModel>().ReverseMap();
+            CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>().ReverseMap();
+
+            CreateMap<LessonInstanceStudent, StudentsByLessonViewModel>()
+            .ForMember(destination => destination.FirstName, opts => opts.MapFrom(source => source.Student.FirstName))
+            .ForMember(destination => destination.LastName, opts => opts.MapFrom(source => source.Student.LastName));
+
+            CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
+
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
             CreateMap<GetAllTimeSlotsQuery, RequestParameter>();
             CreateMap<GetAllPricingQuery, RequestParameter>();
             CreateMap<GetAllUsersQuery, RequestParameter>();
+            CreateMap<GetAllSingleQuestionsQuery, RequestParameter>();
+            CreateMap<GetAllQuestionsQuery, RequestParameter>();
             CreateMap<GetAllGroupInstancesQuery, FilteredRequestParameter>();
             CreateMap<GetAllGroupConditionsQuery, FilteredRequestParameter>();
 

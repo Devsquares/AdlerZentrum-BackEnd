@@ -10,11 +10,14 @@ namespace Domain.Entities
         public GroupInstance()
         {
             Students = new HashSet<GroupInstanceStudents>();
+            LessonInstances = new HashSet<LessonInstance>();
         }
         public int GroupDefinitionId { get; set; }
         public virtual GroupDefinition GroupDefinition { get; set; }
-        public int Serail { get; set; }
+        public string Serial { get; set; }
         public int? Status { get; set; }
         public ICollection<GroupInstanceStudents> Students { get; set; }
+        public ICollection<LessonInstance> LessonInstances { get; set; } 
+        public TeacherGroupInstanceAssignment TeacherAssignment { get; set; }
     }
 }

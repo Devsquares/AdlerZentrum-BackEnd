@@ -8,5 +8,6 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<HomeWorkSubmition>> GetAllForStudentAsync(string studentId, int groupInstanceId);
         Task<IReadOnlyList<HomeWorkSubmition>> GetAllAsync(int groupInstanceId);
+        Task<HomeWorkSubmition> GetByIdAsync(int id);
     }
 }

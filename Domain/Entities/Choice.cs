@@ -9,6 +9,6 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
         public int SingleQuestionId { get; set; }
-        public virtual SingleQuestion SingleQuestion { get; set; }
+        public bool IsCorrect {get;set;}
     }
 }

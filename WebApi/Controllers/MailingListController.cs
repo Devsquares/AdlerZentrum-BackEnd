@@ -14,12 +14,12 @@ namespace WebApi.Controllers
             _emailService = emailService;
         }
         [HttpPost("AddToMailingList")]
-        public async Task<IActionResult> Post(string mail)
+        public IActionResult Post(string mail)
         {
 
             string startupPath = System.IO.Directory.GetCurrentDirectory();
 
-            System.IO.File.AppendAllText($"{startupPath}/emails.txt", mail + "\n");
+           System.IO.File.AppendAllText($"{startupPath}/emails.txt", mail + "\n");
 
             return Ok();
         }

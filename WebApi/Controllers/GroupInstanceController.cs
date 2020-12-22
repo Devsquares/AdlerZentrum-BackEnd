@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.DTOs;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.GroupInstance.Queries.GetAll;
 using Application.Filters;
@@ -37,6 +38,15 @@ namespace WebApi.Controllers
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
                 TeacherId = filter.teacherId
+            }));
+        }
+
+        [HttpPost("ActiveGroupInstance")]
+        public async Task<IActionResult> ActiveGroupInstanceCommand([FromQuery] ActiveGroupInstanceCommand filter)
+        {
+            return Ok(await Mediator.Send(new ActiveGroupInstanceCommand()
+            {
+                GroupInstanceId = filter.GroupInstanceId
             }));
         }
     }

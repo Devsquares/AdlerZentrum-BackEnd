@@ -156,6 +156,42 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("ApplicationUsers");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Choice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SingleQuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SingleQuestionId");
+
+                    b.ToTable("Choice");
+                });
+
             modelBuilder.Entity("Domain.Entities.GroupCondition", b =>
                 {
                     b.Property<int>("Id")
@@ -279,8 +315,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("Serail")
-                        .HasColumnType("int");
+                    b.Property<string>("Serial")
+                        .HasColumnType("text");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -397,6 +433,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("BonusPoints")
                         .HasColumnType("int");
 
+                    b.Property<int>("BonusPointsStatus")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -423,8 +462,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("Text")
                         .HasColumnType("text");
@@ -434,6 +473,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("GroupInstanceId");
 
                     b.HasIndex("LessonInstanceId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Homeworks");
                 });
@@ -497,11 +538,14 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("LessonDefinitionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MaterialDone")
-                        .HasColumnType("int");
+                    b.Property<string>("MaterialDone")
+                        .HasColumnType("text");
 
-                    b.Property<int>("MaterialToDo")
-                        .HasColumnType("int");
+                    b.Property<string>("MaterialToDo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Serial")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -647,6 +691,124 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("PromoCodes");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AudioPath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("MinCharacters")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoOfRepeats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.QuestionDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SingleQuestionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("QuestionDetails");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AnswerIsTrueOrFalse")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SingleQuestionType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("SingleQuestions");
+                });
+
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>
                 {
                     b.Property<int>("Id")
@@ -717,11 +879,81 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupInstanceId");
+                    b.HasIndex("GroupInstanceId")
+                        .IsUnique();
 
                     b.HasIndex("TeacherId");
 
                     b.ToTable("TeacherGroupInstances");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("LessonDefinitionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<TimeSpan>("TestDuration")
+                        .HasColumnType("time");
+
+                    b.Property<int>("TestTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonDefinitionId");
+
+                    b.HasIndex("TestTypeId");
+
+                    b.ToTable("Tests");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TestType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TestType");
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlot", b =>
@@ -983,6 +1215,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("RoleId");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Choice", b =>
+                {
+                    b.HasOne("Domain.Entities.SingleQuestion", null)
+                        .WithMany("Choices")
+                        .HasForeignKey("SingleQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.GroupDefinition", b =>
                 {
                     b.HasOne("Domain.Entities.GroupCondition", "GroupCondition")
@@ -1062,6 +1303,10 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("LessonInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
@@ -1076,7 +1321,7 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.LessonInstance", b =>
                 {
                     b.HasOne("Domain.Entities.GroupInstance", "GroupInstance")
-                        .WithMany()
+                        .WithMany("LessonInstances")
                         .HasForeignKey("GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1101,6 +1346,20 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("StudentId");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Question", b =>
+                {
+                    b.HasOne("Domain.Entities.Test", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("TestId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
+                {
+                    b.HasOne("Domain.Entities.Question", null)
+                        .WithMany("SingleQuestions")
+                        .HasForeignKey("QuestionId");
+                });
+
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>
                 {
                     b.HasOne("Domain.Entities.Level", null)
@@ -1113,14 +1372,29 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.TeacherGroupInstanceAssignment", b =>
                 {
                     b.HasOne("Domain.Entities.GroupInstance", "GroupInstance")
-                        .WithMany()
-                        .HasForeignKey("GroupInstanceId")
+                        .WithOne("TeacherAssignment")
+                        .HasForeignKey("Domain.Entities.TeacherGroupInstanceAssignment", "GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Test", b =>
+                {
+                    b.HasOne("Domain.Entities.LessonDefinition", "LessonDefinition")
+                        .WithMany()
+                        .HasForeignKey("LessonDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.TestType", "TestType")
+                        .WithMany()
+                        .HasForeignKey("TestTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlotDetails", b =>

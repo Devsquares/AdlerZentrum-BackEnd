@@ -15,7 +15,7 @@ namespace Application.DTOs
     public class CreateLessonInstanceCommand : IRequest<Response<int>>
     {
         public int GroupDefinitionId { get; set; }
-        public int Serail { get; set; }
+        public int Serial { get; set; }
         public int? Status { get; set; }
 
         public class CreateLessonInstanceCommandHandler : IRequestHandler<CreateLessonInstanceCommand, Response<int>>

@@ -61,7 +61,7 @@ namespace Infrastructure.Persistence.Repository
         }
         private IQueryable<T> MyQueryWithDynamicInclude<T>(string includeProperties) where T : class
         {
-            string[] includes = includeProperties.Split(';');
+            string[] includes = includeProperties.Split(',');
             var query = _dbContext.Set<T>().AsQueryable();
 
             foreach (string include in includes)
@@ -208,6 +208,14 @@ namespace Infrastructure.Persistence.Repository
             await _dbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> UpdateBulkAsync(List<T> entity)
+        {
+            _dbContext.Set<T>().UpdateRange(entity);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
@@ -218,6 +226,13 @@ namespace Infrastructure.Persistence.Repository
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> DeleteBulkAsync(List<T> entity)
+        {
+            _dbContext.Set<T>().RemoveRange(entity);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         public virtual async Task<IReadOnlyList<T>> GetAllAsync()
