@@ -19,7 +19,13 @@ namespace Infrastructure.Persistence.Repositories
 
         public ICollection<Homework> GetAllBounsRequests()
         {
-            return homework.Where(x => x.BonusPointsStatus == (int)BonusPointsStatusEnum.New && x.BonusPoints > 0).ToList();
+            return homework
+            .Include(x => x.Teacher)
+            .Include(x => x.LessonInstance)
+            .Include(x => x.GroupInstance)
+            .Include(x => x.GroupInstance.GroupDefinition)
+            .Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+            .Where(x => x.BonusPointsStatus == (int)BonusPointsStatusEnum.New && x.BonusPoints > 0).ToList();
         }
     }
 }

@@ -13,6 +13,6 @@ namespace Domain.Entities
         public int MinCharacters { get; set; }
         public string AudioPath { get; set; }
         public int NoOfRepeats { get; set; }
-        public virtual ICollection<SingleQuestion> SingleQuestions { get; set; }
+        public virtual ICollection<QuestionDetails> QuestionDetails { get; set; }
     }
 }

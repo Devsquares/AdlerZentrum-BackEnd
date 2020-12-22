@@ -26,18 +26,15 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("CreateAdditionalHomework")]
-        public async Task<IActionResult> CreateAdditionalHomework(int id, CreateHomeWorkCommand command)
+        public async Task<IActionResult> CreateAdditionalHomework(CreateHomeWorkCommand command)
         {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
+            command.TeacherId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
 
         [HttpGet("GetHomeworkForStudent")]
         //[Authorize(Roles = "Student")]
-        public async Task<IActionResult> GetByGroupInstance()
+        public async Task<IActionResult> GetHomeworkForStudent()
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsForStudentQuery()
             {
@@ -51,6 +48,18 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetBounsRequests()
         {
             return Ok(await Mediator.Send(new GetHomeworkBounsRequestsQuery()));
+        }
+
+
+        [HttpPut("update")]
+        [Authorize(Roles = "Supervisor")]
+        public async Task<IActionResult> Put(int id, UpdateHomeworkBounsCommand command)
+        {
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+            return Ok(await Mediator.Send(command));
         }
 
 

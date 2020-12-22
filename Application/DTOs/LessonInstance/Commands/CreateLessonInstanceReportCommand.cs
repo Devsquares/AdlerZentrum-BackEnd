@@ -11,9 +11,11 @@ namespace Application.DTOs
     public class CreateLessonInstanceReportCommand : IRequest<Response<bool>>
     {
         public int Id { get; set; }
-        public int MaterialDone { get; set; }
-        public int MaterialToDo { get; set; }
-        public List<LessonInstanceStudentInputModel> LessonInstanceStudent { get; set; }
+        public string MaterialDone { get; set; }
+        public string MaterialToDo { get; set; }
+        public bool isAdditionalHomework { get; set; }
+        public CreateHomeWorkCommand AdditionalHomework { get; set; }
+        public List<LessonInstanceStudent> LessonInstanceStudent { get; set; }
 
         public class CreateLessonInstanceReportCommandHandler : IRequestHandler<CreateLessonInstanceReportCommand, Response<bool>>
         {
@@ -27,11 +29,30 @@ namespace Application.DTOs
             }
             public async Task<Response<bool>> Handle(CreateLessonInstanceReportCommand command, CancellationToken cancellationToken)
             {
-                var LessonInstance = new LessonInstance();
+                var lessonInstance = new LessonInstance();
+                lessonInstance = _LessonInstanceRepositoryAsync.GetByIdAsync(command.Id).Result;
+                lessonInstance.MaterialDone = command.MaterialDone;
+                lessonInstance.MaterialToDo = command.MaterialToDo;
 
-                Reflection.CopyProperties(command, LessonInstance);
-                await _LessonInstanceRepositoryAsync.UpdateAsync(LessonInstance);
+                await _LessonInstanceRepositoryAsync.UpdateAsync(lessonInstance);
+                foreach (var item in command.LessonInstanceStudent)
+                {
+                    item.LessonInstanceId = lessonInstance.Id;
+                }
                 await _mediator.Send(new CreateLessonInstanceStudentCommand { inputModels = command.LessonInstanceStudent });
+                
+                if (command.isAdditionalHomework)
+                {
+                    await _mediator.Send(new CreateHomeWorkCommand
+                    {
+                        BonusPoints = command.AdditionalHomework.BonusPoints,
+                        GroupInstanceId = lessonInstance.GroupInstanceId,
+                        MinCharacters = command.AdditionalHomework.MinCharacters,
+                        Points = command.AdditionalHomework.Points,
+                        Text = command.AdditionalHomework.Text
+                    });
+                }
+
                 return new Response<bool>(true);
             }
         }

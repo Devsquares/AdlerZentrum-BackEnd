@@ -33,6 +33,10 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.Homework.LessonInstance)
              .Where(x => x.StudentId == studentId && x.Homework.GroupInstanceId == groupInstanceId).ToListAsync();
         }
+        public async Task<HomeWorkSubmition> GetByIdAsync(int id)
+        {
+            return await homeWorkSubmitions.Include(x => x.Homework).Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
 
     }
 }

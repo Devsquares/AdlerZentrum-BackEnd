@@ -538,11 +538,11 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("LessonDefinitionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MaterialDone")
-                        .HasColumnType("int");
+                    b.Property<string>("MaterialDone")
+                        .HasColumnType("text");
 
-                    b.Property<int>("MaterialToDo")
-                        .HasColumnType("int");
+                    b.Property<string>("MaterialToDo")
+                        .HasColumnType("text");
 
                     b.Property<string>("Serial")
                         .HasColumnType("text");
@@ -879,7 +879,8 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupInstanceId");
+                    b.HasIndex("GroupInstanceId")
+                        .IsUnique();
 
                     b.HasIndex("TeacherId");
 
@@ -906,6 +907,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("LessonDefinitionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
@@ -916,6 +920,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LessonDefinitionId");
 
                     b.HasIndex("TestTypeId");
 
@@ -1315,7 +1321,7 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.LessonInstance", b =>
                 {
                     b.HasOne("Domain.Entities.GroupInstance", "GroupInstance")
-                        .WithMany()
+                        .WithMany("LessonInstances")
                         .HasForeignKey("GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1366,8 +1372,8 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.TeacherGroupInstanceAssignment", b =>
                 {
                     b.HasOne("Domain.Entities.GroupInstance", "GroupInstance")
-                        .WithMany()
-                        .HasForeignKey("GroupInstanceId")
+                        .WithOne("TeacherAssignment")
+                        .HasForeignKey("Domain.Entities.TeacherGroupInstanceAssignment", "GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1378,6 +1384,12 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Test", b =>
                 {
+                    b.HasOne("Domain.Entities.LessonDefinition", "LessonDefinition")
+                        .WithMany()
+                        .HasForeignKey("LessonDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.TestType", "TestType")
                         .WithMany()
                         .HasForeignKey("TestTypeId")

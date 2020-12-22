@@ -14,5 +14,8 @@ namespace Application.DTOs
         public string GroupInstanceSerial { get; set; }
         public int LessonInstanceId { get; set; }
         public string LessonInstanceSerial { get; set; }
+        public string TeacherName { get; set; }
+        public string LessonOrder { get; set; }
+        public string SubLevel { get; set; }
     }
 }

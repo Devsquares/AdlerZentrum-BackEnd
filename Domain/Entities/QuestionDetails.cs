@@ -9,5 +9,6 @@ namespace Domain.Entities
     {
         public int QuestionId { get; set; }
         public int SingleQuestionId { get; set; }
+        public SingleQuestion SingleQuestion  { get; set; }
     }
 }

@@ -6,13 +6,13 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // migrationBuilder.DropForeignKey(
-            //     name: "FK_Choice_ChoiceAnswer_AnswerId",
-            //     table: "Choice");
+            migrationBuilder.DropForeignKey(
+                name: "FK_Choice_ChoiceAnswer_AnswerId",
+                table: "Choice");
 
-            // migrationBuilder.DropForeignKey(
-            //     name: "FK_ChoiceAnswer_SingleQuestions_SingleQuestionId",
-            //     table: "ChoiceAnswer");
+            migrationBuilder.DropForeignKey(
+                name: "FK_ChoiceAnswer_SingleQuestions_SingleQuestionId",
+                table: "ChoiceAnswer");
 
             migrationBuilder.DropIndex(
                 name: "IX_ChoiceAnswer_SingleQuestionId",

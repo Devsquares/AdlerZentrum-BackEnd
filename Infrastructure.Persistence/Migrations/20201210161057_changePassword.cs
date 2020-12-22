@@ -6,10 +6,10 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         { 
-            migrationBuilder.AddColumn<string>(
-                name: "Color",
-                table: "SubLevels",
-                nullable: true);
+            // migrationBuilder.AddColumn<string>(
+            //     name: "Color",
+            //     table: "SubLevels",
+            //     nullable: true);
 
             migrationBuilder.AddColumn<bool>(
                 name: "ChangePassword",

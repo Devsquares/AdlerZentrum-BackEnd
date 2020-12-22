@@ -67,5 +67,25 @@ namespace Infrastructure.Persistence.Repositories
         {
             return groupInstances.Include(x => x.Students).Where(x => x.Id == groupId).FirstOrDefault()?.Students.ToList();
         }
+
+        public async void AddStudentToTheGroupInstance(int groupId, string studentId)
+        {
+            groupInstanceStudents.Add(new GroupInstanceStudents
+            {
+                GroupInstanceId = groupId,
+                IsDefault = true,
+                StudentId = studentId
+            });
+        }
+        public async Task<GroupInstance> GetByIdAsync(int id)
+        {
+            return groupInstances
+                  .Include(x => x.GroupDefinition)
+                  .Include(x => x.Students)
+                  .Include(x => x.GroupDefinition.TimeSlot)
+                  .Include(x => x.GroupDefinition.Sublevel)
+                  .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
+                  .Where(x => x.Id == id).FirstOrDefault();
+        }
     }
 }

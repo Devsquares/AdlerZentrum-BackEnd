@@ -9,7 +9,6 @@ namespace Application.DTOs
 {
     public class GetHomeworkBounsRequestsQuery : IRequest<IEnumerable<GetAllomeworkBounsViewModel>>
     {
-        public int GroupInstanceId { get; set; }
     }
     public class GetHomeworkBounsRequestsQueryHandler : IRequestHandler<GetHomeworkBounsRequestsQuery, IEnumerable<GetAllomeworkBounsViewModel>>
     {

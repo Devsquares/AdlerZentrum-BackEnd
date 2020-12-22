@@ -47,9 +47,21 @@ namespace Application.Mappings
 
             CreateMap<Homework, GetAllomeworkBounsViewModel>()
             .ForMember(destination => destination.GroupInstanceSerial, opts => opts.MapFrom(source => source.GroupInstance.Serial))
+            .ForMember(destination => destination.TeacherName, opts => opts.MapFrom(source => source.Teacher.FirstName + source.Teacher.LastName))
+            .ForMember(destination => destination.LessonOrder, opts => opts.MapFrom(source => source.LessonInstance.Serial))
+            .ForMember(destination => destination.SubLevel, opts => opts.MapFrom(source => source.GroupInstance.GroupDefinition.Sublevel.Name))
             .ForMember(destination => destination.LessonInstanceSerial, opts => opts.MapFrom(source => source.LessonInstance.Serial));
 
-            CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>();
+            CreateMap<LessonInstance, LessonInstanceViewModel>().ReverseMap();
+            CreateMap<GroupInstance, GroupInstanceViewModel>().ReverseMap();
+            CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>().ReverseMap();
+
+            CreateMap<LessonInstanceStudent, StudentsByLessonViewModel>()
+            .ForMember(destination => destination.FirstName, opts => opts.MapFrom(source => source.Student.FirstName))
+            .ForMember(destination => destination.LastName, opts => opts.MapFrom(source => source.Student.LastName));
+
+            CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
+
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
             CreateMap<GetAllTimeSlotsQuery, RequestParameter>();

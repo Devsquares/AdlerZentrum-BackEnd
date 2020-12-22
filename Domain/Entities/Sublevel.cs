@@ -1,4 +1,5 @@
 using Domain.Common;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -8,5 +9,7 @@ namespace Domain.Entities
         public int LevelId { get; set; }
         public int NumberOflessons { get; set; }
         public string Color { get; set; }
+
+        public List<LessonDefinition> LessonDefinitions { get; set; }
     }
 }

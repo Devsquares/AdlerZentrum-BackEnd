@@ -125,7 +125,7 @@ namespace Infrastructure.Persistence.Services
 
 
                     //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
-
+                    _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
                     return new Response<string>(user.Id, message: $"User Registered.");
                 }
                 else

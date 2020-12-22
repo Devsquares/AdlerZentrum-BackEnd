@@ -10,7 +10,7 @@ namespace Application.DTOs
 {
     public class CreateLessonInstanceStudentCommand : IRequest<Response<bool>>
     {
-        public List<LessonInstanceStudentInputModel> inputModels { get; set; }
+        public List<LessonInstanceStudent> inputModels { get; set; }
 
         public class CreateLessonInstanceStudentCommandHandler : IRequestHandler<CreateLessonInstanceStudentCommand, Response<bool>>
         {
@@ -20,11 +20,8 @@ namespace Application.DTOs
                 _LessonInstanceStudentRepositoryAsync = LessonInstanceStudentRepository;
             }
             public async Task<Response<bool>> Handle(CreateLessonInstanceStudentCommand command, CancellationToken cancellationToken)
-            {
-                var LessonInstanceStudent = new List<LessonInstanceStudent>();
-
-                Reflection.CopyProperties(command, LessonInstanceStudent);
-                await _LessonInstanceStudentRepositoryAsync.AddBulkAsync(LessonInstanceStudent);
+            { 
+                await _LessonInstanceStudentRepositoryAsync.UpdateBulkAsync(command.inputModels);
                 return new Response<bool>(true);
             }
         }

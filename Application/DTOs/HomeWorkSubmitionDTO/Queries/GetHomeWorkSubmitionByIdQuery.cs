@@ -30,7 +30,7 @@ namespace Application.DTOs
         public async Task<GetAllHomeWorkSubmitionsViewModel> Handle(GetHomeWorkSubmitionByIdQuery request, CancellationToken cancellationToken)
         {
             var HomeWorkSubmitions = await _HomeWorkSubmitionRepository.GetByIdAsync(request.HomeWorkSubmitionId);
-            return _mapper.Map<GetAllHomeWorkSubmitionsViewModel>(HomeWorkSubmitions); ;
+            return _mapper.Map<GetAllHomeWorkSubmitionsViewModel>(HomeWorkSubmitions);
         }
     }
 }

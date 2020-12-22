@@ -51,7 +51,8 @@ namespace Infrastructure.Persistence
             services.AddTransient<IPricingRepositoryAsync, PricingRepositoryAsync>();
             services.AddTransient<ISingleQuestionRepositoryAsync, SingleQuestionRepositoryAsync>();
             services.AddTransient<IQuestionRepositoryAsync, QuestionRepositoryAsync>();
-
+            services.AddTransient<ILessonDefinitionRepositoryAsync, LessonDefinitionRepositoryAsync>();
+            services.AddTransient<ITestRepositoryAsync, TestRepositoryAsync>();
 
             #endregion
 

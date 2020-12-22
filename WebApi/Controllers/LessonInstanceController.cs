@@ -11,10 +11,17 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetByGroupInstance([FromQuery] LessonsByGroupInstanceIdRequestParameter filter)
         {
             return Ok(await Mediator.Send(new GetLessonInstanceByGroupInstanceIdQuery()
+            { 
+                GroupInstanceId = filter.GroupInstanceId
+            }));
+        }
+
+        [HttpGet("GetStudents")]
+        public async Task<IActionResult> GetStudents([FromQuery] GetStudentsByLessonInstanceQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetStudentsByLessonInstanceQuery()
             {
-                PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber,
-                TeacherId = filter.GroupInstanceId
+                LessonInstanceId = filter.LessonInstanceId
             }));
         }
 

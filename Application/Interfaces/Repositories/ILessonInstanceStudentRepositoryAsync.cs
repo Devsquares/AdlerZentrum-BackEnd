@@ -7,5 +7,6 @@ namespace Application.Interfaces.Repositories
 {
     public interface ILessonInstanceStudentRepositoryAsync : IGenericRepositoryAsync<LessonInstanceStudent>
     {
+        IEnumerable<LessonInstanceStudent> GetStudentsByLessonInstance(int LessonInstanceId);
     }
 }

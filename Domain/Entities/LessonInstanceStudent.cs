@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class LessonInstanceStudent : AuditableBaseEntity
+    public class LessonInstanceStudent : AuditableBaseEntity, ICloneable
     {
         public int LessonInstanceId { get; set; }
         public virtual LessonInstance LessonInstance { get; set; }
@@ -14,5 +14,10 @@ namespace Domain.Entities
         public virtual ApplicationUser Student { get; set; }
         public bool Attend { get; set; }
         public bool Homework { get; set; }
+
+        public object Clone()
+        {
+            return (LessonInstanceStudent)this.MemberwiseClone();
+        }
     }
 }

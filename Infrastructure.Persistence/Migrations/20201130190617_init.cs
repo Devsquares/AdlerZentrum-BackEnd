@@ -536,10 +536,10 @@ namespace Infrastructure.Persistence.Migrations
                 table: "SubLevels",
                 column: "LevelId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TeacherGroupInstances_GroupInstanceId",
-                table: "TeacherGroupInstances",
-                column: "GroupInstanceId");
+            // migrationBuilder.CreateIndex(
+            //     name: "IX_TeacherGroupInstances_GroupInstanceId",
+            //     table: "TeacherGroupInstances",
+            //     column: "GroupInstanceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeacherGroupInstances_TeacherId",
