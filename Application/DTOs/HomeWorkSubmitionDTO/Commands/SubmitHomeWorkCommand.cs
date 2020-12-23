@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -27,13 +28,21 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(SubmitHomeWorkCommand command, CancellationToken cancellationToken)
             {
-                var homeWorkSubmition = new HomeWorkSubmition();
-                homeWorkSubmition = _HomeWorkSubmitionRepository.GetByIdAsync(command.Id).Result;
-                homeWorkSubmition.Text = command.Text;
-                homeWorkSubmition.Status = command.Status;
+                if (command.Status == (int)HomeWorkSubmitionStatusEnum.Draft || command.Status == (int)HomeWorkSubmitionStatusEnum.Solved)
+                {
+                    var homeWorkSubmition = new HomeWorkSubmition();
+                    homeWorkSubmition = _HomeWorkSubmitionRepository.GetByIdAsync(command.Id).Result;
+                    homeWorkSubmition.Text = command.Text;
+                    homeWorkSubmition.Status = command.Status;
 
-                await _HomeWorkSubmitionRepository.UpdateAsync(homeWorkSubmition);
-                return new Response<int>(homeWorkSubmition.Id);
+                    await _HomeWorkSubmitionRepository.UpdateAsync(homeWorkSubmition);
+                    return new Response<int>(homeWorkSubmition.Id);
+                }
+                else
+                {
+                    throw new ApiException($"Wrong Status.");
+                }
+                  
 
             }
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Application.DTOs
 {
     public class GetAllSubLevelsQuery : IRequest<IEnumerable<GetAllSubLevelsViewModel>>
-    { 
+    {
     }
     public class GetAllSubLevelsQueryHandler : IRequestHandler<GetAllSubLevelsQuery, IEnumerable<GetAllSubLevelsViewModel>>
     {
@@ -21,7 +21,7 @@ namespace Application.DTOs
         }
 
         public async Task<IEnumerable<GetAllSubLevelsViewModel>> Handle(GetAllSubLevelsQuery request, CancellationToken cancellationToken)
-        { 
+        {
             var SubLevels = await _levelService.GetAllAsync("Level");
             var userViewModel = _mapper.Map<IEnumerable<GetAllSubLevelsViewModel>>(SubLevels);
             return userViewModel;
