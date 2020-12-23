@@ -9,7 +9,7 @@ namespace Domain.Entities
     public class LessonInstance : AuditableBaseEntity
     {
         public LessonInstance()
-        { 
+        {
         }
         public int GroupInstanceId { get; set; }
         public virtual GroupInstance GroupInstance { get; set; }
@@ -18,6 +18,7 @@ namespace Domain.Entities
         public string MaterialDone { get; set; }
         public string MaterialToDo { get; set; }
         public string Serial { get; set; }
+        public bool SubmittedReport { get; set; }
         public virtual IList<LessonInstanceStudent> LessonInstanceStudents { get; set; }
     }
 }

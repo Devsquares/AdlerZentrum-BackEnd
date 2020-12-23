@@ -1,7 +1,6 @@
-﻿using Application.DTOs.Level.Commands;
-using Application.DTOs.Level.Queries;
+﻿using Application.DTOs;
+using Application.DTOs.Level.Commands;
 using Application.Filters;
-using Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -13,6 +12,12 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
         {
             return Ok(await Mediator.Send(new GetAllLevelsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
+        }
+
+        [HttpGet("GetAllSubLevels")]
+        public async Task<IActionResult> GetAllSubLevels()
+        {
+            return Ok(await Mediator.Send(new GetAllSubLevelsQuery()));
         }
 
         [HttpGet("GetById")]

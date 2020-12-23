@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.GroupCondition.Queries
+namespace Application.DTOs
 {
     public class GetAllGroupConditionsQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllGroupConditionViewModel>>>
     {

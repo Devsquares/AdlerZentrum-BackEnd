@@ -10,30 +10,30 @@ namespace Infrastructure.Persistence.Migrations
             //     name: "IX_TeacherGroupInstances_GroupInstanceId",
             //     table: "TeacherGroupInstances");
 
-            migrationBuilder.AddColumn<int>(
-                name: "LessonDefinitionId",
-                table: "Tests",
-                nullable: false,
-                defaultValue: 0);
+            //migrationBuilder.AddColumn<int>(
+            //    name: "LessonDefinitionId",
+            //    table: "Tests",
+            //    nullable: false,
+            //    defaultValue: 0);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Tests_LessonDefinitionId",
-                table: "Tests",
-                column: "LessonDefinitionId");
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_Tests_LessonDefinitionId",
+            //    table: "Tests",
+            //    column: "LessonDefinitionId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TeacherGroupInstances_GroupInstanceId",
-                table: "TeacherGroupInstances",
-                column: "GroupInstanceId",
-                unique: true);
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_TeacherGroupInstances_GroupInstanceId",
+            //    table: "TeacherGroupInstances",
+            //    column: "GroupInstanceId",
+            //    unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Tests_LessonDefinition_LessonDefinitionId",
-                table: "Tests",
-                column: "LessonDefinitionId",
-                principalTable: "LessonDefinition",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            //migrationBuilder.AddForeignKey(
+            //    name: "FK_Tests_LessonDefinition_LessonDefinitionId",
+            //    table: "Tests",
+            //    column: "LessonDefinitionId",
+            //    principalTable: "LessonDefinition",
+            //    principalColumn: "Id",
+            //    onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

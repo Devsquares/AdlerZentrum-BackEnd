@@ -2,9 +2,9 @@ namespace Application.Enums
 {
     public enum SingleQuestionTypeEnum
     {
-        MultipleChoice,
-        TrueAndfalse,
-        SingleChoice,
-        Complete
+        MultipleChoice = 0,
+        TrueAndfalse = 1,
+        SingleChoice = 2,
+        Complete = 3
     }
 }

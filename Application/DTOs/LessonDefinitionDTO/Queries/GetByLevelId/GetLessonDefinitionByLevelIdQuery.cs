@@ -1,31 +1,33 @@
 ﻿using Application.Exceptions;
-using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
-using Domain.Entities;
+using AutoMapper;
 using MediatR;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class GetLessonDefinitionByLevelIdQuery : IRequest<Response<ICollection<LessonDefinition>>>
+    public class GetLessonDefinitionByLevelIdQuery : IRequest<Response<ICollection<GetLessonDefinitionByLevelIdViewModel>>>
     {
         public int SubLevelId { get; set; }
-        public class GetLessonDefinitionByLevelIdQueryHandler : IRequestHandler<GetLessonDefinitionByLevelIdQuery, Response<ICollection<LessonDefinition>>>
+        public class GetLessonDefinitionByLevelIdQueryHandler : IRequestHandler<GetLessonDefinitionByLevelIdQuery, Response<ICollection<GetLessonDefinitionByLevelIdViewModel>>>
         {
             private readonly ILessonDefinitionRepositoryAsync _LessonDefinitionService;
-            public GetLessonDefinitionByLevelIdQueryHandler(ILessonDefinitionRepositoryAsync LessonDefinitionService)
+            private readonly IMapper _mapper;
+            public GetLessonDefinitionByLevelIdQueryHandler(ILessonDefinitionRepositoryAsync LessonDefinitionService, IMapper mapper)
             {
                 _LessonDefinitionService = LessonDefinitionService;
+                _mapper = mapper;
             }
-            public async Task<Response<ICollection<LessonDefinition>>> Handle(GetLessonDefinitionByLevelIdQuery query, CancellationToken cancellationToken)
+            public async Task<Response<ICollection<GetLessonDefinitionByLevelIdViewModel>>> Handle(GetLessonDefinitionByLevelIdQuery query, CancellationToken cancellationToken)
             {
                 var LessonDefinition = await _LessonDefinitionService.GetBySubLevelId(query.SubLevelId);
                 if (LessonDefinition == null) throw new ApiException($"Lesson Definitions Not Found.");
-                return new Response<ICollection<LessonDefinition>>(LessonDefinition);
+
+                var LessonDefinitionViewModel = _mapper.Map<ICollection<GetLessonDefinitionByLevelIdViewModel>>(LessonDefinition);
+                return new Response<ICollection<GetLessonDefinitionByLevelIdViewModel>>(LessonDefinitionViewModel);
             }
         }
     }

@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.DTOs.Account.Queries.GetAllUsers
-{
+namespace Application.DTOs 
+{ 
     public class GetAllUsersParameter : RequestParameter
     {
         public string Role { get; set; }

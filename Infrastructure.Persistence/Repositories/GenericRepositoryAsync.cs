@@ -242,6 +242,12 @@ namespace Infrastructure.Persistence.Repository
                  .ToListAsync();
         }
 
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync(string Include)
+        {
+            var query = MyQueryWithDynamicInclude<T>(Include);
+            return query.ToList();
+        }
+
         public string BuildOrderStatement(string sortBy, string sortType)
         {
             sortBy ??= "ID";

@@ -31,28 +31,31 @@ namespace Application.DTOs
             {
                 var lessonInstance = new LessonInstance();
                 lessonInstance = _LessonInstanceRepositoryAsync.GetByIdAsync(command.Id).Result;
-                lessonInstance.MaterialDone = command.MaterialDone;
-                lessonInstance.MaterialToDo = command.MaterialToDo;
+                if (!lessonInstance.SubmittedReport)
+                {
+                    lessonInstance.MaterialDone = command.MaterialDone;
+                    lessonInstance.MaterialToDo = command.MaterialToDo;
+                    lessonInstance.SubmittedReport = true;
 
-                await _LessonInstanceRepositoryAsync.UpdateAsync(lessonInstance);
-                foreach (var item in command.LessonInstanceStudent)
-                {
-                    item.LessonInstanceId = lessonInstance.Id;
-                }
-                await _mediator.Send(new CreateLessonInstanceStudentCommand { inputModels = command.LessonInstanceStudent });
-                
-                if (command.isAdditionalHomework)
-                {
-                    await _mediator.Send(new CreateHomeWorkCommand
+                    await _LessonInstanceRepositoryAsync.UpdateAsync(lessonInstance);
+                    foreach (var item in command.LessonInstanceStudent)
                     {
-                        BonusPoints = command.AdditionalHomework.BonusPoints,
-                        GroupInstanceId = lessonInstance.GroupInstanceId,
-                        MinCharacters = command.AdditionalHomework.MinCharacters,
-                        Points = command.AdditionalHomework.Points,
-                        Text = command.AdditionalHomework.Text
-                    });
-                }
+                        item.LessonInstanceId = lessonInstance.Id;
+                    }
+                    await _mediator.Send(new CreateLessonInstanceStudentCommand { inputModels = command.LessonInstanceStudent });
 
+                    if (command.isAdditionalHomework)
+                    {
+                        await _mediator.Send(new CreateHomeWorkCommand
+                        {
+                            BonusPoints = command.AdditionalHomework.BonusPoints,
+                            GroupInstanceId = lessonInstance.GroupInstanceId,
+                            MinCharacters = command.AdditionalHomework.MinCharacters,
+                            Points = command.AdditionalHomework.Points,
+                            Text = command.AdditionalHomework.Text
+                        });
+                    }
+                }
                 return new Response<bool>(true);
             }
         }

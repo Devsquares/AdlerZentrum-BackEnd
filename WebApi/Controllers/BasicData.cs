@@ -24,7 +24,13 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllHomeworkSubmtionStatusEnumQuery()));
         }
 
-          [HttpGet("getDateTime")]
+        [HttpGet("GetSingleQuestionTypes")]
+        public async Task<IActionResult> GetSingleQuestionTypes()
+        {
+            return Ok(await Mediator.Send(new GetSingleQuestionTypesQuery()));
+        }
+
+        [HttpGet("getDateTime")]
         public async Task<IActionResult> getDateTime()
         {
             return Ok(DateTime.Now.ToString());

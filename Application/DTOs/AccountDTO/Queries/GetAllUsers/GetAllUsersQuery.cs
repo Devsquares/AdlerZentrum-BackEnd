@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Account.Queries.GetAllUsers
+namespace Application.DTOs 
 {
     public class GetAllUsersQuery : IRequest<UserPagedResponse<IEnumerable<GetAllUsersViewModel>>>
     {

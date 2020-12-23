@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.GroupCondition.Queries
+namespace Application.DTOs
 {
     public class GetGroupConditionByIdQuery : IRequest<Response<Domain.Entities.GroupCondition>>
     {

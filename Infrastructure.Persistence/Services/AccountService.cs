@@ -272,6 +272,8 @@ namespace Infrastructure.Persistence.Services
         {
             var ApplicationUser = await _userManager.FindByEmailAsync(model.Email);
             if (ApplicationUser == null) throw new ApiException($"No ApplicationUsers Registered with {model.Email}.");
+            //string tok = _userManager.GeneratePasswordResetTokenAsync(ApplicationUser).Result;
+            //await _userManager.ResetPasswordAsync(ApplicationUser, tok, "P@$$w0rd");
             var result = await _userManager.ChangePasswordAsync(ApplicationUser, model.CurrentPassword, model.Password);
             if (result.Succeeded)
             {

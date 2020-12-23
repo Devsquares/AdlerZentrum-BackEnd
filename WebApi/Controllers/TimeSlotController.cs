@@ -1,7 +1,5 @@
-﻿using Application.DTOs.TimeSlot.Commands;
-using Application.DTOs.TimeSlot.Queries;
+﻿using Application.DTOs;
 using Application.Filters;
-using Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

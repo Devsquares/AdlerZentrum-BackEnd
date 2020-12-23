@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Account.Queries.GetUserById
+namespace Application.DTOs 
 {
     public class GetUserByIdQuery : IRequest<Response<Domain.Entities.ApplicationUser>>
     {

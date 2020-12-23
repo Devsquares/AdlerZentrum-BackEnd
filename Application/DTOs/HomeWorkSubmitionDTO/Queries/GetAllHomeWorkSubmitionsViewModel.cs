@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using System;
 
-namespace Application.DTOs.HomeWorkSubmitionDTO.Queries
+namespace Application.DTOs
 {
     public class GetAllHomeWorkSubmitionsViewModel
     {

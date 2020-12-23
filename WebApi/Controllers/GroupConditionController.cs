@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Application.DTOs.GroupCondition.Commands;
-using Application.DTOs.GroupCondition.Queries;
-using Application.DTOs.GroupCondition.Queries.GetAll;
+using Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers

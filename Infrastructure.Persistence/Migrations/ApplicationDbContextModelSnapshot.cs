@@ -547,6 +547,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Serial")
                         .HasColumnType("text");
 
+                    b.Property<bool>("SubmittedReport")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupInstanceId");
@@ -767,6 +770,10 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("SingleQuestionId");
+
                     b.ToTable("QuestionDetails");
                 });
 
@@ -793,9 +800,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("QuestionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SingleQuestionType")
                         .HasColumnType("int");
 
@@ -803,8 +807,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
 
                     b.ToTable("SingleQuestions");
                 });
@@ -1312,7 +1314,7 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
                 {
                     b.HasOne("Domain.Entities.Sublevel", "Sublevel")
-                        .WithMany()
+                        .WithMany("LessonDefinitions")
                         .HasForeignKey("SublevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1353,11 +1355,19 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("TestId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
+            modelBuilder.Entity("Domain.Entities.QuestionDetails", b =>
                 {
                     b.HasOne("Domain.Entities.Question", null)
-                        .WithMany("SingleQuestions")
-                        .HasForeignKey("QuestionId");
+                        .WithMany("QuestionDetails")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.SingleQuestion", "SingleQuestion")
+                        .WithMany()
+                        .HasForeignKey("SingleQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>

@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DTOs.Account;
-using Application.DTOs.Account.Queries.GetAllUsers;
-using Application.DTOs.Account.Queries.GetUserById;
+using Application.DTOs.Account; 
 using Application.DTOs.Account.Commands.UpdateAccount;
 using Application.DTOs.Account.Commands.DeleteAccountById;
 using Application.DTOs.Email;
@@ -16,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Application.Filters;
+using Application.DTOs;
 
 namespace WebApi.Controllers
 {
