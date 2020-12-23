@@ -1,13 +1,6 @@
-﻿using Application.DTOs.HomeWorkSubmitionDTO.Queries;
-using Application.Filters;
-using Application.Interfaces;
-using Application.Interfaces.Repositories;
-using Application.Wrappers;
+﻿using Application.Interfaces.Repositories;
 using AutoMapper;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

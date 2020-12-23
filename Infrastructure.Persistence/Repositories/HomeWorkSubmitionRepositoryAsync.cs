@@ -22,7 +22,6 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await homeWorkSubmitions
                 .Include(x => x.Homework)
-                .Include(x => x.Homework.LessonInstance)
             .Where(x => x.Homework.GroupInstanceId == groupInstanceId).ToListAsync();
         }
 

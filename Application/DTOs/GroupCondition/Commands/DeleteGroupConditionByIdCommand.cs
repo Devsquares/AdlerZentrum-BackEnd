@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.GroupCondition.Commands
+namespace Application.DTOs
 {
     public class DeleteGroupConditionByIdCommand : IRequest<Response<int>>
     {

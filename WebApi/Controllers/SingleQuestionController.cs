@@ -1,5 +1,5 @@
 using Application.DTOs;
-using Application.Filters; 
+using Application.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,6 +11,12 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
         {
             return Ok(await Mediator.Send(new GetAllSingleQuestionsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
+        }
+
+        [HttpGet("GetAllByType")]
+        public async Task<IActionResult> GetAllByType([FromQuery] GetAllSingleQuestionsByTypeQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetAllSingleQuestionsByTypeQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber, TypeId = filter.TypeId }));
         }
 
         [HttpGet("GetById")]

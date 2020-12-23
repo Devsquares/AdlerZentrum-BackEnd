@@ -39,6 +39,7 @@ namespace Infrastructure.Persistence
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
             services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
+            services.AddTransient<ISublevelRepositoryAsync, SubLevelRepositoryAsync>();
             services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
             services.AddTransient<ITeacherGroupInstanceAssignmentRepositoryAsync, TeacherGroupInstanceAssignmentRepositoryAsync>();
             services.AddTransient<IPromoCodeRepositoryAsync, PromoCodeRepositoryAsync>();
@@ -53,6 +54,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IQuestionRepositoryAsync, QuestionRepositoryAsync>();
             services.AddTransient<ILessonDefinitionRepositoryAsync, LessonDefinitionRepositoryAsync>();
             services.AddTransient<ITestRepositoryAsync, TestRepositoryAsync>();
+            services.AddTransient<IGroupDefinitionRepositoryAsync, GroupDefinitionRepositoryAsync>();
 
             #endregion
 

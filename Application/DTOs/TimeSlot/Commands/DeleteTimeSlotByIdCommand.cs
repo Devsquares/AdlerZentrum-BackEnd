@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.TimeSlot.Commands
+namespace Application.DTOs 
 {
     public class DeleteTimeSlotByIdCommand : IRequest<Response<int>>
     {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.TimeSlot.Queries
+namespace Application.DTOs 
 {
     public class GetTimeSlotByIdQuery : IRequest<Response<Domain.Entities.TimeSlot>>
     {

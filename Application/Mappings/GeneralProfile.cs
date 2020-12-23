@@ -1,13 +1,7 @@
 ﻿using Application.DTOs.Account;
 using Application.DTOs;
-using Application.DTOs.Account.Queries.GetAllUsers;
-using Application.DTOs.GroupCondition.Queries;
 using Application.DTOs.GroupInstance.Queries;
-using Application.DTOs.HomeWorkSubmitionDTO.Queries;
 using Application.DTOs.Level.Commands;
-using Application.DTOs.Level.Queries;
-using Application.DTOs.Pricing.Queries;
-using Application.DTOs.TimeSlot.Queries;
 using Application.Enums;
 using Application.Filters;
 using Application.Wrappers;
@@ -60,10 +54,16 @@ namespace Application.Mappings
             .ForMember(destination => destination.FirstName, opts => opts.MapFrom(source => source.Student.FirstName))
             .ForMember(destination => destination.LastName, opts => opts.MapFrom(source => source.Student.LastName));
 
-            CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
+            CreateMap<Sublevel, GetAllSubLevelsViewModel>()
+                .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.Level.Name +"."+ source.Name));
 
+            CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
+            CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();
+
+            CreateMap<GroupDefinition, GetAllGroupDefinitionViewModel>().ReverseMap();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
+            CreateMap<GetAllGroupDefinitionsQuery, RequestParameter>().ReverseMap();
             CreateMap<GetAllTimeSlotsQuery, RequestParameter>();
             CreateMap<GetAllPricingQuery, RequestParameter>();
             CreateMap<GetAllUsersQuery, RequestParameter>();

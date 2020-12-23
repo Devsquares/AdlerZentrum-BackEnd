@@ -3,9 +3,9 @@ using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -16,6 +16,15 @@ namespace Infrastructure.Persistence.Repositories
         public SingleQuestionRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             _singleQuestion = dbContext.Set<SingleQuestion>();
+        }
+
+        public async Task<IReadOnlyList<SingleQuestion>> GetPagedReponseAsync(int pageNumber, int pageSize, int typeId)
+        {
+            return await _singleQuestion.Where(x => x.SingleQuestionType == typeId)
+           .Skip((pageNumber - 1) * pageSize)
+           .Take(pageSize)
+           .AsNoTracking()
+           .ToListAsync();
         }
     }
 }

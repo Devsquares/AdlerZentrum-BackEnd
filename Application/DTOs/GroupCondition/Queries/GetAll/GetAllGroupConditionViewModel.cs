@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.DTOs.GroupCondition.Queries
+namespace Application.DTOs
 {
     public class GetAllGroupConditionViewModel
     {

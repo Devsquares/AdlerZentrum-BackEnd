@@ -1,8 +1,5 @@
 ﻿using Application.DTOs;
-using Application.DTOs.Pricing.Commands;
-using Application.DTOs.Pricing.Queries;
 using Application.Filters;
-using Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

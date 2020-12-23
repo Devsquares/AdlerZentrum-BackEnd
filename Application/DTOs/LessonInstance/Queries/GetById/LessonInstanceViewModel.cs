@@ -14,6 +14,7 @@ namespace Application.DTOs
         public string MaterialDone { get; set; }
         public string MaterialToDo { get; set; }
         public string Serial { get; set; }
+        public bool SubmittedReport { get; set; }
     }
     public class GroupInstanceViewModel
     {
