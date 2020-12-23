@@ -5,6 +5,7 @@ namespace Application.DTOs
 {
     public class GetAllHomeWorkSubmitionsViewModel
     {
+        public int Id { get; set; }
         public string StudentId { get; set; }
         public ApplicationUser Student { get; set; }
         public string URL { get; set; }
