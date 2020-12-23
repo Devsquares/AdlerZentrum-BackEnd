@@ -9,7 +9,7 @@ namespace WebApi.Controllers
     {
         [HttpPost("SubmitHomeWorkForStudent")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> SubmitHomeWorkForStudent(int id, CreateHomeWorkSubmitionCommand command)
+        public async Task<IActionResult> SubmitHomeWorkForStudent(int id, SubmitHomeWorkCommand command)
         {
             if (id != command.Id)
             {
