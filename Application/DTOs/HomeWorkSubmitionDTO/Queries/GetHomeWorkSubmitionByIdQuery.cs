@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class GetHomeWorkSubmitionByIdQuery : IRequest<GetAllHomeWorkSubmitionsViewModel>
+    public class GetHomeWorkSubmitionByIdQuery : IRequest<GetAllHomeWorkForStudentViewModel>
     {
         public int HomeWorkSubmitionId { get; set; }
     }
-    public class GetHomeWorkSubmitionByIdQueryHandler : IRequestHandler<GetHomeWorkSubmitionByIdQuery, GetAllHomeWorkSubmitionsViewModel>
+    public class GetHomeWorkSubmitionByIdQueryHandler : IRequestHandler<GetHomeWorkSubmitionByIdQuery, GetAllHomeWorkForStudentViewModel>
     {
         private readonly IHomeWorkSubmitionRepositoryAsync _HomeWorkSubmitionRepository;
         private readonly IMapper _mapper;
@@ -20,10 +20,10 @@ namespace Application.DTOs
             _mapper = mapper;
         }
 
-        public async Task<GetAllHomeWorkSubmitionsViewModel> Handle(GetHomeWorkSubmitionByIdQuery request, CancellationToken cancellationToken)
+        public async Task<GetAllHomeWorkForStudentViewModel> Handle(GetHomeWorkSubmitionByIdQuery request, CancellationToken cancellationToken)
         {
             var HomeWorkSubmitions = await _HomeWorkSubmitionRepository.GetByIdAsync(request.HomeWorkSubmitionId);
-            return _mapper.Map<GetAllHomeWorkSubmitionsViewModel>(HomeWorkSubmitions);
+            return _mapper.Map<GetAllHomeWorkForStudentViewModel>(HomeWorkSubmitions);
         }
     }
 }

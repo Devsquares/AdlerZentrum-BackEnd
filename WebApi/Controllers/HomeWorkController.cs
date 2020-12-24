@@ -63,12 +63,23 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpGet("GetHomeworkSubmition")]
-        public async Task<IActionResult> GetHomeworkSubmition([FromQuery] GetAllHomeWorkSubmitionsQuery filter)
+        [HttpGet("GetHomeworkSubmitionByGroupInstance")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetHomeworkSubmitionByGroupInstance([FromQuery] GetAllHomeWorkSubmitionsQuery filter)
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
             {
                 GroupInstanceId = filter.GroupInstanceId
+            }));
+        }
+
+        [HttpGet("GetHomeworkSubmitions")]
+        [Authorize(Roles = "Teacher")]
+        public async Task<IActionResult> GetAllHomeworkSubmitions()
+        {
+            return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
+            {
+                GroupInstanceId = null
             }));
         }
 

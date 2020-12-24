@@ -1,11 +1,13 @@
-﻿using Domain.Common;
+﻿using Domain.Entities;
 using System;
-using System.Data;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Domain.Entities
+namespace Application.DTOs
 {
-    public class HomeWorkSubmition : AuditableBaseEntity
+    public class GetAllHomeWorkForStudentViewModel
     {
+        public int Id { get; set; }
         public string StudentId { get; set; }
         public ApplicationUser Student { get; set; }
         public string URL { get; set; }
@@ -17,7 +19,7 @@ namespace Domain.Entities
         public DateTime? CorrectionDate { get; set; }
         public string CorrectionTeacherId { get; set; }
         public ApplicationUser CorrectionTeacher { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public DateTime? SubmitionDate { get; set; }
     }
 }

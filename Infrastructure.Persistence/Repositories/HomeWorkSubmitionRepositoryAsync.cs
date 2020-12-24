@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Enums;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
@@ -12,17 +13,29 @@ namespace Infrastructure.Persistence.Repositories
     public class HomeWorkSubmitionRepositoryAsync : GenericRepositoryAsync<HomeWorkSubmition>, IHomeWorkSubmitionRepositoryAsync
     {
         private readonly DbSet<HomeWorkSubmition> homeWorkSubmitions;
-        private readonly DbSet<LessonInstance> lessonInstances;
         public HomeWorkSubmitionRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             homeWorkSubmitions = dbContext.Set<HomeWorkSubmition>();
         }
 
-        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllAsync(int groupInstanceId)
+        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllByGroupInstanceAsync(int groupInstanceId)
         {
             return await homeWorkSubmitions
                 .Include(x => x.Homework)
+                .Include(x => x.Student)
+                .Include(x => x.Homework.GroupInstance)
+                .Include(x => x.Homework.LessonInstance)
             .Where(x => x.Homework.GroupInstanceId == groupInstanceId).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllSolvedAsync()
+        {
+            return await homeWorkSubmitions
+                .Include(x => x.Homework)
+                .Include(x => x.Student)
+                .Include(x => x.Homework.GroupInstance)
+                .Include(x => x.Homework.LessonInstance)
+                .Where(x => x.Status == (int)HomeWorkSubmitionStatusEnum.Solved).ToListAsync();
         }
 
         public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllForStudentAsync(string studentId, int groupInstanceId)

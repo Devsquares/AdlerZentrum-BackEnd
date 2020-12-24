@@ -7,7 +7,7 @@ namespace Application.Interfaces.Repositories
     public interface IHomeWorkSubmitionRepositoryAsync : IGenericRepositoryAsync<HomeWorkSubmition>
     {
         Task<IReadOnlyList<HomeWorkSubmition>> GetAllForStudentAsync(string studentId, int groupInstanceId);
-        Task<IReadOnlyList<HomeWorkSubmition>> GetAllAsync(int groupInstanceId);
-        Task<HomeWorkSubmition> GetByIdAsync(int id);
+        Task<IReadOnlyList<HomeWorkSubmition>> GetAllSolvedAsync();
+        Task<IReadOnlyList<HomeWorkSubmition>> GetAllByGroupInstanceAsync(int groupInstanceId);
     }
 }

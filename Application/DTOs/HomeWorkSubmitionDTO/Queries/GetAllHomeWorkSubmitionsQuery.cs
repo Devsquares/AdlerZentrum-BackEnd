@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using System.Collections.Generic;
 using System.Threading;
@@ -9,7 +10,7 @@ namespace Application.DTOs
 {
     public class GetAllHomeWorkSubmitionsQuery : IRequest<IEnumerable<GetAllHomeWorkSubmitionsViewModel>>
     {
-        public int GroupInstanceId { get; set; }
+        public int? GroupInstanceId { get; set; }
     }
     public class GetAllHomeWorkSubmitionsQueryHandler : IRequestHandler<GetAllHomeWorkSubmitionsQuery, IEnumerable<GetAllHomeWorkSubmitionsViewModel>>
     {
@@ -23,8 +24,16 @@ namespace Application.DTOs
 
         public async Task<IEnumerable<GetAllHomeWorkSubmitionsViewModel>> Handle(GetAllHomeWorkSubmitionsQuery request, CancellationToken cancellationToken)
         {
-            var HomeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllAsync(request.GroupInstanceId);
-            var userViewModel = _mapper.Map<IEnumerable<GetAllHomeWorkSubmitionsViewModel>>(HomeWorkSubmitions);
+            IReadOnlyList<HomeWorkSubmition> homeWorkSubmitions = null;
+            if (request.GroupInstanceId == null)
+            {
+                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllSolvedAsync();
+            }
+            else
+            {
+                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByGroupInstanceAsync(request.GroupInstanceId.Value);
+            }
+            var userViewModel = _mapper.Map<IEnumerable<GetAllHomeWorkSubmitionsViewModel>>(homeWorkSubmitions);
             return userViewModel;
         }
     }

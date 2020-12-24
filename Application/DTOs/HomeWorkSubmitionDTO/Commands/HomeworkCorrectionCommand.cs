@@ -32,7 +32,7 @@ namespace Application.DTOs
                 HomeWorkSubmition.CorrectionTeacherId = command.CorrectionTeacherId;
                 HomeWorkSubmition.Status = (int)HomeWorkSubmitionStatusEnum.Corrected;
 
-                await _HomeWorkSubmitionRepository.AddAsync(HomeWorkSubmition);
+                await _HomeWorkSubmitionRepository.UpdateAsync(HomeWorkSubmition);
                 return new Response<int>(HomeWorkSubmition.Id);
             }
         }

@@ -34,8 +34,14 @@ namespace Application.Mappings
             CreateMap<SingleQuestion, GetAllSingleQuestionsViewModel>().ReverseMap();
             CreateMap<Question, GetQuestionViewModel>().ReverseMap();
 
-            //CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>().ReverseMap();
             CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>()
+            .ForMember(destination => destination.Student, opts => opts.MapFrom(source => source.Student.FirstName + " " + source.Student.LastName))
+            .ForMember(destination => destination.GroupInstance, opts => opts.MapFrom(source => source.Homework.GroupInstance.Serial))
+            .ForMember(destination => destination.LessonInstance, opts => opts.MapFrom(source => source.Homework.LessonInstance.Serial))
+                             .ForMember(destination => destination.Status,
+                 opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
+
+            CreateMap<HomeWorkSubmition, GetAllHomeWorkForStudentViewModel>() 
                              .ForMember(destination => destination.Status,
                  opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
 
@@ -55,7 +61,7 @@ namespace Application.Mappings
             .ForMember(destination => destination.LastName, opts => opts.MapFrom(source => source.Student.LastName));
 
             CreateMap<Sublevel, GetAllSubLevelsViewModel>()
-                .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.Level.Name +"."+ source.Name));
+                .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.Level.Name + "." + source.Name));
 
             CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
             CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();

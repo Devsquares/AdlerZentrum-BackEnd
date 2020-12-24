@@ -34,6 +34,7 @@ namespace Application.DTOs
                     homeWorkSubmition = _HomeWorkSubmitionRepository.GetByIdAsync(command.Id).Result;
                     homeWorkSubmition.Text = command.Text;
                     homeWorkSubmition.Status = command.Status;
+                    homeWorkSubmition.SubmitionDate = DateTime.Now;
 
                     await _HomeWorkSubmitionRepository.UpdateAsync(homeWorkSubmition);
                     return new Response<int>(homeWorkSubmition.Id);
@@ -42,7 +43,7 @@ namespace Application.DTOs
                 {
                     throw new ApiException($"Wrong Status.");
                 }
-                  
+
 
             }
         }
