@@ -5,6 +5,7 @@ namespace Application.DTOs
 {
     public class GetAllomeworkBounsViewModel
     {
+        public int Id { get; set; }
         public string Text { get; set; }
         public int MinCharacters { get; set; }
         public int Points { get; set; }

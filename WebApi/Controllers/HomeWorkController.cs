@@ -53,12 +53,8 @@ namespace WebApi.Controllers
 
         [HttpPut("update")]
         [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> Put(int id, UpdateHomeworkBounsCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
+        public async Task<IActionResult> Put(UpdateHomeworkBounsCommand command)
+        { 
             return Ok(await Mediator.Send(command));
         }
 

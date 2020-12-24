@@ -10,7 +10,7 @@ namespace Application.DTOs
 {
     public class UpdateHomeworkBounsCommand : IRequest<Response<int>>
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public int BonusPoints { get; set; }
         public int BonusPointsStatus { get; set; }
 
@@ -23,9 +23,9 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(UpdateHomeworkBounsCommand command, CancellationToken cancellationToken)
             {
-                var homeWork = new Domain.Entities.Homework(); 
-                Reflection.CopyProperties(command, homeWork);
-
+                var homeWork = _HomeWorkRepository.GetByIdAsync(command.Id).Result;
+                homeWork.BonusPoints = command.BonusPoints;
+                homeWork.BonusPointsStatus = command.BonusPointsStatus;
                 await _HomeWorkRepository.UpdateAsync(homeWork);
                 return new Response<int>(homeWork.Id);
 
