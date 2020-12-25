@@ -20,9 +20,18 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<IReadOnlyList<SingleQuestion>> GetPagedReponseAsync(int pageNumber, int pageSize, int typeId)
         {
-            return await _singleQuestion.Where(x => x.SingleQuestionType == typeId)
+            return await _singleQuestion
+                .Include(x => x.Choices)
+                .Where(x => x.SingleQuestionType == typeId)
            .Skip((pageNumber - 1) * pageSize)
            .Take(pageSize)
+           .AsNoTracking()
+           .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<SingleQuestion>> GetAllByIdAsync(List<int> Ids)
+        {
+            return await _singleQuestion.Where(x => Ids.Contains(x.Id))
            .AsNoTracking()
            .ToListAsync();
         }

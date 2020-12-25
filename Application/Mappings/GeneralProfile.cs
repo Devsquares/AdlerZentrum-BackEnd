@@ -41,7 +41,7 @@ namespace Application.Mappings
                              .ForMember(destination => destination.Status,
                  opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
 
-            CreateMap<HomeWorkSubmition, GetAllHomeWorkForStudentViewModel>() 
+            CreateMap<HomeWorkSubmition, GetAllHomeWorkForStudentViewModel>()
                              .ForMember(destination => destination.Status,
                  opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
 
@@ -69,6 +69,7 @@ namespace Application.Mappings
             CreateMap<GroupDefinition, GetAllGroupDefinitionViewModel>().ReverseMap();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
+            CreateMap<GetAllTestsQuery, RequestParameter>();
             CreateMap<GetAllGroupDefinitionsQuery, RequestParameter>().ReverseMap();
             CreateMap<GetAllTimeSlotsQuery, RequestParameter>();
             CreateMap<GetAllPricingQuery, RequestParameter>();

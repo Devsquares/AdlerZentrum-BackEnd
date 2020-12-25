@@ -5,7 +5,7 @@ using Application.Interfaces;
 namespace WebApi.Controllers
 {
     [Microsoft.AspNetCore.Cors.EnableCors("_myAllowSpecificOrigins")]
-    public class MailingListController : Controller
+    public class MailingListController : BaseApiController
     {
         private readonly IEmailService _emailService;
 

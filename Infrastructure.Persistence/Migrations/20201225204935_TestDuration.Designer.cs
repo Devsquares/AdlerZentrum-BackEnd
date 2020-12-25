@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201225204935_TestDuration")]
+    partial class TestDuration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +65,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<short>("Active")
+                    b.Property<bool>("Active")
                         .HasColumnType("bit");
 
                     b.Property<int?>("AddressId")
@@ -72,7 +74,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Avatar")
                         .HasColumnType("text");
 
-                    b.Property<short>("ChangePassword")
+                    b.Property<bool>("ChangePassword")
                         .HasColumnType("bit");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -85,14 +87,14 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime");
 
-                    b.Property<short>("Deleted")
+                    b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<short>("EmailConfirmed")
+                    b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
@@ -101,7 +103,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
-                    b.Property<short>("LockoutEnabled")
+                    b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
@@ -121,7 +123,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<short>("PhoneNumberConfirmed")
+                    b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("Profilephoto")
@@ -133,7 +135,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<short>("TwoFactorEnabled")
+                    b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
@@ -169,7 +171,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<short>("IsCorrect")
+                    b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
@@ -344,7 +346,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupInstanceId")
                         .HasColumnType("int");
 
-                    b.Property<short>("IsDefault")
+                    b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
@@ -550,7 +552,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Serial")
                         .HasColumnType("text");
 
-                    b.Property<short>("SubmittedReport")
+                    b.Property<bool>("SubmittedReport")
                         .HasColumnType("bit");
 
                     b.Property<int?>("TestId")
@@ -576,7 +578,7 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<short>("Attend")
+                    b.Property<bool>("Attend")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -586,7 +588,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<short>("Homework")
+                    b.Property<bool>("Homework")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
@@ -759,7 +761,7 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<short>("AnswerIsTrueOrFalse")
+                    b.Property<bool>("AnswerIsTrueOrFalse")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
@@ -847,7 +849,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupInstanceId")
                         .HasColumnType("int");
 
-                    b.Property<short>("IsDefault")
+                    b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
