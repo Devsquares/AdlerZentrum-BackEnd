@@ -27,5 +27,14 @@ namespace Infrastructure.Persistence.Repositories
                   .AsNoTracking()
                   .ToListAsync();
         }
+
+        public virtual async Task<Test> GetByIdAsync(int id)
+        {
+            return await tests
+                .Include(x => x.Questions)
+                .ThenInclude(x => x.SingleQuestions)
+                .ThenInclude(x => x.Choices)
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
     }
 }
