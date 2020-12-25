@@ -283,7 +283,9 @@ namespace Infrastructure.Persistence.Services
             }
             else
             {
-                throw new ApiException($"Error occured while reseting the password.");
+                string ex = result.Errors.FirstOrDefault()?.Description;
+                if (string.IsNullOrEmpty(ex)) ex = $"Error occured while reseting the password.";
+                throw new ApiException(ex);
             }
         }
 

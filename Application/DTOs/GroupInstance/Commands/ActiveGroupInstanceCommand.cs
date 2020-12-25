@@ -37,6 +37,7 @@ namespace Application.DTOs
                 {
                     var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions;
 
+                    // TODO: remove it to API..
                     List<LessonInstanceStudent> lessonInstanceStudents = new List<LessonInstanceStudent>();
                     foreach (var item in groupInstance.Students)
                     {
@@ -48,6 +49,8 @@ namespace Application.DTOs
                             StudentId = item.StudentId
                         });
                     }
+
+                    // replace with quizz depond on lesson defination...
 
                     List<LessonInstance> lessonInstances = new List<LessonInstance>();
                     foreach (var item in LessonDefinitions)

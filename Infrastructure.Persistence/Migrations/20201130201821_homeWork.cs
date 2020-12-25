@@ -25,7 +25,7 @@ namespace Infrastructure.Persistence.Migrations
                     LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
                     Text = table.Column<string>(nullable: true),
-                    MinCharacters = table.Column<int>(nullable: false),
+                    MinCharacters = table.Column<int>(nullable: true),
                     Points = table.Column<int>(nullable: false),
                     BonusPoints = table.Column<int>(nullable: false)
                 },

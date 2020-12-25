@@ -20,5 +20,10 @@ namespace Domain.Entities
         public string Serial { get; set; }
         public bool SubmittedReport { get; set; }
         public virtual IList<LessonInstanceStudent> LessonInstanceStudents { get; set; }
-    }
+        public int? TestId { get; set; }
+        public Test Test { get; set; }
+        public int? TestStatus { get; set; }
+
+        public TestInstance TestInstance { get;set;}
+}
 }

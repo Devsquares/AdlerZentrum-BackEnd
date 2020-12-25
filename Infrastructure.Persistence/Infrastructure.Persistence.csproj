@@ -26,6 +26,10 @@
     <Compile Remove="Migrations\20201211112349_homeworkCorrection.Designer.cs" />
     <Compile Remove="Migrations\20201224032002_homeWorkSubmition.SubmitionDate.cs" />
     <Compile Remove="Migrations\20201224032002_homeWorkSubmition.SubmitionDate.Designer.cs" />
+    <Compile Remove="Migrations\20201225211458_MinCharacters.cs" />
+    <Compile Remove="Migrations\20201225211458_MinCharacters.Designer.cs" />
+    <Compile Remove="Migrations\20201225214420_SingleQuestionNullable.cs" />
+    <Compile Remove="Migrations\20201225214420_SingleQuestionNullable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

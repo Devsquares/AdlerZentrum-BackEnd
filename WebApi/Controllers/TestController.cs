@@ -1,4 +1,6 @@
 ﻿using Application.DTOs;
+using Application.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,13 +13,32 @@ namespace WebApi.Controllers
     {
         [HttpPost("Create")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Post(int id, CreateTestCommand command)
-        {
-            if (id != command.Id)
-            {
-                return BadRequest();
-            }
+        public async Task<IActionResult> Post(CreateTestCommand command)
+        { 
             return Ok(await Mediator.Send(command));
         }
+
+        [HttpPost("GetAllQuizzes")]
+        //[Authorize(Roles = "SuperAdmin,Supervisor")]
+        public async Task<IActionResult> GetAllQuizzes([FromQuery] GetAllTestsQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetAllTestsQuery()
+            {
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                TestType = TestTypeEnum.quizz
+            }));
+        }
+
+        [HttpPost("GetTestById")]
+        //[Authorize(Roles = "SuperAdmin,Supervisor")]
+        public async Task<IActionResult> GetTestById([FromQuery] GetTestByIdQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetTestByIdQuery()
+            {
+                Id = filter.Id
+            }));
+        }
+
     }
 }
