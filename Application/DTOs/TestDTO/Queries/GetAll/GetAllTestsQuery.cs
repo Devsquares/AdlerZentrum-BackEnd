@@ -1,4 +1,5 @@
 ﻿using Application.DTOs.Level.Queries;
+using Application.Enums;
 using Application.Filters;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
@@ -11,12 +12,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs 
+namespace Application.DTOs
 {
     public class GetAllTestsQuery : IRequest<PagedResponse<IEnumerable<GetAllTestsViewModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public TestTypeEnum TestType { get; set; }
     }
     public class GetAllTestsQueryHandler : IRequestHandler<GetAllTestsQuery, PagedResponse<IEnumerable<GetAllTestsViewModel>>>
     {
@@ -31,7 +33,7 @@ namespace Application.DTOs
         public async Task<PagedResponse<IEnumerable<GetAllTestsViewModel>>> Handle(GetAllTestsQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<RequestParameter>(request);
-            var user = await _TestService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
+            var user = await _TestService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, (int)request.TestType);
             var userViewModel = _mapper.Map<IEnumerable<GetAllTestsViewModel>>(user);
             return new PagedResponse<IEnumerable<GetAllTestsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
         }

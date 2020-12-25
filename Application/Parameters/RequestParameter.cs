@@ -16,7 +16,7 @@ namespace Application.Filters
         public RequestParameter(int pageNumber, int pageSize)
         {
             this.PageNumber = pageNumber < 1 ? 1 : pageNumber;
-            this.PageSize = pageSize > 10 ? 10 : pageSize;
+            this.PageSize = pageSize > 10 || pageSize < 1 ? 10 : pageSize  ;
         }
     }
 }
