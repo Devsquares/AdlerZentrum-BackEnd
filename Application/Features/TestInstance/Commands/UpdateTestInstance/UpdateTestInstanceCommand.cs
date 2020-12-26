@@ -15,7 +15,7 @@ namespace Application.Features.TestInstance.Commands.UpdateTestInstance
     {
 		public int Id { get; set; }
 		public int LessonInstanceId { get; set; }
-		public int StudentId { get; set; }
+		public string StudentId { get; set; }
 		public int Points { get; set; }
 		public int Status { get; set; }
 		public LessonInstance LessonInstance { get; set; }

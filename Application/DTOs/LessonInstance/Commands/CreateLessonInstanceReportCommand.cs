@@ -16,6 +16,7 @@ namespace Application.DTOs
         public bool isAdditionalHomework { get; set; }
         public CreateHomeWorkCommand AdditionalHomework { get; set; }
         public List<LessonInstanceStudent> LessonInstanceStudent { get; set; }
+        public string TeacherId { get; set; }
 
         public class CreateLessonInstanceReportCommandHandler : IRequestHandler<CreateLessonInstanceReportCommand, Response<bool>>
         {
@@ -52,7 +53,9 @@ namespace Application.DTOs
                             GroupInstanceId = lessonInstance.GroupInstanceId,
                             MinCharacters = command.AdditionalHomework.MinCharacters,
                             Points = command.AdditionalHomework.Points,
-                            Text = command.AdditionalHomework.Text
+                            Text = command.AdditionalHomework.Text,
+                            TeacherId = command.TeacherId,
+                            LessonInstanceId = lessonInstance.Id
                         });
                     }
                 }

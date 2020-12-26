@@ -8,6 +8,7 @@ using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using System;
+using Application.Features.TestInstance.Queries.GetAllTestInstances;
 
 namespace Application.Mappings
 {
@@ -65,7 +66,7 @@ namespace Application.Mappings
 
             CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
             CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();
-
+            CreateMap<GetAllTestInstancesQuery, GetAllTestInstancesParameter>().ReverseMap();
             CreateMap<GroupDefinition, GetAllGroupDefinitionViewModel>().ReverseMap();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();

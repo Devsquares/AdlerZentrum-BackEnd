@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
@@ -21,13 +22,19 @@ namespace Application.DTOs
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
             private readonly ILessonInstanceRepositoryAsync _lessonInstanceRepositoryAsync;
             private readonly ILessonInstanceStudentRepositoryAsync _lessonInstanceStudentRepositoryAsync;
+            private readonly ITestRepositoryAsync _testRepository;
+            private readonly ITestInstanceRepositoryAsync _testInstanceRepository;
             public ActiveGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
                 ILessonInstanceRepositoryAsync lessonInstanceRepository,
-                ILessonInstanceStudentRepositoryAsync lessonInstanceStudent)
+                ILessonInstanceStudentRepositoryAsync lessonInstanceStudent,
+                ITestRepositoryAsync testRepositoryAsync,
+                ITestInstanceRepositoryAsync testInstanceRepository)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
                 _lessonInstanceRepositoryAsync = lessonInstanceRepository;
                 _lessonInstanceStudentRepositoryAsync = lessonInstanceStudent;
+                _testRepository = testRepositoryAsync;
+                _testInstanceRepository = testInstanceRepository;
             }
 
             public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
@@ -50,11 +57,9 @@ namespace Application.DTOs
                         });
                     }
 
-                    // replace with quizz depond on lesson defination...
-
                     List<LessonInstance> lessonInstances = new List<LessonInstance>();
                     foreach (var item in LessonDefinitions)
-                    { 
+                    {
                         lessonInstances.Add(new LessonInstance
                         {
                             GroupInstanceId = groupInstance.Id,
@@ -84,6 +89,30 @@ namespace Application.DTOs
                         }
                     }
                     await _lessonInstanceStudentRepositoryAsync.UpdateBulkAsync(LessonInstanceStudentsList);
+
+
+
+                    List<TestInstance> testInstance = new List<TestInstance>();
+                    foreach (var item in lessonInstances)
+                    {
+                        // TODO get quiz for lesson 
+                        var quiz = _testRepository.GetByLessonDefinationAsync(item.LessonDefinitionId).Result;
+                        if (quiz != null)
+                        {
+                            foreach (var student in LessonInstanceStudentsList)
+                            {
+                                testInstance.Add(new TestInstance
+                                {
+                                    LessonInstanceId = item.Id,
+                                    StudentId = student.StudentId,
+                                    Status = (int)TestInstanceEnum.Closed,
+                                    TestId = quiz.Id
+                                });
+                            }
+                        }
+
+                    }
+                    await _testInstanceRepository.AddBulkAsync(testInstance);
                 }
                 return new Response<int>(groupInstance.Id);
             }

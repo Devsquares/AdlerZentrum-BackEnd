@@ -36,5 +36,10 @@ namespace Infrastructure.Persistence.Repositories
                 .ThenInclude(x => x.Choices)
                 .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task<Test> GetByLessonDefinationAsync(int lessonDefinationdId)
+        {
+            return await tests.Where(x => x.LessonDefinitionId == lessonDefinationdId).FirstOrDefaultAsync();
+        }
     }
 }

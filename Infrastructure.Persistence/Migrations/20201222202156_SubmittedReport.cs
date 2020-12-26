@@ -6,9 +6,9 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.DropForeignKey(
-            //    name: "FK_SingleQuestions_Questions_QuestionId",
-            //    table: "SingleQuestions");
+            migrationBuilder.DropForeignKey(
+               name: "FK_SingleQuestions_Questions_QuestionId",
+               table: "SingleQuestions");
 
             migrationBuilder.DropIndex(
                 name: "IX_SingleQuestions_QuestionId",

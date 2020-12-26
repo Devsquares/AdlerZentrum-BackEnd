@@ -70,13 +70,14 @@ namespace Infrastructure.Persistence.Repositories
 
         public async void AddStudentToTheGroupInstance(int groupId, string studentId)
         {
-            groupInstanceStudents.Add(new GroupInstanceStudents
+            await groupInstanceStudents.AddAsync(new GroupInstanceStudents
             {
                 GroupInstanceId = groupId,
                 IsDefault = true,
                 StudentId = studentId
             });
         }
+        
         public async Task<GroupInstance> GetByIdAsync(int id)
         {
             return groupInstances

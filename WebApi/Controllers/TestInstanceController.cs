@@ -1,3 +1,4 @@
+using Application.Features;
 using Application.Features.TestInstance.Commands.CreateTestInstance;
 using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
 using Application.Features.TestInstance.Commands.UpdateTestInstance;
@@ -16,7 +17,8 @@ namespace WebApi.Controller
         public async Task<IActionResult> Get([FromQuery] GetAllTestInstancesParameter filter)
         {
 
-            return Ok(await Mediator.Send(new GetAllTestInstancesQuery() {
+            return Ok(await Mediator.Send(new GetAllTestInstancesQuery()
+            {
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
                 FilterArray = filter.FilterArray,
@@ -34,6 +36,17 @@ namespace WebApi.Controller
         public async Task<IActionResult> Get(int id)
         {
             return Ok(await Mediator.Send(new GetTestInstanceByIdQuery { Id = id }));
+        }
+
+        // GET api/<controller>/5
+        [HttpGet("GetQuizzesForStudent")]
+        public async Task<IActionResult> GetQuizzesForStudent()
+        {
+            return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
+            {
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value
+            }));
         }
 
         // POST api/<controller>

@@ -35,6 +35,7 @@ namespace Infrastructure.Persistence.Services
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
         private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
+        private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
 
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
@@ -42,7 +43,8 @@ namespace Infrastructure.Persistence.Services
             IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService,
-            IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync)
+            IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
+            IGroupInstanceStudentRepositoryAsync  groupInstanceStudentRepositoryAsync)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -51,6 +53,7 @@ namespace Infrastructure.Persistence.Services
             _signInManager = signInManager;
             _emailService = emailService;
             _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
+            _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -113,7 +116,6 @@ namespace Infrastructure.Persistence.Services
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
-
                 //TODO need to be change
                 user.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(user, request.Password);
@@ -125,7 +127,13 @@ namespace Infrastructure.Persistence.Services
 
 
                     //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
-                    _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
+                    // _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
+                    await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
+                    {
+                        GroupInstanceId = request.GroupInstanceId,
+                        StudentId = user.Id,
+                        IsDefault = true
+                    });
                     return new Response<string>(user.Id, message: $"User Registered.");
                 }
                 else
