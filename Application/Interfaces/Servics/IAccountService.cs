@@ -12,6 +12,7 @@ namespace Application.Interfaces
     public interface IAccountService
     {
         Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress);
+        Task<Response<AuthenticationResponse>> RefreshToken(string token, string ipAddress);
         Task<Response<string>> RegisterAsync(RegisterRequest request, string origin);
         Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, int role);
         Task<Response<string>> ConfirmEmailAsync(string userId, string code);
