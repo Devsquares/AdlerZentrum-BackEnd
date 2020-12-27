@@ -69,8 +69,6 @@ namespace Application.DTOs
                             Serial = item.Order.ToString()
                         });
                     }
-
-
                     // TODO: update group status set it with 1 and change it in the next iteration.
                     groupInstance.Status = 1;
                     await _groupInstanceRepositoryAsync.UpdateAsync(groupInstance);
@@ -90,8 +88,6 @@ namespace Application.DTOs
                     }
                     await _lessonInstanceStudentRepositoryAsync.UpdateBulkAsync(LessonInstanceStudentsList);
 
-
-
                     List<TestInstance> testInstance = new List<TestInstance>();
                     foreach (var item in lessonInstances)
                     {
@@ -99,18 +95,18 @@ namespace Application.DTOs
                         var quiz = _testRepository.GetByLessonDefinationAsync(item.LessonDefinitionId).Result;
                         if (quiz != null)
                         {
-                            foreach (var student in LessonInstanceStudentsList)
+                            foreach (var student in lessonInstanceStudents)
                             {
-                                testInstance.Add(new TestInstance
+                                TestInstance obj = new TestInstance
                                 {
                                     LessonInstanceId = item.Id,
                                     StudentId = student.StudentId,
                                     Status = (int)TestInstanceEnum.Closed,
                                     TestId = quiz.Id
-                                });
+                                };
+                                testInstance.Add(obj);
                             }
                         }
-
                     }
                     await _testInstanceRepository.AddBulkAsync(testInstance);
                 }

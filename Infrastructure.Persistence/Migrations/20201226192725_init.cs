@@ -145,7 +145,8 @@ namespace Infrastructure.Persistence.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     LevelId = table.Column<int>(nullable: false),
-                    NumberOflessons = table.Column<int>(nullable: false)
+                    NumberOflessons = table.Column<int>(nullable: false),
+                    Color = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -186,7 +187,8 @@ namespace Infrastructure.Persistence.Migrations
                     Profilephoto = table.Column<string>(nullable: true),
                     Avatar = table.Column<string>(nullable: true),
                     AddressId = table.Column<int>(nullable: true),
-                    RoleId = table.Column<string>(nullable: true)
+                    RoleId = table.Column<string>(nullable: true),
+                    ChangePassword = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -299,6 +301,30 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_GroupDefinition_TimeSlot_TimeSlotId",
                         column: x => x.TimeSlotId,
                         principalTable: "TimeSlot",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LessonDefinition",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    SublevelId = table.Column<int>(nullable: false),
+                    Order = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LessonDefinition", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LessonDefinition_SubLevels_SublevelId",
+                        column: x => x.SublevelId,
+                        principalTable: "SubLevels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -425,7 +451,7 @@ namespace Infrastructure.Persistence.Migrations
                     LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
                     GroupDefinitionId = table.Column<int>(nullable: false),
-                    Serail = table.Column<int>(nullable: false),
+                    Serial = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -440,6 +466,63 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    TestDuration = table.Column<int>(nullable: false),
+                    TestTypeId = table.Column<int>(nullable: false),
+                    LessonDefinitionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tests_LessonDefinition_LessonDefinitionId",
+                        column: x => x.LessonDefinitionId,
+                        principalTable: "LessonDefinition",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GroupInstanceStudents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    StudentId = table.Column<string>(nullable: true),
+                    GroupInstanceId = table.Column<int>(nullable: false),
+                    IsDefault = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupInstanceStudents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GroupInstanceStudents_GroupInstances_GroupInstanceId",
+                        column: x => x.GroupInstanceId,
+                        principalTable: "GroupInstances",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupInstanceStudents_ApplicationUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "ApplicationUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TeacherGroupInstances",
                 columns: table => new
                 {
@@ -450,7 +533,8 @@ namespace Infrastructure.Persistence.Migrations
                     LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
                     TeacherId = table.Column<string>(nullable: true),
-                    GroupInstanceId = table.Column<int>(nullable: false)
+                    GroupInstanceId = table.Column<int>(nullable: false),
+                    IsDefault = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -467,6 +551,281 @@ namespace Infrastructure.Persistence.Migrations
                         principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LessonInstances",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    GroupInstanceId = table.Column<int>(nullable: false),
+                    LessonDefinitionId = table.Column<int>(nullable: false),
+                    MaterialDone = table.Column<string>(nullable: true),
+                    MaterialToDo = table.Column<string>(nullable: true),
+                    Serial = table.Column<string>(nullable: true),
+                    SubmittedReport = table.Column<bool>(nullable: false),
+                    TestId = table.Column<int>(nullable: true),
+                    TestStatus = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LessonInstances", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LessonInstances_GroupInstances_GroupInstanceId",
+                        column: x => x.GroupInstanceId,
+                        principalTable: "GroupInstances",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LessonInstances_LessonDefinition_LessonDefinitionId",
+                        column: x => x.LessonDefinitionId,
+                        principalTable: "LessonDefinition",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LessonInstances_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    TestId = table.Column<int>(nullable: true),
+                    QuestionTypeId = table.Column<int>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    Header = table.Column<string>(nullable: true),
+                    MinCharacters = table.Column<int>(nullable: true),
+                    AudioPath = table.Column<string>(nullable: true),
+                    NoOfRepeats = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Questions_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Homeworks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    Text = table.Column<string>(nullable: true),
+                    MinCharacters = table.Column<int>(nullable: false),
+                    Points = table.Column<int>(nullable: false),
+                    BonusPoints = table.Column<int>(nullable: false),
+                    BonusPointsStatus = table.Column<int>(nullable: false),
+                    GroupInstanceId = table.Column<int>(nullable: false),
+                    LessonInstanceId = table.Column<int>(nullable: false),
+                    TeacherId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Homeworks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Homeworks_GroupInstances_GroupInstanceId",
+                        column: x => x.GroupInstanceId,
+                        principalTable: "GroupInstances",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Homeworks_LessonInstances_LessonInstanceId",
+                        column: x => x.LessonInstanceId,
+                        principalTable: "LessonInstances",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Homeworks_ApplicationUsers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "ApplicationUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LessonInstanceStudent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    LessonInstanceId = table.Column<int>(nullable: false),
+                    StudentId = table.Column<string>(nullable: true),
+                    Attend = table.Column<bool>(nullable: false),
+                    Homework = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LessonInstanceStudent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LessonInstanceStudent_LessonInstances_LessonInstanceId",
+                        column: x => x.LessonInstanceId,
+                        principalTable: "LessonInstances",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_LessonInstanceStudent_ApplicationUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "ApplicationUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TestInstances",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    StudentId = table.Column<string>(nullable: false),
+                    Points = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    LessonInstanceId = table.Column<int>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    TestId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestInstances", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TestInstances_LessonInstances_LessonInstanceId",
+                        column: x => x.LessonInstanceId,
+                        principalTable: "LessonInstances",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TestInstances_Tests_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Tests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SingleQuestions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    QuestionId = table.Column<int>(nullable: true),
+                    SingleQuestionType = table.Column<int>(nullable: false),
+                    Text = table.Column<string>(nullable: true),
+                    AnswerIsTrueOrFalse = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SingleQuestions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SingleQuestions_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HomeWorkSubmitions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    StudentId = table.Column<string>(nullable: true),
+                    URL = table.Column<string>(nullable: true),
+                    HomeworkId = table.Column<int>(nullable: false),
+                    DueDate = table.Column<DateTime>(nullable: true),
+                    Text = table.Column<string>(nullable: true),
+                    Solution = table.Column<string>(nullable: true),
+                    CorrectionDate = table.Column<DateTime>(nullable: true),
+                    CorrectionTeacherId = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    SubmitionDate = table.Column<DateTime>(nullable: true),
+                    Points = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HomeWorkSubmitions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HomeWorkSubmitions_ApplicationUsers_CorrectionTeacherId",
+                        column: x => x.CorrectionTeacherId,
+                        principalTable: "ApplicationUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_HomeWorkSubmitions_Homeworks_HomeworkId",
+                        column: x => x.HomeworkId,
+                        principalTable: "Homeworks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HomeWorkSubmitions_ApplicationUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "ApplicationUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Choice",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    SingleQuestionId = table.Column<int>(nullable: false),
+                    IsCorrect = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Choice", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Choice_SingleQuestions_SingleQuestionId",
+                        column: x => x.SingleQuestionId,
+                        principalTable: "SingleQuestions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -489,6 +848,11 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_ApplicationUsers_RoleId",
                 table: "ApplicationUsers",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Choice_SingleQuestionId",
+                table: "Choice",
+                column: "SingleQuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupDefinition_GroupConditionId",
@@ -516,6 +880,81 @@ namespace Infrastructure.Persistence.Migrations
                 column: "GroupDefinitionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GroupInstanceStudents_GroupInstanceId",
+                table: "GroupInstanceStudents",
+                column: "GroupInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupInstanceStudents_StudentId",
+                table: "GroupInstanceStudents",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Homeworks_GroupInstanceId",
+                table: "Homeworks",
+                column: "GroupInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Homeworks_LessonInstanceId",
+                table: "Homeworks",
+                column: "LessonInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Homeworks_TeacherId",
+                table: "Homeworks",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HomeWorkSubmitions_CorrectionTeacherId",
+                table: "HomeWorkSubmitions",
+                column: "CorrectionTeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HomeWorkSubmitions_HomeworkId",
+                table: "HomeWorkSubmitions",
+                column: "HomeworkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HomeWorkSubmitions_StudentId",
+                table: "HomeWorkSubmitions",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonDefinition_SublevelId",
+                table: "LessonDefinition",
+                column: "SublevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonInstances_GroupInstanceId",
+                table: "LessonInstances",
+                column: "GroupInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonInstances_LessonDefinitionId",
+                table: "LessonInstances",
+                column: "LessonDefinitionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonInstances_TestId",
+                table: "LessonInstances",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonInstanceStudent_LessonInstanceId",
+                table: "LessonInstanceStudent",
+                column: "LessonInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LessonInstanceStudent_StudentId",
+                table: "LessonInstanceStudent",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_TestId",
+                table: "Questions",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_ApplicationUserId",
                 table: "RefreshToken",
                 column: "ApplicationUserId");
@@ -532,19 +971,40 @@ namespace Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_SingleQuestions_QuestionId",
+                table: "SingleQuestions",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SubLevels_LevelId",
                 table: "SubLevels",
                 column: "LevelId");
 
-            // migrationBuilder.CreateIndex(
-            //     name: "IX_TeacherGroupInstances_GroupInstanceId",
-            //     table: "TeacherGroupInstances",
-            //     column: "GroupInstanceId");
+            migrationBuilder.CreateIndex(
+                name: "IX_TeacherGroupInstances_GroupInstanceId",
+                table: "TeacherGroupInstances",
+                column: "GroupInstanceId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeacherGroupInstances_TeacherId",
                 table: "TeacherGroupInstances",
                 column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestInstances_LessonInstanceId",
+                table: "TestInstances",
+                column: "LessonInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestInstances_TestId",
+                table: "TestInstances",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tests_LessonDefinitionId",
+                table: "Tests",
+                column: "LessonDefinitionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TimeSlotDetails_TimeSlotId",
@@ -573,6 +1033,18 @@ namespace Infrastructure.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Choice");
+
+            migrationBuilder.DropTable(
+                name: "GroupInstanceStudents");
+
+            migrationBuilder.DropTable(
+                name: "HomeWorkSubmitions");
+
+            migrationBuilder.DropTable(
+                name: "LessonInstanceStudent");
+
+            migrationBuilder.DropTable(
                 name: "PromoCodes");
 
             migrationBuilder.DropTable(
@@ -583,6 +1055,9 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "TeacherGroupInstances");
+
+            migrationBuilder.DropTable(
+                name: "TestInstances");
 
             migrationBuilder.DropTable(
                 name: "TimeSlotDetails");
@@ -597,13 +1072,25 @@ namespace Infrastructure.Persistence.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "GroupInstances");
+                name: "SingleQuestions");
+
+            migrationBuilder.DropTable(
+                name: "Homeworks");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "LessonInstances");
 
             migrationBuilder.DropTable(
                 name: "ApplicationUsers");
 
             migrationBuilder.DropTable(
-                name: "GroupDefinition");
+                name: "GroupInstances");
+
+            migrationBuilder.DropTable(
+                name: "Tests");
 
             migrationBuilder.DropTable(
                 name: "Address");
@@ -612,16 +1099,22 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
+                name: "GroupDefinition");
+
+            migrationBuilder.DropTable(
+                name: "LessonDefinition");
+
+            migrationBuilder.DropTable(
                 name: "GroupCondition");
 
             migrationBuilder.DropTable(
                 name: "Pricing");
 
             migrationBuilder.DropTable(
-                name: "SubLevels");
+                name: "TimeSlot");
 
             migrationBuilder.DropTable(
-                name: "TimeSlot");
+                name: "SubLevels");
 
             migrationBuilder.DropTable(
                 name: "Levels");

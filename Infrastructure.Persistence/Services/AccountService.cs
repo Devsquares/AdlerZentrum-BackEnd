@@ -44,7 +44,7 @@ namespace Infrastructure.Persistence.Services
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService,
             IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
-            IGroupInstanceStudentRepositoryAsync  groupInstanceStudentRepositoryAsync)
+            IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -93,7 +93,55 @@ namespace Infrastructure.Persistence.Services
             response.RefreshToken = refreshToken.Token;
             response.ActiveGroupInstance = activeGroup;
             response.ChangePassword = user.ChangePassword;
+
+            user.RefreshTokens.Add(refreshToken);
+            await _userManager.UpdateAsync(user);
+
             return new Response<AuthenticationResponse>(response, $"Authenticated {user.UserName}");
+        }
+
+        public async Task<Response<AuthenticationResponse>> RefreshToken(string token, string ipAddress)
+        {
+            var user = _userManager.Users.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
+
+            // return null if no user found with token
+            if (user == null) return null;
+
+            var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+            // return null if token is no longer active
+            if (!refreshToken.IsActive) return null;
+
+            // replace old refresh token with a new one and save
+            var newRefreshToken = GenerateRefreshToken(ipAddress);
+            refreshToken.Revoked = DateTime.UtcNow;
+            refreshToken.RevokedByIp = ipAddress;
+            refreshToken.ReplacedByToken = newRefreshToken.Token;
+            user.RefreshTokens.Add(newRefreshToken);
+            await _userManager.UpdateAsync(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            int? activeGroup = null;
+            if (roles.Contains("Student"))
+            {
+                activeGroup = _groupInstanceRepositoryAsync.GetActiveGroupInstance(user.Id);
+            }
+
+            // generate new jwt
+            var jwtToken = await GenerateJWToken(user, roles, activeGroup);
+            AuthenticationResponse response = new AuthenticationResponse();
+            response.Id = user.Id;
+            response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            response.Email = user.Email;
+            response.UserName = user.UserName;
+            var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
+            response.Roles = rolesList.ToList();
+            response.IsVerified = user.EmailConfirmed;
+            response.RefreshToken = refreshToken.Token;
+            response.ActiveGroupInstance = activeGroup;
+            response.ChangePassword = user.ChangePassword;
+
+            return new Response<AuthenticationResponse>(response, $"Token Refreshed.");
         }
 
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)

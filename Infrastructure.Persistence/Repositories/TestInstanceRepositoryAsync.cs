@@ -13,9 +13,9 @@ namespace Infrastructure.Persistence.Repositories
 {
     public class TestInstanceRepositoryAsync : GenericRepositoryAsync<TestInstance>, ITestInstanceRepositoryAsync
     {
-        private readonly DbSet<TestInstance> _testinstances;
+        private readonly DbSet<TestInstance> _testinstances; 
         public TestInstanceRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
-        {
+        { 
             _testinstances = dbContext.Set<TestInstance>();
         }
 
@@ -25,8 +25,7 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.LessonInstance)
                   .Include(x => x.Test)
                   .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.StudentId == student).ToListAsync();
-        }
+        } 
 
     }
-
 }

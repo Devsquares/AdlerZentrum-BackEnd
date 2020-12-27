@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201226011311_LessonDefinitionId")]
-    partial class LessonDefinitionId
+    [Migration("20201226192725_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -399,6 +399,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
 
                     b.Property<string>("Solution")
                         .HasColumnType("text");
@@ -944,21 +947,19 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("StudentId")
-                        .HasColumnType("varchar(85)");
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("TestId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LessonInstanceId")
-                        .IsUnique();
-
-                    b.HasIndex("StudentId");
+                    b.HasIndex("LessonInstanceId");
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("TestInstance");
+                    b.ToTable("TestInstances");
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlot", b =>
@@ -1403,14 +1404,10 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.TestInstance", b =>
                 {
                     b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
-                        .WithOne("TestInstance")
-                        .HasForeignKey("Domain.Entities.TestInstance", "LessonInstanceId")
+                        .WithMany()
+                        .HasForeignKey("LessonInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
 
                     b.HasOne("Domain.Entities.Test", "Test")
                         .WithMany()
