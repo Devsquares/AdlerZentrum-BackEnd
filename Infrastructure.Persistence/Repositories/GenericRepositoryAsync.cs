@@ -202,6 +202,7 @@ namespace Infrastructure.Persistence.Repository
             await _dbContext.SaveChangesAsync();
             return entity;
         }
+
         public async Task<bool> AddBulkAsync(List<T> entity)
         {
             await _dbContext.Set<T>().AddRangeAsync(entity);

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.DTOs.Account; 
+using Application.DTOs.Account;
 using Application.DTOs.Account.Commands.UpdateAccount;
 using Application.DTOs.Account.Commands.DeleteAccountById;
 using Application.DTOs.Email;
@@ -38,6 +38,20 @@ namespace WebApi.Controllers
         {
             return Ok(await _accountService.AuthenticateAsync(request, GenerateIPAddress()));
         }
+
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public IActionResult RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var response = _accountService.RefreshToken(refreshToken, GenerateIPAddress());
+
+            if (response == null)
+                return Unauthorized(new { message = "Invalid token" });
+ 
+            return Ok(response);
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {

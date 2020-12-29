@@ -27,7 +27,7 @@ namespace Application.DTOs
         public async Task<PagedResponse<IEnumerable<GetAllQuestionsViewModel>>> Handle(GetAllQuestionsQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<RequestParameter>(request);
-            var user = await _QuestionService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, "QuestionDetails,QuestionDetails.SingleQuestion,QuestionDetails.SingleQuestion.Choices");
+            var user = await _QuestionService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
             var userViewModel = _mapper.Map<IEnumerable<GetAllQuestionsViewModel>>(user);
             return new PagedResponse<IEnumerable<GetAllQuestionsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
         }

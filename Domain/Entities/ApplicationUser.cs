@@ -8,6 +8,10 @@ namespace Domain.Entities
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser()
+        {
+            this.RefreshTokens = new List<RefreshToken>();
+        }
         [MaxLength(85)]
         public override string Id { get; set; }
         public string FirstName { get; set; }

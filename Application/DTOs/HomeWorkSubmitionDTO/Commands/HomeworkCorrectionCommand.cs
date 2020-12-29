@@ -15,6 +15,7 @@ namespace Application.DTOs
         public int Id { get; set; }
         public string Solution { get; set; }
         public string CorrectionTeacherId { get; set; }
+        public int Points { get; set; }
 
         public class HomeworkCorrectionCommandHandler : IRequestHandler<HomeworkCorrectionCommand, Response<int>>
         {
@@ -27,9 +28,9 @@ namespace Application.DTOs
             {
                 var HomeWorkSubmition = _HomeWorkSubmitionRepository.GetByIdAsync(command.Id).Result;
                 HomeWorkSubmition.CorrectionDate = DateTime.Now;
-                HomeWorkSubmition.Solution = command.Solution;
-                //TODO need to get from login user.
                 HomeWorkSubmition.CorrectionTeacherId = command.CorrectionTeacherId;
+                HomeWorkSubmition.Solution = command.Solution;
+                HomeWorkSubmition.Points = command.Points; 
                 HomeWorkSubmition.Status = (int)HomeWorkSubmitionStatusEnum.Corrected;
 
                 await _HomeWorkSubmitionRepository.UpdateAsync(HomeWorkSubmition);

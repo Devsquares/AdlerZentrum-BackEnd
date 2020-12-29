@@ -8,11 +8,13 @@ namespace Application.Features.TestInstance.Queries.GetAllTestInstances
 	public class GetAllTestInstancesViewModel
 	{
 		public int Id { get; set; }
-		public int LessonInstanceId { get; set; }
-		public int StudentId { get; set; }
-		public int Points { get; set; }
-		public int Status { get; set; }
-		public LessonInstance LessonInstance { get; set; }
-		public DateTime StartDate { get; set; }
-	}
+        public string StudentId { get; set; }
+        public int Points { get; set; }
+        public int Status { get; set; }
+        public int LessonInstanceId { get; set; }
+        public virtual LessonInstance LessonInstance { get; set; }
+        public DateTime StartDate { get; set; }
+        public int TestId { get; set; }
+        public virtual Test Test { get; set; }
+    }
 }

@@ -24,9 +24,11 @@ namespace Infrastructure.Persistence.Repositories
             return await _testinstances
                   .Include(x => x.LessonInstance)
                   .Include(x => x.Test)
+                  .Include(x => x.Test.Questions)
+                  .ThenInclude(x => x.SingleQuestions)
+                  .ThenInclude(x => x.Choices)
                   .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.StudentId == student).ToListAsync();
         }
 
     }
-
 }

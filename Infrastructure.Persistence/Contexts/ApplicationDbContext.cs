@@ -20,6 +20,10 @@ namespace Infrastructure.Persistence.Contexts
         private readonly IDateTimeService _dateTime;
         private readonly IAuthenticatedUserService _authenticatedUser;
 
+        public ApplicationDbContext()
+        {
+
+        }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IDateTimeService dateTime, IAuthenticatedUserService authenticatedUser) : base(options)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
@@ -35,8 +39,11 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<LessonInstance> LessonInstances { get; set; }
         public DbSet<HomeWorkSubmition> HomeWorkSubmitions { get; set; }
         public DbSet<Test> Tests { get; set; }
+        public DbSet<TestInstance> TestInstances { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<SingleQuestion> SingleQuestions { get; set; } 
+        public DbSet<SingleQuestion> SingleQuestions { get; set; }
+        public DbSet<SingleQuestionSubmission> SingleQuestionSubmissions { get; set; }
+        public DbSet<ChoiceSubmission> ChoiceSubmissions { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

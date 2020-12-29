@@ -41,8 +41,7 @@ namespace Application.Features.TestInstance.Commands.UpdateTestInstance
 				testinstance.LessonInstanceId = command.LessonInstanceId;
 				testinstance.StudentId = command.StudentId;
 				testinstance.Points = command.Points;
-				testinstance.Status = command.Status;
-				testinstance.LessonInstance = command.LessonInstance;
+				testinstance.Status = command.Status; 
 				testinstance.StartDate = command.StartDate; 
 
                     await _testinstanceRepository.UpdateAsync(testinstance);

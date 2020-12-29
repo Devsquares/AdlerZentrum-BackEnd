@@ -22,6 +22,7 @@ namespace WebApi.Controllers
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> SubmitHomeWorkCorrection(HomeworkCorrectionCommand command)
         {
+            command.CorrectionTeacherId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
 
@@ -54,7 +55,7 @@ namespace WebApi.Controllers
         [HttpPut("update")]
         [Authorize(Roles = "Supervisor")]
         public async Task<IActionResult> Put(UpdateHomeworkBounsCommand command)
-        { 
+        {
             return Ok(await Mediator.Send(command));
         }
 

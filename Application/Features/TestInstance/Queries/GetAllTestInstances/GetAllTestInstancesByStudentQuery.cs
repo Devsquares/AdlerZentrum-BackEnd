@@ -30,9 +30,7 @@ namespace Application.Features
         public async Task<IEnumerable<GetAllTestInstancesViewModel>> Handle(GetAllTestInstancesByStudentQuery request, CancellationToken cancellationToken)
         {
             var testinstance = await _testInstanceRepository.GetAllQuizzForStudentAsync(request.StudentId, request.GroupInstanceId);
-
-            var testinstanceViewModel = _mapper.Map<IEnumerable<GetAllTestInstancesViewModel>>(testinstance);
-            return testinstanceViewModel;
+            return _mapper.Map<IEnumerable<GetAllTestInstancesViewModel>>(testinstance);
         }
     }
 }
