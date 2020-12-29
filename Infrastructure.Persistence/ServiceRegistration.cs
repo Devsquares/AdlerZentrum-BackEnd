@@ -58,6 +58,8 @@ namespace Infrastructure.Persistence
             services.AddTransient<ITestRepositoryAsync, TestRepositoryAsync>();
             services.AddTransient<ITestInstanceRepositoryAsync, TestInstanceRepositoryAsync>(); 
             services.AddTransient<IGroupInstanceStudentRepositoryAsync, GroupInstanceStudentRepositoryAsync>();
+            services.AddTransient<ISingleQuestionSubmissionRepositoryAsync, SingleQuestionSubmissionRepositoryAsync>();
+            services.AddTransient<IChoiceSubmissionRepositoryAsync, ChoiceSubmissionRepositoryAsync>();
 
             #endregion
 

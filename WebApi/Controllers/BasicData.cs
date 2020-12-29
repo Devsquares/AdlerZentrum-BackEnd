@@ -5,6 +5,7 @@ using Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,6 +35,25 @@ namespace WebApi.Controllers
         public async Task<IActionResult> getDateTime()
         {
             return Ok(DateTime.Now.ToString());
+        }
+
+
+        [HttpGet("GetAllCountries")]
+        public async Task<IActionResult> GetAllCountries()
+        {
+            List<string> culuterList = new List<string>();
+            CultureInfo[] cultureInfos = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+
+            foreach (CultureInfo item in cultureInfos)
+            {
+                RegionInfo regionInfo = new RegionInfo(item.LCID);
+                if (!(culuterList.Contains(regionInfo.EnglishName)))
+                {
+                    culuterList.Add(regionInfo.EnglishName);
+                }
+            }
+            culuterList.Sort();
+            return Ok(culuterList);
         }
 
 

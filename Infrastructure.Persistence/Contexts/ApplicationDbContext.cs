@@ -42,6 +42,8 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<TestInstance> TestInstances { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<SingleQuestion> SingleQuestions { get; set; }
+        public DbSet<SingleQuestionSubmission> SingleQuestionSubmissions { get; set; }
+        public DbSet<ChoiceSubmission> ChoiceSubmissions { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

@@ -68,6 +68,7 @@ namespace Application.Mappings
             CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();
             CreateMap<GetAllTestInstancesQuery, GetAllTestInstancesParameter>().ReverseMap();
             CreateMap<GroupDefinition, GetAllGroupDefinitionViewModel>().ReverseMap();
+            CreateMap<TestInstance, GetAllTestInstancesViewModel>().ReverseMap();
             // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
             CreateMap<GetAllTestsQuery, RequestParameter>();
