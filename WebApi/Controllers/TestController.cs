@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPost("GetAllQuizzes")]
+        [HttpGet("GetAllQuizzes")]
         //[Authorize(Roles = "SuperAdmin,Supervisor")]
         public async Task<IActionResult> GetAllQuizzes([FromQuery] GetAllTestsQuery filter)
         {
@@ -30,7 +30,7 @@ namespace WebApi.Controllers
             }));
         }
 
-        [HttpPost("GetTestById")]
+        [HttpGet("GetTestById")]
         //[Authorize(Roles = "SuperAdmin,Supervisor")]
         public async Task<IActionResult> GetTestById([FromQuery] GetTestByIdQuery filter)
         {

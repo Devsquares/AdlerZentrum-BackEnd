@@ -9,6 +9,7 @@ namespace Application.DTOs
     {
         public string Id { get; set; } 
         public string Name { get; set; }
-        public int? Status { get; set; } 
+        public string TestTypeId { get; set; }
+        public LessonDefinition LessonDefinition { get; set; }
     }
 }

@@ -30,7 +30,8 @@ namespace Application.Mappings
 
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
-
+            CreateMap<Test, GetAllTestsViewModel>().ReverseMap().ForMember(destination => destination.TestTypeId,
+                 opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.TestTypeId))); 
 
             CreateMap<SingleQuestion, GetAllSingleQuestionsViewModel>().ReverseMap();
             CreateMap<Question, GetQuestionViewModel>().ReverseMap();

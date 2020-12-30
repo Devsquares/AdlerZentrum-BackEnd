@@ -21,7 +21,10 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<IReadOnlyList<Test>> GetPagedReponseAsync(int pageNumber, int pageSize, int type)
         {
-            return await tests.Where(x => x.TestTypeId == type)
+            return await tests
+                .Include(x => x.LessonDefinition)
+                .ThenInclude(x => x.Sublevel)
+                .Where(x => x.TestTypeId == type)
                   .Skip((pageNumber - 1) * pageSize)
                   .Take(pageSize)
                   .AsNoTracking()
