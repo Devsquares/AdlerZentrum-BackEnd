@@ -55,6 +55,7 @@ namespace WebApi.Controller
         //TODO: enable authorization
         public async Task<IActionResult> Post(CreateTestInstanceCommand command)
         {
+            command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
 

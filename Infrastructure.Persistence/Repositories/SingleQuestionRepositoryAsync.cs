@@ -22,7 +22,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _singleQuestion
                 .Include(x => x.Choices)
-                .Where(x => x.SingleQuestionType == typeId)
+                .Where(x => x.SingleQuestionType == typeId && x.QuestionId != null)
            .Skip((pageNumber - 1) * pageSize)
            .Take(pageSize)
            .AsNoTracking()

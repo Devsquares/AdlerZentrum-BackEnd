@@ -12,6 +12,7 @@ namespace Domain.Entities
         public string StudentId { get; set; }
         public ICollection<ChoiceSubmission> Choices { get; set; }
         public ApplicationUser Student { get; set; }
+        public int SingleQuestionId { get; set; }
         public SingleQuestion SingleQuestion { get; set; }
     }
 }
