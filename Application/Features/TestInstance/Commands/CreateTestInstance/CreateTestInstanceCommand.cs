@@ -73,10 +73,8 @@ namespace Application.Features.TestInstance.Commands.CreateTestInstance
                 }
             }
             await _testinstanceRepository.UpdateAsync(testInstance);
-
-            var testinstance = _mapper.Map<Domain.Entities.TestInstance>(request);
-            await _testinstanceRepository.AddAsync(testinstance);
-            return new Response<int>(testinstance.Id);
+  
+            return new Response<int>(testInstance.Id);
         }
     }
 }
