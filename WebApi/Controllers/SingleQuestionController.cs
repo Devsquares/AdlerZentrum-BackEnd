@@ -7,6 +7,7 @@ namespace WebApi.Controllers
 {
     public class SingleQuestionController : BaseApiController
     {
+        // Gat All avilable qutions to create quiz
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
         {
