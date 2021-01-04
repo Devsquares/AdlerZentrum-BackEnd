@@ -88,7 +88,7 @@ namespace Application.DTOs
                     }
                     await _lessonInstanceStudentRepositoryAsync.UpdateBulkAsync(LessonInstanceStudentsList);
 
-                    List<TestInstance> testInstance = new List<TestInstance>();
+                    List<TestInstance> testInstance = new List<TestInstance>(); 
                     foreach (var item in lessonInstances)
                     {
                         // TODO get quiz for lesson 

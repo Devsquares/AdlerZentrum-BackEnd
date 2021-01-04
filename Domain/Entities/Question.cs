@@ -14,6 +14,7 @@ namespace Domain.Entities
         public int? MinCharacters { get; set; }
         public string? AudioPath { get; set; }
         public int? NoOfRepeats { get; set; }
+        public string Text { get; set; }
         public virtual ICollection<SingleQuestion> SingleQuestions { get; set; }
         public virtual ICollection<SingleQuestionSubmission> SingleQuestionSubmissions { get; set; }
     }

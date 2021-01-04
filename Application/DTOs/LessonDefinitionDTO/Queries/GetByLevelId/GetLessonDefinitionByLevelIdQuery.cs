@@ -25,8 +25,9 @@ namespace Application.DTOs
             {
                 var LessonDefinition = await _LessonDefinitionService.GetBySubLevelId(query.SubLevelId);
                 if (LessonDefinition == null) throw new ApiException($"Lesson Definitions Not Found.");
+                var LessonDefinitionViewModel = _mapper.Map<List<GetLessonDefinitionByLevelIdViewModel>>(LessonDefinition);
 
-                var LessonDefinitionViewModel = _mapper.Map<ICollection<GetLessonDefinitionByLevelIdViewModel>>(LessonDefinition);
+                LessonDefinitionViewModel.RemoveAt(LessonDefinitionViewModel.Count - 1);
                 return new Response<ICollection<GetLessonDefinitionByLevelIdViewModel>>(LessonDefinitionViewModel);
             }
         }

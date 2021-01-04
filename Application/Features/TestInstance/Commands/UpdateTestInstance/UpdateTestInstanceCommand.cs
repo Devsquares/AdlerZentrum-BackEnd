@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace Application.Features.TestInstance.Commands.UpdateTestInstance
 {
-	public class UpdateTestInstanceCommand : IRequest<Response<int>>
+    public class UpdateTestInstanceCommand : IRequest<Response<int>>
     {
-		public int Id { get; set; }
-		public int LessonInstanceId { get; set; }
-		public string StudentId { get; set; }
-		public int Points { get; set; }
-		public int Status { get; set; }
-		public LessonInstance LessonInstance { get; set; }
-		public DateTime StartDate { get; set; }
+        public int Id { get; set; }
+        public int LessonInstanceId { get; set; }
+        public string StudentId { get; set; }
+        public int Points { get; set; }
+        public int Status { get; set; }
+        public LessonInstance LessonInstance { get; set; }
+        public DateTime StartDate { get; set; }
 
         public class UpdateTestInstanceCommandHandler : IRequestHandler<UpdateTestInstanceCommand, Response<int>>
         {
@@ -38,11 +38,11 @@ namespace Application.Features.TestInstance.Commands.UpdateTestInstance
                 }
                 else
                 {
-				testinstance.LessonInstanceId = command.LessonInstanceId;
-				testinstance.StudentId = command.StudentId;
-				testinstance.Points = command.Points;
-				testinstance.Status = command.Status; 
-				testinstance.StartDate = command.StartDate; 
+                    testinstance.LessonInstanceId = command.LessonInstanceId;
+                    testinstance.StudentId = command.StudentId;
+                    testinstance.Points = command.Points;
+                    testinstance.Status = command.Status;
+                    testinstance.StartDate = command.StartDate;
 
                     await _testinstanceRepository.UpdateAsync(testinstance);
                     return new Response<int>(testinstance.Id);

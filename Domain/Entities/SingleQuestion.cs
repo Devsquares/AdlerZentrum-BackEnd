@@ -14,3 +14,4 @@ namespace Domain.Entities
         public bool AnswerIsTrueOrFalse { get; set; }
     }
 }
+    

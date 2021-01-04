@@ -8,15 +8,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.PromoCode.Queries
+namespace Application.DTOs
 {
     public class CheckPromoCodeCommand : IRequest<Response<bool>>
     {
         public string name { get; set; }
-        public class GetLevelByIdQueryHandler : IRequestHandler<CheckPromoCodeCommand, Response<bool>>
+        public class CheckPromoCodeCommandHandler : IRequestHandler<CheckPromoCodeCommand, Response<bool>>
         {
             private readonly IPromoCodeRepositoryAsync _promoCodeRepository;
-            public GetLevelByIdQueryHandler(IPromoCodeRepositoryAsync promoCodeRepository)
+            public CheckPromoCodeCommandHandler(IPromoCodeRepositoryAsync promoCodeRepository)
             {
                 _promoCodeRepository = promoCodeRepository;
             }

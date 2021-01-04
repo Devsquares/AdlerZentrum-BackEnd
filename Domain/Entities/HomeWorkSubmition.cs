@@ -20,5 +20,6 @@ namespace Domain.Entities
         public int Status { get; set; }
         public DateTime? SubmitionDate { get; set; }
         public int Points { get; set; }
+        public string Comment { get; set; }
     }
 }

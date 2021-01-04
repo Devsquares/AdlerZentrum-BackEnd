@@ -2,9 +2,9 @@ namespace Application.Enums
 {
     public enum QuestionTypeEnum
     {
-        Single,
-        Reading,
-        Writing,
-        Listening
+        GroupOfSingle = 0,
+        Reading = 1,
+        Writing = 2,
+        Listening = 3
     }
 }

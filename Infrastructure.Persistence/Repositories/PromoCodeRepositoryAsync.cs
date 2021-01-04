@@ -26,5 +26,11 @@ namespace Infrastructure.Persistence.Repositories
             if (data.Count() > 0) { return true; }
             else { return false; }
         }
+
+        public PromoCode GetByName(string name)
+        {
+            var data = promoCodes.Where(x => x.Name == name).ToList();
+            return data.FirstOrDefault();
+        }
     }
 }

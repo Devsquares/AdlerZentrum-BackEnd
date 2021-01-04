@@ -16,6 +16,7 @@ namespace Application.DTOs
         public string Solution { get; set; }
         public string CorrectionTeacherId { get; set; }
         public int Points { get; set; }
+        public string Comment { get; set; }
 
         public class HomeworkCorrectionCommandHandler : IRequestHandler<HomeworkCorrectionCommand, Response<int>>
         {
@@ -30,7 +31,8 @@ namespace Application.DTOs
                 HomeWorkSubmition.CorrectionDate = DateTime.Now;
                 HomeWorkSubmition.CorrectionTeacherId = command.CorrectionTeacherId;
                 HomeWorkSubmition.Solution = command.Solution;
-                HomeWorkSubmition.Points = command.Points; 
+                HomeWorkSubmition.Points = command.Points;
+                HomeWorkSubmition.Comment = command.Comment;
                 HomeWorkSubmition.Status = (int)HomeWorkSubmitionStatusEnum.Corrected;
 
                 await _HomeWorkSubmitionRepository.UpdateAsync(HomeWorkSubmition);

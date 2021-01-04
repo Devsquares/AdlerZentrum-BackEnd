@@ -23,10 +23,10 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(DeleteGroupDefinitionByIdCommand command, CancellationToken cancellationToken)
             {
-                var groupInstance = await _GroupDefinitionRepository.GetByIdAsync(command.Id);
-                if (groupInstance == null) throw new ApiException($"Group Not Found.");
-                await _GroupDefinitionRepository.DeleteAsync(groupInstance);
-                return new Response<int>(groupInstance.Id);
+                var groupDefinition = await _GroupDefinitionRepository.GetByIdAsync(command.Id);
+                if (groupDefinition == null) throw new ApiException($"Group Not Found.");
+                await _GroupDefinitionRepository.DeleteAsync(groupDefinition);
+                return new Response<int>(groupDefinition.Id);
             }
         }
     }
