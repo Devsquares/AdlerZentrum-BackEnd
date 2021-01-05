@@ -11,8 +11,7 @@ using WebApi.Controllers;
 namespace WebApi.Controller
 {
     public class TestInstanceController : BaseApiController
-    {
-        // GET: api/<controller>
+    { 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetAllTestInstancesParameter filter)
         {
@@ -30,15 +29,13 @@ namespace WebApi.Controller
                 NoPaging = filter.NoPaging
             }));
         }
-
-        // GET api/<controller>/5
+         
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             return Ok(await Mediator.Send(new GetTestInstanceByIdQuery { Id = id }));
         }
-
-        // GET api/<controller>/5
+         
         [HttpGet("GetQuizzesForStudent")]
         public async Task<IActionResult> GetQuizzesForStudent()
         {
@@ -48,21 +45,18 @@ namespace WebApi.Controller
                 GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value
             }));
         }
-
-        // POST api/<controller>
+         
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Post(CreateTestInstanceCommand command)
         {
             command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
-
-        // PUT api/<controller>/5
+         
         [HttpPut("{id}")]
-        //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        //[Authorize(Roles = "SuperAdmin")]        
         public async Task<IActionResult> Put(int id, UpdateTestInstanceCommand command)
         {
             if (id != command.Id)
@@ -71,11 +65,23 @@ namespace WebApi.Controller
             }
             return Ok(await Mediator.Send(command));
         }
+         
+        [HttpPut("AssginTeacherToTest")]
+        //[Authorize(Roles = "SuperAdmin")]        
+        public async Task<IActionResult> AssginTeacherToTest(AssginTeacherTestInstanceCommand command)
+        { 
+            return Ok(await Mediator.Send(command));
+        }
 
-        // DELETE api/<controller>/5
+        [HttpGet("GetTestInstanceToAssginQuery")]
+        //[Authorize(Roles = "SuperAdmin")]        
+        public async Task<IActionResult> GetTestInstanceToAssginQuery(GetTestInstanceToAssginQuery command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        //[Authorize(Roles = "SuperAdmin")]        
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteTestInstanceByIdCommand { Id = id }));

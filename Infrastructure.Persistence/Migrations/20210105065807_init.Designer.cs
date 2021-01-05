@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201226192725_init")]
+    [Migration("20210105065807_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -194,6 +194,41 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Choice");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ChoiceSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("SingleQuestionSubmissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChoiceId");
+
+                    b.HasIndex("SingleQuestionSubmissionId");
+
+                    b.ToTable("ChoiceSubmissions");
+                });
+
             modelBuilder.Entity("Domain.Entities.GroupCondition", b =>
                 {
                     b.Property<int>("Id")
@@ -373,6 +408,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CorrectionDate")
                         .HasColumnType("datetime");
@@ -692,6 +730,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -751,6 +792,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("TestId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TestId");
@@ -795,6 +839,52 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("SingleQuestions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SingleQuestionSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("AnswerText")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SingleQuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("varchar(85)");
+
+                    b.Property<bool>("TrueOrFalseSubmission")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("SingleQuestionId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("SingleQuestionSubmissions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>
@@ -881,6 +971,9 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<bool>("AutoCorrect")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -920,6 +1013,9 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("CorrectionTeacherId")
+                        .HasColumnType("varchar(85)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -950,10 +1046,15 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("TestId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CorrectionTeacherId");
 
                     b.HasIndex("LessonInstanceId");
 
@@ -1230,6 +1331,21 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.ChoiceSubmission", b =>
+                {
+                    b.HasOne("Domain.Entities.Choice", "Choice")
+                        .WithMany()
+                        .HasForeignKey("ChoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.SingleQuestionSubmission", "SingleQuestionSubmission")
+                        .WithMany("Choices")
+                        .HasForeignKey("SingleQuestionSubmissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.GroupDefinition", b =>
                 {
                     b.HasOne("Domain.Entities.GroupCondition", "GroupCondition")
@@ -1370,6 +1486,23 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("QuestionId");
                 });
 
+            modelBuilder.Entity("Domain.Entities.SingleQuestionSubmission", b =>
+                {
+                    b.HasOne("Domain.Entities.Question", null)
+                        .WithMany("SingleQuestionSubmissions")
+                        .HasForeignKey("QuestionId");
+
+                    b.HasOne("Domain.Entities.SingleQuestion", "SingleQuestion")
+                        .WithMany()
+                        .HasForeignKey("SingleQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+                });
+
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>
                 {
                     b.HasOne("Domain.Entities.Level", "Level")
@@ -1403,6 +1536,10 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.TestInstance", b =>
                 {
+                    b.HasOne("Domain.Entities.ApplicationUser", "CorrectionTeacher")
+                        .WithMany()
+                        .HasForeignKey("CorrectionTeacherId");
+
                     b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
                         .WithMany()
                         .HasForeignKey("LessonInstanceId")

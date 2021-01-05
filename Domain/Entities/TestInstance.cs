@@ -14,6 +14,8 @@ namespace Domain.Entities
         public int Status { get; set; }
         public int LessonInstanceId { get; set; }
         public virtual LessonInstance LessonInstance { get; set; }
+        public string CorrectionTeacherId { get; set; }
+        public ApplicationUser CorrectionTeacher { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime SubmissionDate { get; set; }
         public int TestId { get; set; }

@@ -969,6 +969,9 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<bool>("AutoCorrect")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -1008,6 +1011,9 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("CorrectionTeacherId")
+                        .HasColumnType("varchar(85)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -1045,6 +1051,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CorrectionTeacherId");
 
                     b.HasIndex("LessonInstanceId");
 
@@ -1526,6 +1534,10 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.TestInstance", b =>
                 {
+                    b.HasOne("Domain.Entities.ApplicationUser", "CorrectionTeacher")
+                        .WithMany()
+                        .HasForeignKey("CorrectionTeacherId");
+
                     b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
                         .WithMany()
                         .HasForeignKey("LessonInstanceId")

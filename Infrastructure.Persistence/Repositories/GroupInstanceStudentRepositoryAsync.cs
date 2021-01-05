@@ -11,11 +11,16 @@ using System.Threading.Tasks;
 namespace Infrastructure.Persistence.Repositories
 {
     public class GroupInstanceStudentRepositoryAsync : GenericRepositoryAsync<GroupInstanceStudents>, IGroupInstanceStudentRepositoryAsync
-    { 
+    {
         private readonly DbSet<GroupInstanceStudents> groupInstanceStudents;
         public GroupInstanceStudentRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
-        { 
+        {
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
+        }
+
+        public int GetCountOfStudents(int groupId)
+        {
+            return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();
         }
     }
 }

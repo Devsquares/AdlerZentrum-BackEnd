@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
@@ -28,6 +29,12 @@ namespace Infrastructure.Persistence.Repositories
                   .ThenInclude(x => x.SingleQuestions)
                   .ThenInclude(x => x.Choices)
                   .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.StudentId == student).ToListAsync();
+        }
+
+        public virtual async Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin()
+        {
+            return await _testinstances
+             .Where(x => x.CorrectionTeacherId == null && x.Status == (int)TestInstanceEnum.Solved).ToListAsync();
         }
 
     }
