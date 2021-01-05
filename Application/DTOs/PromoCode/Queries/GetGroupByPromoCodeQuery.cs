@@ -30,6 +30,7 @@ namespace Application.DTOs
             public async Task<Response<GetAllGroupInstancesViewModel>> Handle(GetGroupByPromoCodeQuery query, CancellationToken cancellationToken)
             {
                 var promoCode = _promoCodeRepository.GetByName(query.name);
+                if(promoCode == null) throw new ApiException($"Promo Code Invaild.");
                 if (promoCode.GroupId != null)
                 {
                     var groupInstance = await _groupInstanceRepository.GetByIdAsync(promoCode.GroupId.Value);
@@ -37,7 +38,10 @@ namespace Application.DTOs
                     var userViewModel = _mapper.Map<GetAllGroupInstancesViewModel>(groupInstance);
                     return new Response<GetAllGroupInstancesViewModel>(userViewModel);
                 }
-                throw new ApiException($"Promo Code Not Found. Kindly contact the admin.");
+                else
+                {
+                    throw new ApiException($"Promo Code Invaild.");
+                }
             }
         }
     }
