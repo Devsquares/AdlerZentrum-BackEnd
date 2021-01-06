@@ -149,9 +149,41 @@ namespace Infrastructure.Persistence.Services
 
             return new Response<AuthenticationResponse>(response, $"Token Refreshed.");
         }
-
+        bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public async Task<Response<string>> RegisterAsync(RegisterRequest request, string origin)
         {
+            if (request.Password == null ||
+             request.ConfirmPassword == null ||
+             request.Email == null ||
+             request.LastName == null ||
+             request.FirstName == null)
+            {
+                throw new ApiException($"One of this fields missing: Password, ConfirmPassword, Email, LastName, FirstName.");
+            }
+            if (request.Password.Length < 6)
+            {
+                throw new ApiException($"password Minimum length 6.");
+            }
+            if (request.ConfirmPassword != request.Password)
+            {
+                throw new ApiException($"Confirm Password wrong.");
+            }
+            if (!IsValidEmail(request.Email))
+            {
+                throw new ApiException($"Email Not Vaild.");
+            }
+            request.UserName = request.Email;
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName != null)
             {
@@ -163,8 +195,7 @@ namespace Infrastructure.Persistence.Services
                 Email = request.Email,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
-                UserName = request.UserName,
-
+                UserName = request.Email,
             };
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
@@ -182,7 +213,7 @@ namespace Infrastructure.Persistence.Services
 
                     //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                     // _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
-                     
+
                     int count = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(request.GroupInstanceId);
                     var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(request.GroupInstanceId).Result;
 
@@ -203,7 +234,7 @@ namespace Infrastructure.Persistence.Services
                 }
                 else
                 {
-                    throw new ApiException($"{result.Errors}");
+                    throw new ApiException($"{result.Errors.FirstOrDefault().Description}");
                 }
             }
             else
