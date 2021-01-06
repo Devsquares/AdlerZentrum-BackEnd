@@ -46,7 +46,6 @@ namespace Process
                                             .Where(x => x.Status == (int)TestInstanceEnum.Solved).ToListAsync().Result;
                     _logger.LogInformation("HomeWork Submitions to be correct Count: {}", homeWorkSubmitions.Count);
 
-
                 }
                 await Task.Delay(1000, stoppingToken);
             }
