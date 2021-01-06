@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 namespace Application.Interfaces.Repositories
 {
     public interface IGroupInstanceStudentRepositoryAsync : IGenericRepositoryAsync<GroupInstanceStudents>
-    { 
+    {
+        int GetCountOfStudents(int groupId);
     }
 }

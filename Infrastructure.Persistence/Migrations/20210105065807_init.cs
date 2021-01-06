@@ -94,7 +94,8 @@ namespace Infrastructure.Persistence.Migrations
                     LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true),
+                    GroupId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -478,7 +479,8 @@ namespace Infrastructure.Persistence.Migrations
                     Name = table.Column<string>(nullable: true),
                     TestDuration = table.Column<int>(nullable: false),
                     TestTypeId = table.Column<int>(nullable: false),
-                    LessonDefinitionId = table.Column<int>(nullable: false)
+                    LessonDefinitionId = table.Column<int>(nullable: false),
+                    AutoCorrect = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -611,7 +613,8 @@ namespace Infrastructure.Persistence.Migrations
                     Header = table.Column<string>(nullable: true),
                     MinCharacters = table.Column<int>(nullable: true),
                     AudioPath = table.Column<string>(nullable: true),
-                    NoOfRepeats = table.Column<int>(nullable: true)
+                    NoOfRepeats = table.Column<int>(nullable: true),
+                    Text = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -712,12 +715,20 @@ namespace Infrastructure.Persistence.Migrations
                     Points = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     LessonInstanceId = table.Column<int>(nullable: false),
+                    CorrectionTeacherId = table.Column<string>(nullable: true),
                     StartDate = table.Column<DateTime>(nullable: false),
+                    SubmissionDate = table.Column<DateTime>(nullable: false),
                     TestId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TestInstances", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TestInstances_ApplicationUsers_CorrectionTeacherId",
+                        column: x => x.CorrectionTeacherId,
+                        principalTable: "ApplicationUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TestInstances_LessonInstances_LessonInstanceId",
                         column: x => x.LessonInstanceId,
@@ -778,7 +789,8 @@ namespace Infrastructure.Persistence.Migrations
                     CorrectionTeacherId = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     SubmitionDate = table.Column<DateTime>(nullable: true),
-                    Points = table.Column<int>(nullable: false)
+                    Points = table.Column<int>(nullable: false),
+                    Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -828,6 +840,75 @@ namespace Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SingleQuestionSubmissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    AnswerText = table.Column<string>(nullable: true),
+                    TrueOrFalseSubmission = table.Column<bool>(nullable: false),
+                    StudentId = table.Column<string>(nullable: true),
+                    SingleQuestionId = table.Column<int>(nullable: false),
+                    QuestionId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SingleQuestionSubmissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SingleQuestionSubmissions_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SingleQuestionSubmissions_SingleQuestions_SingleQuestionId",
+                        column: x => x.SingleQuestionId,
+                        principalTable: "SingleQuestions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SingleQuestionSubmissions_ApplicationUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "ApplicationUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChoiceSubmissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    ChoiceId = table.Column<int>(nullable: false),
+                    SingleQuestionSubmissionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChoiceSubmissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChoiceSubmissions_Choice_ChoiceId",
+                        column: x => x.ChoiceId,
+                        principalTable: "Choice",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChoiceSubmissions_SingleQuestionSubmissions_SingleQuestionSu~",
+                        column: x => x.SingleQuestionSubmissionId,
+                        principalTable: "SingleQuestionSubmissions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ApplicationUsers_AddressId",
                 table: "ApplicationUsers",
@@ -853,6 +934,16 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_Choice_SingleQuestionId",
                 table: "Choice",
                 column: "SingleQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChoiceSubmissions_ChoiceId",
+                table: "ChoiceSubmissions",
+                column: "ChoiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChoiceSubmissions_SingleQuestionSubmissionId",
+                table: "ChoiceSubmissions",
+                column: "SingleQuestionSubmissionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupDefinition_GroupConditionId",
@@ -976,6 +1067,21 @@ namespace Infrastructure.Persistence.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SingleQuestionSubmissions_QuestionId",
+                table: "SingleQuestionSubmissions",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SingleQuestionSubmissions_SingleQuestionId",
+                table: "SingleQuestionSubmissions",
+                column: "SingleQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SingleQuestionSubmissions_StudentId",
+                table: "SingleQuestionSubmissions",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SubLevels_LevelId",
                 table: "SubLevels",
                 column: "LevelId");
@@ -990,6 +1096,11 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_TeacherGroupInstances_TeacherId",
                 table: "TeacherGroupInstances",
                 column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestInstances_CorrectionTeacherId",
+                table: "TestInstances",
+                column: "CorrectionTeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TestInstances_LessonInstanceId",
@@ -1033,7 +1144,7 @@ namespace Infrastructure.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Choice");
+                name: "ChoiceSubmissions");
 
             migrationBuilder.DropTable(
                 name: "GroupInstanceStudents");
@@ -1072,13 +1183,16 @@ namespace Infrastructure.Persistence.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "SingleQuestions");
+                name: "Choice");
+
+            migrationBuilder.DropTable(
+                name: "SingleQuestionSubmissions");
 
             migrationBuilder.DropTable(
                 name: "Homeworks");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "SingleQuestions");
 
             migrationBuilder.DropTable(
                 name: "LessonInstances");
@@ -1087,16 +1201,19 @@ namespace Infrastructure.Persistence.Migrations
                 name: "ApplicationUsers");
 
             migrationBuilder.DropTable(
-                name: "GroupInstances");
+                name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Tests");
+                name: "GroupInstances");
 
             migrationBuilder.DropTable(
                 name: "Address");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Tests");
 
             migrationBuilder.DropTable(
                 name: "GroupDefinition");

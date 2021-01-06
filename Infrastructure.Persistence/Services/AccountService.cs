@@ -35,6 +35,8 @@ namespace Infrastructure.Persistence.Services
         private readonly JWTSettings _jwtSettings;
         private readonly IDateTimeService _dateTimeService;
         private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
+        private readonly IGroupDefinitionRepositoryAsync _groupDefinitionRepositoryAsync;
+        private readonly IGroupConditionRepositoryAsync _groupConditionRepositoryAsync;
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
 
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
@@ -44,7 +46,9 @@ namespace Infrastructure.Persistence.Services
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService,
             IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
-            IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync)
+            IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
+            IGroupDefinitionRepositoryAsync groupDefinitionRepositoryAsync,
+            IGroupConditionRepositoryAsync groupConditionRepositoryAsync)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -54,6 +58,8 @@ namespace Infrastructure.Persistence.Services
             _emailService = emailService;
             _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
             _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
+            _groupDefinitionRepositoryAsync = groupDefinitionRepositoryAsync;
+            _groupConditionRepositoryAsync = groupConditionRepositoryAsync;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -176,6 +182,17 @@ namespace Infrastructure.Persistence.Services
 
                     //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                     // _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
+                     
+                    int count = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(request.GroupInstanceId);
+                    var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(request.GroupInstanceId).Result;
+
+                    var groupDefinition = _groupDefinitionRepositoryAsync.GetByIdAsync(groupInstance.GroupDefinitionId).Result;
+                    var condtion = _groupConditionRepositoryAsync.GetByIdAsync(groupDefinition.GroupConditionId);
+
+                    if (count > condtion.Result.NumberOfSolts)
+                    {
+                        throw new ApiException($"Group is complate now, Contact the admin.");
+                    }
                     await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
                     {
                         GroupInstanceId = request.GroupInstanceId,

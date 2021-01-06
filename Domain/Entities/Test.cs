@@ -14,5 +14,6 @@ namespace Domain.Entities
         public virtual ICollection<Question> Questions { get; set; }
         public int LessonDefinitionId { get; set; }
         public LessonDefinition LessonDefinition { get; set; }
+        public bool AutoCorrect { get; set; }
     }
 }

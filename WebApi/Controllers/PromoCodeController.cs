@@ -13,7 +13,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetGroupByPromoCodeQuery")]
-        public async Task<IActionResult> GetGroupByPromoCodeQuery([FromQuery] CheckPromoCodeCommand command)
+        public async Task<IActionResult> GetGroupByPromoCodeQuery([FromQuery] GetGroupByPromoCodeQuery command)
         {
             return Ok(await Mediator.Send(command));
         }

@@ -13,6 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\v1\**" />
+    <Content Remove="Controllers\v1\**" />
+    <EmbeddedResource Remove="Controllers\v1\**" />
+    <None Remove="Controllers\v1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MailKit" Version="2.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.7">
@@ -46,7 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\v1\" />
     <Folder Include="ImageStorage\" />
     <Folder Include="Logs\" />
   </ItemGroup>
