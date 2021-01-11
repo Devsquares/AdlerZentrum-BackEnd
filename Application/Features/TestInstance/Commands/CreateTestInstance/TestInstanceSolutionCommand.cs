@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.TestInstance.Commands.CreateTestInstance
+namespace Application.Features
 {
-    public partial class CreateTestInstanceCommand : IRequest<Response<int>>
+    public partial class TestInstanceSolutionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
         public List<QuestionSubmissionInput> Questions { get; set; }
@@ -30,7 +30,7 @@ namespace Application.Features.TestInstance.Commands.CreateTestInstance
         public int ChoiceId { get; set; }
     }
 
-    public class CreateTestInstanceCommandHandler : IRequestHandler<CreateTestInstanceCommand, Response<int>>
+    public class CreateTestInstanceCommandHandler : IRequestHandler<TestInstanceSolutionCommand, Response<int>>
     {
         private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
         private readonly ISingleQuestionSubmissionRepositoryAsync _singleQuestionSubmission;
@@ -47,12 +47,11 @@ namespace Application.Features.TestInstance.Commands.CreateTestInstance
             _mapper = mapper;
         }
 
-        public async Task<Response<int>> Handle(CreateTestInstanceCommand request, CancellationToken cancellationToken)
+        public async Task<Response<int>> Handle(TestInstanceSolutionCommand request, CancellationToken cancellationToken)
         {
             var testInstance = _testinstanceRepository.GetByIdAsync(request.Id).Result;
             testInstance.Status = (int)TestInstanceEnum.Solved;
             testInstance.SubmissionDate = DateTime.Now;
-            //TODO add background job to correct the test if it is all automatic
             foreach (var item in request.Questions)
             {
                 SingleQuestionSubmission singleQuestionSubmission = new SingleQuestionSubmission();
@@ -60,6 +59,7 @@ namespace Application.Features.TestInstance.Commands.CreateTestInstance
                 singleQuestionSubmission.SingleQuestionId = item.SingleQuestionId;
                 singleQuestionSubmission.TrueOrFalseSubmission = item.TrueOrFalseSubmission;
                 singleQuestionSubmission.StudentId = request.StudentId;
+                singleQuestionSubmission.Corrected = false;
                 var singleQuestionSubmissionId = _singleQuestionSubmission.AddAsync(singleQuestionSubmission).Result.Id;
                 if (item.Choices != null)
                 {
@@ -67,13 +67,12 @@ namespace Application.Features.TestInstance.Commands.CreateTestInstance
                     {
                         ChoiceSubmission choiceSubmission = new ChoiceSubmission();
                         choiceSubmission.SingleQuestionSubmissionId = singleQuestionSubmissionId;
-                        choiceSubmission.ChoiceId = choice.ChoiceId;
                         await _choiceSubmissionRepository.AddAsync(choiceSubmission);
                     }
                 }
             }
             await _testinstanceRepository.UpdateAsync(testInstance);
-  
+
             return new Response<int>(testInstance.Id);
         }
     }

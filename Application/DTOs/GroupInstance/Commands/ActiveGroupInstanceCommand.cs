@@ -91,7 +91,8 @@ namespace Application.DTOs
                     List<TestInstance> testInstance = new List<TestInstance>(); 
                     foreach (var item in lessonInstances)
                     {
-                        // TODO get quiz for lesson 
+                        // TODO get quiz for lesson.
+                        // TODO add get final test or sublevel test.
                         var quiz = _testRepository.GetByLessonDefinationAsync(item.LessonDefinitionId).Result;
                         if (quiz != null)
                         {

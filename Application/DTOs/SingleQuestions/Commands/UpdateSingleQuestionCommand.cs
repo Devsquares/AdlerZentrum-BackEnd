@@ -14,13 +14,8 @@ namespace Application.DTOs
 {
     public class UpdateSingleQuestionCommand : IRequest<Response<int>>
     {
-         public int Id { get; set; }
-        public int SingleQuestionTypeId { get; set; }
-        public int Order { get; set; }
-        public string Text { get; set; }
-        public int MinCharacters { get; set; }
-        public string AudioPath { get; set; } 
-
+        public int Id { get; set; }
+        public int QuestionId { get; set; }
         public class UpdateSingleQuestionCommandHandler : IRequestHandler<UpdateSingleQuestionCommand, Response<int>>
         {
             private readonly ISingleQuestionRepositoryAsync _SingleQuestionRepository;
@@ -30,17 +25,17 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(UpdateSingleQuestionCommand command, CancellationToken cancellationToken)
             {
-                var SingleQuestion = await _SingleQuestionRepository.GetByIdAsync(command.Id);
+                var singleQuestion = await _SingleQuestionRepository.GetByIdAsync(command.Id);
 
-                if (SingleQuestion == null)
+                if (singleQuestion == null)
                 {
                     throw new ApiException($"SingleQuestion Not Found.");
                 }
                 else
                 {
-                    Reflection.CopyProperties(command, SingleQuestion);
-                    await _SingleQuestionRepository.UpdateAsync(SingleQuestion);
-                    return new Response<int>(SingleQuestion.Id);
+                    singleQuestion.QuestionId = command.QuestionId;
+                    await _SingleQuestionRepository.UpdateAsync(singleQuestion);
+                    return new Response<int>(singleQuestion.Id);
                 }
             }
         }

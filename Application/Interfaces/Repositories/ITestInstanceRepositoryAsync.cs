@@ -1,3 +1,4 @@
+using Application.Enums;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface ITestInstanceRepositoryAsync : IGenericRepositoryAsync<TestInstance>
     {
-        Task<IReadOnlyList<TestInstance>> GetAllQuizzForStudentAsync(string student, int groupInstance);
+        Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType);
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin();
     }
 }

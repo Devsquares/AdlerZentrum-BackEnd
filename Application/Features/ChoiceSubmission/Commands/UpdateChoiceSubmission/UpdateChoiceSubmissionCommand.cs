@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-	public class UpdateChoiceSubmissionCommand : IRequest<Response<int>>
+    public class UpdateChoiceSubmissionCommand : IRequest<Response<int>>
     {
-		public int Id { get; set; }
-		public Choice Choice { get; set; }
-		public int ChoiceId { get; set; }
-		public SingleQuestionSubmission SingleQuestionSubmission { get; set; }
-		public int SingleQuestionSubmissionId { get; set; }
+        public int Id { get; set; }
+        public Choice Choice { get; set; }
+        public int ChoiceId { get; set; }
+        public SingleQuestionSubmission SingleQuestionSubmission { get; set; }
+        public int SingleQuestionSubmissionId { get; set; }
 
         public class UpdateChoiceSubmissionCommandHandler : IRequestHandler<UpdateChoiceSubmissionCommand, Response<int>>
         {
@@ -36,11 +36,8 @@ namespace Application.Features
                 }
                 else
                 {
-				choicesubmission.Choice = command.Choice;
-				choicesubmission.ChoiceId = command.ChoiceId;
-				choicesubmission.SingleQuestionSubmission = command.SingleQuestionSubmission;
-				choicesubmission.SingleQuestionSubmissionId = command.SingleQuestionSubmissionId; 
-
+                    choicesubmission.SingleQuestionSubmission = command.SingleQuestionSubmission;
+                    choicesubmission.ChoiceSubmissionId = command.ChoiceId;
                     await _choicesubmissionRepository.UpdateAsync(choicesubmission);
                     return new Response<int>(choicesubmission.Id);
                 }

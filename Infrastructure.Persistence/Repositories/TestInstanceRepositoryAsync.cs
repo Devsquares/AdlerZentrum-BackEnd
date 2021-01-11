@@ -20,7 +20,7 @@ namespace Infrastructure.Persistence.Repositories
             _testinstances = dbContext.Set<TestInstance>();
         }
 
-        public virtual async Task<IReadOnlyList<TestInstance>> GetAllQuizzForStudentAsync(string student, int groupInstance)
+        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType)
         {
             return await _testinstances
                   .Include(x => x.LessonInstance)
@@ -28,14 +28,32 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.Test.Questions)
                   .ThenInclude(x => x.SingleQuestions)
                   .ThenInclude(x => x.Choices)
-                  .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.StudentId == student).ToListAsync();
+                  .Where(x => x.LessonInstance.GroupInstanceId == groupInstance &&
+                  x.StudentId == student &&
+                  x.Test.TestTypeId == (int)testType).ToListAsync();
         }
 
         public virtual async Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin()
         {
             return await _testinstances
+            .Include(x => x.Test)
+            .Include(x => x.Student)
+            .Include(x => x.LessonInstance)
+            .ThenInclude(x => x.GroupInstance)
              .Where(x => x.CorrectionTeacherId == null && x.Status == (int)TestInstanceEnum.Solved).ToListAsync();
         }
 
+        public override Task<TestInstance> GetByIdAsync(int id)
+        {
+            return _testinstances
+                   .Include(x => x.Test)
+                   .ThenInclude(x => x.Questions)
+                   .ThenInclude(x => x.SingleQuestions)
+                   .Include(x => x.Student)
+                   .Include(x => x.Test)
+                   .ThenInclude(x => x.Questions)
+                   .ThenInclude(x => x.SingleQuestionSubmissions)
+                   .Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
     }
 }

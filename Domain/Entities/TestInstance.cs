@@ -9,7 +9,8 @@ namespace Domain.Entities
     public class TestInstance : AuditableBaseEntity
     {
         [Required] 
-        public string StudentId { get; set; } 
+        public string StudentId { get; set; }
+        public ApplicationUser Student { get; set; }
         public int Points { get; set; }
         public int Status { get; set; }
         public int LessonInstanceId { get; set; }
@@ -19,6 +20,6 @@ namespace Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime SubmissionDate { get; set; }
         public int TestId { get; set; }
-        public virtual Test Test { get; set; }
+        public virtual Test Test { get; set; } 
     }
 }
