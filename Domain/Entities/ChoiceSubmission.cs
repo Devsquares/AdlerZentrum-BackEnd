@@ -7,9 +7,8 @@ namespace Domain.Entities
 {
     public class ChoiceSubmission : AuditableBaseEntity
     {
-        public Choice Choice { get; set; }
-        public int ChoiceId { get; set; }
-        public SingleQuestionSubmission SingleQuestionSubmission { get; set; }
+        public int ChoiceSubmissionId { get; set; }
         public int SingleQuestionSubmissionId { get; set; }
+        public SingleQuestionSubmission SingleQuestionSubmission { get; set; }
     }
 }

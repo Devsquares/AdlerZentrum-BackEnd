@@ -9,6 +9,7 @@ using AutoMapper;
 using Domain.Entities;
 using System;
 using Application.Features.TestInstance.Queries.GetAllTestInstances;
+using Application.Features;
 
 namespace Application.Mappings
 {
@@ -31,7 +32,7 @@ namespace Application.Mappings
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
             CreateMap<Test, GetAllTestsViewModel>().ReverseMap().ForMember(destination => destination.TestTypeId,
-                 opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.TestTypeId))); 
+                 opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.TestTypeId)));
 
             CreateMap<SingleQuestion, GetAllSingleQuestionsViewModel>().ReverseMap();
             CreateMap<Question, GetQuestionViewModel>().ReverseMap();
@@ -46,6 +47,13 @@ namespace Application.Mappings
             CreateMap<HomeWorkSubmition, GetAllHomeWorkForStudentViewModel>()
                              .ForMember(destination => destination.Status,
                  opt => opt.MapFrom(source => Enum.GetName(typeof(HomeWorkSubmitionStatusEnum), source.Status)));
+
+            CreateMap<TestInstance, TestInstanceToAssginViewModel>()
+                       .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName + " " + source.Student.LastName))
+                    .ForMember(destination => destination.GroupSerial, opts => opts.MapFrom(source => source.LessonInstance.GroupInstance.Serial))
+                           .ForMember(destination => destination.TestName, opts => opts.MapFrom(source => source.Test.Name))
+                  .ForMember(destination => destination.TestType,
+                 opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.Test.TestTypeId)));
 
             CreateMap<Homework, GetAllomeworkBounsViewModel>()
             .ForMember(destination => destination.GroupInstanceSerial, opts => opts.MapFrom(source => source.GroupInstance.Serial))
@@ -70,7 +78,6 @@ namespace Application.Mappings
             CreateMap<GetAllTestInstancesQuery, GetAllTestInstancesParameter>().ReverseMap();
             CreateMap<GroupDefinition, GetAllGroupDefinitionViewModel>().ReverseMap();
             CreateMap<TestInstance, GetAllTestInstancesViewModel>().ReverseMap();
-            // Filter 
             CreateMap<GetAllLevelsQuery, RequestParameter>();
             CreateMap<GetAllTestsQuery, RequestParameter>();
             CreateMap<GetAllGroupDefinitionsQuery, RequestParameter>().ReverseMap();
@@ -81,6 +88,11 @@ namespace Application.Mappings
             CreateMap<GetAllQuestionsQuery, RequestParameter>();
             CreateMap<GetAllGroupInstancesQuery, FilteredRequestParameter>();
             CreateMap<GetAllGroupConditionsQuery, FilteredRequestParameter>();
+            CreateMap<GetAllBanRequestsQuery, GetAllBanRequestsParameter>().ReverseMap();
+            CreateMap<BanRequest, CreateBanRequestCommand>().ReverseMap();
+
+
+            CreateMap<BanRequest, GetAllBanRequestsViewModel>().ReverseMap();
 
         }
     }

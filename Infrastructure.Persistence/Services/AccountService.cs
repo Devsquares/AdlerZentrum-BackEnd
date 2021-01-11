@@ -99,6 +99,8 @@ namespace Infrastructure.Persistence.Services
             response.RefreshToken = refreshToken.Token;
             response.ActiveGroupInstance = activeGroup;
             response.ChangePassword = user.ChangePassword;
+            response.Banned = user.Banned;
+            response.BanComment = user.BanComment;
 
             user.RefreshTokens.Add(refreshToken);
             await _userManager.UpdateAsync(user);
@@ -393,7 +395,6 @@ namespace Infrastructure.Persistence.Services
             }
         }
 
-
         public async Task<ApplicationUser> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -402,6 +403,19 @@ namespace Infrastructure.Persistence.Services
                 throw new ApiException("No user found with id " + id);
             }
             return user;
+        }
+
+        public async Task<bool> BanAsync(string id, string comment)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                throw new ApiException("No user found with id " + id);
+            }
+            user.Banned = true;
+            user.BanComment = comment;
+            await _userManager.UpdateAsync(user);
+            return true;
         }
 
         public async Task<IReadOnlyList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize)

@@ -14,6 +14,8 @@ namespace Application.DTOs.Account
         public bool IsVerified { get; set; }
         public string JWToken { get; set; }
         public bool ChangePassword { get; set; }
+        public bool Banned { get; set; }
+        public string BanComment { get; set; }
         [JsonIgnore]
         public string RefreshToken { get; set; }
     }

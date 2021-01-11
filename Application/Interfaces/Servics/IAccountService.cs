@@ -23,6 +23,7 @@ namespace Application.Interfaces
         Task<IdentityResult> UpdateAsync(UpdateBasicUserCommand updateUserCommand);
         Task DeleteAsync(string id);
         Task<ApplicationUser> GetByClaimsPrincipalAsync(ClaimsPrincipal user);
+        Task<bool> BanAsync(string id, string comment);
 
     }
 }

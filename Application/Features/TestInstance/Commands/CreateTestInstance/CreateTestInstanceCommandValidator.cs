@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.Features.TestInstance.Commands.CreateTestInstance
 {
-    public class CreateTestInstanceCommandValidator : AbstractValidator<CreateTestInstanceCommand>
+    public class CreateTestInstanceCommandValidator : AbstractValidator<TestInstanceSolutionCommand>
     {
         private readonly ITestInstanceRepositoryAsync testinstanceRepository;
 

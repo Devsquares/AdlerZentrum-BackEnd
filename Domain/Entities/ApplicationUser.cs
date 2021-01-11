@@ -22,6 +22,8 @@ namespace Domain.Entities
         public DateTime DateOfBirth { get; set; }
         public string Profilephoto { get; set; }
         public string Avatar { get; set; }
+        public bool Banned { get; set; }
+        public string BanComment { get; set; }
         public Address Address { get; set; }
         public IdentityRole Role { get; set; }
         public bool ChangePassword { get; set; }

@@ -12,6 +12,7 @@ namespace Domain.Entities
         public string Text { get; set; }
         public ICollection<Choice> Choices { get; set; }
         public bool AnswerIsTrueOrFalse { get; set; }
+        public int Points { get; set; }
     }
 }
     

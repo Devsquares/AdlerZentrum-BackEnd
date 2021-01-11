@@ -11,10 +11,18 @@ namespace WebApi.Controllers
 {
     public class TestController : BaseApiController
     {
-        [HttpPost("Create")]
+
+        [HttpPost("CreateQuiz")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> Post(CreateQuizCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPost("CreateTestCommand")]
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Post(CreateTestCommand command)
-        { 
+        {
             return Ok(await Mediator.Send(command));
         }
 

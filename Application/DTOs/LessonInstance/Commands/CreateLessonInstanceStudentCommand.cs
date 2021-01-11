@@ -2,6 +2,7 @@
 using Application.Wrappers;
 using Domain.Entities;
 using MediatR;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,16 @@ namespace Application.DTOs
                 _LessonInstanceStudentRepositoryAsync = LessonInstanceStudentRepository;
             }
             public async Task<Response<bool>> Handle(CreateLessonInstanceStudentCommand command, CancellationToken cancellationToken)
-            { 
+            {
+                // TODO need to be check if not working make it selcet then update then save.
+
+                // TODO if it absence again check last two lessons:
+                // if just last one create absnce reminder.
+                // if it is the third one make him disquilified.
+                foreach (var item in command.inputModels)
+                {
+                    item.ReportDateTime = DateTime.Now;
+                }
                 await _LessonInstanceStudentRepositoryAsync.UpdateBulkAsync(command.inputModels);
                 return new Response<bool>(true);
             }
