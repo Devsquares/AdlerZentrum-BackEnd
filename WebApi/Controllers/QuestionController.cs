@@ -1,5 +1,5 @@
 using Application.DTOs;
-using Application.Filters; 
+using Application.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -21,12 +21,8 @@ namespace WebApi.Controllers
 
         [HttpPost("Create")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Post(int id, CreateQuestionCommand command)
+        public async Task<IActionResult> Post(CreateQuestionCommand command)
         {
-            if (id != command.Question.Id)
-            {
-                return BadRequest();
-            }
             return Ok(await Mediator.Send(command));
         }
 
