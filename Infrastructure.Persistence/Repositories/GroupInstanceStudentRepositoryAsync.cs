@@ -22,5 +22,13 @@ namespace Infrastructure.Persistence.Repositories
         {
             return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();
         }
+
+        public List<string> GetEmailsByGroupDefinationId(int groupDefinationId)
+        {
+           var emailList =   groupInstanceStudents.Include(x=>x.GroupInstance)
+                .Include(x => x.Student)
+                .Where(x => x.GroupInstance.GroupDefinitionId == groupDefinationId).Select(x=>x.Student.Email).ToList();
+            return emailList;
+        }
     }
 }
