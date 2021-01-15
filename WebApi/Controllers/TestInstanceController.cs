@@ -45,11 +45,11 @@ namespace WebApi.Controller
                 GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value
             }));
         }
-         
-        [HttpPost]
+
+        // TODO need to be reviewd
+        [HttpPut("TestInstanceSolution")]
         //[Authorize(Roles = "SuperAdmin")]
-        
-        public async Task<IActionResult> Post(CreateTestInstanceCommand command)
+        public async Task<IActionResult> Post(TestInstanceSolutionCommand command)
         {
             command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));

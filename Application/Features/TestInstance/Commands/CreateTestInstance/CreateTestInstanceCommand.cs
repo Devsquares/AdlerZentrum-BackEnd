@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.TestInstance.Commands.CreateTestInstance
 {
-    public partial class CreateTestInstanceCommand : IRequest<Response<int>>
+    public partial class TestInstanceSolutionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
         public List<QuestionSubmissionInput> Questions { get; set; }
@@ -30,7 +30,7 @@ namespace Application.Features.TestInstance.Commands.CreateTestInstance
         public int ChoiceId { get; set; }
     }
 
-    public class CreateTestInstanceCommandHandler : IRequestHandler<CreateTestInstanceCommand, Response<int>>
+    public class CreateTestInstanceCommandHandler : IRequestHandler<TestInstanceSolutionCommand, Response<int>>
     {
         private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
         private readonly ISingleQuestionSubmissionRepositoryAsync _singleQuestionSubmission;
@@ -47,7 +47,7 @@ namespace Application.Features.TestInstance.Commands.CreateTestInstance
             _mapper = mapper;
         }
 
-        public async Task<Response<int>> Handle(CreateTestInstanceCommand request, CancellationToken cancellationToken)
+        public async Task<Response<int>> Handle(TestInstanceSolutionCommand request, CancellationToken cancellationToken)
         {
             var testInstance = _testinstanceRepository.GetByIdAsync(request.Id).Result;
             testInstance.Status = (int)TestInstanceEnum.Solved;
