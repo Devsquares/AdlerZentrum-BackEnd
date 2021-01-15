@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.GroupConditionPromoCodeModel;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Application.DTOs
         public int? Status { get; set; }
         public int NumberOfSolts { get; set; }
         public int NumberOfSlotsWithPlacementTest { get; set; }
+        public List<List<GroupConditionPromoCodeInputModel>> PromoCodes { get; set; }
 
     }
 }

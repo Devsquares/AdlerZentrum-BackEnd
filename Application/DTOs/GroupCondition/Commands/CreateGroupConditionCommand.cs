@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.DTOs.GroupConditionPromoCodeModel;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -18,13 +19,20 @@ namespace Application.DTOs
         public int? Status { get; set; }
         public int NumberOfSolts { get; set; }
         public int NumberOfSlotsWithPlacementTest { get; set; }
+        public List<List<GroupConditionPromoCodeInputModel>> PromoCodes { get; set; }
 
         public class CreateGroupConditionCommandHandler : IRequestHandler<CreateGroupConditionCommand, Response<int>>
         {
             private readonly IGroupConditionRepositoryAsync _groupConditionRepository;
-            public CreateGroupConditionCommandHandler(IGroupConditionRepositoryAsync groupConditionRepository)
+            private readonly IGroupConditionDetailsRepositoryAsync _groupConditionDetailsRepository;
+            private readonly IGroupConditionPromoCodeRepositoryAsync _groupConditionPromoCodeRepository;
+            public CreateGroupConditionCommandHandler(IGroupConditionRepositoryAsync groupConditionRepository,
+                IGroupConditionDetailsRepositoryAsync groupConditionDetailsRepository,
+                IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepository)
             {
                 _groupConditionRepository = groupConditionRepository;
+                _groupConditionDetailsRepository = groupConditionDetailsRepository;
+                _groupConditionPromoCodeRepository = groupConditionPromoCodeRepository;
             }
             public async Task<Response<int>> Handle(CreateGroupConditionCommand command, CancellationToken cancellationToken)
             {
@@ -32,6 +40,8 @@ namespace Application.DTOs
 
                 Reflection.CopyProperties(command, groupCondition);
                 await _groupConditionRepository.AddAsync(groupCondition);
+                CreateDependenciesGroupCondition _createDependenciesGroupCondition = new CreateDependenciesGroupCondition(_groupConditionDetailsRepository, _groupConditionPromoCodeRepository);
+                _createDependenciesGroupCondition.Create(groupCondition.Id, command.PromoCodes);
                 return new Response<int>(groupCondition.Id);
 
             }

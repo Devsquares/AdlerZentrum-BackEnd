@@ -64,7 +64,8 @@ namespace Infrastructure.Persistence
             services.AddTransient<IEmailTypeRepositoryAsync, EmailTypeRepositoryAsync>();
             services.AddTransient<IEmailTemplateRepositoryAsync, EmailTemplateRepositoryAsync>();
             services.AddTransient<IUsersRepositoryAsync, UsersRepositoryAsync>();
-
+            services.AddTransient<IGroupConditionDetailsRepositoryAsync, GroupConditionDetailsRepositoryAsync>();
+            services.AddTransient<IGroupConditionPromoCodeRepositoryAsync, GroupConditionPromoCodeRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
