@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Enums;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
@@ -42,7 +43,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<Test> GetByLessonDefinationAsync(int lessonDefinationdId)
         {
-            return await tests.Where(x => x.LessonDefinitionId == lessonDefinationdId).FirstOrDefaultAsync();
+            return await tests.Where(x => x.LessonDefinitionId == lessonDefinationdId && x.TestTypeId == (int)TestTypeEnum.quizz).FirstOrDefaultAsync();
         }
     }
 }

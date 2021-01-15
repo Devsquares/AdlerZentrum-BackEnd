@@ -42,8 +42,6 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-
-
         [HttpPut("update")]
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Put(int id, UpdateGroupConditionCommand command)
@@ -54,7 +52,6 @@ namespace WebApi.Controllers
             }
             return Ok(await Mediator.Send(command));
         }
-
 
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]

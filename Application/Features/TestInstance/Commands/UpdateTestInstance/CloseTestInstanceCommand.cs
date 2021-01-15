@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -11,10 +12,9 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class AssginTeacherTestInstanceCommand : IRequest<Response<int>>
+    public class CloseTestInstanceCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public string CorrectionTeacherId { get; set; }
 
         public class AssginTeacherTestInstanceCommandHandler : IRequestHandler<AssginTeacherTestInstanceCommand, Response<int>>
         {
@@ -33,7 +33,8 @@ namespace Application.Features
                 }
                 else
                 {
-                    testinstance.CorrectionTeacherId = command.CorrectionTeacherId;
+                    testinstance.Status = (int)TestInstanceEnum.Closed;
+                    testinstance.SubmissionDate = DateTime.Now;
 
                     await _testinstanceRepository.UpdateAsync(testinstance);
                     return new Response<int>(testinstance.Id);
