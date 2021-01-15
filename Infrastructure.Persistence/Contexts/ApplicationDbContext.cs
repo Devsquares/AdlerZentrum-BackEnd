@@ -51,6 +51,8 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<ChoiceSubmission> ChoiceSubmissions { get; set; }
         public DbSet<BanRequest> BanRequests { get; set; }
         public DbSet<LessonInstanceStudent> LessonInstanceStudents { get; set; }
+        public DbSet<EmailType> EmailTypes { get; set; }
+        public DbSet<EmailTemplate> EmailTemplates { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

@@ -8,5 +8,7 @@ namespace Application.Interfaces.Repositories
     public interface IGroupInstanceStudentRepositoryAsync : IGenericRepositoryAsync<GroupInstanceStudents>
     {
         int GetCountOfStudents(int groupId);
+
+        List<string> GetEmailsByGroupDefinationId(int groupDefinationId);
     }
 }
