@@ -2,6 +2,7 @@ using Application.Features;
 using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
 using Application.Features.TestInstance.Commands.UpdateTestInstance;
 using Application.Features.TestInstance.Queries.GetAllTestInstances;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebApi.Controllers;
@@ -106,6 +107,27 @@ namespace WebApi.Controller
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteTestInstanceByIdCommand { Id = id }));
+        }
+
+        [HttpGet("GetTestInstanceToActive")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> GetTestInstanceToActive()
+        {
+            return Ok(await Mediator.Send(new GetTestInstanceToActiveQuery()));
+        }
+
+        [HttpPut("TestToActive")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToActive(ActiveTestInstanceCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut("TestToClose")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToClose(CloseTestInstanceCommand command)
+        {
+            return Ok(await Mediator.Send(command));
         }
 
     }

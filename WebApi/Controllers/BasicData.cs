@@ -2,11 +2,14 @@
 using Application.Enums;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
@@ -55,7 +58,32 @@ namespace WebApi.Controllers
             culuterList.Sort();
             return Ok(culuterList);
         }
+        
+        [Produces("application/json")]
+        [Route("api/audio")]
+        [HttpPost]
+        public async Task<IActionResult> ProcessCommandAsync([FromForm] IFormFile command)
+        {
+            if (command.ContentType != "audio/wav" && command.ContentType != "audio/wave" || command.Length < 1)
+            {
+                return BadRequest();
+            }
+            var text = await CovnvertSpeechToTextApiCall(ConvertToByteArrayContent(command));
+
+            return Ok(FormulateResponse(text));
+        }
 
 
+        private ByteArrayContent ConvertToByteArrayContent(IFormFile audofile)
+        {
+            byte[] data;
+
+            using (var br = new BinaryReader(audofile.OpenReadStream()))
+            {
+                data = br.ReadBytes((int)audofile.OpenReadStream().Length);
+            }
+
+            return new ByteArrayContent(data);
+        }
     }
 }
