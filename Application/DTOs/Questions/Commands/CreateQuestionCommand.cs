@@ -3,6 +3,7 @@ using Application.Wrappers;
 using Domain.Entities;
 using MediatR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,11 +15,12 @@ namespace Application.DTOs
         public int? TestId { get; set; }
         public int QuestionTypeId { get; set; }
         public int Order { get; set; }
+        public string Header { get; set; }
+        public int? MinCharacters { get; set; }
+        public string? AudioPath { get; set; }
+        public int? NoOfRepeats { get; set; }
         public string Text { get; set; }
-        public int MinCharacters { get; set; }
-        public string AudioPath { get; set; }
-        public int NoOfRepeats { get; set; }
-        public virtual ICollection<SingleQuestionCreateInputModel> SingleQuestions { get; set; }
+        public virtual ICollection<SingleQuestion> SingleQuestions { get; set; }
 
         public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionCommand, Response<int>>
         {
@@ -36,9 +38,19 @@ namespace Application.DTOs
 
                 Reflection.CopyProperties(command, question);
                 await _QuestionRepository.AddAsync(question);
-                foreach (var item in command.SingleQuestions)
+                foreach (var item in command.SingleQuestions.ToList())
                 {
-                    await _mediator.Send(new UpdateSingleQuestionCommand { Id = item.Id, QuestionId = question.Id });
+                    SingleQuestion singleQuestion = new SingleQuestion();
+                    Reflection.CopyProperties(item, singleQuestion);
+                    await _mediator.Send(new CreateSingleQuestionCommand
+                    {
+                        Choices = singleQuestion.Choices,
+                        SingleQuestionType = singleQuestion.SingleQuestionType,
+                        Text = singleQuestion.Text,
+                        AnswerIsTrueOrFalse = singleQuestion.AnswerIsTrueOrFalse,
+                        Points = singleQuestion.Points,
+                        QuestionId = singleQuestion.QuestionId
+                    });
                 }
                 return new Response<int>(question.Id);
             }

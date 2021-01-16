@@ -27,8 +27,8 @@ namespace Domain.Entities
         public Address Address { get; set; }
         public IdentityRole Role { get; set; }
         public bool ChangePassword { get; set; }
-        public Sublevel Sublevel { get; set; }
-        public int? SublevelId { get; set; }
+        //public Sublevel Sublevel { get; set; }
+        //public int? SublevelId { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
         public bool OwnsToken(string token)
         {

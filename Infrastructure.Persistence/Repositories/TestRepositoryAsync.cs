@@ -41,7 +41,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Test> GetByLessonDefinationAsync(int lessonDefinationdId)
+        public async Task<Test> GetQuizzByLessonDefinationAsync(int lessonDefinationdId)
         {
             return await tests.Where(x => x.LessonDefinitionId == lessonDefinationdId && x.TestTypeId == (int)TestTypeEnum.quizz).FirstOrDefaultAsync();
         }

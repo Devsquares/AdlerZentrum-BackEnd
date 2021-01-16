@@ -48,7 +48,7 @@ namespace WebApi.Controllers
 
             if (response == null)
                 return Unauthorized(new { message = "Invalid token" });
- 
+
             return Ok(response);
         }
 
@@ -80,10 +80,15 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(VerifyEmailRequest model)
+        {
+            return Ok(await _accountService.ChangePassword(model));
+        }
+
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
-
             return Ok(await _accountService.ResetPassword(model));
         }
 

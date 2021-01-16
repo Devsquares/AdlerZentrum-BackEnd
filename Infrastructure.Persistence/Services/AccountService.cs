@@ -374,7 +374,7 @@ namespace Infrastructure.Persistence.Services
             await _emailService.SendAsync(emailRequest);
         }
 
-        public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
+        public async Task<Response<string>> ChangePassword(VerifyEmailRequest model)
         {
             var ApplicationUser = await _userManager.FindByEmailAsync(model.Email);
             if (ApplicationUser == null) throw new ApiException($"No ApplicationUsers Registered with {model.Email}.");
@@ -498,6 +498,21 @@ namespace Infrastructure.Persistence.Services
                 return null;
             Reflection.CopyProperties(updateUserCommand, user);
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
+        {
+            var account = await _userManager.FindByEmailAsync(model.Email);
+            if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
+            var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
+            if (result.Succeeded)
+            {
+                return new Response<string>(model.Email, message: $"Password Resetted.");
+            }
+            else
+            {
+                throw new ApiException($"Error occured while reseting the password.");
+            }
         }
     }
 

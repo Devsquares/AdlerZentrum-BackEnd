@@ -49,19 +49,12 @@ namespace Application.DTOs
                 foreach (var item in command.Questions)
                 {
                     item.TestId = test.Id;
-                    var responaceQuestionId = await _mediator.Send(new CreateQuestionCommand
+                    var responaceQuestionId = await _mediator.Send(new UpdateQuestionCommand
                     {
-                        AudioPath = item.AudioPath,
-                        MinCharacters = item.MinCharacters,
-                        NoOfRepeats = item.NoOfRepeats,
-                        Order = item.Order,
-                        QuestionTypeId = item.QuestionTypeId,
                         TestId = item.TestId,
-                        Text = item.Text,
-                        SingleQuestions = item.SingleQuestions
                     });
                     item.Id = responaceQuestionId.data;
-                } 
+                }
                 return new Response<int>(test.Id);
             }
         }

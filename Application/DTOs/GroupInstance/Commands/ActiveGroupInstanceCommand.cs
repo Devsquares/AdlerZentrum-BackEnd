@@ -93,7 +93,7 @@ namespace Application.DTOs
                     {
                         // TODO get quiz for lesson.
                         // TODO add get final test or sublevel test.
-                        var quiz = _testRepository.GetByLessonDefinationAsync(item.LessonDefinitionId).Result;
+                        var quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
                         if (quiz != null)
                         {
                             foreach (var student in lessonInstanceStudents)

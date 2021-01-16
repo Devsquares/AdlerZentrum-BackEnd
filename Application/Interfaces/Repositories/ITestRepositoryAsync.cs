@@ -9,6 +9,6 @@ namespace Application.Interfaces.Repositories
     public interface ITestRepositoryAsync : IGenericRepositoryAsync<Test>
     {
         Task<IReadOnlyList<Test>> GetPagedReponseAsync(int pageNumber, int pageSize, int type);
-        Task<Test> GetByLessonDefinationAsync(int lessonDefinationdId);
+        Task<Test> GetQuizzByLessonDefinationAsync(int lessonDefinationdId);
     }
 }
