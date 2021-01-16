@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210115130236_add-group-condition-details-table")]
+    partial class addgroupconditiondetailstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -401,44 +403,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("GroupConditionId");
 
                     b.ToTable("GroupConditionDetails");
-                });
-
-            modelBuilder.Entity("Domain.Entities.GroupConditionPromoCode", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("GroupConditionDetailsId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("PromoCodeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupConditionDetailsId");
-
-                    b.HasIndex("PromoCodeId");
-
-                    b.ToTable("groupConditionPromoCodes");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupDefinition", b =>
@@ -1557,21 +1521,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.GroupCondition", "GroupCondition")
                         .WithMany()
                         .HasForeignKey("GroupConditionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.GroupConditionPromoCode", b =>
-                {
-                    b.HasOne("Domain.Entities.GroupConditionDetail", "GroupConditionDetails")
-                        .WithMany()
-                        .HasForeignKey("GroupConditionDetailsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.PromoCode", "PromoCode")
-                        .WithMany()
-                        .HasForeignKey("PromoCodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
