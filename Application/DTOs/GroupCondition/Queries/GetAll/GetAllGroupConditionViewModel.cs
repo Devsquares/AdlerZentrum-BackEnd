@@ -12,7 +12,7 @@ namespace Application.DTOs
         public int? Status { get; set; }
         public int NumberOfSolts { get; set; }
         public int NumberOfSlotsWithPlacementTest { get; set; }
-        public List<List<GroupConditionPromoCodeInputModel>> PromoCodes { get; set; }
+        public List<List<GroupConditionPromoCodeInputModel>> PromoCodes { get; set; } = new List<List<GroupConditionPromoCodeInputModel>>();
 
     }
 }

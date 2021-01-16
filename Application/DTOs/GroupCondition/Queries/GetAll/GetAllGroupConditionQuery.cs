@@ -68,10 +68,10 @@ namespace Application.DTOs
                 var view = userViewModel.Where(x => x.Id == GroupConditionD.GroupConditionId).FirstOrDefault();
                 if (view != null)
                 {
-                    if (view.PromoCodes == null)
-                    {
-                        view.PromoCodes = new List<List<GroupConditionPromoCodeInputModel>>();
-                    }
+                    //if (view.PromoCodes == null)
+                    //{
+                    //    view.PromoCodes = new List<List<GroupConditionPromoCodeInputModel>>();
+                    //}
                     view.PromoCodes.AddRange(new List<List<GroupConditionPromoCodeInputModel>>() { promocodeslst });
                 }
             }
