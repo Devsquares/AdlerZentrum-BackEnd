@@ -22,5 +22,8 @@ namespace Application.DTOs.Account
         public Address Address { get; set; }
         public string PhoneNumber { get; set; }
         public int GroupInstanceId { get; set; }
+        public bool IsPlacmentTest { get; set; }
+        public bool IsAdlerService { get; set; }
+        public int PromoCodeID { get; set; }
     }
 }

@@ -206,8 +206,12 @@ namespace Infrastructure.Persistence.Services
                 //TODO need to be change
                 user.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded)
+                if (result.Succeeded )
                 {
+                    if(request.IsPlacmentTest || request.IsAdlerService)
+                    {
+                        return new Response<string>(user.Id, message: $"User Registered.");
+                    }
                     await _userManager.AddToRoleAsync(user, RolesEnum.Student.ToString());
 
                     //var verificationUri = await SendVerificationEmail(user, origin);
