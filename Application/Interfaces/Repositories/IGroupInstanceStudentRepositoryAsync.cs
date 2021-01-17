@@ -10,5 +10,7 @@ namespace Application.Interfaces.Repositories
         int GetCountOfStudents(int groupId);
 
         List<string> GetEmailsByGroupDefinationId(int groupDefinationId);
+        GroupInstanceStudents GetByStudentId(string studentId, int groupId);
+
     }
 }
