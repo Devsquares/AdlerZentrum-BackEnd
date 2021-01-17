@@ -36,6 +36,8 @@
     <Compile Remove="Migrations\20201226190226_add test ins.Designer.cs" />
     <Compile Remove="Migrations\20210109181442_addBanRequest.cs" />
     <Compile Remove="Migrations\20210109181442_addBanRequest.Designer.cs" />
+    <Compile Remove="Migrations\20210116180704_add-isplacementtest-promocodeid-groupinstancestudent.cs" />
+    <Compile Remove="Migrations\20210116180704_add-isplacementtest-promocodeid-groupinstancestudent.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,6 +18,11 @@ namespace Infrastructure.Persistence.Repositories
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
         }
 
+        public GroupInstanceStudents GetByStudentId(string studentId,int groupId)
+        {
+            return groupInstanceStudents.Where(x => x.StudentId == studentId && x.GroupInstanceId == groupId).FirstOrDefault();
+        }
+
         public int GetCountOfStudents(int groupId)
         {
             return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();
