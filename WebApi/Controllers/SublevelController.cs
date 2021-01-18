@@ -1,6 +1,4 @@
-﻿using Application.DTOs;
-using Application.DTOs.Level.Commands;
-using Application.Filters;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,33 +6,45 @@ namespace WebApi.Controllers
 {
     public class SublevelController : BaseApiController
     {
-        //[HttpGet("GetAll")]
-        //public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
-        //{
-        //    return Ok(await Mediator.Send(new GetAllSubLevelsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
-        //} 
+        // GET: api/<controller>
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] GetAllSublevelsParameter filter)
+        {
 
-        //[HttpGet("GetById")]
-        //public async Task<IActionResult> GetById(int id)
-        //{
-        //    return Ok(await Mediator.Send(new GetSubLevelByIdQuery { Id = id }));
-        //}
+            return Ok(await Mediator.Send(new GetAllSublevelsQuery() {
+                PageSize = filter.PageSize,
+                PageNumber = filter.PageNumber,
+                FilterArray = filter.FilterArray,
+                FilterRange = filter.FilterRange,
+                FilterSearch = filter.FilterSearch,
+                FilterValue = filter.FilterValue,
+                SortBy = filter.SortBy,
+                SortType = filter.SortType,
+                NoPaging = filter.NoPaging
+            }));
+        }
 
-        //[HttpPost("Create")]
-        ////[Authorize(Roles = "SuperAdmin")]
-        //public async Task<IActionResult> Post(int id, CreateSubLevelCommand command)
-        //{
-        //    if (id != command.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return Ok(await Mediator.Send(command));
-        //}
+        // GET api/<controller>/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            return Ok(await Mediator.Send(new GetSublevelByIdQuery { Id = id }));
+        }
 
-
-        [HttpPut("update")]
+        // POST api/<controller>
+        [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Put(int id, UpdateLevelCommand command)
+        //TODO: enable authorization
+        public async Task<IActionResult> Post(CreateSublevelCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        // PUT api/<controller>/5
+        [HttpPut("{id}")]
+        //[Authorize(Roles = "SuperAdmin")]
+        //TODO: enable authorization
+        public async Task<IActionResult> Put(int id, UpdateSublevelCommand command)
         {
             if (id != command.Id)
             {
@@ -43,11 +53,14 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
+        // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
+        //TODO: enable authorization
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await Mediator.Send(new DeleteLevelByIdCommand { Id = id }));
+            return Ok(await Mediator.Send(new DeleteSublevelByIdCommand { Id = id }));
         }
+
     }
 }

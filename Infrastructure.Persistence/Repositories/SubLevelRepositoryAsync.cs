@@ -9,14 +9,16 @@ using System.Text;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class SubLevelRepositoryAsync : GenericRepositoryAsync<Sublevel>, ISublevelRepositoryAsync
+    public class SublevelRepositoryAsync : GenericRepositoryAsync<Sublevel>, ISublevelRepositoryAsync
     {
-        private readonly DbSet<Sublevel> _subLevels;
+        private readonly DbSet<Sublevel> _sublevels;
 
 
-        public SubLevelRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
+        public SublevelRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _subLevels = dbContext.Set<Sublevel>();
+            _sublevels = dbContext.Set<Sublevel>();
+
         }
     }
+
 }

@@ -89,12 +89,12 @@ namespace WebApi
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"ListeningAudioFiles")),
-                RequestPath = new PathString("/ListeningAudioFiles")
-            });
+            //app.UseStaticFiles();
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"ListeningAudioFiles")),
+            //    RequestPath = new PathString("/ListeningAudioFiles")
+            //});
             app.UseAuthentication();
             app.UseAuthorization(); 
             app.UseSwaggerExtension();

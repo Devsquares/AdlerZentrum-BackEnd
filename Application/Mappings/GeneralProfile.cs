@@ -90,10 +90,10 @@ namespace Application.Mappings
             CreateMap<GetAllGroupConditionsQuery, FilteredRequestParameter>();
             CreateMap<GetAllBanRequestsQuery, GetAllBanRequestsParameter>().ReverseMap();
             CreateMap<BanRequest, CreateBanRequestCommand>().ReverseMap();
-
-
             CreateMap<BanRequest, GetAllBanRequestsViewModel>().ReverseMap();
-
+            CreateMap<GetAllSublevelsQuery, GetAllSublevelsParameter>().ReverseMap();
+            CreateMap<Sublevel, GetAllSublevelsViewModel>().ReverseMap();
+            CreateMap<Sublevel, CreateSublevelCommand>().ReverseMap();
         }
     }
 }
