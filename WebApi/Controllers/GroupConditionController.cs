@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.DTOs;
+using Application.Features.GroupConditionPromoCode.Commands.CreateGroupConditionPromoCode;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -58,6 +59,13 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteGroupConditionByIdCommand { Id = id }));
+        }
+
+        [HttpPut("Check_AddStudentwithPromoCode")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> Check_AddStudentwithPromoCode(int groupInstanceId,int promoCodeId,string studentId)
+        {
+            return Ok(await Mediator.Send(new CheckGroupConditionPromoCodeCommand {GroupInstanceId = groupInstanceId , PromoCodeId = promoCodeId,StudentId = studentId}));
         }
     }
 }

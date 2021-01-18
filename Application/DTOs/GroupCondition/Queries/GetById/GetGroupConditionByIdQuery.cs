@@ -55,6 +55,7 @@ namespace Application.DTOs
                     }
                     groupConditionViewModel.PromoCodes.AddRange(new List<List<GroupConditionPromoCodeInputModel>>() { promocodeslst });
                 }
+
                 return new Response<GetAllGroupConditionViewModel>(groupConditionViewModel);
             }
         }
