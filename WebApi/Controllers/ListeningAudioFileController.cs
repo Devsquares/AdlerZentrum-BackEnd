@@ -70,22 +70,30 @@ namespace WebApi.Controllers
         //[Authorize(Roles = "SuperAdmin")] 
         public async Task<IActionResult> Post(IFormFile file)
         {
-            CreateListeningAudioFileCommand command = new CreateListeningAudioFileCommand();
-            command.FileName = file.Name + DateTime.Now;
-            var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "ListeningAudioFiles");
-            if (!Directory.Exists(uploads))
+            try
             {
-                Directory.CreateDirectory(uploads);
-            }
-            if (file.Length > 0)
-            {
-                command.FilePath = Path.Combine(uploads, command.FileName);
-                using (var fileStream = new FileStream(command.FilePath, FileMode.Create))
+                CreateListeningAudioFileCommand command = new CreateListeningAudioFileCommand();
+                command.FileName = file.FileName;
+                var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "ListeningAudioFiles");
+                if (!Directory.Exists(uploads))
                 {
-                    await file.CopyToAsync(fileStream);
+                    Directory.CreateDirectory(uploads);
                 }
+                if (file.Length > 0)
+                {
+                    command.FilePath = Path.Combine(uploads, command.FileName);
+                    using (var fileStream = new FileStream(command.FilePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                }
+                return Ok(await Mediator.Send(command));
             }
-            return Ok(await Mediator.Send(command));
+            catch(Exception ex)
+            {
+                return Ok();
+            }
+           
         }
 
         //// PUT api/<controller>/5

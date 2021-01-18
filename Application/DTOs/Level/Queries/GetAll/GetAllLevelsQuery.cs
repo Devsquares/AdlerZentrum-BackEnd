@@ -32,7 +32,7 @@ namespace Application.DTOs
             var validFilter = _mapper.Map<RequestParameter>(request);
             var user = await _levelService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, "SubLevels");
             var userViewModel = _mapper.Map<IEnumerable<GetAllLevelsViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllLevelsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllLevelsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize,_levelService.GetCount());
         }
     }
 }

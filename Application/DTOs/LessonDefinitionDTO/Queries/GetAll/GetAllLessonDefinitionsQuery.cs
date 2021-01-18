@@ -32,7 +32,7 @@ namespace Application.DTOs
             var validFilter = _mapper.Map<RequestParameter>(request);
             var user = await _LessonDefinitionService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
             var userViewModel = _mapper.Map<IEnumerable<GetAllLessonDefinitionsViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllLessonDefinitionsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllLessonDefinitionsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize,_LessonDefinitionService.GetCount());
         }
     }
 }

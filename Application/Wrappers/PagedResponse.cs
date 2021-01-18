@@ -8,12 +8,14 @@ namespace Application.Wrappers
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public int Count { get; set; }
 
-        public PagedResponse(T data, int pageNumber, int pageSize)
+        public PagedResponse(T data, int pageNumber, int pageSize, int count)
         {
             this.PageNumber = pageNumber;
             this.PageSize = pageSize;
             this.data = data;
+            this.Count = count;
             this.message = null;
             this.succeeded = true;
             this.errors = null;

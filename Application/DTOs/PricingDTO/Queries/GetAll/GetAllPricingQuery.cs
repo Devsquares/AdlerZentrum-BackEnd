@@ -33,7 +33,7 @@ namespace Application.DTOs
             var validFilter = _mapper.Map<RequestParameter>(request);
             var user = await _PricingService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
             var userViewModel = _mapper.Map<IEnumerable<GetAllPricingViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllPricingViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllPricingViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize, _PricingService.GetCount());
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Application.DTOs.Level.Queries
             var validFilter = _mapper.Map<RequestParameter>(request);
             var user = await _promoCodeRepository.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
             var userViewModel = _mapper.Map<IEnumerable<GetAllPromoCodesViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllPromoCodesViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllPromoCodesViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize,_promoCodeRepository.GetCount());
         }
     }
 }
