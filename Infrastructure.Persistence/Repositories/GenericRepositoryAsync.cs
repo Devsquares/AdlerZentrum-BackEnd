@@ -28,6 +28,11 @@ namespace Infrastructure.Persistence.Repository
             return _dbContext.Set<T>().Count();
         }
 
+        public int GetCount()
+        {
+            return _dbContext.Set<T>().Count();
+        }
+
         public int GetCount(FilteredRequestParameter filteredRequestParameter)
         {
             return _dbContext

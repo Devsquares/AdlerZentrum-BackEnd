@@ -29,7 +29,7 @@ namespace Application.DTOs
             var validFilter = _mapper.Map<RequestParameter>(request);
             var user = await _SingleQuestionService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, "Choices");
             var userViewModel = _mapper.Map<IEnumerable<GetAllSingleQuestionsViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllSingleQuestionsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllSingleQuestionsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize,_SingleQuestionService.GetCount());
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Application.DTOs
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
             GroupDefinitions = await _GroupDefinitionRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize);
             var userViewModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
-            return new PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>(userViewModel, request.PageNumber, request.PageSize);
+            return new PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>(userViewModel, request.PageNumber, request.PageSize, _GroupDefinitionRepositoryAsync.GetCount());
         }
     }
 }

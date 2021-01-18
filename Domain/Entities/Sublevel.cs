@@ -10,7 +10,6 @@ namespace Domain.Entities
         public virtual Level Level { get; set; }
         public int NumberOflessons { get; set; }
         public string Color { get; set; }
-
         public List<LessonDefinition> LessonDefinitions { get; set; }
     }
 }

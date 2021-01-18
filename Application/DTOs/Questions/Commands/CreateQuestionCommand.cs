@@ -37,21 +37,7 @@ namespace Application.DTOs
                 var question = new Question();
 
                 Reflection.CopyProperties(command, question);
-                await _QuestionRepository.AddAsync(question);
-                foreach (var item in command.SingleQuestions.ToList())
-                {
-                    SingleQuestion singleQuestion = new SingleQuestion();
-                    Reflection.CopyProperties(item, singleQuestion);
-                    await _mediator.Send(new CreateSingleQuestionCommand
-                    {
-                        Choices = singleQuestion.Choices,
-                        SingleQuestionType = singleQuestion.SingleQuestionType,
-                        Text = singleQuestion.Text,
-                        AnswerIsTrueOrFalse = singleQuestion.AnswerIsTrueOrFalse,
-                        Points = singleQuestion.Points,
-                        QuestionId = singleQuestion.QuestionId
-                    });
-                }
+                await _QuestionRepository.AddAsync(question); 
                 return new Response<int>(question.Id);
             }
         }
