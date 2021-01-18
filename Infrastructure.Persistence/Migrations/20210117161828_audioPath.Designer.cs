@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210117161828_audioPath")]
+    partial class audioPath
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -562,9 +564,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPlacementTest")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -572,17 +571,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("PromoCodeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("StudentId")
                         .HasColumnType("varchar(85)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupInstanceId");
-
-                    b.HasIndex("PromoCodeId");
 
                     b.HasIndex("StudentId");
 
@@ -1660,10 +1654,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.PromoCode", "PromoCode")
-                        .WithMany()
-                        .HasForeignKey("PromoCodeId");
 
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
