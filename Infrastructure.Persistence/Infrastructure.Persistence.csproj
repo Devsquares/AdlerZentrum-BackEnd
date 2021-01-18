@@ -36,6 +36,10 @@
     <Compile Remove="Migrations\20201226190226_add test ins.Designer.cs" />
     <Compile Remove="Migrations\20210109181442_addBanRequest.cs" />
     <Compile Remove="Migrations\20210109181442_addBanRequest.Designer.cs" />
+    <Compile Remove="Migrations\20210117161531_audioPath.cs" />
+    <Compile Remove="Migrations\20210117161531_audioPath.Designer.cs" />
+    <Compile Remove="Migrations\20210117161647_audioPath.cs" />
+    <Compile Remove="Migrations\20210117161647_audioPath.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

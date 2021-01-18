@@ -17,7 +17,7 @@ namespace Application.DTOs
         public int Order { get; set; }
         public string Header { get; set; }
         public int? MinCharacters { get; set; }
-        public string? AudioPath { get; set; }
+        public int? AudioPathId { get; set; }
         public int? NoOfRepeats { get; set; }
         public string Text { get; set; }
         public virtual ICollection<SingleQuestion> SingleQuestions { get; set; }
