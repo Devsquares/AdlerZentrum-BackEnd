@@ -61,5 +61,12 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new CancelGroupDefinitionByIdCommand { Id = id, UserId = AuthenticatedUserService.UserId }));
         }
+
+        [HttpGet("GetAvailableGroupDefinitionStudent")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> GetAvailableGroupDefinitionStudent(int SubLevelId, int? PromoCodeId)
+        {
+            return Ok(await Mediator.Send(new GetAllAvailableGroupDefinitionStudent { SubLevelId = SubLevelId,PromoCodeId = PromoCodeId }));
+        }
     }
 }

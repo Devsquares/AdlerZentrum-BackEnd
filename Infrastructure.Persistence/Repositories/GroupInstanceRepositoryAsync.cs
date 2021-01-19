@@ -1,4 +1,5 @@
-﻿using Application.Filters;
+﻿using Application.Enums;
+using Application.Filters;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
@@ -87,6 +88,17 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.GroupDefinition.Sublevel)
                   .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
                   .Where(x => x.Id == id).FirstOrDefault();
+        }
+
+        public GroupInstance GetByGroupDefinitionId(int groupdefinitionid)
+        {
+            return groupInstances
+                 .Include(x => x.GroupDefinition)
+                 .Include(x => x.Students)
+                 .Include(x => x.GroupDefinition.TimeSlot)
+                 .Include(x => x.GroupDefinition.Sublevel)
+                 .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
+                 .Where(x => x.GroupDefinitionId == groupdefinitionid && x.Status == (int)GroupInstanceStatusEnum.Pending).FirstOrDefault();
         }
     }
 }

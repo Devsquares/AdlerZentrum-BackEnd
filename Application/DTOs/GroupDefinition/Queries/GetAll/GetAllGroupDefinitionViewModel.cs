@@ -36,5 +36,7 @@ namespace Application.DTOs
 
         public int? Status { get; set; }
 
+        public bool IsInterested { get; set; }
+
     }
 }
