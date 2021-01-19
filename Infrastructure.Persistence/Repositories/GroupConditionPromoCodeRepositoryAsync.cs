@@ -16,10 +16,12 @@ namespace Infrastructure.Persistence.Repositories
         private readonly DbSet<GroupConditionPromoCode> _groupconditionpromocodes;
         ApplicationDbContext _dbContext;
         private readonly DbSet<GroupInstanceStudents> _groupInstanceStudents;
+        private readonly DbSet<InterestedStudent> _interestedStudent;
         public GroupConditionPromoCodeRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             _groupconditionpromocodes = dbContext.Set<GroupConditionPromoCode>();
             _groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
+            _interestedStudent = dbContext.Set<InterestedStudent>();
             _dbContext = dbContext;
         }
 
@@ -82,7 +84,7 @@ namespace Infrastructure.Persistence.Repositories
                 var validpromo = item.Where(x => x.PromoCodeId == promocodeId).FirstOrDefault();
                 if (studentpromocount == null && validpromo == null)
                 {
-                    throw new Exception("invalid promocode in group");
+                    canApply = false;
                 }
                 else if (studentpromocount == null && validpromo != null) // first student
                 {
@@ -90,6 +92,35 @@ namespace Infrastructure.Persistence.Repositories
                     break;
                 }
                 else if (studentpromocount != null && validpromo != null && studentpromocount.count < validpromo.Count)
+                {
+                    canApply = true;
+                    break;
+                }
+            }
+            return canApply;
+        }
+
+        public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeId)
+        {
+            bool canApply = false;
+            var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
+                .Join(_dbContext.GroupInstances,
+                gcpc => gcpc.GroupConditionDetails.GroupConditionId,
+                gi => gi.GroupDefinition.GroupConditionId,
+                (gcpc, gi) => new { gcpc, gi })
+                .Where(x => x.gi.GroupDefinitionId == groupDefinitionId)
+                .Select(x => x.gcpc).ToList();
+            var GroupConditionDetails = promocodes.GroupBy(x => x.GroupConditionDetailsId).ToList();
+
+            var interestedStudentsCount = _interestedStudent.Where(x => x.GroupDefinitionId == groupDefinitionId && x.PromoCodeId == promocodeId).Count();
+            foreach (var item in GroupConditionDetails)
+            {
+                var validpromo = item.Where(x => x.PromoCodeId == promocodeId).FirstOrDefault();
+                if ( validpromo == null)
+                {
+                    canApply = false;
+                }
+                else if ( validpromo != null && interestedStudentsCount < validpromo.Count)
                 {
                     canApply = true;
                     break;

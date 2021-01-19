@@ -61,5 +61,12 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new CancelGroupDefinitionByIdCommand { Id = id, UserId = AuthenticatedUserService.UserId }));
         }
+
+        [HttpPut("StudentRegister")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> StudentRegister(int groupDefinitionId, int? promoCodeId,int? placmentTest)
+        {
+            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand {groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeId = promoCodeId,PlacmentTestId = placmentTest}));
+        }
     }
 }

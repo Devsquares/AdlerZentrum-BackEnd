@@ -9,5 +9,6 @@ namespace Application.Interfaces.Repositories
     {
         List<GroupConditionPromoCode> GetByGroupConditionDetailId(List<GroupConditionDetail> groupConditionDetails);
         bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId);
+        bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeId);
     }
 }

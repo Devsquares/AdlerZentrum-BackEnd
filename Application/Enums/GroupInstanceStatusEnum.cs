@@ -10,6 +10,6 @@ namespace Application.Enums
         Running = 1,
         Finished = 2,
         Canceld = 3,
-        Complete = 4
+        SlotCompleted = 4 // number of slotes completed
     }
 }

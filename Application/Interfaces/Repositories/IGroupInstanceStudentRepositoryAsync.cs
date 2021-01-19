@@ -11,6 +11,6 @@ namespace Application.Interfaces.Repositories
 
         List<string> GetEmailsByGroupDefinationId(int groupDefinationId);
         GroupInstanceStudents GetByStudentId(string studentId, int groupId);
-
+        int GetCountOfPlacmentTestStudents(int groupId);
     }
 }
