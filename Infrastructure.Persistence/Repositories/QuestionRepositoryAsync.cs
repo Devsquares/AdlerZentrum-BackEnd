@@ -20,7 +20,8 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<IReadOnlyList<Question>> GetAllByTypeIdAsync(int questionTypeId, int pageNumber, int pageSize)
         {
-            return await _questions.Where(x => x.QuestionTypeId == questionTypeId).Include(x => x.SingleQuestions)
+            return await _questions.Include(x => x.SingleQuestions).ThenInclude(x => x.Choices)
+                .Where(x => x.QuestionTypeId == questionTypeId).Include(x => x.SingleQuestions)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
@@ -30,6 +31,12 @@ namespace Infrastructure.Persistence.Repositories
         public int GetAllByTypeIdCountAsync(int questionTypeId)
         {
             return _questions.Where(x => x.QuestionTypeId == questionTypeId).ToList().Count();
+        }
+
+        public override Task<Question> GetByIdAsync(int id)
+        {
+            return _questions.Include(x => x.SingleQuestions)
+                   .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
     }
 }

@@ -222,7 +222,7 @@ namespace Infrastructure.Persistence.Services
                     var groupDefinition = _groupDefinitionRepositoryAsync.GetByIdAsync(groupInstance.GroupDefinitionId).Result;
                     var condtion = _groupConditionRepositoryAsync.GetByIdAsync(groupDefinition.GroupConditionId);
 
-                    if (count > condtion.Result.NumberOfSolts)
+                    if (count > condtion.Result.NumberOfSlots)
                     {
                         throw new ApiException($"Group is complate now, Contact the admin.");
                     }

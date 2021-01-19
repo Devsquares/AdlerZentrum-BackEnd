@@ -25,20 +25,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetAllNewRequests")]
-        public async Task<IActionResult> GetAllNewRequests([FromQuery] GetAllBanRequestsParameter filter)
+        public async Task<IActionResult> GetAllNewRequests([FromQuery] GetAllNewBanRequestsQuery filter)
         {
 
-            return Ok(await Mediator.Send(new GetAllBanRequestsQuery()
+            return Ok(await Mediator.Send(new GetAllNewBanRequestsQuery()
             {
                 PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber,
-                FilterArray = filter.FilterArray,
-                FilterRange = filter.FilterRange,
-                FilterSearch = filter.FilterSearch,
-                FilterValue = filter.FilterValue,
-                SortBy = filter.SortBy,
-                SortType = filter.SortType,
-                NoPaging = filter.NoPaging
+                PageNumber = filter.PageNumber
             }));
         }
 
