@@ -9,6 +9,7 @@ using AutoMapper;
 using Domain.Entities;
 using System;
 using Application.Features.TestInstance.Queries.GetAllTestInstances;
+using Application.Features;
 
 namespace Application.Mappings
 {
@@ -31,7 +32,7 @@ namespace Application.Mappings
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
             CreateMap<Test, GetAllTestsViewModel>().ReverseMap().ForMember(destination => destination.TestTypeId,
-                 opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.TestTypeId))); 
+                 opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.TestTypeId)));
 
             CreateMap<SingleQuestion, GetAllSingleQuestionsViewModel>().ReverseMap();
             CreateMap<Question, GetQuestionViewModel>().ReverseMap();
@@ -64,6 +65,10 @@ namespace Application.Mappings
 
             CreateMap<Sublevel, GetAllSubLevelsViewModel>()
                 .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.Level.Name + "." + source.Name));
+
+            CreateMap<TestInstance, TestInstancesResultsViewModel>()
+                .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName + source.Student.LastName));
+
 
             CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
             CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();
