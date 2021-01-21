@@ -81,30 +81,6 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.LessonInstance)
                 .ThenInclude(x => x.GroupInstance)
                 .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.Status == (int)TestInstanceEnum.Corrected).Count();
-        }
-
-        public virtual async Task<IReadOnlyList<TestInstance>> GetTestInstanceToActive()
-        {
-            return await _testInstances
-            .Include(x => x.Test)
-            .Include(x => x.Student)
-            .Include(x => x.LessonInstance)
-            .ThenInclude(x => x.GroupInstance)
-             .Where(x => x.Status == (int)TestInstanceEnum.Closed).ToListAsync();
-        }
-
-
-        public override Task<TestInstance> GetByIdAsync(int id)
-        {
-            return _testInstances
-                   .Include(x => x.Test)
-                   .ThenInclude(x => x.Questions)
-                   .ThenInclude(x => x.SingleQuestions)
-                   .Include(x => x.Student)
-                   .Include(x => x.Test)
-                   .ThenInclude(x => x.Questions)
-                   .ThenInclude(x => x.SingleQuestionSubmissions)
-                   .Where(x => x.Id == id).FirstOrDefaultAsync();
-        }
+        }  
     }
 }

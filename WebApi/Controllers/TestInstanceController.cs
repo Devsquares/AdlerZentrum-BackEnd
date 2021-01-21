@@ -55,6 +55,7 @@ namespace WebApi.Controller
             }));
         }
 
+        
         [HttpGet("GetFinalLevelTestsForStudent")]
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetFinalLevelTestsForStudent()
@@ -63,19 +64,6 @@ namespace WebApi.Controller
             {
                 return Ok(new Response<object>("Not registerd in any group."));
             }
-
-            return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
-            {
-                StudentId = AuthenticatedUserService.UserId,
-                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
-                TestType = Application.Enums.TestTypeEnum.quizz
-            }));
-        }
-
-        [HttpGet("GetFinalLevelTestsForStudent")]
-        [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> GetFinalLevelTestsForStudent()
-        {
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {
                 StudentId = AuthenticatedUserService.UserId,
