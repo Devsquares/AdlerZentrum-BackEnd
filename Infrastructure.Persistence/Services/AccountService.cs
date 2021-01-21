@@ -99,6 +99,8 @@ namespace Infrastructure.Persistence.Services
             response.RefreshToken = refreshToken.Token;
             response.ActiveGroupInstance = activeGroup;
             response.ChangePassword = user.ChangePassword;
+            response.Banned = user.Banned;
+            response.BanComment = user.BanComment;
 
             user.RefreshTokens.Add(refreshToken);
             await _userManager.UpdateAsync(user);
@@ -220,7 +222,7 @@ namespace Infrastructure.Persistence.Services
                     var groupDefinition = _groupDefinitionRepositoryAsync.GetByIdAsync(groupInstance.GroupDefinitionId).Result;
                     var condtion = _groupConditionRepositoryAsync.GetByIdAsync(groupDefinition.GroupConditionId);
 
-                    if (count > condtion.Result.NumberOfSolts)
+                    if (count > condtion.Result.NumberOfSlots)
                     {
                         throw new ApiException($"Group is complate now, Contact the admin.");
                     }
@@ -372,7 +374,7 @@ namespace Infrastructure.Persistence.Services
             await _emailService.SendAsync(emailRequest);
         }
 
-        public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
+        public async Task<Response<string>> ChangePassword(VerifyEmailRequest model)
         {
             var ApplicationUser = await _userManager.FindByEmailAsync(model.Email);
             if (ApplicationUser == null) throw new ApiException($"No ApplicationUsers Registered with {model.Email}.");
@@ -393,7 +395,6 @@ namespace Infrastructure.Persistence.Services
             }
         }
 
-
         public async Task<ApplicationUser> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -402,6 +403,19 @@ namespace Infrastructure.Persistence.Services
                 throw new ApiException("No user found with id " + id);
             }
             return user;
+        }
+
+        public async Task<bool> BanAsync(string id, string comment)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                throw new ApiException("No user found with id " + id);
+            }
+            user.Banned = true;
+            user.BanComment = comment;
+            await _userManager.UpdateAsync(user);
+            return true;
         }
 
         public async Task<IReadOnlyList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize)
@@ -484,6 +498,21 @@ namespace Infrastructure.Persistence.Services
                 return null;
             Reflection.CopyProperties(updateUserCommand, user);
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
+        {
+            var account = await _userManager.FindByEmailAsync(model.Email);
+            if (account == null) throw new ApiException($"No Accounts Registered with {model.Email}.");
+            var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
+            if (result.Succeeded)
+            {
+                return new Response<string>(model.Email, message: $"Password Resetted.");
+            }
+            else
+            {
+                throw new ApiException($"Error occured while reseting the password.");
+            }
         }
     }
 

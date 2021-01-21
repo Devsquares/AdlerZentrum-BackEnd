@@ -1,5 +1,5 @@
 using Application.DTOs;
-using Application.Filters; 
+using Application.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -13,6 +13,12 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllQuestionsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
 
+        [HttpGet("GetByType")]
+        public async Task<IActionResult> GetByType([FromQuery] GetQuestionsByTypeQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetQuestionsByTypeQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber, QuestionType = filter.QuestionType }));
+        }
+
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -21,12 +27,8 @@ namespace WebApi.Controllers
 
         [HttpPost("Create")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Post(int id, CreateQuestionCommand command)
+        public async Task<IActionResult> Post(CreateQuestionCommand command)
         {
-            if (id != command.Question.Id)
-            {
-                return BadRequest();
-            }
             return Ok(await Mediator.Send(command));
         }
 

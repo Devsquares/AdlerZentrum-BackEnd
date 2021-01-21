@@ -1,4 +1,3 @@
-
 using Domain.Common;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,8 @@ namespace Domain.Entities
         public string StudentId { get; set; }
         public virtual ApplicationUser Student { get; set; }
         public bool Attend { get; set; }
-        public bool Homework { get; set; } 
+        public bool Homework { get; set; }
+        public DateTime? ReportDateTime { get; set; }
 
         public object Clone()
         {

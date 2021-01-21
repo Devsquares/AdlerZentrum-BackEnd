@@ -17,7 +17,9 @@ using WebApi.Services;
 using WebApi.Middlewares;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Net;
-
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApi
 {
@@ -87,6 +89,12 @@ namespace WebApi
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
+            // app.UseStaticFiles();
+            // app.UseStaticFiles(new StaticFileOptions()
+            // {
+            //     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"ListeningAudioFiles")),
+            //     RequestPath = new PathString("/ListeningAudioFiles")
+            // });
             app.UseAuthentication();
             app.UseAuthorization(); 
             app.UseSwaggerExtension();

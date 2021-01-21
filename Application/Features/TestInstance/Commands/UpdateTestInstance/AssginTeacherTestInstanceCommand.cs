@@ -29,7 +29,7 @@ namespace Application.Features
 
                 if (testinstance == null)
                 {
-                    throw new ApiException($"TestInstance Not Found.");
+                    throw new ApiException($"Test Instance Not Found.");
                 }
                 else
                 {

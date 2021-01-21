@@ -5,6 +5,7 @@ using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,11 @@ namespace Infrastructure.Persistence.Repositories
         public UsersRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             users = dbContext.Set<ApplicationUser>();
+        }
+
+        public ApplicationUser GetUserById(string Id)
+        {
+            return users.Where(x => x.Id == Id).FirstOrDefault();
         }
     }
 }

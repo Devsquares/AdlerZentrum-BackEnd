@@ -17,7 +17,7 @@ namespace WebApi.Controllers
         [HttpGet("GetAllSubLevels")]
         public async Task<IActionResult> GetAllSubLevels()
         {
-            return Ok(await Mediator.Send(new GetAllSubLevelsQuery()));
+            return Ok(await Mediator.Send(new GetAllSublevelsQuery()));
         }
 
         [HttpGet("GetById")]

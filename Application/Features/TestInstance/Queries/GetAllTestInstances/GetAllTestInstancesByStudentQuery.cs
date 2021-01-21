@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Features.TestInstance.Queries.GetAllTestInstances;
 using Application.Filters;
 using Application.Interfaces.Repositories;
@@ -16,6 +17,7 @@ namespace Application.Features
     {
         public string StudentId { get; set; }
         public int GroupInstanceId { get; set; }
+        public TestTypeEnum TestType { get; set; }
     }
     public class GetAllTestInstancesByStudentQueryHandler : IRequestHandler<GetAllTestInstancesByStudentQuery, IEnumerable<GetAllTestInstancesViewModel>>
     {
@@ -29,7 +31,7 @@ namespace Application.Features
 
         public async Task<IEnumerable<GetAllTestInstancesViewModel>> Handle(GetAllTestInstancesByStudentQuery request, CancellationToken cancellationToken)
         {
-            var testinstance = await _testInstanceRepository.GetAllQuizzForStudentAsync(request.StudentId, request.GroupInstanceId);
+            var testinstance = await _testInstanceRepository.GetAllTestsForStudentAsync(request.StudentId, request.GroupInstanceId, request.TestType);
             return _mapper.Map<IEnumerable<GetAllTestInstancesViewModel>>(testinstance);
         }
     }

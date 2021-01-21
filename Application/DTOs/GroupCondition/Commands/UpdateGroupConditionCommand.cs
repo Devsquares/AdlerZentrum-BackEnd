@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.DTOs.GroupConditionPromoCodeModel;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -16,15 +17,22 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public int? Status { get; set; }
-        public int NumberOfSolts { get; set; }
+        public int NumberOfSlots { get; set; }
         public int NumberOfSlotsWithPlacementTest { get; set; }
+        public List<List<GroupConditionPromoCodeInputModel>> PromoCodes { get; set; }
 
         public class UpdateGroupConditionCommandHandler : IRequestHandler<UpdateGroupConditionCommand, Response<int>>
         {
             private readonly IGroupConditionRepositoryAsync _GroupConditionRepositoryAsync;
-            public UpdateGroupConditionCommandHandler(IGroupConditionRepositoryAsync GroupConditionRepository)
+            private readonly IGroupConditionDetailsRepositoryAsync _groupConditionDetailsRepository;
+            private readonly IGroupConditionPromoCodeRepositoryAsync _groupConditionPromoCodeRepository;
+            public UpdateGroupConditionCommandHandler(IGroupConditionRepositoryAsync GroupConditionRepository,
+                 IGroupConditionDetailsRepositoryAsync groupConditionDetailsRepository,
+                IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepository)
             {
                 _GroupConditionRepositoryAsync = GroupConditionRepository;
+                _groupConditionDetailsRepository = groupConditionDetailsRepository;
+                _groupConditionPromoCodeRepository = groupConditionPromoCodeRepository;
             }
             public async Task<Response<int>> Handle(UpdateGroupConditionCommand command, CancellationToken cancellationToken)
             {
@@ -37,6 +45,14 @@ namespace Application.DTOs
                 else
                 {
                     Reflection.CopyProperties(command, GroupCondition);
+                    //delete group condition promocodes and details
+                    var deletedGroupConditionDetail = _groupConditionDetailsRepository.GetByGroupConditionId(command.Id);
+                    var deletedPromocodes = _groupConditionPromoCodeRepository.GetByGroupConditionDetailId(deletedGroupConditionDetail);
+                    await _groupConditionPromoCodeRepository.DeleteBulkAsync(deletedPromocodes);
+                    await _groupConditionDetailsRepository.DeleteBulkAsync(deletedGroupConditionDetail);
+                    // add new ones
+                    CreateDependenciesGroupCondition _createDependenciesGroupCondition = new CreateDependenciesGroupCondition(_groupConditionDetailsRepository, _groupConditionPromoCodeRepository);
+                    _createDependenciesGroupCondition.Create(GroupCondition.Id, command.PromoCodes);
                     await _GroupConditionRepositoryAsync.UpdateAsync(GroupCondition);
                     return new Response<int>(GroupCondition.Id);
                 }

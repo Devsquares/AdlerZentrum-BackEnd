@@ -54,5 +54,12 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new DeleteGroupDefinitionByIdCommand { Id = id }));
         }
+
+        [HttpPut("Cancel")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            return Ok(await Mediator.Send(new CancelGroupDefinitionByIdCommand { Id = id, UserId = AuthenticatedUserService.UserId }));
+        }
     }
 }

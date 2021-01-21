@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence.Contexts
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly IDateTimeService _dateTime;
-        private readonly IAuthenticatedUserService _authenticatedUser; 
+        private readonly IAuthenticatedUserService _authenticatedUser;
 
         public ApplicationDbContext()
         {
@@ -49,6 +49,12 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<SingleQuestion> SingleQuestions { get; set; }
         public DbSet<SingleQuestionSubmission> SingleQuestionSubmissions { get; set; }
         public DbSet<ChoiceSubmission> ChoiceSubmissions { get; set; }
+        public DbSet<BanRequest> BanRequests { get; set; }
+        public DbSet<LessonInstanceStudent> LessonInstanceStudents { get; set; }
+        public DbSet<EmailType> EmailTypes { get; set; }
+        public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<GroupConditionDetail> GroupConditionDetails { get; set; }
+        public DbSet<GroupConditionPromoCode> groupConditionPromoCodes { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

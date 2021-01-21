@@ -33,7 +33,7 @@ namespace Application.DTOs
             var validFilter = _mapper.Map<RequestParameter>(request);
             var user = await _TimeSlotService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, "TimeSlotDetails");
             var userViewModel = _mapper.Map<IEnumerable<GetAllTimeSlotsViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllTimeSlotsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllTimeSlotsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize,_TimeSlotService.GetCount());
         }
     }
 }

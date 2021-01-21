@@ -60,7 +60,13 @@ namespace Infrastructure.Persistence
             services.AddTransient<IGroupInstanceStudentRepositoryAsync, GroupInstanceStudentRepositoryAsync>();
             services.AddTransient<ISingleQuestionSubmissionRepositoryAsync, SingleQuestionSubmissionRepositoryAsync>();
             services.AddTransient<IChoiceSubmissionRepositoryAsync, ChoiceSubmissionRepositoryAsync>();
-
+            services.AddTransient<IBanRequestRepositoryAsync, BanRequestRepositoryAsync>();
+            services.AddTransient<IEmailTypeRepositoryAsync, EmailTypeRepositoryAsync>();
+            services.AddTransient<IEmailTemplateRepositoryAsync, EmailTemplateRepositoryAsync>();
+            services.AddTransient<IUsersRepositoryAsync, UsersRepositoryAsync>();
+            services.AddTransient<IGroupConditionDetailsRepositoryAsync, GroupConditionDetailsRepositoryAsync>();
+            services.AddTransient<IGroupConditionPromoCodeRepositoryAsync, GroupConditionPromoCodeRepositoryAsync>();
+            services.AddTransient<IListeningAudioFileRepositoryAsync, ListeningAudioFileRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

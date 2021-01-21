@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.DTOs.Account
 {
-    public class ResetPasswordRequest
+    public class VerifyEmailRequest
     {
         [Required]
         [EmailAddress]

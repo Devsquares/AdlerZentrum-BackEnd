@@ -31,7 +31,7 @@ namespace Application.DTOs
             if (request.PageSize == 0) request.PageSize = 10;
             var user = await _SingleQuestionService.GetPagedReponseAsync(request.PageNumber, request.PageSize, request.TypeId);
             var userViewModel = _mapper.Map<IEnumerable<GetAllSingleQuestionsViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllSingleQuestionsViewModel>>(userViewModel, request.PageNumber, request.PageSize);
+            return new PagedResponse<IEnumerable<GetAllSingleQuestionsViewModel>>(userViewModel, request.PageNumber, request.PageSize,_SingleQuestionService.GetCount());
         }
     }
 }

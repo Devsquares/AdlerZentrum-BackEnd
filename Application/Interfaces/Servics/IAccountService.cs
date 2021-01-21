@@ -18,11 +18,13 @@ namespace Application.Interfaces
         Task<Response<string>> ConfirmEmailAsync(string userId, string code);
         Task ForgotPassword(ForgotPasswordRequest model, string origin);
         Task<Response<string>> ResetPassword(ResetPasswordRequest model);
-        Task<ApplicationUser> GetByIdAsync(string id);
+        Task<Response<string>> ChangePassword(VerifyEmailRequest model); 
+         Task<ApplicationUser> GetByIdAsync(string id);
         Task<IReadOnlyList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize);
         Task<IdentityResult> UpdateAsync(UpdateBasicUserCommand updateUserCommand);
         Task DeleteAsync(string id);
         Task<ApplicationUser> GetByClaimsPrincipalAsync(ClaimsPrincipal user);
+        Task<bool> BanAsync(string id, string comment);
 
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.TestInstance.Queries.GetTestInstanceById
+namespace Application.Features 
 {
     public class GetTestInstanceByIdQuery : IRequest<Response<Domain.Entities.TestInstance>>
     {

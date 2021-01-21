@@ -8,7 +8,7 @@ namespace Application.Interfaces
 {
     public interface IGenericRepositoryAsync<T> where T : class
     {
-        Task<T> GetByIdAsync(int id); 
+        Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<IReadOnlyList<T>> GetAllAsync(string Include);
         Task<IReadOnlyList<T>> GetPagedReponseAsync(int pageNumber, int pageSize);
@@ -22,5 +22,6 @@ namespace Application.Interfaces
         Task<bool> DeleteBulkAsync(List<T> entity);
         int GetCount(T entity);
         int GetCount(FilteredRequestParameter filteredRequestParameter);
+        int GetCount();
     }
 }

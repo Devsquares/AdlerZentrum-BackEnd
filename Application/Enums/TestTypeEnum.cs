@@ -8,6 +8,7 @@ namespace Application.Enums
     {
         quizz = 0,
         subLevel = 1,
-        final = 2
+        final = 2,
+        placement = 3
     }
 }

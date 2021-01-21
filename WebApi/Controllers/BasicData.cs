@@ -2,11 +2,14 @@
 using Application.Enums;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
@@ -55,7 +58,5 @@ namespace WebApi.Controllers
             culuterList.Sort();
             return Ok(culuterList);
         }
-
-
     }
 }

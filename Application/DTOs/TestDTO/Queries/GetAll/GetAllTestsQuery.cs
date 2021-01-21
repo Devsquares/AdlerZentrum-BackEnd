@@ -35,7 +35,7 @@ namespace Application.DTOs
             var validFilter = _mapper.Map<RequestParameter>(request);
             var user = await _TestService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, (int)request.TestType);
             var userViewModel = _mapper.Map<IEnumerable<GetAllTestsViewModel>>(user);
-            return new PagedResponse<IEnumerable<GetAllTestsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize);
+            return new PagedResponse<IEnumerable<GetAllTestsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize,_TestService.GetCount());
         }
     }
 }

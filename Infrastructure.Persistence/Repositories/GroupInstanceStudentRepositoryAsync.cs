@@ -18,9 +18,22 @@ namespace Infrastructure.Persistence.Repositories
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
         }
 
+        public GroupInstanceStudents GetByStudentId(string studentId,int groupId)
+        {
+            return groupInstanceStudents.Where(x => x.StudentId == studentId && x.GroupInstanceId == groupId).FirstOrDefault();
+        }
+
         public int GetCountOfStudents(int groupId)
         {
             return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();
+        }
+
+        public List<string> GetEmailsByGroupDefinationId(int groupDefinationId)
+        {
+           var emailList =   groupInstanceStudents.Include(x=>x.GroupInstance)
+                .Include(x => x.Student)
+                .Where(x => x.GroupInstance.GroupDefinitionId == groupDefinationId).Select(x=>x.Student.Email).ToList();
+            return emailList;
         }
     }
 }

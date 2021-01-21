@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -37,6 +38,11 @@ namespace WebApi.Controllers
         //[Authorize(Roles = "Student")]
         public async Task<IActionResult> GetHomeworkForStudent()
         {
+            if (AuthenticatedUserService.GroupInstanceId == null)
+            {
+                return Ok(new Response<object>("Not registerd in any group."));
+            }
+
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsForStudentQuery()
             {
                 StudentId = AuthenticatedUserService.UserId,

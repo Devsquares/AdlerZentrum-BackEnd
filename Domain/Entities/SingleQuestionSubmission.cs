@@ -14,5 +14,7 @@ namespace Domain.Entities
         public ApplicationUser Student { get; set; }
         public int SingleQuestionId { get; set; }
         public SingleQuestion SingleQuestion { get; set; }
+        public bool Corrected { get; set; }
+        public bool RightAnswer { get; set; }
     }
 }

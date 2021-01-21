@@ -88,11 +88,12 @@ namespace Application.DTOs
                     }
                     await _lessonInstanceStudentRepositoryAsync.UpdateBulkAsync(LessonInstanceStudentsList);
 
-                    List<TestInstance> testInstance = new List<TestInstance>(); 
+                    List<TestInstance> testInstance = new List<TestInstance>();
                     foreach (var item in lessonInstances)
                     {
-                        // TODO get quiz for lesson 
-                        var quiz = _testRepository.GetByLessonDefinationAsync(item.LessonDefinitionId).Result;
+                        // TODO get quiz for lesson.
+                        // TODO add get final test or sublevel test.
+                        var quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
                         if (quiz != null)
                         {
                             foreach (var student in lessonInstanceStudents)
@@ -108,6 +109,51 @@ namespace Application.DTOs
                             }
                         }
                     }
+
+                    // check is final sublevl or not? then set sublevel or final.
+                    if (groupInstance.GroupDefinition.Sublevel.IsFinal)
+                    {
+                        var subLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
+                        var lastLesson = lessonInstances[lessonInstances.Count - 1];
+
+                        if (subLevelTest != null)
+                        {
+                            foreach (var student in lessonInstanceStudents)
+                            {
+                                TestInstance obj = new TestInstance
+                                {
+                                    LessonInstanceId = lastLesson.Id,
+                                    StudentId = student.StudentId,
+                                    Status = (int)TestInstanceEnum.Closed,
+                                    TestId = subLevelTest.Id
+                                };
+                                testInstance.Add(obj);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        var subLevelTest = _testRepository.GetSubLevelTestBySublevelAsync(groupInstance.GroupDefinition.SubLevelId).Result;
+                        var lastLesson = lessonInstances[lessonInstances.Count - 1];
+
+                        if (subLevelTest != null)
+                        {
+                            foreach (var student in lessonInstanceStudents)
+                            {
+                                TestInstance obj = new TestInstance
+                                {
+                                    LessonInstanceId = lastLesson.Id,
+                                    StudentId = student.StudentId,
+                                    Status = (int)TestInstanceEnum.Closed,
+                                    TestId = subLevelTest.Id
+                                };
+                                testInstance.Add(obj);
+                            }
+                        }
+
+                    }
+
                     await _testInstanceRepository.AddBulkAsync(testInstance);
                 }
                 return new Response<int>(groupInstance.Id);
