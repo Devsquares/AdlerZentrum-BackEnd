@@ -11,7 +11,7 @@ using WebApi.Controllers;
 namespace WebApi.Controller
 {
     public class TestInstanceController : BaseApiController
-    { 
+    {
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetAllTestInstancesParameter filter)
         {
@@ -29,13 +29,13 @@ namespace WebApi.Controller
                 NoPaging = filter.NoPaging
             }));
         }
-         
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             return Ok(await Mediator.Send(new GetTestInstanceByIdQuery { Id = id }));
         }
-         
+
         [HttpGet("GetQuizzesForStudent")]
         public async Task<IActionResult> GetQuizzesForStudent()
         {
@@ -43,6 +43,18 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value
+            }));
+        }
+
+
+        [HttpGet("GetTestResults")]
+        public async Task<IActionResult> GetTestResults([FromQuery]  GetAllTestInstancesResultsQuery query)
+        {
+            return Ok(await Mediator.Send(new GetAllTestInstancesResultsQuery
+            {
+                GroupInstanceId = query.GroupInstanceId,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
             }));
         }
 
@@ -54,7 +66,7 @@ namespace WebApi.Controller
             command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
-         
+
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]        
         public async Task<IActionResult> Put(int id, UpdateTestInstanceCommand command)
@@ -65,11 +77,11 @@ namespace WebApi.Controller
             }
             return Ok(await Mediator.Send(command));
         }
-         
+
         [HttpPut("AssginTeacherToTest")]
         //[Authorize(Roles = "SuperAdmin")]        
         public async Task<IActionResult> AssginTeacherToTest(AssginTeacherTestInstanceCommand command)
-        { 
+        {
             return Ok(await Mediator.Send(command));
         }
 

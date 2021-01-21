@@ -37,5 +37,22 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.CorrectionTeacherId == null && x.Status == (int)TestInstanceEnum.Solved).ToListAsync();
         }
 
+        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance)
+        {
+            return await _testinstances
+                  .Include(x => x.Student)
+                  .Include(x => x.LessonInstance)
+                  .ThenInclude(x => x.GroupInstance)
+                  .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.Status == (int)TestInstanceEnum.Corrected).ToListAsync();
+        }
+        public virtual int GetAllTestInstancesResultsCount(int groupInstance)
+        {
+            return _testinstances
+                .Include(x => x.Student)
+                .Include(x => x.LessonInstance)
+                .ThenInclude(x => x.GroupInstance)
+                .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.Status == (int)TestInstanceEnum.Corrected).Count();
+        }
+
     }
 }

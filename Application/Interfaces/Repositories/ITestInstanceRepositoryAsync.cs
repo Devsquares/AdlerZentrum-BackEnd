@@ -10,5 +10,7 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<TestInstance>> GetAllQuizzForStudentAsync(string student, int groupInstance);
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin();
+        Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance);
+        int GetAllTestInstancesResultsCount(int groupInstance);
     }
 }
