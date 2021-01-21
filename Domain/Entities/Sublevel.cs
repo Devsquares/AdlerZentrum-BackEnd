@@ -5,11 +5,16 @@ namespace Domain.Entities
 {
     public class Sublevel : AuditableBaseEntity
     {
+        public Sublevel()
+        {
+            this.LessonDefinitions = new List<LessonDefinition>();
+        }
         public string Name { get; set; }
         public int LevelId { get; set; }
         public virtual Level Level { get; set; }
         public int NumberOflessons { get; set; }
         public string Color { get; set; }
+        public bool IsFinal { get; set; }
         public List<LessonDefinition> LessonDefinitions { get; set; }
     }
 }

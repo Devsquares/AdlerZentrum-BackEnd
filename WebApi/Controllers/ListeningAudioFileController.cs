@@ -72,6 +72,7 @@ namespace WebApi.Controllers
         {
             try
             {
+ 
                 CreateListeningAudioFileCommand command = new CreateListeningAudioFileCommand();
                 command.FileName = file.FileName;
                 var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "ListeningAudioFiles");
@@ -83,7 +84,7 @@ namespace WebApi.Controllers
                 {
                     command.FilePath = Path.Combine(uploads, command.FileName);
                     using (var fileStream = new FileStream(command.FilePath, FileMode.Create))
-                    {
+                    { 
                         await file.CopyToAsync(fileStream);
                     }
                 }

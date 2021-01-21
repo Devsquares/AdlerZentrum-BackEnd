@@ -8,33 +8,32 @@ namespace WebApi.Controllers
 {
     public class SublevelController : BaseApiController
     {
-        //[HttpGet("GetAll")]
-        //public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
-        //{
-        //    return Ok(await Mediator.Send(new GetAllSubLevelsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
-        //} 
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
+        {
+           return Ok(await Mediator.Send(new GetAllSublevelsQuery() ));
+        } 
 
-        //[HttpGet("GetById")]
-        //public async Task<IActionResult> GetById(int id)
-        //{
-        //    return Ok(await Mediator.Send(new GetSubLevelByIdQuery { Id = id }));
-        //}
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(int id)
+        {
+           return Ok(await Mediator.Send(new GetSublevelByIdQuery { Id = id }));
+        }
 
-        //[HttpPost("Create")]
-        ////[Authorize(Roles = "SuperAdmin")]
-        //public async Task<IActionResult> Post(int id, CreateSubLevelCommand command)
-        //{
-        //    if (id != command.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return Ok(await Mediator.Send(command));
-        //}
-
+        [HttpPost("Create")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> Post(int id, CreateSublevelCommand command)
+        {
+           if (id != command.Id)
+           {
+               return BadRequest();
+           }
+           return Ok(await Mediator.Send(command));
+        }
 
         [HttpPut("update")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Put(int id, UpdateLevelCommand command)
+        public async Task<IActionResult> Put(int id, UpdateSublevelCommand command)
         {
             if (id != command.Id)
             {
@@ -47,7 +46,7 @@ namespace WebApi.Controllers
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
-            return Ok(await Mediator.Send(new DeleteLevelByIdCommand { Id = id }));
+            return Ok(await Mediator.Send(new DeleteSublevelByIdCommand { Id = id }));
         }
     }
 }
