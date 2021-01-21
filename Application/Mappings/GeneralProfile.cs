@@ -73,6 +73,10 @@ namespace Application.Mappings
             CreateMap<Sublevel, GetAllSubLevelsViewModel>()
                 .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.Level.Name + "." + source.Name));
 
+            CreateMap<TestInstance, TestInstancesResultsViewModel>()
+                .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName + source.Student.LastName));
+
+
             CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
             CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();
             CreateMap<GetAllTestInstancesQuery, GetAllTestInstancesParameter>().ReverseMap();

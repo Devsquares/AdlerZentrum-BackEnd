@@ -55,10 +55,15 @@ namespace WebApi.Controller
             }));
         }
 
+        
         [HttpGet("GetFinalLevelTestsForStudent")]
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetFinalLevelTestsForStudent()
         {
+            if (AuthenticatedUserService.GroupInstanceId == null)
+            {
+                return Ok(new Response<object>("Not registerd in any group."));
+            }
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {
                 StudentId = AuthenticatedUserService.UserId,
@@ -87,6 +92,17 @@ namespace WebApi.Controller
             command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
+
+        [HttpGet("GetTestResults")]
+        public async Task<IActionResult> GetTestResults([FromQuery]  GetAllTestInstancesResultsQuery query)
+        {
+            return Ok(await Mediator.Send(new GetAllTestInstancesResultsQuery
+            {
+                GroupInstanceId = query.GroupInstanceId,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            }));
+        } 
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin")]
