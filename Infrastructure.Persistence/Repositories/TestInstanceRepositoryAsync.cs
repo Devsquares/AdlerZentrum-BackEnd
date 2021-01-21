@@ -36,7 +36,6 @@ namespace Infrastructure.Persistence.Repositories
             return await _testinstances
              .Where(x => x.CorrectionTeacherId == null && x.Status == (int)TestInstanceEnum.Solved).ToListAsync();
         }
-
         public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance)
         {
             return await _testinstances
@@ -52,6 +51,18 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.LessonInstance)
                 .ThenInclude(x => x.GroupInstance)
                 .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.Status == (int)TestInstanceEnum.Corrected).Count();
+        }
+        public virtual async Task<IReadOnlyList<object>> GetAllClosedAndPendingQuizzAsync(int GroupInstanceId)
+        {
+            return await _testinstances
+                  .Include(x => x.LessonInstance)
+                  .Where(x => (x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending) && x.Test.TestTypeId == (int)TestTypeEnum.quizz).Where(x => x.LessonInstance.GroupInstanceId == GroupInstanceId).Select(x => x.LessonInstance).ToListAsync();
+        }
+
+
+        public virtual async Task<List<TestInstance>> GetTestInstanceByLessonInstanceId(int LessonInstanceId)
+        {
+            return await _testinstances.Where(x => x.LessonInstanceId == LessonInstanceId).ToListAsync();
         }
 
     }

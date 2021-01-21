@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Features;
 using Application.Features.TestInstance.Commands.CreateTestInstance;
 using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
@@ -46,9 +47,38 @@ namespace WebApi.Controller
             }));
         }
 
+        [HttpGet("GetQuizzesByGroupInstance")]
+        public async Task<IActionResult> GetQuizzesByGroupInstance([FromQuery] GetQuizzesByGroupInstanceQuery query)
+        {
+            return Ok(await Mediator.Send(new GetQuizzesByGroupInstanceQuery
+            {
+                GroupInstanceId = query.GroupInstanceId
+            }));
+        }
+
+        [HttpPut("ActiveTestInstanceByLesson")]
+        public async Task<IActionResult> ActiveTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
+        {
+            return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
+            {
+                Status = (int)TestInstanceEnum.Pending,
+                LessonInstanceId = query.LessonInstanceId
+            }));
+        }
+
+        [HttpPut("CloseTestInstanceByLesson")]
+        public async Task<IActionResult> CloseTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
+        {
+            return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
+            {
+                Status = (int)TestInstanceEnum.Missed,
+                LessonInstanceId = query.LessonInstanceId
+            }));
+        }
+
 
         [HttpGet("GetTestResults")]
-        public async Task<IActionResult> GetTestResults([FromQuery]  GetAllTestInstancesResultsQuery query)
+        public async Task<IActionResult> GetTestResults([FromQuery] GetAllTestInstancesResultsQuery query)
         {
             return Ok(await Mediator.Send(new GetAllTestInstancesResultsQuery
             {
