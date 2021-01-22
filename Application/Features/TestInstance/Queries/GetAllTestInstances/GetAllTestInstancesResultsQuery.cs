@@ -30,7 +30,7 @@ namespace Application.Features
                 int count = _testinstanceRepository.GetAllTestInstancesResultsCount(request.GroupInstanceId);
                 var testinstance = await _testinstanceRepository.GetAllTestInstancesResults(request.GroupInstanceId);
                 var testinstanceViewModel = _mapper.Map<IEnumerable<TestInstancesResultsViewModel>>(testinstance);
-                return new PagedResponse<IEnumerable<TestInstancesResultsViewModel>>(testinstanceViewModel, request.PageNumber, count);
+                return new PagedResponse<IEnumerable<TestInstancesResultsViewModel>>(testinstanceViewModel, request.PageNumber, request.PageSize, count);
             }
         }
     }
