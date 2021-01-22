@@ -38,6 +38,7 @@ namespace Infrastructure.Persistence
             }
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+            services.AddTransient<IBugRepositoryAsync, BugRepositoryAsync>();
             services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
             services.AddTransient<ISublevelRepositoryAsync, SubLevelRepositoryAsync>();
             services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
