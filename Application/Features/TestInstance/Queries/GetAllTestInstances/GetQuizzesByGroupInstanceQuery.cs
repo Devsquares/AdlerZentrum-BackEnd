@@ -27,7 +27,8 @@ namespace Application.Features
 
         public async Task<IEnumerable<object>> Handle(GetQuizzesByGroupInstanceQuery request, CancellationToken cancellationToken)
         {
-            return await _testInstanceRepository.GetAllClosedAndPendingQuizzAsync(request.GroupInstanceId);
+            var res = await _testInstanceRepository.GetAllClosedAndPendingQuizzAsync(request.GroupInstanceId);
+            return res;
         }
     }
 }

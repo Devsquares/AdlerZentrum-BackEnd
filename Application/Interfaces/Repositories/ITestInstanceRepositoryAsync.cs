@@ -14,5 +14,6 @@ namespace Application.Interfaces.Repositories
         int GetAllTestInstancesResultsCount(int groupInstance);
         Task<IReadOnlyList<object>> GetAllClosedAndPendingQuizzAsync(int GroupInstanceId);
         Task<List<TestInstance>> GetTestInstanceByLessonInstanceId(int LessonInstanceId);
+        Task<bool> checkNotExiset(int quizId, int LessonId);
     }
 } 

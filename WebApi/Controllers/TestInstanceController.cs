@@ -47,32 +47,32 @@ namespace WebApi.Controller
             }));
         }
 
-        [HttpGet("GetQuizzesByGroupInstance")]
-        public async Task<IActionResult> GetQuizzesByGroupInstance([FromQuery] GetQuizzesByGroupInstanceQuery query)
+        [HttpGet("GetQuizzesByGroupInstance/{id}")]
+        public async Task<IActionResult> GetQuizzesByGroupInstance(int id)
         {
             return Ok(await Mediator.Send(new GetQuizzesByGroupInstanceQuery
             {
-                GroupInstanceId = query.GroupInstanceId
+                GroupInstanceId = id
             }));
         }
 
         [HttpPut("ActiveTestInstanceByLesson")]
-        public async Task<IActionResult> ActiveTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
+        public async Task<IActionResult> ActiveTestInstanceByLesson([FromBody] int id)
         {
             return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
             {
                 Status = (int)TestInstanceEnum.Pending,
-                LessonInstanceId = query.LessonInstanceId
+                LessonInstanceId = id
             }));
         }
 
         [HttpPut("CloseTestInstanceByLesson")]
-        public async Task<IActionResult> CloseTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
+        public async Task<IActionResult> CloseTestInstanceByLesson([FromBody] int id)
         {
             return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
             {
                 Status = (int)TestInstanceEnum.Missed,
-                LessonInstanceId = query.LessonInstanceId
+                LessonInstanceId = id
             }));
         }
 
@@ -91,7 +91,7 @@ namespace WebApi.Controller
         // TODO need to be reviewd
         [HttpPut("TestInstanceSolution")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Post(TestInstanceSolutionCommand command)
+        public async Task<IActionResult> TestInstanceSolution(TestInstanceSolutionCommand command)
         {
             command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));

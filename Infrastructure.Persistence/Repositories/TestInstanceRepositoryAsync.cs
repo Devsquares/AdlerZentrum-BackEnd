@@ -56,13 +56,18 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _testinstances
                   .Include(x => x.LessonInstance)
-                  .Where(x => (x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending) && x.Test.TestTypeId == (int)TestTypeEnum.quizz).Where(x => x.LessonInstance.GroupInstanceId == GroupInstanceId).Select(x => x.LessonInstance).ToListAsync();
+                  .Where(x => (x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending) && x.Test.TestTypeId == (int)TestTypeEnum.quizz).Where(x => x.LessonInstance.GroupInstanceId == GroupInstanceId).Select(x => x.LessonInstance).Distinct().ToListAsync();
         }
 
 
         public virtual async Task<List<TestInstance>> GetTestInstanceByLessonInstanceId(int LessonInstanceId)
         {
             return await _testinstances.Where(x => x.LessonInstanceId == LessonInstanceId).ToListAsync();
+        }
+
+        public async Task<bool> checkNotExiset(int quizId, int LessonId)
+        {
+            return !await _testinstances.Where(x => x.TestId == quizId && x.LessonInstanceId == LessonId).AnyAsync();
         }
 
     }

@@ -119,7 +119,7 @@ namespace Application.DTOs
             {
                 foreach (var item in SingleQuestions)
                 {
-                    item.QuestionId = item.Id;
+                    item.QuestionId = question.Id;
                 }
                 _singleQuestionRepository.UpdateBulkAsync(SingleQuestions);
             }
