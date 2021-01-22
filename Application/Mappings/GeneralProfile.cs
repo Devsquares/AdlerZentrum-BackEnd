@@ -10,6 +10,8 @@ using Domain.Entities;
 using System;
 using Application.Features.TestInstance.Queries.GetAllTestInstances;
 using Application.Features;
+using Application.Features.Bug.Queries.GetAllBugs;
+using Application.Features.Bug.Commands.CreateBug;
 
 namespace Application.Mappings
 {
@@ -17,6 +19,11 @@ namespace Application.Mappings
     {
         public GeneralProfile()
         {
+
+            CreateMap<Bug, GetAllBugsViewModel>().ReverseMap();
+            CreateMap<CreateBugCommand, Bug>();
+            CreateMap<GetAllBugsQuery, GetAllBugsParameter>();
+
             CreateMap<Level, GetAllLevelsViewModel>().ReverseMap();
             CreateMap<CreateLevelCommand, Level>();
             CreateMap<GetAllLevelsQuery, PagedResponse<Level>>();
