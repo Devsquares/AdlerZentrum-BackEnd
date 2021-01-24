@@ -35,7 +35,7 @@ namespace Infrastructure.Persistence.Contexts
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
-        public DbSet<Level> Bugs { get; set; }
+        public DbSet<Bug> Bugs { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Sublevel> SubLevels { get; set; }
         public DbSet<GroupInstance> GroupInstances { get; set; }
@@ -55,7 +55,7 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<EmailType> EmailTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<GroupConditionDetail> GroupConditionDetails { get; set; }
-        public DbSet<GroupConditionPromoCode> groupConditionPromoCodes { get; set; }
+        public DbSet<GroupConditionPromoCode> groupConditionPromoCodes { get; set; } 
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
