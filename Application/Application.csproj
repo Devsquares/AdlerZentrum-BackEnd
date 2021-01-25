@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Tags\**" />
+    <EmbeddedResource Remove="Features\Tags\**" />
+    <None Remove="Features\Tags\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="FluentValidation" Version="9.1.2" />
@@ -25,7 +31,6 @@
     <Folder Include="DTOs\HomeWorkDTO\Queries\" />
     <Folder Include="DTOs\DisqualificationDTO\" />
     <Folder Include="Features\Generic\" />
-    <Folder Include="Features\Tags\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

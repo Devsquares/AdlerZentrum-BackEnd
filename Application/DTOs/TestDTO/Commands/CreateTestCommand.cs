@@ -51,6 +51,7 @@ namespace Application.DTOs
                     item.TestId = test.Id;
                     var responaceQuestionId = await _mediator.Send(new UpdateQuestionCommand
                     {
+                        Id = item.Id,
                         TestId = item.TestId,
                     });
                     item.Id = responaceQuestionId.data;

@@ -83,7 +83,6 @@ namespace Application.Mappings
             CreateMap<TestInstance, TestInstancesResultsViewModel>()
                 .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName + source.Student.LastName));
 
-
             CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
             CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();
             CreateMap<GetAllTestInstancesQuery, GetAllTestInstancesParameter>().ReverseMap();
@@ -101,10 +100,10 @@ namespace Application.Mappings
             CreateMap<GetAllGroupConditionsQuery, FilteredRequestParameter>();
             CreateMap<GetAllBanRequestsQuery, GetAllBanRequestsParameter>().ReverseMap();
             CreateMap<BanRequest, CreateBanRequestCommand>().ReverseMap();
-
-
             CreateMap<BanRequest, GetAllBanRequestsViewModel>().ReverseMap();
-
+            CreateMap<TestInstance, TestInstanceViewModel>().ReverseMap();
+            CreateMap<DisqualificationRequest, GetAllDisqualificationRequestsViewModel>().ReverseMap();
+            CreateMap<GetAllDisqualificationRequestsQuery, GetAllDisqualificationRequestsParameter>().ReverseMap();
         }
     }
 }

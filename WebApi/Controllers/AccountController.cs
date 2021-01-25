@@ -104,9 +104,8 @@ namespace WebApi.Controllers
         [HttpGet("GetAllUsersByRole")]
         public async Task<IActionResult> GetAllUsersByRole([FromQuery] GetAllUsersParameter filter)
         {
-
             return Ok(await Mediator.Send(new GetAllUsersQuery() { Role = filter.Role, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
-        }
+        } 
 
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] RequestParameter filter)

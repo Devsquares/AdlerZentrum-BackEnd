@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210125192829_add-disqualification-table")]
+    partial class adddisqualificationtable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,6 +147,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<int?>("SublevelId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -164,6 +169,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasName("UserNameIndex");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("SublevelId");
 
                     b.ToTable("ApplicationUsers");
                 });
@@ -791,46 +798,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Homeworks");
                 });
 
-            modelBuilder.Entity("Domain.Entities.InterestedStudent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("GroupDefinitionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("PromoCodeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("varchar(85)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupDefinitionId");
-
-                    b.HasIndex("PromoCodeId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("interestedStudents");
-                });
-
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
                 {
                     b.Property<int>("Id")
@@ -989,41 +956,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Levels");
-                });
-
-            modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("GroupDefinitionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("varchar(85)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupDefinitionId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("overPaymentStudents");
                 });
 
             modelBuilder.Entity("Domain.Entities.ListeningAudioFile", b =>
@@ -1711,6 +1643,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
+
+                    b.HasOne("Domain.Entities.Sublevel", "Sublevel")
+                        .WithMany()
+                        .HasForeignKey("SublevelId");
                 });
 
             modelBuilder.Entity("Domain.Entities.BanRequest", b =>
@@ -1867,25 +1803,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("TeacherId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.InterestedStudent", b =>
-                {
-                    b.HasOne("Domain.Entities.GroupDefinition", "GroupDefinition")
-                        .WithMany()
-                        .HasForeignKey("GroupDefinitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.PromoCode", "PromoCode")
-                        .WithMany()
-                        .HasForeignKey("PromoCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
-                });
-
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
                 {
                     b.HasOne("Domain.Entities.Sublevel", "Sublevel")
@@ -1919,19 +1836,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
                         .WithMany("LessonInstanceStudents")
                         .HasForeignKey("LessonInstanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
-                });
-
-            modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
-                {
-                    b.HasOne("Domain.Entities.GroupDefinition", "GroupDefinition")
-                        .WithMany()
-                        .HasForeignKey("GroupDefinitionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
