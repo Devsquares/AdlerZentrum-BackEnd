@@ -138,5 +138,20 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new DeleteUserByIdCommand { Id = id }));
         }
 
+        [HttpGet("GetAllStudentUsers")]
+        public async Task<IActionResult> GetAllStudentUsers(int PageSize, int PageNumber, int? groupDefinitionId, int? groupInstanceId,string studentName)
+        {
+            if(PageSize ==0)
+            {
+                PageSize = 10;
+            }
+            if (PageNumber == 0)
+            {
+                PageNumber = 1;
+            }
+            var report = await _accountService.GetPagedReponseStudentUsersAsync(PageNumber, PageSize, groupDefinitionId, groupInstanceId,studentName);
+            return Ok(report);
+        }
+
     }
 }

@@ -23,6 +23,8 @@ using Application.DTOs.Account.Commands.UpdateAccount;
 using Org.BouncyCastle.Ocsp;
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces.Repositories;
+using Infrastructure.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Infrastructure.Persistence.Services
 {
@@ -38,7 +40,7 @@ namespace Infrastructure.Persistence.Services
         private readonly IGroupDefinitionRepositoryAsync _groupDefinitionRepositoryAsync;
         private readonly IGroupConditionRepositoryAsync _groupConditionRepositoryAsync;
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
-
+        private readonly ApplicationDbContext _context;
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -48,7 +50,8 @@ namespace Infrastructure.Persistence.Services
             IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
             IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
             IGroupDefinitionRepositoryAsync groupDefinitionRepositoryAsync,
-            IGroupConditionRepositoryAsync groupConditionRepositoryAsync)
+            IGroupConditionRepositoryAsync groupConditionRepositoryAsync,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -60,6 +63,7 @@ namespace Infrastructure.Persistence.Services
             _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
             _groupDefinitionRepositoryAsync = groupDefinitionRepositoryAsync;
             _groupConditionRepositoryAsync = groupConditionRepositoryAsync;
+            _context = context;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -206,14 +210,14 @@ namespace Infrastructure.Persistence.Services
                 //TODO need to be change
                 user.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded )
+                if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, RolesEnum.Student.ToString());
                     if (request.PlacmentTestId.HasValue || request.IsAdlerService)
                     {
                         return new Response<string>(user.Id, message: $"User Registered.");
                     }
-                   
+
                     ////var verificationUri = await SendVerificationEmail(user, origin);
 
 
@@ -517,6 +521,53 @@ namespace Infrastructure.Persistence.Services
             {
                 throw new ApiException($"Error occured while reseting the password.");
             }
+        }
+        public async Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName)
+        {
+            var studentRoles = (from user in _userManager.Users
+                                join gis in _context.GroupInstanceStudents on user.Id equals gis.StudentId
+
+                                into gj
+                                from x in gj.DefaultIfEmpty()
+                                where user.Role.NormalizedName == "STUDENT" &&
+                                ((groupDefinitionId != null ? x.GroupInstance.GroupDefinitionId == groupDefinitionId : true)) &&
+                                (groupInstanceId != null ? x.GroupInstanceId == groupInstanceId : true) &&
+                                (!string.IsNullOrEmpty(studentName) ? (user.FirstName.ToLower().Contains(studentName.ToLower()) || user.LastName.ToLower().Contains(studentName.ToLower())) : true)
+                                select new
+                                {
+                                    Id = user.Id,
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName,
+                                    Email = user.Email,
+                                    PhoneNumber = user.PhoneNumber,
+                                    GroupSerial = x.GroupInstance != null ? $"{x.GroupInstance.GroupDefinitionId}.{x.GroupInstanceId}" : string.Empty
+                                }).ToList();
+            //var studentRoles = _userManager.Users.Include(x => x.Role).Where(x => x.Role.NormalizedName == "STUDENT").LeftJoin(
+            //          _context.GroupInstanceStudents,
+            //          user => user.Id,
+            //          gis => gis.StudentId,
+            //          (user, gis) => new
+            //          {
+            //              user,
+            //              gis
+            //          }
+            //         )
+            //   // .Include(x => x.gis.GroupInstance)
+            //    .Where(x => (groupDefinitionId != null ? x.gis.GroupInstance.GroupDefinitionId == groupDefinitionId : true) &&
+            //     (groupInstanceId != null ? x.gis.GroupInstanceId == groupInstanceId : true))
+            //    .Select(x => new
+            //    {
+            //        Id = x.user.Id,
+            //        FirstName = x.user.FirstName,
+            //        LastName = x.user.LastName,
+            //        Email = x.user.Email,
+            //        PhoneNumber = x.user.PhoneNumber,
+            //        GroupDefinitionId = x.gis.GroupInstance.GroupDefinitionId,
+            //        GroupInstancenId = x.gis.GroupInstanceId
+            //    }).ToList();
+            int totalCount = studentRoles.Count();
+            studentRoles = studentRoles.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            return new PagedResponse<IEnumerable<object>>(studentRoles, pageNumber, pageSize, totalCount);
         }
     }
 

@@ -25,6 +25,7 @@ namespace Application.Interfaces
         Task DeleteAsync(string id);
         Task<ApplicationUser> GetByClaimsPrincipalAsync(ClaimsPrincipal user);
         Task<bool> BanAsync(string id, string comment);
+        Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName);
 
     }
 }
