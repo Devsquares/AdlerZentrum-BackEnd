@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210117203310_add-interested-student-table")]
+    partial class addinterestedstudenttable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,49 +200,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("BanRequests");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Bug", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("BugName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Priority")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Bugs");
-                });
-
             modelBuilder.Entity("Domain.Entities.Choice", b =>
                 {
                     b.Property<int>("Id")
@@ -397,10 +356,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("NumberOfSlots")
+                    b.Property<int>("NumberOfSlotsWithPlacementTest")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfSlotsWithPlacementTest")
+                    b.Property<int>("NumberOfSolts")
                         .HasColumnType("int");
 
                     b.Property<int?>("Status")
@@ -949,72 +908,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Levels");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("GroupDefinitionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("varchar(85)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupDefinitionId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("overPaymentStudents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ListeningAudioFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ListeningAudioFile");
-                });
-
             modelBuilder.Entity("Domain.Entities.Pricing", b =>
                 {
                     b.Property<int>("Id")
@@ -1090,8 +983,8 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AudioPathId")
-                        .HasColumnType("int");
+                    b.Property<string>("AudioPath")
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
@@ -1129,8 +1022,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AudioPathId");
 
                     b.HasIndex("TestId");
 
@@ -1246,9 +1137,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
-
-                    b.Property<bool>("IsFinal")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
@@ -1377,7 +1265,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("LessonInstanceId")
+                    b.Property<int>("LessonInstanceId")
                         .HasColumnType("int");
 
                     b.Property<int>("Points")
@@ -1878,25 +1766,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("StudentId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
-                {
-                    b.HasOne("Domain.Entities.GroupDefinition", "GroupDefinition")
-                        .WithMany()
-                        .HasForeignKey("GroupDefinitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
-                });
-
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
-                    b.HasOne("Domain.Entities.ListeningAudioFile", "AudioPath")
-                        .WithMany()
-                        .HasForeignKey("AudioPathId");
-
                     b.HasOne("Domain.Entities.Test", null)
                         .WithMany("Questions")
                         .HasForeignKey("TestId");
@@ -1965,7 +1836,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
                         .WithMany()
-                        .HasForeignKey("LessonInstanceId");
+                        .HasForeignKey("LessonInstanceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()

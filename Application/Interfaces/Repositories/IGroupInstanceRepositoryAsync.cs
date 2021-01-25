@@ -11,5 +11,6 @@ namespace Application.Interfaces.Repositories
         int? GetActiveGroupInstance(string userId);
         void AddStudentToTheGroupInstance(int groupId, string studentId);
         Task<GroupInstance> GetByIdAsync(int id);
+        GroupInstance GetByGroupDefinitionId(int groupDefinitionId);
     }
 }

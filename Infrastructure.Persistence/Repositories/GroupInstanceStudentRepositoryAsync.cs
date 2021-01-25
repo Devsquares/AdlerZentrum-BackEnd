@@ -35,5 +35,10 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => x.GroupInstance.GroupDefinitionId == groupDefinationId).Select(x=>x.Student.Email).ToList();
             return emailList;
         }
+
+        public int GetCountOfPlacmentTestStudents(int groupId)
+        {
+            return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId && x.IsPlacementTest == true).Count();
+        }
     }
 }

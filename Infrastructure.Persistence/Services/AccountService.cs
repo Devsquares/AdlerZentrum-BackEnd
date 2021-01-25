@@ -206,32 +206,36 @@ namespace Infrastructure.Persistence.Services
                 //TODO need to be change
                 user.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded)
+                if (result.Succeeded )
                 {
                     await _userManager.AddToRoleAsync(user, RolesEnum.Student.ToString());
-
-                    //var verificationUri = await SendVerificationEmail(user, origin);
-
-
-                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
-                    // _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
-
-                    int count = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(request.GroupInstanceId);
-                    var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(request.GroupInstanceId).Result;
-
-                    var groupDefinition = _groupDefinitionRepositoryAsync.GetByIdAsync(groupInstance.GroupDefinitionId).Result;
-                    var condtion = _groupConditionRepositoryAsync.GetByIdAsync(groupDefinition.GroupConditionId);
-
-                    if (count > condtion.Result.NumberOfSlots)
+                    if (request.PlacmentTestId.HasValue || request.IsAdlerService)
                     {
-                        throw new ApiException($"Group is complate now, Contact the admin.");
+                        return new Response<string>(user.Id, message: $"User Registered.");
                     }
-                    await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
-                    {
-                        GroupInstanceId = request.GroupInstanceId,
-                        StudentId = user.Id,
-                        IsDefault = true
-                    });
+                   
+                    ////var verificationUri = await SendVerificationEmail(user, origin);
+
+
+                    ////return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
+                    //// _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
+
+                    //int count = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(request.GroupInstanceId);
+                    //var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(request.GroupInstanceId).Result;
+
+                    //var groupDefinition = _groupDefinitionRepositoryAsync.GetByIdAsync(groupInstance.GroupDefinitionId).Result;
+                    //var condtion = _groupConditionRepositoryAsync.GetByIdAsync(groupDefinition.GroupConditionId);
+
+                    //if (count > condtion.Result.NumberOfSolts)
+                    //{
+                    //    throw new ApiException($"Group is complate now, Contact the admin.");
+                    //}
+                    //await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
+                    //{
+                    //    GroupInstanceId = request.GroupInstanceId,
+                    //    StudentId = user.Id,
+                    //    IsDefault = true
+                    //});
                     return new Response<string>(user.Id, message: $"User Registered.");
                 }
                 else

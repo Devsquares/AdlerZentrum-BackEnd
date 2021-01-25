@@ -55,7 +55,9 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<EmailType> EmailTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<GroupConditionDetail> GroupConditionDetails { get; set; }
-        public DbSet<GroupConditionPromoCode> groupConditionPromoCodes { get; set; } 
+        public DbSet<GroupConditionPromoCode> groupConditionPromoCodes { get; set; }
+        public DbSet<InterestedStudent> interestedStudents { get; set; }
+        public DbSet<OverPaymentStudent> overPaymentStudents { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
