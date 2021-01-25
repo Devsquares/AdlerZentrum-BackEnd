@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.Enums
 {
-    public enum DisqualificationRequestStatus
+    public enum DisqualificationRequestStatusEnum
     {
         Pending = 0,
         Disqualified = 1 ,

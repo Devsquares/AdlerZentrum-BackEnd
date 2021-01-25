@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
@@ -26,8 +27,13 @@ namespace Application.Features
 
         public async Task<Response<int>> Handle(CreateDisqualificationRequestCommand request, CancellationToken cancellationToken)
         {
-            var disqualificationrequest = _mapper.Map<Domain.Entities.DisqualificationRequest>(request);
-            //disqualificationrequest.DisqualificationRequestStatus == Disqual
+            var disqualificationrequest = new DisqualificationRequest()
+            {
+                StudentId = request.StudentId,
+                Comment = request.Comment
+            }; // _mapper.Map<DisqualificationRequest>(request);
+
+            disqualificationrequest.DisqualificationRequestStatus = (int)DisqualificationRequestStatusEnum.Pending;
             await _disqualificationrequestRepository.AddAsync(disqualificationrequest);
             return new Response<int>(disqualificationrequest.Id);
         }
