@@ -1,6 +1,7 @@
 using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,23 +9,26 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features 
+namespace Application.Features
 {
-    public class GetTestInstanceByIdQuery : IRequest<Response<Domain.Entities.TestInstance>>
+    public class GetTestInstanceByIdQuery : IRequest<Response<TestInstanceViewModel>>
     {
         public int Id { get; set; }
-        public class GetTestInstanceByIdQueryHandler : IRequestHandler<GetTestInstanceByIdQuery, Response<Domain.Entities.TestInstance>>
+        public class GetTestInstanceByIdQueryHandler : IRequestHandler<GetTestInstanceByIdQuery, Response<TestInstanceViewModel>>
         {
             private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
-            public GetTestInstanceByIdQueryHandler(ITestInstanceRepositoryAsync testinstanceRepository)
+            private readonly IMapper _mapper;
+            public GetTestInstanceByIdQueryHandler(ITestInstanceRepositoryAsync testinstanceRepository, IMapper mapper)
             {
                 _testinstanceRepository = testinstanceRepository;
+                _mapper = mapper;
             }
-            public async Task<Response<Domain.Entities.TestInstance>> Handle(GetTestInstanceByIdQuery query, CancellationToken cancellationToken)
+            public async Task<Response<TestInstanceViewModel>> Handle(GetTestInstanceByIdQuery query, CancellationToken cancellationToken)
             {
                 var testinstance = await _testinstanceRepository.GetByIdAsync(query.Id);
                 if (testinstance == null) throw new ApiException($"TestInstance Not Found.");
-                return new Response<Domain.Entities.TestInstance>(testinstance);
+                var viewModel = _mapper.Map<TestInstanceViewModel>(testinstance);
+                return new Response<TestInstanceViewModel>(viewModel);
             }
         }
     }

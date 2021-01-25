@@ -32,7 +32,7 @@ namespace WebApi.Controller
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Student")]
+        //[Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Student")]
         public async Task<IActionResult> Get(int id)
         {
             return Ok(await Mediator.Send(new GetTestInstanceByIdQuery { Id = id }));

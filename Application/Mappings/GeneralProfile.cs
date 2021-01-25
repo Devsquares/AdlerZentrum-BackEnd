@@ -102,8 +102,8 @@ namespace Application.Mappings
             CreateMap<GetAllBanRequestsQuery, GetAllBanRequestsParameter>().ReverseMap();
             CreateMap<BanRequest, CreateBanRequestCommand>().ReverseMap();
 
-
             CreateMap<BanRequest, GetAllBanRequestsViewModel>().ReverseMap();
+            CreateMap<TestInstance, TestInstanceViewModel>().ReverseMap();
 
         }
     }
