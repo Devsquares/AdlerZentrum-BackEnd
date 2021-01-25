@@ -198,6 +198,49 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("BanRequests");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Bug", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("BugName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Priority")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bugs");
+                });
+
             modelBuilder.Entity("Domain.Entities.Choice", b =>
                 {
                     b.Property<int>("Id")
@@ -354,10 +397,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("NumberOfSlotsWithPlacementTest")
+                    b.Property<int>("NumberOfSlots")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfSolts")
+                    b.Property<int>("NumberOfSlotsWithPlacementTest")
                         .HasColumnType("int");
 
                     b.Property<int?>("Status")
@@ -941,6 +984,37 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("overPaymentStudents");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ListeningAudioFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ListeningAudioFile");
+                });
+
             modelBuilder.Entity("Domain.Entities.Pricing", b =>
                 {
                     b.Property<int>("Id")
@@ -1016,8 +1090,8 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AudioPath")
-                        .HasColumnType("text");
+                    b.Property<int?>("AudioPathId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
@@ -1055,6 +1129,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AudioPathId");
 
                     b.HasIndex("TestId");
 
@@ -1170,6 +1246,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
+
+                    b.Property<bool>("IsFinal")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
@@ -1298,7 +1377,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("LessonInstanceId")
+                    b.Property<int?>("LessonInstanceId")
                         .HasColumnType("int");
 
                     b.Property<int>("Points")
@@ -1814,6 +1893,10 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
+                    b.HasOne("Domain.Entities.ListeningAudioFile", "AudioPath")
+                        .WithMany()
+                        .HasForeignKey("AudioPathId");
+
                     b.HasOne("Domain.Entities.Test", null)
                         .WithMany("Questions")
                         .HasForeignKey("TestId");
@@ -1882,9 +1965,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
                         .WithMany()
-                        .HasForeignKey("LessonInstanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LessonInstanceId");
 
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()

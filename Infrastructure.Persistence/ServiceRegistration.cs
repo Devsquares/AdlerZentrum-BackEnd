@@ -38,6 +38,7 @@ namespace Infrastructure.Persistence
             }
             #region Repositories
             services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+            services.AddTransient<IBugRepositoryAsync, BugRepositoryAsync>();
             services.AddTransient<ILevelRepositoryAsync, LevelRepositoryAsync>();
             services.AddTransient<ISublevelRepositoryAsync, SubLevelRepositoryAsync>();
             services.AddTransient<IGroupInstanceRepositoryAsync, GroupInstanceRepositoryAsync>();
@@ -68,6 +69,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IGroupConditionPromoCodeRepositoryAsync, GroupConditionPromoCodeRepositoryAsync>();
             services.AddTransient<IInterestedStudentRepositoryAsync, InterestedStudentRepositoryAsync>();
             services.AddTransient<IOverPaymentStudentRepositoryAsync, OverPaymentStudentRepositoryAsync>();
+            services.AddTransient<IListeningAudioFileRepositoryAsync, ListeningAudioFileRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

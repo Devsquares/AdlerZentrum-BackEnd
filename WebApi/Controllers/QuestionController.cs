@@ -13,6 +13,12 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllQuestionsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
 
+        [HttpGet("GetByType")]
+        public async Task<IActionResult> GetByType([FromQuery] GetQuestionsByTypeQuery filter)
+        {
+            return Ok(await Mediator.Send(new GetQuestionsByTypeQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber, QuestionType = filter.QuestionType }));
+        }
+
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(int id)
         {

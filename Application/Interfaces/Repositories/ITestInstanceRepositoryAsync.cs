@@ -11,6 +11,8 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType);
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin();
+        Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance);
+        int GetAllTestInstancesResultsCount(int groupInstance);
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToActive();
     }
 }

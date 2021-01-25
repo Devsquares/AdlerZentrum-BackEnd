@@ -10,5 +10,7 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<Test>> GetPagedReponseAsync(int pageNumber, int pageSize, int type);
         Task<Test> GetQuizzByLessonDefinationAsync(int lessonDefinationdId);
+        Task<Test> GetSubLevelTestBySublevelAsync(int Sublevel);
+        Task<Test> GetFinalLevelTestBySublevelAsync(int level);
     }
 }

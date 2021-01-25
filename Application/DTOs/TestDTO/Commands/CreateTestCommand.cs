@@ -15,7 +15,7 @@ namespace Application.DTOs
         public string Name { get; set; }
         public int TestDuration { get; set; }
         public int TestTypeId { get; set; }
-        public List<CreateQuestionCommand> Questions { get; set; }
+        public List<UpdateQuestionCommand> Questions { get; set; }
         public int LessonDefinitionId { get; set; }
 
         public class CreateTestCommandHandler : IRequestHandler<CreateTestCommand, Response<int>>

@@ -83,7 +83,7 @@ namespace Application.DTOs
                     canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstans.Id, command.PromoCodeId.Value);
                     canApplyInGroupDefinition = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeInGroupDefinitionGeneral(command.groupDefinitionId, command.PromoCodeId.Value);
                 }
-                if (studentCount < groupInstans.GroupDefinition.GroupCondition.NumberOfSolts)
+                if (studentCount < groupInstans.GroupDefinition.GroupCondition.NumberOfSlots)
                 {
                     if (canApplyInSpecificGroup)
                     {
@@ -141,7 +141,7 @@ namespace Application.DTOs
                             });
                         }
                     }
-                    if (canApply && studentCount == groupInstans.GroupDefinition.GroupCondition.NumberOfSolts)
+                    if (canApply && studentCount == groupInstans.GroupDefinition.GroupCondition.NumberOfSlots)
                     {
                         groupInstans.Status = (int)GroupInstanceStatusEnum.SlotCompleted;
                         await _groupInstanceRepositoryAsync.UpdateAsync(groupInstans);

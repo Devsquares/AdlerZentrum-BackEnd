@@ -2,6 +2,7 @@ using Application.Features;
 using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
 using Application.Features.TestInstance.Commands.UpdateTestInstance;
 using Application.Features.TestInstance.Queries.GetAllTestInstances;
+using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace WebApi.Controller
     public class TestInstanceController : BaseApiController
     {
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin,Supervisor")]
         public async Task<IActionResult> Get([FromQuery] GetAllTestInstancesParameter filter)
         {
 
@@ -30,14 +32,21 @@ namespace WebApi.Controller
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Student")]
         public async Task<IActionResult> Get(int id)
         {
             return Ok(await Mediator.Send(new GetTestInstanceByIdQuery { Id = id }));
         }
 
         [HttpGet("GetQuizzesForStudent")]
+        [Authorize(Roles = "SuperAdmin,Student")]
         public async Task<IActionResult> GetQuizzesForStudent()
         {
+            if (AuthenticatedUserService.GroupInstanceId == null)
+            {
+                return Ok(new Response<object>("Not registerd in any group."));
+            }
+
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {
                 StudentId = AuthenticatedUserService.UserId,
@@ -46,9 +55,15 @@ namespace WebApi.Controller
             }));
         }
 
+        
         [HttpGet("GetFinalLevelTestsForStudent")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetFinalLevelTestsForStudent()
         {
+            if (AuthenticatedUserService.GroupInstanceId == null)
+            {
+                return Ok(new Response<object>("Not registerd in any group."));
+            }
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {
                 StudentId = AuthenticatedUserService.UserId,
@@ -58,6 +73,7 @@ namespace WebApi.Controller
         }
 
         [HttpGet("GetSubLevelTestsForStudent")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetSubLevelTestsForStudent()
         {
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
@@ -70,15 +86,26 @@ namespace WebApi.Controller
 
         // TODO need to be reviewd
         [HttpPut("TestInstanceSolution")]
-        //[Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Post(TestInstanceSolutionCommand command)
         {
             command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpGet("GetTestResults")]
+        public async Task<IActionResult> GetTestResults([FromQuery]  GetAllTestInstancesResultsQuery query)
+        {
+            return Ok(await Mediator.Send(new GetAllTestInstancesResultsQuery
+            {
+                GroupInstanceId = query.GroupInstanceId,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            }));
+        } 
+
         [HttpPut("{id}")]
-        //[Authorize(Roles = "SuperAdmin")]        
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Put(int id, UpdateTestInstanceCommand command)
         {
             if (id != command.Id)
@@ -89,21 +116,21 @@ namespace WebApi.Controller
         }
 
         [HttpPut("AssginTeacherToTest")]
-        //[Authorize(Roles = "SuperAdmin")]        
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> AssginTeacherToTest(AssginTeacherTestInstanceCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
 
         [HttpGet("GetTestInstanceToAssgin")]
-        //[Authorize(Roles = "Supervisor")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetTestInstanceToAssgin()
         {
             return Ok(await Mediator.Send(new GetTestInstanceToAssginQuery()));
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "SuperAdmin")]        
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteTestInstanceByIdCommand { Id = id }));

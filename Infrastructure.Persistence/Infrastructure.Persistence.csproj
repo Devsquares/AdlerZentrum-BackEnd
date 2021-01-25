@@ -36,8 +36,12 @@
     <Compile Remove="Migrations\20201226190226_add test ins.Designer.cs" />
     <Compile Remove="Migrations\20210109181442_addBanRequest.cs" />
     <Compile Remove="Migrations\20210109181442_addBanRequest.Designer.cs" />
+    <Compile Remove="Migrations\20210117161531_audioPath.cs" />
+    <Compile Remove="Migrations\20210117161531_audioPath.Designer.cs" />
     <Compile Remove="Migrations\20210116180704_add-isplacementtest-promocodeid-groupinstancestudent.cs" />
     <Compile Remove="Migrations\20210116180704_add-isplacementtest-promocodeid-groupinstancestudent.Designer.cs" />
+    <Compile Remove="Migrations\20210122224549_bugReport.cs" />
+    <Compile Remove="Migrations\20210122224549_bugReport.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

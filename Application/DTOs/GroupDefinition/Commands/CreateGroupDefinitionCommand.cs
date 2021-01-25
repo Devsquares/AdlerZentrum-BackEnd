@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -15,9 +16,15 @@ namespace Application.DTOs
     public class CreateGroupDefinitionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public int? Status { get; set; }
-        public int NumberOfSolts { get; set; }
-        public int NumberOfSlotsWithPlacementTest { get; set; }
+        public int SubLevelId { get; set; }
+        public int TimeSlotId { get; set; }
+        public int PricingId { get; set; }
+        public int GroupConditionId { get; set; }
+        public double Discount { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime? FinalTestDate { get; set; }
+        public int MaxInstances { get; set; }
 
         public class CreateGroupDefinitionCommandHandler : IRequestHandler<CreateGroupDefinitionCommand, Response<int>>
         {
@@ -28,11 +35,14 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(CreateGroupDefinitionCommand command, CancellationToken cancellationToken)
             {
-                var GroupDefinition = new Domain.Entities.GroupDefinition();
+                var groupDefinition = new GroupDefinition();
 
-                Reflection.CopyProperties(command, GroupDefinition);
-                await _GroupDefinitionRepository.AddAsync(GroupDefinition);
-                return new Response<int>(GroupDefinition.Id);
+                Reflection.CopyProperties(command, groupDefinition);
+                groupDefinition.Status = (int)GroupDefinationStatusEnum.Pending;
+                await _GroupDefinitionRepository.AddAsync(groupDefinition);
+                groupDefinition.Serial = groupDefinition.Id;
+                await _GroupDefinitionRepository.UpdateAsync(groupDefinition);
+                return new Response<int>(groupDefinition.Id);
 
             }
         }

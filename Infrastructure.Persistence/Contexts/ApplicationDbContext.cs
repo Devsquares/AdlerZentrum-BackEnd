@@ -35,6 +35,7 @@ namespace Infrastructure.Persistence.Contexts
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
+        public DbSet<Bug> Bugs { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Sublevel> SubLevels { get; set; }
         public DbSet<GroupInstance> GroupInstances { get; set; }

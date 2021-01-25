@@ -11,8 +11,7 @@ namespace Application.DTOs
         public int QuestionTypeId { get; set; }
         public int Order { get; set; }
         public string Text { get; set; }
-        public int MinCharacters { get; set; }
-        public string AudioPath { get; set; }
+        public int MinCharacters { get; set; } 
         public int NoOfRepeats { get; set; } 
 
     }

@@ -17,7 +17,7 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public int? Status { get; set; }
-        public int NumberOfSolts { get; set; }
+        public int NumberOfSlots { get; set; }
         public int NumberOfSlotsWithPlacementTest { get; set; }
         public List<List<GroupConditionPromoCodeInputModel>> PromoCodes { get; set; }
 

@@ -10,6 +10,8 @@ using Domain.Entities;
 using System;
 using Application.Features.TestInstance.Queries.GetAllTestInstances;
 using Application.Features;
+using Application.Features.Bug.Queries.GetAllBugs;
+using Application.Features.Bug.Commands.CreateBug;
 
 namespace Application.Mappings
 {
@@ -17,10 +19,15 @@ namespace Application.Mappings
     {
         public GeneralProfile()
         {
+
+            CreateMap<Bug, GetAllBugsViewModel>().ReverseMap();
+            CreateMap<CreateBugCommand, Bug>();
+            CreateMap<GetAllBugsQuery, GetAllBugsParameter>();
+
             CreateMap<Level, GetAllLevelsViewModel>().ReverseMap();
             CreateMap<CreateLevelCommand, Level>();
             CreateMap<GetAllLevelsQuery, PagedResponse<Level>>();
-
+            CreateMap<ListeningAudioFile, CreateListeningAudioFileCommand>().ReverseMap();
 
             CreateMap<ApplicationUser, GetAllUsersViewModel>().ReverseMap();
             CreateMap<ApplicationUser, AccountViewModel>().ReverseMap();
@@ -72,6 +79,10 @@ namespace Application.Mappings
 
             CreateMap<Sublevel, GetAllSubLevelsViewModel>()
                 .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.Level.Name + "." + source.Name));
+
+            CreateMap<TestInstance, TestInstancesResultsViewModel>()
+                .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName + source.Student.LastName));
+
 
             CreateMap<Question, GetAllQuestionsViewModel>().ReverseMap();
             CreateMap<LessonDefinition, GetLessonDefinitionByLevelIdViewModel>().ReverseMap();
