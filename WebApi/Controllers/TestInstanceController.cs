@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Features;
 using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
 using Application.Features.TestInstance.Commands.UpdateTestInstance;
@@ -55,26 +56,38 @@ namespace WebApi.Controller
             }));
         }
 
-        
-        [HttpGet("GetFinalLevelTestsForStudent")]
-        [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> GetFinalLevelTestsForStudent()
+        [HttpGet("GetQuizzesByGroupInstance")]
+        public async Task<IActionResult> GetQuizzesByGroupInstance([FromQuery] GetQuizzesByGroupInstanceQuery query)
         {
-            if (AuthenticatedUserService.GroupInstanceId == null)
+            return Ok(await Mediator.Send(new GetQuizzesByGroupInstanceQuery
             {
-                return Ok(new Response<object>("Not registerd in any group."));
-            }
-            return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
-            {
-                StudentId = AuthenticatedUserService.UserId,
-                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
-                TestType = Application.Enums.TestTypeEnum.final
+                GroupInstanceId = query.GroupInstanceId
             }));
         }
 
-        [HttpGet("GetSubLevelTestsForStudent")]
-        [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> GetSubLevelTestsForStudent()
+        [HttpPut("ActiveTestInstanceByLesson")]
+        public async Task<IActionResult> ActiveTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
+        {
+            return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
+            {
+                Status = (int)TestInstanceEnum.Pending,
+                LessonInstanceId = query.LessonInstanceId
+            }));
+        }
+
+        [HttpPut("CloseTestInstanceByLesson")]
+        public async Task<IActionResult> CloseTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
+        {
+            return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
+            {
+                Status = (int)TestInstanceEnum.Missed,
+                LessonInstanceId = query.LessonInstanceId
+            }));
+        }
+
+
+        [HttpGet("GetTestResults")]
+        public async Task<IActionResult> GetTestResults([FromQuery] GetAllTestInstancesResultsQuery query)
         {
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {

@@ -28,14 +28,15 @@ namespace Infrastructure.Persistence.Repositories
             .Where(x => x.Homework.GroupInstanceId == groupInstanceId).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllSolvedAsync()
+        public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllByTeacherIdAsync(string TeacherId)
         {
             return await homeWorkSubmitions
                 .Include(x => x.Homework)
                 .Include(x => x.Student)
                 .Include(x => x.Homework.GroupInstance)
                 .Include(x => x.Homework.LessonInstance)
-                .Where(x => x.Status == (int)HomeWorkSubmitionStatusEnum.Solved).ToListAsync();
+                .Where(x=>x.Homework.TeacherId == TeacherId)
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<HomeWorkSubmition>> GetAllForStudentAsync(string studentId, int groupInstanceId)
