@@ -76,7 +76,8 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
             {
-                GroupInstanceId = null
+                GroupInstanceId = null,
+                TeacherId = AuthenticatedUserService.UserId
             }));
         }
 

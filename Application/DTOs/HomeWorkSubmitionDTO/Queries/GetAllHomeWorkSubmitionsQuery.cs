@@ -11,6 +11,7 @@ namespace Application.DTOs
     public class GetAllHomeWorkSubmitionsQuery : IRequest<IEnumerable<GetAllHomeWorkSubmitionsViewModel>>
     {
         public int? GroupInstanceId { get; set; }
+        public string TeacherId { get; set; }
     }
     public class GetAllHomeWorkSubmitionsQueryHandler : IRequestHandler<GetAllHomeWorkSubmitionsQuery, IEnumerable<GetAllHomeWorkSubmitionsViewModel>>
     {
@@ -27,7 +28,7 @@ namespace Application.DTOs
             IReadOnlyList<HomeWorkSubmition> homeWorkSubmitions = null;
             if (request.GroupInstanceId == null)
             {
-                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllSolvedAsync();
+                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByTeacherIdAsync(request.TeacherId);
             }
             else
             {
