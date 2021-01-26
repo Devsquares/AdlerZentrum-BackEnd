@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.DTOs;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.GroupInstance.Queries.GetAll;
+using Application.DTOs.GroupInstance.Queries.GetById;
 using Application.Filters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,5 +50,12 @@ namespace WebApi.Controllers
                 GroupInstanceId = filter.GroupInstanceId
             }));
         }
+
+        [HttpGet("GetListByGroupDefinitionId")]
+        public async Task<IActionResult> GetListByGroupDefinitionId(int groupDefinitionId)
+        {
+            return Ok(await Mediator.Send(new GetGroupInstanceByGroupDefinitionIdQuery() { GroupDefinitionId = groupDefinitionId }));
+        }
+        
     }
 }
