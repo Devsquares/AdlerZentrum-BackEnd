@@ -10,7 +10,7 @@ namespace Application.Wrappers
         public int PageSize { get; set; }
         public int Count { get; set; }
 
-        public PagedResponse(T data, int pageNumber, int pageSize, int count)
+        public PagedResponse(T data, int pageNumber, int pageSize, int count = 10)
         {
             this.PageNumber = pageNumber;
             this.PageSize = pageSize;

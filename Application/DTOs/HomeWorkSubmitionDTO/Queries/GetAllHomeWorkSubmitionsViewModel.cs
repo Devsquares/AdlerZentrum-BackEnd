@@ -19,5 +19,6 @@ namespace Application.DTOs
         public string Solution { get; set; } 
         public string Status { get; set; }
         public DateTime SubmitionDate { get; set; }
+        public int Points { get; set; }
     }
 }

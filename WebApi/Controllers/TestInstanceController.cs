@@ -55,7 +55,7 @@ namespace WebApi.Controller
             }));
         }
 
-        
+
         [HttpGet("GetFinalLevelTestsForStudent")]
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetFinalLevelTestsForStudent()
@@ -94,7 +94,7 @@ namespace WebApi.Controller
         }
 
         [HttpGet("GetTestResults")]
-        public async Task<IActionResult> GetTestResults([FromQuery]  GetAllTestInstancesResultsQuery query)
+        public async Task<IActionResult> GetTestResults([FromQuery] GetAllTestInstancesResultsQuery query)
         {
             return Ok(await Mediator.Send(new GetAllTestInstancesResultsQuery
             {
@@ -102,7 +102,7 @@ namespace WebApi.Controller
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
             }));
-        } 
+        }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin")]
