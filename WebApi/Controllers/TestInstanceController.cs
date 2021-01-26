@@ -1,4 +1,3 @@
-using Application.Enums;
 using Application.Features;
 using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
 using Application.Features.TestInstance.Commands.UpdateTestInstance;
@@ -56,38 +55,26 @@ namespace WebApi.Controller
             }));
         }
 
-        [HttpGet("GetQuizzesByGroupInstance")]
-        public async Task<IActionResult> GetQuizzesByGroupInstance([FromQuery] GetQuizzesByGroupInstanceQuery query)
+
+        [HttpGet("GetFinalLevelTestsForStudent")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> GetFinalLevelTestsForStudent()
         {
-            return Ok(await Mediator.Send(new GetQuizzesByGroupInstanceQuery
+            if (AuthenticatedUserService.GroupInstanceId == null)
             {
-                GroupInstanceId = query.GroupInstanceId
+                return Ok(new Response<object>("Not registerd in any group."));
+            }
+            return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
+            {
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
+                TestType = Application.Enums.TestTypeEnum.final
             }));
         }
 
-        [HttpPut("ActiveTestInstanceByLesson")]
-        public async Task<IActionResult> ActiveTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
-        {
-            return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
-            {
-                Status = (int)TestInstanceEnum.Pending,
-                LessonInstanceId = query.LessonInstanceId
-            }));
-        }
-
-        [HttpPut("CloseTestInstanceByLesson")]
-        public async Task<IActionResult> CloseTestInstanceByLesson([FromQuery] UpdateTestInstanceStatusCommand query)
-        {
-            return Ok(await Mediator.Send(new UpdateTestInstanceStatusCommand
-            {
-                Status = (int)TestInstanceEnum.Missed,
-                LessonInstanceId = query.LessonInstanceId
-            }));
-        }
-
-
-        [HttpGet("GetTestResults")]
-        public async Task<IActionResult> GetTestResults([FromQuery] GetAllTestInstancesResultsQuery query)
+        [HttpGet("GetSubLevelTestsForStudent")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> GetSubLevelTestsForStudent()
         {
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {
@@ -107,7 +94,7 @@ namespace WebApi.Controller
         }
 
         [HttpGet("GetTestResults")]
-        public async Task<IActionResult> GetTestResults([FromQuery]  GetAllTestInstancesResultsQuery query)
+        public async Task<IActionResult> GetTestResults([FromQuery] GetAllTestInstancesResultsQuery query)
         {
             return Ok(await Mediator.Send(new GetAllTestInstancesResultsQuery
             {
@@ -115,7 +102,7 @@ namespace WebApi.Controller
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
             }));
-        } 
+        }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin")]
