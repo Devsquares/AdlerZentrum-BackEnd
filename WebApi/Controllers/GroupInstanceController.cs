@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.DTOs;
+using Application.DTOs.GroupInstance.Commands;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.GroupInstance.Queries.GetAll;
 using Application.DTOs.GroupInstance.Queries.GetById;
@@ -56,6 +57,14 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new GetGroupInstanceByGroupDefinitionIdQuery() { GroupDefinitionId = groupDefinitionId }));
         }
-        
+
+        [HttpPost("CreateGroupInstanceAutomatic")]
+        public async Task<IActionResult> CreateGroupInstanceAutomatic(int groupDefinitionId)
+        {
+            return Ok(await Mediator.Send(new CreateGroupInstanceWithInterestedOverPaymentStudentCommand()
+            {
+                GroupDefinitionId = groupDefinitionId
+            }));
+        }
     }
 }

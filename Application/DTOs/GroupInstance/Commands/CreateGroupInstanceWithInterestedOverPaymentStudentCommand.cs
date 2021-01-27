@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,22 +10,20 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.GroupInstance.Commands
 {
-    class CreateGroupInstanceWithInterestedOverPaymentStudentCommand : IRequest<Response<int>>
+    public class CreateGroupInstanceWithInterestedOverPaymentStudentCommand : IRequest<Response<StudentsGroupInstanceModel>>
     {
         public int GroupDefinitionId { get; set; }
-        public class CreateGroupInstanceWithInterestedOverPaymentStudentCommandHandler : IRequestHandler<CreateGroupInstanceWithInterestedOverPaymentStudentCommand, Response<int>>
+        public class CreateGroupInstanceWithInterestedOverPaymentStudentCommandHandler : IRequestHandler<CreateGroupInstanceWithInterestedOverPaymentStudentCommand, Response<StudentsGroupInstanceModel>>
         {
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
             public CreateGroupInstanceWithInterestedOverPaymentStudentCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
             }
-            public async Task<Response<int>> Handle(CreateGroupInstanceWithInterestedOverPaymentStudentCommand command, CancellationToken cancellationToken)
+            public async Task<Response<StudentsGroupInstanceModel>> Handle(CreateGroupInstanceWithInterestedOverPaymentStudentCommand command, CancellationToken cancellationToken)
             {
-                var groupInstance = new Domain.Entities.GroupInstance();
-                Reflection.CopyProperties(command, groupInstance);
-                await _groupInstanceRepositoryAsync.AddAsync(groupInstance);
-                return new Response<int>(groupInstance.Id);
+                var newGroupInstance = _groupInstanceRepositoryAsync.CreateGroupFromInterestedOverPayment(command.GroupDefinitionId);
+                return new Response<StudentsGroupInstanceModel>(newGroupInstance.Result);
 
             }
         }
