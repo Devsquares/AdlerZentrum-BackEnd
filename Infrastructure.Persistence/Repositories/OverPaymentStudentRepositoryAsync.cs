@@ -25,6 +25,18 @@ namespace Infrastructure.Persistence.Repositories
         {
             return _overpaymentstudents.Where(x => x.StudentId == studentId && x.GroupDefinitionId == groupDefinitionId).FirstOrDefault();
         }
+
+        public object GetByGroupDefinitionId(int groupDefinitionId)
+        {
+            var interestedStudents = _overpaymentstudents.Include(x => x.Student)
+                .Include(x => x.GroupDefinition)
+                .Where(x => x.GroupDefinitionId == groupDefinitionId)
+                .Select(x => new {
+                    StudentId = x.Student.Id,
+                    StudentName = $"{x.Student.FirstName} {x.Student.LastName}"
+                }).ToList();
+            return interestedStudents;
+        }
     }
 
 }
