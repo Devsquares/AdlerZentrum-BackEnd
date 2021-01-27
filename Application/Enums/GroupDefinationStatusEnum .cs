@@ -9,6 +9,7 @@ namespace Application.Enums
         Pending = 0,
         Running = 1,
         Finished = 2,
-        Canceld = 3
+        Canceld = 3,
+        New = 4
     }
 }

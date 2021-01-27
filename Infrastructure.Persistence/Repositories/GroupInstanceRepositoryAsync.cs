@@ -3,6 +3,7 @@ using Application.Exceptions;
 using Application.Filters;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -22,10 +23,12 @@ namespace Infrastructure.Persistence.Repositories
         private readonly IGroupConditionPromoCodeRepositoryAsync _groupConditionPromoCodeRepositoryAsync;
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
         private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
+        private readonly DbSet<TeacherGroupInstanceAssignment> teacherGroupInstanceAssignment;
         public GroupInstanceRepositoryAsync(ApplicationDbContext dbContext,
             IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync,
              IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
              IGroupDefinitionRepositoryAsync GroupDefinitionRepository) : base(dbContext)
+
         {
             groupInstances = dbContext.Set<GroupInstance>();
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
@@ -34,6 +37,7 @@ namespace Infrastructure.Persistence.Repositories
             _groupConditionPromoCodeRepositoryAsync = groupConditionPromoCodeRepositoryAsync;
             _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
             _GroupDefinitionRepositoryAsync = GroupDefinitionRepository;
+            teacherGroupInstanceAssignment = dbContext.Set<TeacherGroupInstanceAssignment>();
         }
 
         public int? GetActiveGroupInstance(string userId)
@@ -114,6 +118,29 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.GroupDefinition.Sublevel)
                   .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
                   .Where(x => x.GroupDefinitionId == groupDefinitionId && x.Status == (int)GroupInstanceStatusEnum.Pending).FirstOrDefault();
+        }
+
+        public List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId)
+        {
+            List<StudentsGroupInstanceModel> StudentsGroupInstanceModelList = new List<StudentsGroupInstanceModel>();
+            StudentsGroupInstanceModel StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
+            var groupInstanceList = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x=>x.Id).ToList();
+            foreach (var groupInstance in groupInstanceList)
+            {
+                StudentsGroupInstanceObject.GroupInstanceId = groupInstance.Id;
+                StudentsGroupInstanceObject.Status = ((GroupInstanceStatusEnum)groupInstance.Status).ToString();
+                StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCode).Include(x=>x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
+                {
+                    StudentId = x.StudentId,
+                    StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
+                    PromoCodeId = x.PromoCodeId,
+                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name:string.Empty
+
+                }).ToList();
+                StudentsGroupInstanceObject.Teachername = teacherGroupInstanceAssignment.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => x.Teacher.FirstName).FirstOrDefault();
+                StudentsGroupInstanceModelList.Add(StudentsGroupInstanceObject);
+            }
+            return StudentsGroupInstanceModelList;
         }
 
         public async Task CreateGroupFromInterestedOverPayment(int groupDefinitionId)

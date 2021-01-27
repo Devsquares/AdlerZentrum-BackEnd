@@ -17,6 +17,7 @@ namespace Application.DTOs
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public string SubLevel { get; set; }
     }
     public class GetAllGroupDefinitionsQueryHandler : IRequestHandler<GetAllGroupDefinitionsQuery, PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
     {
@@ -30,11 +31,12 @@ namespace Application.DTOs
 
         public async Task<PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>> Handle(GetAllGroupDefinitionsQuery request, CancellationToken cancellationToken)
         {
+            int totalCount = 0;
             var validFilter = _mapper.Map<RequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
-            GroupDefinitions = await _GroupDefinitionRepositoryAsync.GetPagedReponseAsync(request.PageNumber, request.PageSize);
-            var userViewModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
-            return new PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>(userViewModel, request.PageNumber, request.PageSize, _GroupDefinitionRepositoryAsync.GetCount());
+            GroupDefinitions =  _GroupDefinitionRepositoryAsync.GetALL(request.PageNumber, request.PageSize,request.SubLevel,out totalCount);
+            var groupDefinitionsModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
+            return new PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>(groupDefinitionsModel, request.PageNumber, request.PageSize, totalCount);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Application.DTOs;
+using Application.Features.InterestedStudent.Queries.GetInterestedStudentByGroupDefinitionId;
+using Application.Features.OverPaymentStudent.Queries.GetOverPaymentStudentByGroupDefinitionId;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -8,12 +10,13 @@ namespace WebApi.Controllers
     {
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] GroupDefinitionRequestParameter filter)
+        public async Task<IActionResult> GetAll([FromQuery] GroupDefinitionRequestParameter filter,string sublevelName)
         {            
             return Ok(await Mediator.Send(new GetAllGroupDefinitionsQuery()
             {
                 PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber
+                PageNumber = filter.PageNumber,
+                SubLevel = sublevelName
             }));
         }
 
@@ -68,5 +71,18 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand {groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeId = promoCodeId,PlacmentTestId = placmentTest}));
         }
+
+        [HttpGet("GetInterestedStudent")]
+        public async Task<IActionResult> GetInterestedStudent(int groupDefinitionId)
+        {
+            return Ok(await Mediator.Send(new GetInterestedStudentByGroupDefinitionIdQuery { GroupDefinitionId = groupDefinitionId }));
+        }
+
+        [HttpGet("GetOverPaymentStudent")]
+        public async Task<IActionResult> GetOverPaymentStudent(int groupDefinitionId)
+        {
+            return Ok(await Mediator.Send(new GetOverPaymentStudentByGroupDefinitionIdQuery { GroupDefinitionId = groupDefinitionId }));
+        }
+        
     }
 }

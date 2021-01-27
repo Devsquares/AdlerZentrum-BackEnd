@@ -8,5 +8,6 @@ namespace Application.Interfaces.Repositories
     public interface IInterestedStudentRepositoryAsync : IGenericRepositoryAsync<InterestedStudent>
     {
         InterestedStudent GetByStudentId(string studentId, int groupDefinitionId);
+        object GetByGroupDefinitionId(int groupDefinitionId);
     }
 }
