@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -33,6 +34,10 @@ namespace Application.DTOs
                 if (GroupDefinition == null)
                 {
                     throw new ApiException($"Group Not Found.");
+                }
+                else if (GroupDefinition.Status != (int)GroupDefinationStatusEnum.New)
+                {
+                    throw new ApiException($"Group can't be updated");
                 }
                 else
                 {

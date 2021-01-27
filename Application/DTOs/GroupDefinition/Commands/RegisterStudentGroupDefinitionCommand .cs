@@ -49,7 +49,7 @@ namespace Application.DTOs
                 {
                     throw new ApiException($"Group definition Not Found");
                 }
-                else if (GroupDefinition.Status != (int)GroupDefinationStatusEnum.Pending)
+                else if (GroupDefinition.Status != (int)GroupDefinationStatusEnum.Pending || GroupDefinition.Status != (int)GroupDefinationStatusEnum.New)
                 {
                     throw new ApiException($"Group definition is already running.");
                 }
@@ -95,7 +95,6 @@ namespace Application.DTOs
                             PromoCodeId = command.PromoCodeId,
                             IsDefault = true
                         });
-                        studentCount = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(groupInstans.Id);
                     }
                     else if (!canApplyInSpecificGroup && canApplyInGroupDefinition)
                     {
@@ -139,6 +138,14 @@ namespace Application.DTOs
                                 StudentId = command.StudentId,
                                 IsDefault = true
                             });
+                        }
+                    }
+                    if(canApply)
+                    {
+                        if (GroupDefinition.Status == (int)GroupDefinationStatusEnum.New)
+                        {
+                            GroupDefinition.Status = (int)GroupDefinationStatusEnum.Pending;
+                            await _GroupDefinitionRepositoryAsync.UpdateAsync(GroupDefinition);
                         }
                     }
                     if (canApply && studentCount == groupInstans.GroupDefinition.GroupCondition.NumberOfSlots)
