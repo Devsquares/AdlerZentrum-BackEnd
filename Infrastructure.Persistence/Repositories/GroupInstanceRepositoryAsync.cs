@@ -126,5 +126,9 @@ namespace Infrastructure.Persistence.Repositories
             }
             return StudentsGroupInstanceModelList;
         }
+        public int GetCountByGroupDefinitionId(int groupDefinitionId)
+        {
+            return groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId).Count();
+        }
     }
 }

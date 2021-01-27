@@ -22,11 +22,24 @@ namespace Application.DTOs
     public class GetAllGroupDefinitionsQueryHandler : IRequestHandler<GetAllGroupDefinitionsQuery, PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
     {
         private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
+        private readonly IGroupInstanceRepositoryAsync _GroupInstanceRepositoryAsync;
+        private readonly IGroupInstanceStudentRepositoryAsync _GroupInstanceStudentRepositoryAsync;
+        private readonly IInterestedStudentRepositoryAsync _InterestedStudentRepositoryAsync;
+        private readonly IOverPaymentStudentRepositoryAsync _OverPaymentStudentRepositoryAsync;
         private readonly IMapper _mapper;
-        public GetAllGroupDefinitionsQueryHandler(IGroupDefinitionRepositoryAsync GroupDefinitionService, IMapper mapper)
+        public GetAllGroupDefinitionsQueryHandler(IGroupDefinitionRepositoryAsync GroupDefinitionService, IMapper mapper,
+            IGroupInstanceRepositoryAsync GroupInstanceRepositoryAsync,
+            IGroupInstanceStudentRepositoryAsync GroupInstanceStudentRepositoryAsync,
+            IInterestedStudentRepositoryAsync InterestedStudentRepositoryAsync,
+            IOverPaymentStudentRepositoryAsync OverPaymentStudentRepositoryAsync)
         {
             _GroupDefinitionRepositoryAsync = GroupDefinitionService;
             _mapper = mapper;
+            _GroupInstanceRepositoryAsync = GroupInstanceRepositoryAsync;
+            _GroupInstanceStudentRepositoryAsync = GroupInstanceStudentRepositoryAsync;
+            _InterestedStudentRepositoryAsync = InterestedStudentRepositoryAsync;
+            _OverPaymentStudentRepositoryAsync = OverPaymentStudentRepositoryAsync;
+
         }
 
         public async Task<PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>> Handle(GetAllGroupDefinitionsQuery request, CancellationToken cancellationToken)
@@ -36,6 +49,13 @@ namespace Application.DTOs
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
             GroupDefinitions =  _GroupDefinitionRepositoryAsync.GetALL(request.PageNumber, request.PageSize,request.SubLevel,out totalCount);
             var groupDefinitionsModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
+            foreach (var groupDefinition in groupDefinitionsModel)
+            {
+                groupDefinition.ActualTotalGroupInstances = _GroupInstanceRepositoryAsync.GetCountByGroupDefinitionId(groupDefinition.Id);
+                groupDefinition.ActualTotalStudents = _GroupInstanceStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
+                groupDefinition.TotalInterestedStudents = _InterestedStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
+                groupDefinition.TotalOverPaymentStudents = _OverPaymentStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
+            }
             return new PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>(groupDefinitionsModel, request.PageNumber, request.PageSize, totalCount);
         }
     }
