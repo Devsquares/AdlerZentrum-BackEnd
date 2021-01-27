@@ -15,5 +15,6 @@ namespace Application.Interfaces.Repositories
         GroupInstance GetByGroupDefinitionId(int groupDefinitionId);
         List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, int? groupInstanceId = null);
         Task<StudentsGroupInstanceModel> CreateGroupFromInterestedOverPayment(int groupDefinitionId);
+        int GetCountByGroupDefinitionId(int groupDefinitionId);
     }
 }

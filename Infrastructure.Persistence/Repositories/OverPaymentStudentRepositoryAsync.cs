@@ -37,6 +37,11 @@ namespace Infrastructure.Persistence.Repositories
                 }).ToList();
             return interestedStudents;
         }
+
+        public int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId)
+        {
+            return _overpaymentstudents.Where(x => x.GroupDefinitionId == groupDefinitionId).Count();
+        }
     }
 
 }
