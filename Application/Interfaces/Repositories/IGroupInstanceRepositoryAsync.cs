@@ -13,6 +13,6 @@ namespace Application.Interfaces.Repositories
         void AddStudentToTheGroupInstance(int groupId, string studentId);
         Task<GroupInstance> GetByIdAsync(int id);
         GroupInstance GetByGroupDefinitionId(int groupDefinitionId);
-        List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId);
+        List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, int? groupInstanceId = null);
     }
 }

@@ -120,21 +120,23 @@ namespace Infrastructure.Persistence.Repositories
                   .Where(x => x.GroupDefinitionId == groupDefinitionId && x.Status == (int)GroupInstanceStatusEnum.Pending).FirstOrDefault();
         }
 
-        public List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId)
+        public List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, int? groupInstanceId = null)
         {
             List<StudentsGroupInstanceModel> StudentsGroupInstanceModelList = new List<StudentsGroupInstanceModel>();
             StudentsGroupInstanceModel StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
-            var groupInstanceList = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x=>x.Id).ToList();
+            var groupInstanceList = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId
+            && (groupInstanceId != null ? (x.Id == groupInstanceId) : true)
+            && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x => x.Id).ToList();
             foreach (var groupInstance in groupInstanceList)
             {
                 StudentsGroupInstanceObject.GroupInstanceId = groupInstance.Id;
                 StudentsGroupInstanceObject.Status = ((GroupInstanceStatusEnum)groupInstance.Status).ToString();
-                StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCode).Include(x=>x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
+                StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCode).Include(x => x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
                 {
                     StudentId = x.StudentId,
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
                     PromoCodeId = x.PromoCodeId,
-                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name:string.Empty
+                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name : string.Empty
 
                 }).ToList();
                 StudentsGroupInstanceObject.Teachername = teacherGroupInstanceAssignment.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => x.Teacher.FirstName).FirstOrDefault();
@@ -143,7 +145,7 @@ namespace Infrastructure.Persistence.Repositories
             return StudentsGroupInstanceModelList;
         }
 
-        public async Task CreateGroupFromInterestedOverPayment(int groupDefinitionId)
+        public async Task<StudentsGroupInstanceModel> CreateGroupFromInterestedOverPayment(int groupDefinitionId)
         {
             var groupDefinitionobject = await _GroupDefinitionRepositoryAsync.GetByIdAsync(groupDefinitionId);
             if (groupDefinitionobject != null)
@@ -184,7 +186,7 @@ namespace Infrastructure.Persistence.Repositories
                         });
                         studentCount++;
                     }
-                    else if(studentCount == totalStudents)
+                    else if (studentCount == totalStudents)
                     {
                         break;
                     }
@@ -196,7 +198,7 @@ namespace Infrastructure.Persistence.Repositories
             {
                 foreach (var overPaymentStudent in overPaymentStudentList)
                 {
-                    if(studentCount < totalStudents)
+                    if (studentCount < totalStudents)
                     {
                         await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
                         {
@@ -213,11 +215,13 @@ namespace Infrastructure.Persistence.Repositories
                 }
             }
 
-            if(studentCount == totalStudents)
+            if (studentCount == totalStudents)
             {
                 groupInstanceobject.Status = (int)GroupInstanceStatusEnum.SlotCompleted;
-                 groupInstances.Update(groupInstanceobject);
+                groupInstances.Update(groupInstanceobject);
             }
+            var groupInstanceStudents = GetListByGroupDefinitionId(groupDefinitionId, groupInstanceobject.Id);
+            return (groupInstanceStudents != null && groupInstanceStudents.Count > 0) ? groupInstanceStudents[0] : null;
         }
     }
 }
