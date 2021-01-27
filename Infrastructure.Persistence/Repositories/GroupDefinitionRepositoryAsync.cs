@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public List<GroupDefinition> GetALL(int pageNumber, int pageSize,string subLevelName,out int totalCount)
         {
-            var groupDefinitionsList= groupDefinitions.Include(x=>x.Sublevel).Where(x => (!string.IsNullOrEmpty(subLevelName)? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()):true)).ToList();
+            var groupDefinitionsList= groupDefinitions.Include(x => x.GroupCondition).Include(x=>x.Sublevel).Where(x => (!string.IsNullOrEmpty(subLevelName)? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()):true)).ToList();
             totalCount = groupDefinitionsList.Count();
             groupDefinitionsList = groupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return groupDefinitionsList;
