@@ -1,10 +1,12 @@
 ﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Filters;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,10 +17,23 @@ namespace Infrastructure.Persistence.Repositories
     {
         private readonly DbSet<GroupInstance> groupInstances;
         private readonly DbSet<GroupInstanceStudents> groupInstanceStudents;
-        public GroupInstanceRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
+        private readonly DbSet<InterestedStudent> InterestedStudents;
+        private readonly DbSet<OverPaymentStudent> OverPaymentStudents;
+        private readonly IGroupConditionPromoCodeRepositoryAsync _groupConditionPromoCodeRepositoryAsync;
+        private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
+        private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
+        public GroupInstanceRepositoryAsync(ApplicationDbContext dbContext,
+            IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync,
+             IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
+             IGroupDefinitionRepositoryAsync GroupDefinitionRepository) : base(dbContext)
         {
             groupInstances = dbContext.Set<GroupInstance>();
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
+            InterestedStudents = dbContext.Set<InterestedStudent>();
+            OverPaymentStudents = dbContext.Set<OverPaymentStudent>();
+            _groupConditionPromoCodeRepositoryAsync = groupConditionPromoCodeRepositoryAsync;
+            _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
+            _GroupDefinitionRepositoryAsync = GroupDefinitionRepository;
         }
 
         public int? GetActiveGroupInstance(string userId)
@@ -78,7 +93,7 @@ namespace Infrastructure.Persistence.Repositories
                 StudentId = studentId
             });
         }
-        
+
         public async Task<GroupInstance> GetByIdAsync(int id)
         {
             return groupInstances
@@ -99,6 +114,83 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.GroupDefinition.Sublevel)
                   .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
                   .Where(x => x.GroupDefinitionId == groupDefinitionId && x.Status == (int)GroupInstanceStatusEnum.Pending).FirstOrDefault();
+        }
+
+        public async Task CreateGroupFromInterestedOverPayment(int groupDefinitionId)
+        {
+            var groupDefinitionobject = await _GroupDefinitionRepositoryAsync.GetByIdAsync(groupDefinitionId);
+            if (groupDefinitionobject != null)
+            {
+                throw new ApiException($"Group definition Not Found");
+            }
+            if (groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Finished || groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Canceld)
+            {
+                throw new ApiException($"Group definition finished or canceled");
+            }
+            GroupInstance groupInstanceobject = new GroupInstance()
+            {
+                GroupDefinitionId = groupDefinitionId,
+                CreatedDate = DateTime.Now,
+                Status = (int)GroupInstanceStatusEnum.Pending
+            };
+            await groupInstances.AddAsync(groupInstanceobject);
+
+            var interestedStudentsList = InterestedStudents.Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x => x.Id).ToList();
+            var overPaymentStudentList = OverPaymentStudents.Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x => x.Id).ToList();
+            bool canApplyInSpecificGroup = false;
+            int studentCount = 0;
+            int totalStudents = groupDefinitionobject.GroupCondition.NumberOfSlots;
+            // Add interested with  promoCOdes
+            if (interestedStudentsList != null && interestedStudentsList.Count > 0)
+            {
+                foreach (var interestedStudent in interestedStudentsList)
+                {
+                    canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeId);
+                    if (canApplyInSpecificGroup && studentCount < totalStudents)
+                    {
+                        await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
+                        {
+                            GroupInstanceId = groupInstanceobject.Id,
+                            StudentId = interestedStudent.StudentId,
+                            PromoCodeId = interestedStudent.PromoCodeId,
+                            IsDefault = true
+                        });
+                        studentCount++;
+                    }
+                    else if(studentCount == totalStudents)
+                    {
+                        break;
+                    }
+                }
+
+            }
+            // Add overpayment students
+            if (overPaymentStudentList != null && overPaymentStudentList.Count > 0)
+            {
+                foreach (var overPaymentStudent in overPaymentStudentList)
+                {
+                    if(studentCount < totalStudents)
+                    {
+                        await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
+                        {
+                            GroupInstanceId = groupInstanceobject.Id,
+                            StudentId = overPaymentStudent.StudentId,
+                            IsDefault = true
+                        });
+                        studentCount++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if(studentCount == totalStudents)
+            {
+                groupInstanceobject.Status = (int)GroupInstanceStatusEnum.SlotCompleted;
+                 groupInstances.Update(groupInstanceobject);
+            }
         }
     }
 }
