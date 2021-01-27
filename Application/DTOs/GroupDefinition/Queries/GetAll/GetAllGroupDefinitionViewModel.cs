@@ -36,5 +36,10 @@ namespace Application.DTOs
 
         public int? Status { get; set; }
 
+        public int ActualTotalStudents { get; set; }
+        public int ActualTotalGroupInstances { get; set; }
+        public int TotalOverPaymentStudents { get; set; }
+        public int TotalInterestedStudents { get; set; }
+
     }
 }

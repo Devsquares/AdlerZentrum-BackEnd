@@ -14,5 +14,6 @@ namespace Application.Interfaces.Repositories
         Task<GroupInstance> GetByIdAsync(int id);
         GroupInstance GetByGroupDefinitionId(int groupDefinitionId);
         List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId);
+        int GetCountByGroupDefinitionId(int groupDefinitionId);
     }
 }

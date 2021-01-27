@@ -9,5 +9,6 @@ namespace Application.Interfaces.Repositories
     {
         OverPaymentStudent GetByStudentId(string studentId, int groupDefinitionId);
         object GetByGroupDefinitionId(int groupDefinitionId);
+        int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
     }
 }

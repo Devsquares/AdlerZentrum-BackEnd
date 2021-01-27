@@ -40,6 +40,11 @@ namespace Infrastructure.Persistence.Repositories
                 }).ToList();
             return interestedStudents;
         }
+
+        public int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId)
+        {
+            return _interestedstudents.Where(x => x.GroupDefinitionId == groupDefinitionId).Count();
+        }
     }
 
 }
