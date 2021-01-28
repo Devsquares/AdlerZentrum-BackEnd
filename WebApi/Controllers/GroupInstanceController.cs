@@ -66,5 +66,31 @@ namespace WebApi.Controllers
                 GroupDefinitionId = groupDefinitionId
             }));
         }
+
+        [HttpPost("EditGroupInstanceByStudent")]
+        public async Task<IActionResult> EditGroupInstanceByStudent(int groupDefinitionId, int srcGroupInstanceId, int desGroupInstanceId, string studentId, int? promoCodeId)
+        {
+            return Ok(await Mediator.Send(new EditGroupInstanceByAddingStudentFromAnotherCommand()
+            {
+                GroupDefinitionId = groupDefinitionId,
+                srcGroupInstanceId = srcGroupInstanceId,
+                desGroupInstanceId = desGroupInstanceId,
+                promoCodeId = promoCodeId,
+                studentId = studentId
+            }));
+        }
+
+        [HttpPost("SwapStudentsBetweenGroupInsatnces")]
+        public async Task<IActionResult> SwapStudentsBetweenGroupInsatnces(int groupDefinitionId, int srcGroupInstanceId, string srcstudentId, int desGroupInstanceId, string desstudentId)
+        {
+            return Ok(await Mediator.Send(new SwapTwoStudentsCommand()
+            {
+                GroupDefinitionId = groupDefinitionId,
+                DesGroupInstanceId = desGroupInstanceId,
+                DesStudentId = desstudentId,
+                SrcGroupInstanceId = srcGroupInstanceId,
+                SrcStudentId = srcstudentId
+            }));
+        }
     }
 }

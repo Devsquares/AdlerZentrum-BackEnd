@@ -120,12 +120,12 @@ namespace Infrastructure.Persistence.Repositories
                   .Where(x => x.GroupDefinitionId == groupDefinitionId && x.Status == (int)GroupInstanceStatusEnum.Pending).FirstOrDefault();
         }
 
-        public List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, int? groupInstanceId = null)
+        public List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, List<int> groupInstancelist = null)
         {
             List<StudentsGroupInstanceModel> StudentsGroupInstanceModelList = new List<StudentsGroupInstanceModel>();
             StudentsGroupInstanceModel StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
             var groupInstanceList = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId
-            && (groupInstanceId != null ? (x.Id == groupInstanceId) : true)
+            && ((groupInstancelist != null && groupInstancelist.Count > 0) ? (groupInstancelist.Contains(x.Id)) : true)
             && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x => x.Id).ToList();
             foreach (var groupInstance in groupInstanceList)
             {
@@ -201,128 +201,6 @@ namespace Infrastructure.Persistence.Repositories
                 if (interestedGroupInstanceStudents != null && interestedGroupInstanceStudents.Count > 0)
                 {
                     await _groupInstanceStudentRepositoryAsync.AddBulkAsync(interestedGroupInstanceStudents);
-                     InterestedStudents.RemoveRange(interestedStudentsList);
-                }
-            }
-
-            List<GroupInstanceStudents> OverPaymentsGroupInstanceStudents = new List<GroupInstanceStudents>();
-            // Add overpayment students
-            if (overPaymentStudentList != null && overPaymentStudentList.Count > 0)
-            {
-                foreach (var overPaymentStudent in overPaymentStudentList)
-                {
-                    if (studentCount < totalStudents)
-                    {
-                        OverPaymentsGroupInstanceStudents.Add(new GroupInstanceStudents
-                        {
-                            GroupInstanceId = groupInstanceobject.Id,
-                            StudentId = overPaymentStudent.StudentId,
-                            IsDefault = true
-                        });
-
-                        studentCount++;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                if (OverPaymentsGroupInstanceStudents != null && OverPaymentsGroupInstanceStudents.Count > 0)
-                {
-                    await _groupInstanceStudentRepositoryAsync.AddBulkAsync(OverPaymentsGroupInstanceStudents);
-                    OverPaymentStudents.RemoveRange(overPaymentStudentList);
-                }
-            }
-
-            if (studentCount == totalStudents)
-            {
-                groupInstanceobject.Status = (int)GroupInstanceStatusEnum.SlotCompleted;
-                groupInstances.Update(groupInstanceobject);
-            }
-            var groupInstanceStudents = GetListByGroupDefinitionId(groupDefinitionId, groupInstanceobject.Id);
-            return (groupInstanceStudents != null && groupInstanceStudents.Count > 0) ? groupInstanceStudents[0] : null;
-        }
-
-        public async Task<StudentsGroupInstanceModel> EditGroupByAddStudentFromAnotherGroup(int groupDefinitionId,int srcGroupInstanceId, int desGroupInstanceId, string studentId, int? promoCodeId)
-        {
-            var groupDefinitionobject = await _GroupDefinitionRepositoryAsync.GetByIdAsync(groupDefinitionId);
-            if (groupDefinitionobject != null)
-            {
-                throw new ApiException($"Group definition Not Found");
-            }
-            if (groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Finished || groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Canceld)
-            {
-                throw new ApiException($"Group definition finished or canceled");
-            }
-            var sourceGroupInstance = groupInstances.Where(x => x.Id == srcGroupInstanceId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
-            if(sourceGroupInstance == null)
-            {
-                throw new ApiException($"You cannot EDit as Source group instance {((GroupInstanceStatusEnum)sourceGroupInstance.Status).ToString()}");
-            }
-            var destinationGroupInstance = groupInstances.Where(x => x.Id == desGroupInstanceId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
-            if (destinationGroupInstance == null)
-            {
-                throw new ApiException($"You cannot EDit as Destination group instance {((GroupInstanceStatusEnum)destinationGroupInstance.Status).ToString()}");
-            }
-            bool canApplyInSpecificGroup = false;
-            int totalStudents = groupDefinitionobject.GroupCondition.NumberOfSlots;
-            var student = _groupInstanceStudentRepositoryAsync.GetByStudentId(studentId, sourceGroupInstance.Id);
-            if (promoCodeId != null)
-            {
-                canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(destinationGroupInstance.Id, promoCodeId.Value);
-                if(canApplyInSpecificGroup)
-                {
-                    student.GroupInstanceId = destinationGroupInstance.Id;
-                    await _groupInstanceStudentRepositoryAsync.UpdateAsync(student);
-
-                    if(sourceGroupInstance.Status == (int)GroupInstanceStatusEnum.SlotCompleted)
-                    {
-                        sourceGroupInstance.Status = (int)GroupInstanceStatusEnum.Pending;
-                        groupInstances.Update(sourceGroupInstance);
-                    }
-                }
-            }
-            GroupInstance groupInstanceobject = new GroupInstance()
-            {
-                GroupDefinitionId = groupDefinitionId,
-                CreatedDate = DateTime.Now,
-                Status = (int)GroupInstanceStatusEnum.Pending
-            };
-            await groupInstances.AddAsync(groupInstanceobject);
-
-            var interestedStudentsList = InterestedStudents.Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x => x.Id).ToList();
-            var overPaymentStudentList = OverPaymentStudents.Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x => x.Id).ToList();
-           
-            int studentCount = 0;
-           
-            List<GroupInstanceStudents> interestedGroupInstanceStudents = new List<GroupInstanceStudents>();
-            // Add interested with  promoCOdes
-            if (interestedStudentsList != null && interestedStudentsList.Count > 0)
-            {
-
-                foreach (var interestedStudent in interestedStudentsList)
-                {
-                    canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeId);
-                    if (canApplyInSpecificGroup && studentCount < totalStudents)
-                    {
-                        interestedGroupInstanceStudents.Add(new GroupInstanceStudents
-                        {
-                            GroupInstanceId = groupInstanceobject.Id,
-                            StudentId = interestedStudent.StudentId,
-                            PromoCodeId = interestedStudent.PromoCodeId,
-                            IsDefault = true
-                        });
-
-                        studentCount++;
-                    }
-                    else if (studentCount == totalStudents)
-                    {
-                        break;
-                    }
-                }
-                if (interestedGroupInstanceStudents != null && interestedGroupInstanceStudents.Count > 0)
-                {
-                    await _groupInstanceStudentRepositoryAsync.AddBulkAsync(interestedGroupInstanceStudents);
                     InterestedStudents.RemoveRange(interestedStudentsList);
                 }
             }
@@ -361,8 +239,107 @@ namespace Infrastructure.Persistence.Repositories
                 groupInstanceobject.Status = (int)GroupInstanceStatusEnum.SlotCompleted;
                 groupInstances.Update(groupInstanceobject);
             }
-            var groupInstanceStudents = GetListByGroupDefinitionId(groupDefinitionId, groupInstanceobject.Id);
+            List<int> groupInstanceId = new List<int>();
+            groupInstanceId.Add(groupInstanceobject.Id);
+            var groupInstanceStudents = GetListByGroupDefinitionId(groupDefinitionId, groupInstanceId);
             return (groupInstanceStudents != null && groupInstanceStudents.Count > 0) ? groupInstanceStudents[0] : null;
+        }
+
+        public async Task<List<StudentsGroupInstanceModel>> EditGroupByAddStudentFromAnotherGroup(int groupDefinitionId, int srcGroupInstanceId, int desGroupInstanceId, string studentId, int? promoCodeId)
+        {
+            var groupDefinitionobject = await _GroupDefinitionRepositoryAsync.GetByIdAsync(groupDefinitionId);
+            if (groupDefinitionobject != null)
+            {
+                throw new ApiException($"Group definition Not Found");
+            }
+            if (groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Finished || groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Canceld)
+            {
+                throw new ApiException($"Group definition finished or canceled");
+            }
+            var sourceGroupInstance = groupInstances.Where(x => x.Id == srcGroupInstanceId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
+            if (sourceGroupInstance == null)
+            {
+                throw new ApiException($"You cannot EDit as Source group instance {((GroupInstanceStatusEnum)sourceGroupInstance.Status).ToString()}");
+            }
+            var destinationGroupInstance = groupInstances.Where(x => x.Id == desGroupInstanceId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
+            if (destinationGroupInstance == null)
+            {
+                throw new ApiException($"You cannot EDit as Destination group instance {((GroupInstanceStatusEnum)destinationGroupInstance.Status).ToString()}");
+            }
+            bool canApplyInSpecificGroup = false;
+            int totalStudents = groupDefinitionobject.GroupCondition.NumberOfSlots;
+            int desTotalStudent = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(desGroupInstanceId);
+            if (desTotalStudent == totalStudents)
+            {
+                throw new ApiException($"you cann't add student to the desyination group instance as it is full");
+            }
+            var student = _groupInstanceStudentRepositoryAsync.GetByStudentId(studentId, sourceGroupInstance.Id);
+            if (promoCodeId != null)
+            {
+                canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(destinationGroupInstance.Id, promoCodeId.Value);
+                if (canApplyInSpecificGroup)
+                {
+                    student.GroupInstanceId = destinationGroupInstance.Id;
+                    await _groupInstanceStudentRepositoryAsync.UpdateAsync(student);
+                }
+            }
+            else
+            {
+                student.GroupInstanceId = destinationGroupInstance.Id;
+                await _groupInstanceStudentRepositoryAsync.UpdateAsync(student);
+            }
+
+            if (sourceGroupInstance.Status == (int)GroupInstanceStatusEnum.SlotCompleted)
+            {
+                sourceGroupInstance.Status = (int)GroupInstanceStatusEnum.Pending;
+                groupInstances.Update(sourceGroupInstance);
+            }
+            desTotalStudent = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(desGroupInstanceId);
+            if (desTotalStudent == totalStudents)
+            {
+                destinationGroupInstance.Status = (int)GroupInstanceStatusEnum.SlotCompleted;
+                groupInstances.Update(destinationGroupInstance);
+            }
+            List<int> groupInstanceId = new List<int>();
+            groupInstanceId.Add(srcGroupInstanceId);
+            groupInstanceId.Add(desGroupInstanceId);
+            var studentsGroup = GetListByGroupDefinitionId(groupDefinitionId, groupInstanceId);
+            return studentsGroup;
+        }
+        public async Task<List<StudentsGroupInstanceModel>> SwapStudentBetweenTwoGroups(int groupDefinitionId, int srcGroupInstanceId, string srcstudentId, int desGroupInstanceId, string desstudentId)
+        {
+            var groupDefinitionobject = await _GroupDefinitionRepositoryAsync.GetByIdAsync(groupDefinitionId);
+            if (groupDefinitionobject != null)
+            {
+                throw new ApiException($"Group definition Not Found");
+            }
+            if (groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Finished || groupDefinitionobject.Status == (int)GroupDefinationStatusEnum.Canceld)
+            {
+                throw new ApiException($"Group definition finished or canceled");
+            }
+            var sourceGroupInstance = groupInstances.Where(x => x.Id == srcGroupInstanceId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
+            if (sourceGroupInstance == null)
+            {
+                throw new ApiException($"You cannot EDit as Source group instance {((GroupInstanceStatusEnum)sourceGroupInstance.Status).ToString()}");
+            }
+            var destinationGroupInstance = groupInstances.Where(x => x.Id == desGroupInstanceId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
+            if (destinationGroupInstance == null)
+            {
+                throw new ApiException($"You cannot EDit as Destination group instance {((GroupInstanceStatusEnum)destinationGroupInstance.Status).ToString()}");
+            }
+            var sourcestudent = _groupInstanceStudentRepositoryAsync.GetByStudentId(srcstudentId, sourceGroupInstance.Id);
+            var destinationstudent = _groupInstanceStudentRepositoryAsync.GetByStudentId(desstudentId, destinationGroupInstance.Id);
+            sourcestudent.GroupInstanceId = destinationGroupInstance.Id;
+            destinationstudent.GroupInstanceId = sourceGroupInstance.Id;
+            List<GroupInstanceStudents> swapstudents = new List<GroupInstanceStudents>();
+            swapstudents.Add(sourcestudent);
+            swapstudents.Add(destinationstudent);
+            await _groupInstanceStudentRepositoryAsync.UpdateBulkAsync(swapstudents);
+            List<int> groupInstanceId = new List<int>();
+            groupInstanceId.Add(srcGroupInstanceId);
+            groupInstanceId.Add(desGroupInstanceId);
+            var studentsGroup = GetListByGroupDefinitionId(groupDefinitionId, groupInstanceId);
+            return studentsGroup;
         }
     }
 }

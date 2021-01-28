@@ -13,8 +13,10 @@ namespace Application.Interfaces.Repositories
         void AddStudentToTheGroupInstance(int groupId, string studentId);
         Task<GroupInstance> GetByIdAsync(int id);
         GroupInstance GetByGroupDefinitionId(int groupDefinitionId);
-        List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, int? groupInstanceId = null);
+        List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, List<int> groupInstancelist = null);
         Task<StudentsGroupInstanceModel> CreateGroupFromInterestedOverPayment(int groupDefinitionId);
         int GetCountByGroupDefinitionId(int groupDefinitionId);
+        Task<List<StudentsGroupInstanceModel>> EditGroupByAddStudentFromAnotherGroup(int groupDefinitionId, int srcGroupInstanceId, int desGroupInstanceId, string studentId, int? promoCodeId);
+        Task<List<StudentsGroupInstanceModel>> SwapStudentBetweenTwoGroups(int groupDefinitionId, int srcGroupInstanceId, string srcstudentId, int desGroupInstanceId, string desstudentId);
     }
 }
