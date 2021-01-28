@@ -8,7 +8,7 @@ namespace Application.Interfaces.Repositories
     public interface IGroupConditionPromoCodeRepositoryAsync : IGenericRepositoryAsync<GroupConditionPromoCode>
     {
         List<GroupConditionPromoCode> GetByGroupConditionDetailId(List<GroupConditionDetail> groupConditionDetails);
-        bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId);
+        bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId, List<GroupInstanceStudents> groupInstanceStudentsList = null);
         bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeId);
     }
 }
