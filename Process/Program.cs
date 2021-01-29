@@ -13,7 +13,7 @@ namespace Process
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-        } 
+        }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -21,9 +21,9 @@ namespace Process
                 {
                     var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                     var site = hostContext.Configuration.GetConnectionString("DefaultConnection");
-                    optionsBuilder.UseMySql( hostContext.Configuration.GetConnectionString("DefaultConnection"));
+                    optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
                     services.AddScoped<ApplicationDbContext>(s => new ApplicationDbContext(optionsBuilder.Options));
-                    services.AddHostedService<HomeworkCorrectionWorker>();
+                    services.AddHostedService<JobsWorker>();
                 });
     }
 }

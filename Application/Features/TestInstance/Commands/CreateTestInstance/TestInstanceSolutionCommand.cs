@@ -14,10 +14,10 @@ namespace Application.Features
     public partial class TestInstanceSolutionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public List<QuestionSubmissionInput> Questions { get; set; }
+        public List<SingleQuestionSubmissionInput> SingleQuestions { get; set; }
         public string StudentId { get; set; }
     }
-    public class QuestionSubmissionInput
+    public class SingleQuestionSubmissionInput
     {
         public int SingleQuestionId { get; set; }
         public string AnswerText { get; set; }
@@ -52,7 +52,7 @@ namespace Application.Features
             var testInstance = _testinstanceRepository.GetByIdAsync(request.Id).Result;
             testInstance.Status = (int)TestInstanceEnum.Solved;
             testInstance.SubmissionDate = DateTime.Now;
-            foreach (var item in request.Questions)
+            foreach (var item in request.SingleQuestions)
             {
                 SingleQuestionSubmission singleQuestionSubmission = new SingleQuestionSubmission();
                 singleQuestionSubmission.AnswerText = item.AnswerText;
