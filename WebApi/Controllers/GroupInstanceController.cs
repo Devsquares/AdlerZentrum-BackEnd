@@ -56,6 +56,24 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new GetGroupInstanceByGroupDefinitionIdQuery() { GroupDefinitionId = groupDefinitionId }));
         }
-        
+
+        [HttpGet("GetLastByStudent")]
+        public async Task<IActionResult> GetLastByStudent( string studentId )
+        {
+            return Ok(await Mediator.Send(new GetGroupInstanceByIdStudentQuery()
+            {
+                StudentId = studentId
+            }));
+        }
+
+        [HttpGet("GetAllLastByStudent")]
+        public async Task<IActionResult> GetByStudent(string studentId)
+        {
+            return Ok(await Mediator.Send(new GetAllLastGroupInstanceByIdStudentQuery()
+            {
+                StudentId = studentId
+            }));
+        }
+
     }
 }
