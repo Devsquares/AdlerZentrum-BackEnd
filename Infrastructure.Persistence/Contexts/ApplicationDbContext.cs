@@ -58,9 +58,9 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<GroupConditionPromoCode> GroupConditionPromoCodes { get; set; }
         public DbSet<InterestedStudent> InterestedStudents { get; set; }
         public DbSet<OverPaymentStudent> OverPaymentStudents { get; set; }
-        //public DbSet<GroupConditionPromoCode> groupConditionPromoCodes { get; set; }
         public DbSet<DisqualificationRequest> DisqualificationRequests { get; set; }
         public DbSet<GroupInstanceStudents> GroupInstanceStudents { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
