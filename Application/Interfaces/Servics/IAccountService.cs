@@ -26,6 +26,6 @@ namespace Application.Interfaces
         Task<ApplicationUser> GetByClaimsPrincipalAsync(ClaimsPrincipal user);
         Task<bool> BanAsync(string id, string comment);
         Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName);
-
+        Task<List<ApplicationUser>> GetAllRankedusers();
     }
 }

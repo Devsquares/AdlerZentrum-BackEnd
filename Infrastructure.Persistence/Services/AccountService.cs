@@ -569,6 +569,11 @@ namespace Infrastructure.Persistence.Services
             studentRoles = studentRoles.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return new PagedResponse<IEnumerable<object>>(studentRoles, pageNumber, pageSize, totalCount);
         }
+
+        public async Task<List<ApplicationUser>> GetAllRankedusers()
+        {
+            return _userManager.Users.Take(10).ToList();
+        }
     }
 
 }

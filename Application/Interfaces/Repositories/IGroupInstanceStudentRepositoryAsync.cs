@@ -13,5 +13,9 @@ namespace Application.Interfaces.Repositories
         GroupInstanceStudents GetByStudentId(string studentId, int groupId);
         int GetCountOfPlacmentTestStudents(int groupId);
         int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
+        GroupInstance GetLastByStudentId(string studentId);
+        List<GroupInstance> GetAllLastByStudentId(string studentId);
+        List<ApplicationUser> GetAllStudentInGroupInstanceByStudentId(string studentId);
+        List<ApplicationUser> GetAllStudentInGroupDefinitionByStudentId(string studentId);
     }
 }
