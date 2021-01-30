@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionPromoCode.Commands.DeleteGroupConditionPromoCodeById
+namespace Application.Features
 {
     public class DeleteGroupConditionPromoCodeByIdCommand : IRequest<Response<int>>
     {

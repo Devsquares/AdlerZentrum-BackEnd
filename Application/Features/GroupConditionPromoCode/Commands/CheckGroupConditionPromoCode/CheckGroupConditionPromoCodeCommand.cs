@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionPromoCode.Commands.CreateGroupConditionPromoCode
+namespace Application.Features
 {
     public partial class CheckGroupConditionPromoCodeCommand : IRequest<Response<bool>>
     {

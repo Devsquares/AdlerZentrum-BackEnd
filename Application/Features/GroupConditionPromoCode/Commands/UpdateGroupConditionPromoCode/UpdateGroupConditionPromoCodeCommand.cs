@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionPromoCode.Commands.UpdateGroupConditionPromoCode
+namespace Application.Features
 {
 	public class UpdateGroupConditionPromoCodeCommand : IRequest<Response<int>>
     {

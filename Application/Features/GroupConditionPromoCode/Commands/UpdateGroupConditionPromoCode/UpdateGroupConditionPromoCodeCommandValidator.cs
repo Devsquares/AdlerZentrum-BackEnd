@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.GroupConditionPromoCode.Commands.UpdateGroupConditionPromoCode
+namespace Application.Features
 {
     public class UpdateGroupConditionPromoCodeCommandValidator : AbstractValidator<UpdateGroupConditionPromoCodeCommand>
     {

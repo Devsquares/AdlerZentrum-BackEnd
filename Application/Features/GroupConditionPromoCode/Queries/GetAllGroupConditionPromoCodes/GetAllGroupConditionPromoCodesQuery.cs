@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionPromoCode.Queries.GetAllGroupConditionPromoCodes
+namespace Application.Features
 {
     public class GetAllGroupConditionPromoCodesQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllGroupConditionPromoCodesViewModel>>>
     {

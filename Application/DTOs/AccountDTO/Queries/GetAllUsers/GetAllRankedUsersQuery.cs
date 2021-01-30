@@ -1,7 +1,5 @@
-﻿using Application.Filters;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
-using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Models;
@@ -9,11 +7,10 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs 
+namespace Application.DTOs
 {
     public class GetAllRankedUsersQuery : IRequest<List<KeyValuePair<string,RankModel>>>
     {

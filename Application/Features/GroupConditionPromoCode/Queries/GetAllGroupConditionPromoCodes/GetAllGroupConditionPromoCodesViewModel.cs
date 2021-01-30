@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.GroupConditionPromoCode.Queries.GetAllGroupConditionPromoCodes
+namespace Application.Features
 {
 	public class GetAllGroupConditionPromoCodesViewModel
 	{
