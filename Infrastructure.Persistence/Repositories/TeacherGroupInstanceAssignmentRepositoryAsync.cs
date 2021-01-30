@@ -20,5 +20,10 @@ namespace Infrastructure.Persistence.Repositories
         {
             return groupInstances.Where(x => x.TeacherId == TeacherId);
         }
+
+        public TeacherGroupInstanceAssignment GetByGroupInstanceId(int groupInstanceId)
+        {
+            return groupInstances.Include(x=>x.Teacher).Where(x => x.GroupInstanceId == groupInstanceId).FirstOrDefault();
+        }
     }
 }
