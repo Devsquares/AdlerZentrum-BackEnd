@@ -1,4 +1,5 @@
 ﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Filters;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
@@ -6,6 +7,7 @@ using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,11 +18,25 @@ namespace Infrastructure.Persistence.Repositories
     {
         private readonly DbSet<GroupInstance> groupInstances;
         private readonly DbSet<GroupInstanceStudents> groupInstanceStudents;
+        private readonly DbSet<InterestedStudent> InterestedStudents;
+        private readonly DbSet<OverPaymentStudent> OverPaymentStudents;
+        private readonly IGroupConditionPromoCodeRepositoryAsync _groupConditionPromoCodeRepositoryAsync;
+        private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
+        private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
         private readonly DbSet<TeacherGroupInstanceAssignment> teacherGroupInstanceAssignment;
-        public GroupInstanceRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
+        public GroupInstanceRepositoryAsync(ApplicationDbContext dbContext,
+            IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync,
+             IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
+             IGroupDefinitionRepositoryAsync GroupDefinitionRepository) : base(dbContext)
+
         {
             groupInstances = dbContext.Set<GroupInstance>();
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
+            InterestedStudents = dbContext.Set<InterestedStudent>();
+            OverPaymentStudents = dbContext.Set<OverPaymentStudent>();
+            _groupConditionPromoCodeRepositoryAsync = groupConditionPromoCodeRepositoryAsync;
+            _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
+            _GroupDefinitionRepositoryAsync = GroupDefinitionRepository;
             teacherGroupInstanceAssignment = dbContext.Set<TeacherGroupInstanceAssignment>();
         }
 
@@ -81,7 +97,7 @@ namespace Infrastructure.Persistence.Repositories
                 StudentId = studentId
             });
         }
-        
+
         public async Task<GroupInstance> GetByIdAsync(int id)
         {
             return groupInstances
@@ -104,21 +120,24 @@ namespace Infrastructure.Persistence.Repositories
                   .Where(x => x.GroupDefinitionId == groupDefinitionId && x.Status == (int)GroupInstanceStatusEnum.Pending).FirstOrDefault();
         }
 
-        public List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId)
+        public List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, List<int> groupInstancelist = null)
         {
             List<StudentsGroupInstanceModel> StudentsGroupInstanceModelList = new List<StudentsGroupInstanceModel>();
             StudentsGroupInstanceModel StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
-            var groupInstanceList = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x=>x.Id).ToList();
+            var groupInstanceList = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId
+            && ((groupInstancelist != null && groupInstancelist.Count > 0) ? (groupInstancelist.Contains(x.Id)) : true)
+            && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x => x.Id).ToList();
             foreach (var groupInstance in groupInstanceList)
             {
+                StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
                 StudentsGroupInstanceObject.GroupInstanceId = groupInstance.Id;
                 StudentsGroupInstanceObject.Status = ((GroupInstanceStatusEnum)groupInstance.Status).ToString();
-                StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCode).Include(x=>x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
+                StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCode).Include(x => x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
                 {
                     StudentId = x.StudentId,
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
                     PromoCodeId = x.PromoCodeId,
-                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name:string.Empty
+                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name : string.Empty
 
                 }).ToList();
                 StudentsGroupInstanceObject.Teachername = teacherGroupInstanceAssignment.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => x.Teacher.FirstName).FirstOrDefault();
@@ -129,6 +148,16 @@ namespace Infrastructure.Persistence.Repositories
         public int GetCountByGroupDefinitionId(int groupDefinitionId)
         {
             return groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId).Count();
+        }
+        public async Task<GroupInstance> GetByIdPendingorCompleteAsync(int id)
+        {
+            return groupInstances
+                  .Include(x => x.GroupDefinition)
+                  .Include(x => x.Students)
+                  .Include(x => x.GroupDefinition.TimeSlot)
+                  .Include(x => x.GroupDefinition.Sublevel)
+                  .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
+                  .Where(x => x.Id == id && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
         }
     }
 }

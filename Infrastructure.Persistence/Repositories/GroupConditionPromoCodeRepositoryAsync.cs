@@ -34,7 +34,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => ids.Contains(x.GroupConditionDetailsId)).ToList();
         }
 
-        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId)
+        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId, List<GroupInstanceStudents> groupInstanceStudentsList = null)
         {
             bool canApply = false;
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
@@ -48,8 +48,13 @@ namespace Infrastructure.Persistence.Repositories
             //var studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId).ToList();
 
             var studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodeId != null)
-                .GroupBy(x => x.PromoCodeId)
-                .Select(x => new { promocodeId = x.Key, count = x.Count() }).ToList();
+               .GroupBy(x => x.PromoCodeId)
+               .Select(x => new { promocodeId = x.Key, count = x.Count() }).ToList();
+            if (groupInstanceStudentsList != null && groupInstanceStudentsList.Count>0) // from list not database
+            {
+                studentsGroup = groupInstanceStudentsList.GroupBy(x => x.PromoCodeId)
+                   .Select(x => new { promocodeId = x.Key, count = x.Count() }).ToList();
+            }
             // List<int> promocodsIDS = new List<int>();
             //foreach (var item in studentsGroup)
             //{
@@ -116,11 +121,11 @@ namespace Infrastructure.Persistence.Repositories
             foreach (var item in GroupConditionDetails)
             {
                 var validpromo = item.Where(x => x.PromoCodeId == promocodeId).FirstOrDefault();
-                if ( validpromo == null)
+                if (validpromo == null)
                 {
                     canApply = false;
                 }
-                else if ( validpromo != null && interestedStudentsCount < validpromo.Count)
+                else if (validpromo != null && interestedStudentsCount < validpromo.Count)
                 {
                     canApply = true;
                     break;

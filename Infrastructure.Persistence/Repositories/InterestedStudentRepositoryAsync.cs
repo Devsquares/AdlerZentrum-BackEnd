@@ -45,6 +45,14 @@ namespace Infrastructure.Persistence.Repositories
         {
             return _interestedstudents.Where(x => x.GroupDefinitionId == groupDefinitionId).Count();
         }
+
+        public List<InterestedStudent> GetListByGroupDefinitionId(int groupDefinitionId)
+        {
+            return _interestedstudents.AsNoTracking().Include(x => x.Student)
+                .Include(x => x.PromoCode)
+                .Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x=>x.Id).ToList();
+        }
     }
+
 
 }

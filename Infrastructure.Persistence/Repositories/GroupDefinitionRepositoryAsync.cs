@@ -23,5 +23,11 @@ namespace Infrastructure.Persistence.Repositories
             groupDefinitionsList = groupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return groupDefinitionsList;
         }
+
+        public GroupDefinition GetById(int groupDefinitionId)
+        {
+            return groupDefinitions.Include(x => x.GroupCondition).Include(x => x.Sublevel).Where(x => x.Id == groupDefinitionId).FirstOrDefault();
+           
+        }
     }
 }
