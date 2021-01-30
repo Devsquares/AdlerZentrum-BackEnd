@@ -27,5 +27,8 @@ namespace Application.Interfaces
         Task<bool> BanAsync(string id, string comment);
         Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName);
         Task<List<ApplicationUser>> GetAllRankedusers();
+        Task SendMessageToInstructor(string subject, string message, string studentId);
+        Task UpdatePhoneNumber(string newPhoneNumber, string studentId);
+        Task UpdatePhoto(string base64photo, string studentId);
     }
 }

@@ -50,7 +50,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public GroupInstance GetLastByStudentId(string studentId)
         {
-            return groupInstanceStudents.Include(x=>x.GroupInstance.GroupDefinition).Where(x => x.StudentId == studentId ).OrderByDescending(x=>x.CreatedDate).Select(x=>x.GroupInstance).FirstOrDefault();
+            return groupInstanceStudents.Include(x=>x.GroupInstance.GroupDefinition).Where(x => x.StudentId == studentId && x.IsDefault == true ).Select(x=>x.GroupInstance).FirstOrDefault();
         }
         public List<GroupInstance> GetAllLastByStudentId(string studentId)
         {

@@ -136,6 +136,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Photo")
+                        .HasColumnType("text");
+
                     b.Property<string>("Profilephoto")
                         .HasColumnType("text");
 
@@ -144,6 +147,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
+
+                    b.Property<int?>("SublevelId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -164,6 +170,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasName("UserNameIndex");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("SublevelId");
 
                     b.ToTable("ApplicationUsers");
                 });
@@ -349,7 +357,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("disqualificationRequests");
+                    b.ToTable("DisqualificationRequests");
                 });
 
             modelBuilder.Entity("Domain.Entities.EmailTemplate", b =>
@@ -518,7 +526,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("PromoCodeId");
 
-                    b.ToTable("groupConditionPromoCodes");
+                    b.ToTable("GroupConditionPromoCodes");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupDefinition", b =>
@@ -828,7 +836,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("interestedStudents");
+                    b.ToTable("InterestedStudents");
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
@@ -991,6 +999,37 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Levels");
                 });
 
+            modelBuilder.Entity("Domain.Entities.ListeningAudioFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ListeningAudioFile");
+                });
+
             modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
                 {
                     b.Property<int>("Id")
@@ -1023,38 +1062,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("overPaymentStudents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ListeningAudioFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ListeningAudioFile");
+                    b.ToTable("OverPaymentStudents");
                 });
 
             modelBuilder.Entity("Domain.Entities.Pricing", b =>
@@ -1711,6 +1719,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
+
+                    b.HasOne("Domain.Entities.Sublevel", "Sublevel")
+                        .WithMany()
+                        .HasForeignKey("SublevelId");
                 });
 
             modelBuilder.Entity("Domain.Entities.BanRequest", b =>

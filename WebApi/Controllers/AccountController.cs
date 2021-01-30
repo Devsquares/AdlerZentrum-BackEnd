@@ -152,5 +152,31 @@ namespace WebApi.Controllers
             return Ok(report);
         }
 
+        [HttpPost("SendMessageToAdmin")]
+        public async Task<IActionResult> SendMessageToAdmin(string subject, string message, string studentId)
+        {
+           // await _accountService.ForgotPassword(model, Request.Headers["origin"]);
+            return Ok();
+        }
+
+        [HttpPost("SendMessageToInstructor")]
+        public async Task<IActionResult> SendMessageToInstructor(string subject, string message, string studentId)
+        {
+            //await _accountService.SendMessageToInstructor(subject, message, studentId);
+            return Ok();
+        }
+        [HttpPut("UpdatePhoto")]
+        public async Task<IActionResult> UpdatePhoto(string base64photo, string studentId)
+        {
+            await _accountService.UpdatePhoto(base64photo, studentId);
+            return Ok();
+        }
+
+        [HttpPut("UpdatePhoneNumber")]
+        public async Task<IActionResult> UpdatePhoneNumber(string newPhoneNumber, string studentId)
+        {
+            await _accountService.UpdatePhoneNumber(newPhoneNumber, studentId);
+            return Ok();
+        }
     }
 }

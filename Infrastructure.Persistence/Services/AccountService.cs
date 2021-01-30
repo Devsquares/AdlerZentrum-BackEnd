@@ -40,6 +40,7 @@ namespace Infrastructure.Persistence.Services
         private readonly IGroupDefinitionRepositoryAsync _groupDefinitionRepositoryAsync;
         private readonly IGroupConditionRepositoryAsync _groupConditionRepositoryAsync;
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
+        private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignmentRepositoryAsync;
         private readonly ApplicationDbContext _context;
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
@@ -51,7 +52,8 @@ namespace Infrastructure.Persistence.Services
             IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
             IGroupDefinitionRepositoryAsync groupDefinitionRepositoryAsync,
             IGroupConditionRepositoryAsync groupConditionRepositoryAsync,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignmentRepositoryAsync)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -64,6 +66,7 @@ namespace Infrastructure.Persistence.Services
             _groupDefinitionRepositoryAsync = groupDefinitionRepositoryAsync;
             _groupConditionRepositoryAsync = groupConditionRepositoryAsync;
             _context = context;
+            _teacherGroupInstanceAssignmentRepositoryAsync = teacherGroupInstanceAssignmentRepositoryAsync;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -573,6 +576,43 @@ namespace Infrastructure.Persistence.Services
         public async Task<List<ApplicationUser>> GetAllRankedusers()
         {
             return _userManager.Users.Take(10).ToList();
+        }
+        public async Task SendMessageToInstructor(string subject, string message,string studentId)
+        {
+            var groupInstanceObject = _groupInstanceStudentRepositoryAsync.GetLastByStudentId(studentId);
+            if(groupInstanceObject == null)
+            {
+                throw new ApiException("No Group instance for this student");
+            }
+            var teacher = _teacherGroupInstanceAssignmentRepositoryAsync.GetByGroupInstanceId(groupInstanceObject.Id);
+            var student = _userManager.Users.Where(x => x.Id == studentId).FirstOrDefault();
+            EmailRequest emailRequest = new EmailRequest() { 
+                From = student.Email,
+                To = teacher.Teacher.Email,
+                Body = message,
+                Subject = subject
+            };
+            await _emailService.SendAsync(emailRequest);
+
+        }
+
+        public async Task UpdatePhoto(string base64photo, string studentId)
+        {
+            //string base64Decoded;
+            //byte[] data = System.Convert.FromBase64String(base64photo);
+            //base64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(data);
+            var student = _userManager.Users.Where(x => x.Id == studentId).FirstOrDefault();
+            student.Profilephoto = base64photo;
+            await _userManager.UpdateAsync(student);
+
+        }
+
+        public async Task UpdatePhoneNumber(string newPhoneNumber, string studentId)
+        {
+            var student = _userManager.Users.Where(x => x.Id == studentId).FirstOrDefault();
+            student.PhoneNumber = newPhoneNumber;
+            await _userManager.UpdateAsync(student);
+
         }
     }
 
