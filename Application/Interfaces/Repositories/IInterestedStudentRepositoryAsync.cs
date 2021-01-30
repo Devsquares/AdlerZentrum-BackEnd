@@ -10,5 +10,6 @@ namespace Application.Interfaces.Repositories
         InterestedStudent GetByStudentId(string studentId, int groupDefinitionId);
         object GetByGroupDefinitionId(int groupDefinitionId);
         int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
+        List<InterestedStudent> GetListByGroupDefinitionId(int groupDefinitionId);
     }
 }
