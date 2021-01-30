@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.DTOs;
-using Application.Features.GroupConditionPromoCode.Commands.CreateGroupConditionPromoCode;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
