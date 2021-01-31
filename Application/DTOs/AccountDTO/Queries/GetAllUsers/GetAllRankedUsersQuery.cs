@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class GetAllRankedUsersQuery : IRequest<List<KeyValuePair<string,RankModel>>>
+    public class GetAllRankedUsersQuery : IRequest<List<KeyValuePair<string, RankModel>>>
     {
         public string UserId { get; set; }
         public bool isInstance { get; set; }
@@ -32,16 +32,16 @@ namespace Application.DTOs
 
         public async Task<List<KeyValuePair<string, RankModel>>> Handle(GetAllRankedUsersQuery request, CancellationToken cancellationToken)
         {
-           
+
             Random rd = new Random();
             List<KeyValuePair<string, RankModel>> rankedStudents = new List<KeyValuePair<string, RankModel>>();
-            KeyValuePair<string, RankModel> rankedStudent = new KeyValuePair<string, RankModel>();
+            // KeyValuePair<string, RankModel> rankedStudent = new KeyValuePair<string, RankModel>();
             RankModel rankmodel = new RankModel();
             List<ApplicationUser> users;
             if (request.isInstance)
             {
-                 users = _GroupInstanceStudentRepositoryAsync.GetAllStudentInGroupInstanceByStudentId(request.UserId);
-               
+                users = await _GroupInstanceStudentRepositoryAsync.GetAllStudentInGroupInstanceByStudentId(request.UserId);
+
             }
             else
             {
@@ -51,7 +51,6 @@ namespace Application.DTOs
             {
                 int rand_num = rd.Next(1, 20);
                 rankedStudents.Add(new KeyValuePair<string, RankModel>(item.Id, new RankModel() { StudentName = item.FirstName, Rank = rand_num }));
-
             }
             rankedStudents = rankedStudents.OrderBy(x => x.Value.Rank).ToList();
             return new List<KeyValuePair<string, RankModel>>(rankedStudents);

@@ -20,7 +20,7 @@ namespace Infrastructure.Persistence.Repositories
             groupInstances = dbContext.Set<GroupInstance>();
         }
 
-        public GroupInstanceStudents GetByStudentId(string studentId,int groupId)
+        public GroupInstanceStudents GetByStudentId(string studentId, int groupId)
         {
             return groupInstanceStudents.Where(x => x.StudentId == studentId && x.GroupInstanceId == groupId).FirstOrDefault();
         }
@@ -32,41 +32,41 @@ namespace Infrastructure.Persistence.Repositories
 
         public List<string> GetEmailsByGroupDefinationId(int groupDefinationId)
         {
-           var emailList =   groupInstanceStudents.Include(x=>x.GroupInstance)
-                .Include(x => x.Student)
-                .Where(x => x.GroupInstance.GroupDefinitionId == groupDefinationId).Select(x=>x.Student.Email).ToList();
+            var emailList = groupInstanceStudents.Include(x => x.GroupInstance)
+                 .Include(x => x.Student)
+                 .Where(x => x.GroupInstance.GroupDefinitionId == groupDefinationId).Select(x => x.Student.Email).ToList();
             return emailList;
         }
 
-        public int GetCountOfPlacmentTestStudents(int groupId)
+        public  async Task<int> GetCountOfPlacmentTestStudents(int groupId)
         {
-            return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId && x.IsPlacementTest == true).Count();
+            return await groupInstanceStudents.Where(x => x.GroupInstanceId == groupId && x.IsPlacementTest == true).CountAsync();
         }
 
-        public int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId)
+        public async Task<int> GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId)
         {
-            return groupInstanceStudents.Include(x=>x.GroupInstance).Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).Count();
+            return await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).CountAsync();
         }
 
         public GroupInstance GetLastByStudentId(string studentId)
         {
-            return groupInstanceStudents.Include(x=>x.GroupInstance.GroupDefinition).Where(x => x.StudentId == studentId && x.IsDefault == true ).Select(x=>x.GroupInstance).FirstOrDefault();
+            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition).Where(x => x.StudentId == studentId && x.IsDefault == true).Select(x => x.GroupInstance).FirstOrDefault();
         }
         public List<GroupInstance> GetAllLastByStudentId(string studentId)
         {
             return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition).Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).Select(x => x.GroupInstance).ToList();
         }
 
-        public List<ApplicationUser> GetAllStudentInGroupInstanceByStudentId(string studentId)
+        public async Task<List<ApplicationUser>> GetAllStudentInGroupInstanceByStudentId(string studentId)
         {
-            var groupinstance = groupInstanceStudents.Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-            return groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstanceId == groupinstance.GroupInstanceId).Select(x => x.Student).ToList();
+            var groupinstance = await groupInstanceStudents.Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
+            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstanceId == groupinstance.GroupInstanceId).Select(x => x.Student).ToListAsync();
 
         }
-        public List<ApplicationUser> GetAllStudentInGroupDefinitionByStudentId(string studentId)
+        public async Task<List<ApplicationUser>> GetAllStudentInGroupDefinitionByStudentId(string studentId)
         {
-            var groupinstance = groupInstanceStudents.Include(x=>x.GroupInstance).Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-            return groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).Select(x => x.Student).ToList();
+            var groupinstance = await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
+            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).Select(x => x.Student).ToListAsync();
         }
     }
 }

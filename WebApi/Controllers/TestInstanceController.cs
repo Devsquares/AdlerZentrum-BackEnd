@@ -57,7 +57,7 @@ namespace WebApi.Controller
 
 
         [HttpGet("GetFinalLevelTestsForStudent")]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetFinalLevelTestsForStudent()
         {
             if (AuthenticatedUserService.GroupInstanceId == null)
@@ -73,7 +73,7 @@ namespace WebApi.Controller
         }
 
         [HttpGet("GetSubLevelTestsForStudent")]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetSubLevelTestsForStudent()
         {
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
@@ -86,7 +86,7 @@ namespace WebApi.Controller
 
         // TODO need to be reviewd
         [HttpPut("TestInstanceSolution")]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> Post(TestInstanceSolutionCommand command)
         {
             command.StudentId = AuthenticatedUserService.UserId;
