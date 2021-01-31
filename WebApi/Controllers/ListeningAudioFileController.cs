@@ -90,9 +90,9 @@ namespace WebApi.Controllers
                 }
                 return Ok(await Mediator.Send(command));
             }
-            catch(Exception ex)
+            catch
             {
-                return Ok();
+                return NotFound();
             }
            
         }

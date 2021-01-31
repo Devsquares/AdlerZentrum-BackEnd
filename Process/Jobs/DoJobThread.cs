@@ -14,19 +14,37 @@ namespace Process
 {
     public class DoJobThread
     {
-        private ApplicationDbContext applicationDbContext;
         private readonly IServiceProvider _serviceProvider;
 
+        public DoJobThread(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
         public void Run(object job)
         {
             Job _job = (Job)job;
             using (var scope = _serviceProvider.CreateScope())
             {
+                // update job to running.
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                _job.Status = (int)JobStatusEnum.Running;
+                dbContext.Update(_job);
+                dbContext.SaveChanges();
+
                 switch (_job.Type)
                 {
                     case (int)JobTypeEnum.TestCorrection:
-                        CorrectTheTest(dbContext, _job.TestInstanceId);
+                        try
+                        {
+                            CorrectTheTest(dbContext, _job.TestInstanceId);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
+                        }
                         break;
                     default:
                         break;
@@ -130,7 +148,7 @@ namespace Process
                     }
                     item.Corrected = true;
                 }
-             
+
                 else
                 {
                     autoCorrected = false;
@@ -141,9 +159,9 @@ namespace Process
             return autoCorrected;
         }
 
-        public static DoJobThread Create()
+        public static DoJobThread Create(IServiceProvider serviceProvider)
         {
-            return new DoJobThread();
+            return new DoJobThread(serviceProvider);
         }
     }
 }

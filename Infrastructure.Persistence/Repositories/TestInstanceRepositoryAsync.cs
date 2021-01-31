@@ -15,9 +15,18 @@ namespace Infrastructure.Persistence.Repositories
     public class TestInstanceRepositoryAsync : GenericRepositoryAsync<TestInstance>, ITestInstanceRepositoryAsync
     {
         private readonly DbSet<TestInstance> _testInstances;
+        private readonly DbSet<SingleQuestionSubmission> _singleQuestionSubmissions;
+        private readonly DbSet<Test> _tests;
+        private readonly DbSet<Question> _questions;
+        private readonly DbSet<SingleQuestion> _singleQuestions;
+        private readonly DbSet<Choice> _choice;
+        private readonly DbSet<ChoiceSubmission> _choiceSubmission;
+
         public TestInstanceRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             _testInstances = dbContext.Set<TestInstance>();
+            _singleQuestionSubmissions = dbContext.Set<SingleQuestionSubmission>();
+            _singleQuestions = dbContext.Set<SingleQuestion>();
         }
 
         public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType)
@@ -94,5 +103,14 @@ namespace Infrastructure.Persistence.Repositories
             return await _testInstances.Where(x => x.LessonInstanceId == LessonInstanceId).ToListAsync();
         }
 
+        public async Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int status)
+        {
+            return await _testInstances
+              .Include(x => x.Test)
+              .Include(x => x.Student)
+              .Include(x => x.LessonInstance)
+              .ThenInclude(x => x.GroupInstance)
+               .Where(x => x.CorrectionTeacherId == correctionTeacherId && x.Status == status).ToListAsync();
+        } 
     }
 }

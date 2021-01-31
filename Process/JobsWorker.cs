@@ -25,14 +25,14 @@ namespace Process
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
-            _doJobThread = DoJobThread.Create();
+            _doJobThread = DoJobThread.Create(_serviceProvider);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                TimeSpan interval = new TimeSpan(1, 0, 0, 0);
+                TimeSpan interval = new TimeSpan(0, 0, 0, 0);
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
