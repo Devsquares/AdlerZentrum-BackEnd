@@ -45,7 +45,7 @@ namespace Application.DTOs
             }
             else
             {
-                users = _GroupInstanceStudentRepositoryAsync.GetAllStudentInGroupDefinitionByStudentId(request.UserId);
+                users = await _GroupInstanceStudentRepositoryAsync.GetAllStudentInGroupDefinitionByStudentId(request.UserId);
             }
             foreach (var item in users)
             {
