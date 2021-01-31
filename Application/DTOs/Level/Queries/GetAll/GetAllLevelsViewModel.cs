@@ -9,7 +9,9 @@ namespace Application.DTOs
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Sublevel> SubLevels { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public ICollection<SubLevelsViewModel> SubLevels { get; set; }
+      // public ICollection<Sublevel> SubLevels { get; set; }
 
     }
 }

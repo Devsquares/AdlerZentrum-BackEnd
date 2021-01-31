@@ -25,6 +25,8 @@ namespace Application.Mappings
             CreateMap<GetAllBugsQuery, GetAllBugsParameter>();
 
             CreateMap<Level, GetAllLevelsViewModel>().ReverseMap();
+            CreateMap<Sublevel, SubLevelsViewModel>().ReverseMap();
+            CreateMap<LessonDefinition, LessonDefinitionViewModel>().ReverseMap();
             CreateMap<CreateLevelCommand, Level>();
             CreateMap<GetAllLevelsQuery, PagedResponse<Level>>();
             CreateMap<ListeningAudioFile, CreateListeningAudioFileCommand>().ReverseMap();
