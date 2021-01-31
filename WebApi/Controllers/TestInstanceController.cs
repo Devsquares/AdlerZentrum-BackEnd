@@ -129,6 +129,17 @@ namespace WebApi.Controller
             return Ok(await Mediator.Send(new GetTestInstanceToAssginQuery()));
         }
 
+        [HttpGet("GetTestInstanceByTeacher")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary,teacehr")]
+        public async Task<IActionResult> GetTestInstanceByTeacher(GetTestInstanceByTeacherQuery query)
+        {
+            return Ok(await Mediator.Send(new GetTestInstanceByTeacherQuery
+            {
+                Status = query.Status,
+                TeacherId = query.TeacherId
+            }));
+        }
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int id)

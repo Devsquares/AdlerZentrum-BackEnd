@@ -31,7 +31,8 @@ namespace Infrastructure.Persistence.Repositories
             var interestedStudents = _overpaymentstudents.Include(x => x.Student)
                 .Include(x => x.GroupDefinition)
                 .Where(x => x.GroupDefinitionId == groupDefinitionId)
-                .Select(x => new {
+                .Select(x => new
+                {
                     StudentId = x.Student.Id,
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}"
                 }).ToList();
@@ -47,7 +48,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return _overpaymentstudents.Include(x => x.Student)
                 .Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x => x.Id).ToList();
-            
+
         }
     }
 

@@ -7,5 +7,6 @@ namespace Domain.Entities
         public int TestInstanceId { get; set; }
         public int Status { get; set; }
         public int Type { get; set; }
+        public string Failure { get; set; }
     }
 }

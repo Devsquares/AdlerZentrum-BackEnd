@@ -35,14 +35,14 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("getDateTime")]
-        public async Task<IActionResult> getDateTime()
+        public IActionResult getDateTime()
         {
             return Ok(DateTime.Now.ToString());
         }
 
 
         [HttpGet("GetAllCountries")]
-        public async Task<IActionResult> GetAllCountries()
+        public IActionResult GetAllCountries()
         {
             List<string> culuterList = new List<string>();
             CultureInfo[] cultureInfos = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
