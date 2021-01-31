@@ -47,12 +47,12 @@ namespace Application.DTOs
             int totalCount = 0;
             var validFilter = _mapper.Map<RequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
-            GroupDefinitions =  _GroupDefinitionRepositoryAsync.GetALL(request.PageNumber, request.PageSize,request.SubLevel,out totalCount);
+            GroupDefinitions = _GroupDefinitionRepositoryAsync.GetALL(request.PageNumber, request.PageSize, request.SubLevel, out totalCount);
             var groupDefinitionsModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
             foreach (var groupDefinition in groupDefinitionsModel)
             {
                 groupDefinition.ActualTotalGroupInstances = _GroupInstanceRepositoryAsync.GetCountByGroupDefinitionId(groupDefinition.Id);
-                groupDefinition.ActualTotalStudents = _GroupInstanceStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
+                groupDefinition.ActualTotalStudents = await _GroupInstanceStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
                 groupDefinition.TotalInterestedStudents = _InterestedStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
                 groupDefinition.TotalOverPaymentStudents = _OverPaymentStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
             }

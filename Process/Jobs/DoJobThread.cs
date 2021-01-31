@@ -26,7 +26,7 @@ namespace Process
                 switch (_job.Type)
                 {
                     case (int)JobTypeEnum.TestCorrection:
-
+                        CorrectTheTest(dbContext, _job.TestInstanceId);
                         break;
                     default:
                         break;
@@ -43,19 +43,26 @@ namespace Process
             var singleQuestions = dbContext.SingleQuestionSubmissions
                                            .Where(x => x.TestInstanceId == testId).ToListAsync().Result;
 
-            int points = 0;
-            points = correctTheQuestions(dbContext, singleQuestions, points);
+            bool autoCorrected = correctTheQuestions(dbContext, singleQuestions, out int points);
 
             testInstance.Points += points;
             // check if all single quesition not corrected, if so then add task to the teacher to correct it.
-
-            testInstance.Status = (int)TestInstanceEnum.Corrected;
+            if (autoCorrected)
+            {
+                testInstance.Status = (int)TestInstanceEnum.Corrected;
+            }
+            else
+            {
+                testInstance.ManualCorrection = true;
+            }
+            //TODO add required submtion date
             dbContext.TestInstances.Update(testInstance);
-
         }
 
-        private int correctTheQuestions(ApplicationDbContext dbContext, List<SingleQuestionSubmission> SingleQuestionSubmissions, int points)
+        private bool correctTheQuestions(ApplicationDbContext dbContext, List<SingleQuestionSubmission> SingleQuestionSubmissions, out int points)
         {
+            bool autoCorrected = true;
+            points = 0;
             foreach (var item in SingleQuestionSubmissions)
             {
                 // TrueAndfalse
@@ -123,10 +130,15 @@ namespace Process
                     }
                     item.Corrected = true;
                 }
+             
+                else
+                {
+                    autoCorrected = false;
+                }
             }
 
             dbContext.SingleQuestionSubmissions.UpdateRange(SingleQuestionSubmissions);
-            return points;
+            return autoCorrected;
         }
 
         public static DoJobThread Create()

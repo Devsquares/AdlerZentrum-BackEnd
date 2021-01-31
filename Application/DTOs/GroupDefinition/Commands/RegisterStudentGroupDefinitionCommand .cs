@@ -63,14 +63,14 @@ namespace Application.DTOs
                         Serial = 1.ToString(),
                         Status = (int)GroupInstanceStatusEnum.Pending
                     });
-                   
+
                 }
                 //todo check if already registerd
                 //todo check on isdefault
                 var registeredStudent = _groupInstanceStudentRepositoryAsync.GetByStudentId(command.StudentId, groupInstans.Id);
                 var interestedRegisteredStudent = _interestedStudentRepositoryAsync.GetByStudentId(command.StudentId, GroupDefinition.Id);
                 var overRegisteredStudent = _overPaymentStudentRepositoryAsync.GetByStudentId(command.StudentId, GroupDefinition.Id);
-                if (registeredStudent !=null || interestedRegisteredStudent != null || overRegisteredStudent!=null)
+                if (registeredStudent != null || interestedRegisteredStudent != null || overRegisteredStudent != null)
                 {
                     throw new Exception("the student was already registered");
                 }
@@ -110,9 +110,9 @@ namespace Application.DTOs
                     {
                         if (command.PlacmentTestId.HasValue)
                         {
-                            
-                            int studentPlacmentCount = _groupInstanceStudentRepositoryAsync.GetCountOfPlacmentTestStudents(groupInstans.Id);
-                            if(studentPlacmentCount < groupInstans.GroupDefinition.GroupCondition.NumberOfSlotsWithPlacementTest)
+
+                            int studentPlacmentCount = await _groupInstanceStudentRepositoryAsync.GetCountOfPlacmentTestStudents(groupInstans.Id);
+                            if (studentPlacmentCount < groupInstans.GroupDefinition.GroupCondition.NumberOfSlotsWithPlacementTest)
                             {
                                 canApply = true;
                                 await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
@@ -121,11 +121,11 @@ namespace Application.DTOs
                                     StudentId = command.StudentId,
                                     IsPlacementTest = true,
                                     IsDefault = true
-                                }) ;
+                                });
                             }
                             ///// todo has placmenttest but cannot apply in group need to add in waiting list
                             else { }
-                            
+
 
                         }
                         else
@@ -140,7 +140,7 @@ namespace Application.DTOs
                             });
                         }
                     }
-                    if(canApply)
+                    if (canApply)
                     {
                         if (GroupDefinition.Status == (int)GroupDefinationStatusEnum.New)
                         {

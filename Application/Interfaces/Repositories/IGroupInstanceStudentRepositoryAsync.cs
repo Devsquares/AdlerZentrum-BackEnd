@@ -11,11 +11,11 @@ namespace Application.Interfaces.Repositories
 
         List<string> GetEmailsByGroupDefinationId(int groupDefinationId);
         GroupInstanceStudents GetByStudentId(string studentId, int groupId);
-        int GetCountOfPlacmentTestStudents(int groupId);
-        int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
+        Task<int> GetCountOfPlacmentTestStudents(int groupId);
+        Task<int> GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
         GroupInstance GetLastByStudentId(string studentId);
         List<GroupInstance> GetAllLastByStudentId(string studentId);
-        List<ApplicationUser> GetAllStudentInGroupInstanceByStudentId(string studentId);
-        List<ApplicationUser> GetAllStudentInGroupDefinitionByStudentId(string studentId);
+        Task<List<ApplicationUser>> GetAllStudentInGroupInstanceByStudentId(string studentId);
+        Task<List<ApplicationUser>> GetAllStudentInGroupDefinitionByStudentId(string studentId);
     }
 }
