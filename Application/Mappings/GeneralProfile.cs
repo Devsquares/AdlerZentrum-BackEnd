@@ -12,6 +12,7 @@ using Application.Features.TestInstance.Queries.GetAllTestInstances;
 using Application.Features;
 using Application.Features.Bug.Queries.GetAllBugs;
 using Application.Features.Bug.Commands.CreateBug;
+using Domain.Models;
 
 namespace Application.Mappings
 {
@@ -106,6 +107,7 @@ namespace Application.Mappings
             CreateMap<TestInstance, TestInstanceViewModel>().ReverseMap();
             CreateMap<DisqualificationRequest, GetAllDisqualificationRequestsViewModel>().ReverseMap();
             CreateMap<GetAllDisqualificationRequestsQuery, GetAllDisqualificationRequestsParameter>().ReverseMap();
+            CreateMap<GroupInstanceStudents, GroupInstanceStudentsViewModel>().ReverseMap();
         }
     }
 }

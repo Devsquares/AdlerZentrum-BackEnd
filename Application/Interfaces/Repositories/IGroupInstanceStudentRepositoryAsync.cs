@@ -17,5 +17,7 @@ namespace Application.Interfaces.Repositories
         List<GroupInstance> GetAllLastByStudentId(string studentId);
         Task<List<ApplicationUser>> GetAllStudentInGroupInstanceByStudentId(string studentId);
         Task<List<ApplicationUser>> GetAllStudentInGroupDefinitionByStudentId(string studentId);
+
+        void SaveAllGroupInstanceStudents(int groupDefinitionId, List<GroupInstanceStudents> groupInstanceStudentslist);
     }
 }
