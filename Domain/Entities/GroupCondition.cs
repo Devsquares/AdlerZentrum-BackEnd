@@ -10,7 +10,6 @@ namespace Domain.Entities
         public int? Status { get; set; }
         public int NumberOfSlots { get; set; }
         public int NumberOfSlotsWithPlacementTest { get; set; }
-        // TODO fix this realtion
-        //public int NumberOfSlotsWithPromoCode { get; set; }
+        public string Name { get; set; }
     }
 }

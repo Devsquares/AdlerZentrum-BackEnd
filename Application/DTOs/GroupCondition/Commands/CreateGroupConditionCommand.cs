@@ -19,6 +19,7 @@ namespace Application.DTOs
         public int? Status { get; set; }
         public int NumberOfSlots { get; set; }
         public int NumberOfSlotsWithPlacementTest { get; set; }
+        public string Name { get; set; }
         public List<List<GroupConditionPromoCodeInputModel>> PromoCodes { get; set; }
 
         public class CreateGroupConditionCommandHandler : IRequestHandler<CreateGroupConditionCommand, Response<int>>
