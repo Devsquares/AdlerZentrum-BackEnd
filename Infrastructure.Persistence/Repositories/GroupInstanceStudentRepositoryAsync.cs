@@ -14,10 +14,12 @@ namespace Infrastructure.Persistence.Repositories
     {
         private readonly DbSet<GroupInstanceStudents> groupInstanceStudents;
         private readonly DbSet<GroupInstance> groupInstances;
+        private readonly DbSet<GroupDefinition> groupDefinition;
         public GroupInstanceStudentRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
             groupInstances = dbContext.Set<GroupInstance>();
+            groupDefinition = dbContext.Set<GroupDefinition>();
         }
 
         public GroupInstanceStudents GetByStudentId(string studentId, int groupId)
@@ -67,6 +69,11 @@ namespace Infrastructure.Persistence.Repositories
         {
             var groupinstance = await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
             return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).Select(x => x.Student).ToListAsync();
+        }
+
+        public void SaveAllGroupInstanceStudents(int groupDefinitionId,List<GroupInstanceStudents> groupInstanceStudentslist)
+        {
+             groupInstanceStudents.UpdateRange(groupInstanceStudentslist);
         }
     }
 }

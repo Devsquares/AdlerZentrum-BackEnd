@@ -7,7 +7,9 @@ using Application.DTOs.GroupInstance.Commands;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.GroupInstance.Queries.GetAll;
 using Application.DTOs.GroupInstance.Queries.GetById;
+using Application.Features.GroupInstancesStudents.Commands;
 using Application.Filters;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -110,6 +112,16 @@ namespace WebApi.Controllers
                 DesStudentId = desstudentId,
                 SrcGroupInstanceId = srcGroupInstanceId,
                 SrcStudentId = srcstudentId
+            }));
+        }
+
+        [HttpPut("SaveAllGroupInstanceStudents")]
+        public async Task<IActionResult> SaveAllGroupInstanceStudents(int groupDefinitionId, List<GroupInstanceStudentsViewModel> groupInstanceStudents)
+        {
+            return Ok(await Mediator.Send(new SaveAllGroupInstanceStudentsCommand()
+            {
+                GroupDefinitionId = groupDefinitionId,
+                GroupInstancesStudentList = groupInstanceStudents
             }));
         }
 
