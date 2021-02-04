@@ -8,6 +8,9 @@ namespace Domain.Entities
     public class SingleQuestionSubmission : AuditableBaseEntity
     {
         public string AnswerText { get; set; }
+        public string CorrectionText { get; set; }
+        public string CompleteWords { get; set; }
+        public string CompleteWordsCorrections { get; set; }
         public bool TrueOrFalseSubmission { get; set; }
         public string StudentId { get; set; }
         public ICollection<ChoiceSubmission> Choices { get; set; }

@@ -2,9 +2,8 @@ using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace WebApi.Controllers.v1
+namespace WebApi.Controllers
 {
-    [ApiVersion("1.0")]
     public class ChoiceSubmissionController : BaseApiController
     {
         // GET: api/<controller>
