@@ -22,6 +22,7 @@ namespace Application.Features
         public int SingleQuestionId { get; set; }
         public string AnswerText { get; set; }
         public bool TrueOrFalseSubmission { get; set; }
+        public List<string> CompleteWords { get; set; }
         public ICollection<ChoiceSubmissionInputModel> Choices { get; set; }
 
     }
@@ -60,6 +61,7 @@ namespace Application.Features
                 singleQuestionSubmission.TrueOrFalseSubmission = item.TrueOrFalseSubmission;
                 singleQuestionSubmission.StudentId = request.StudentId;
                 singleQuestionSubmission.Corrected = false;
+                singleQuestionSubmission.CompleteWords = string.Join("-", item.CompleteWords);
                 var singleQuestionSubmissionId = _singleQuestionSubmission.AddAsync(singleQuestionSubmission).Result.Id;
                 if (item.Choices != null)
                 {

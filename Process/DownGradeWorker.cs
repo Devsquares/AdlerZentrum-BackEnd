@@ -35,10 +35,10 @@ namespace Process
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var LessonInstanceStudents = dbContext.LessonInstanceStudents
                         .Include(x => x.LessonInstance)
-                        .Include(x => x.LessonInstance.GroupInstance)
-                        .Where(x => x.ReportDateTime > DateTime.Now.AddDays(14) && x.Attend == false && x.LessonInstance.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running).ToList();
+                        .Include(x => x.LessonInstance.GroupInstance);
+                        // .Where(x => x.ReportDateTime > DateTime.Now.AddDays(14) && x.Attend == false && x.LessonInstance.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running).ToList();
                     // send to him reme
-                    _logger.LogInformation("Students to be warring Count: {}", LessonInstanceStudents.Count);
+                    // _logger.LogInformation("Students to be warring Count: {}", LessonInstanceStudents.Count);
                 }
                 // get last attend if over two weeks.
                 // check if it is the active roup or not.

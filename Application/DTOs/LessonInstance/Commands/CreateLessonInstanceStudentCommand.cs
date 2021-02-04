@@ -27,10 +27,6 @@ namespace Application.DTOs
                 // TODO if it absence again check last two lessons:
                 // if just last one create absnce reminder.
                 // if it is the third one make him disquilified.
-                foreach (var item in command.inputModels)
-                {
-                    item.ReportDateTime = DateTime.Now;
-                }
                 await _LessonInstanceStudentRepositoryAsync.UpdateBulkAsync(command.inputModels);
                 return new Response<bool>(true);
             }

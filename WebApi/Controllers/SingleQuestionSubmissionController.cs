@@ -2,9 +2,8 @@ using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace WebApi.Controllers.v1
+namespace WebApi.Controllers
 {
-    [ApiVersion("1.0")]
     public class SingleQuestionSubmissionController : BaseApiController
     {
         // GET: api/<controller>
@@ -12,7 +11,8 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> Get([FromQuery] GetAllSingleQuestionSubmissionsParameter filter)
         {
 
-            return Ok(await Mediator.Send(new GetAllSingleQuestionSubmissionsQuery() {
+            return Ok(await Mediator.Send(new GetAllSingleQuestionSubmissionsQuery()
+            {
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
                 FilterArray = filter.FilterArray,
@@ -51,6 +51,12 @@ namespace WebApi.Controllers.v1
             {
                 return BadRequest();
             }
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut("TestCorrection")]
+        public async Task<IActionResult> TestCorrection(int id, UpdateGroupOfSingleQuestionSubmission command)
+        {
             return Ok(await Mediator.Send(command));
         }
 

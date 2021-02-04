@@ -9,9 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApi.Controllers.v1
+namespace WebApi.Controllers
 {
-    [ApiVersion("1.0")]
     public class EmailTemplateController : BaseApiController
     {
         // GET: api/<controller>

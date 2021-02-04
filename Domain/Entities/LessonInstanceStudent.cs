@@ -13,7 +13,6 @@ namespace Domain.Entities
         public virtual ApplicationUser Student { get; set; }
         public bool Attend { get; set; }
         public bool Homework { get; set; }
-        public DateTime? ReportDateTime { get; set; }
 
         public object Clone()
         {

@@ -11,15 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-	public class UpdateSingleQuestionSubmissionCommand : IRequest<Response<int>>
+    public class UpdateSingleQuestionSubmissionCommand : IRequest<Response<int>>
     {
-		public int Id { get; set; }
-		public string AnswerText { get; set; }
-		public bool TrueOrFalseSubmission { get; set; }
-		public string StudentId { get; set; }
-		public ICollection<ChoiceSubmission> Choices { get; set; }
-		public ApplicationUser Student { get; set; }
-		public SingleQuestion SingleQuestion { get; set; }
+        public int Id { get; set; }
+        public string AnswerText { get; set; }
+        public List<string> CompleteWordsCorrections { get; set; }
+        public string CorrectionText { get; set; }
 
         public class UpdateSingleQuestionSubmissionCommandHandler : IRequestHandler<UpdateSingleQuestionSubmissionCommand, Response<int>>
         {
@@ -34,16 +31,13 @@ namespace Application.Features
 
                 if (singlequestionsubmission == null)
                 {
-                    throw new ApiException($"SingleQuestionSubmission Not Found.");
+                    throw new ApiException($"Single Question Submission Not Found.");
                 }
                 else
                 {
-				singlequestionsubmission.AnswerText = command.AnswerText;
-				singlequestionsubmission.TrueOrFalseSubmission = command.TrueOrFalseSubmission;
-				singlequestionsubmission.StudentId = command.StudentId;
-				singlequestionsubmission.Choices = command.Choices;
-				singlequestionsubmission.Student = command.Student;
-				singlequestionsubmission.SingleQuestion = command.SingleQuestion; 
+                    singlequestionsubmission.AnswerText = command.AnswerText;
+                    singlequestionsubmission.CompleteWordsCorrections = string.Join("-", command.CompleteWordsCorrections);
+                    singlequestionsubmission.CorrectionText = command.CorrectionText;
 
                     await _singlequestionsubmissionRepository.UpdateAsync(singlequestionsubmission);
                     return new Response<int>(singlequestionsubmission.Id);

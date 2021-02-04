@@ -139,8 +139,18 @@ namespace Infrastructure.Persistence.Repositories
                     PromoCodeId = x.PromoCodeId,
                     PromoCodeName = x.PromoCode != null ? x.PromoCode.Name : string.Empty
 
-                }).ToList();
-                StudentsGroupInstanceObject.Teachername = teacherGroupInstanceAssignment.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => x.Teacher.FirstName).FirstOrDefault();
+                }).ToList(); 
+                StudentsGroupInstanceObject.Teachers = new List<TeachersModel>();
+                
+                var teacher = teacherGroupInstanceAssignment.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => x.Teacher).FirstOrDefault();
+                StudentsGroupInstanceObject.Teachers.Add(new TeachersModel
+                {
+                    TeacherFirstName = teacher.FirstName,
+                    TeacherLastName = teacher.LastName,
+                    TeacherId = teacher.Id
+
+                });
+
                 StudentsGroupInstanceModelList.Add(StudentsGroupInstanceObject);
             }
             return StudentsGroupInstanceModelList;

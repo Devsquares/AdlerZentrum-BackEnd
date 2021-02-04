@@ -9,6 +9,7 @@ namespace Domain.Models
         public int GroupInstanceId { get; set; }
         public string Status { get; set; }
         public List<StudentsModel> Students { get; set; } = new List<StudentsModel>();
-        public string Teachername { get; set; }
+        public List<TeachersModel> Teachers { get; set; } = new List<TeachersModel>();
+        public string GroupInstanceSerail { get; set; }
     }
 }
