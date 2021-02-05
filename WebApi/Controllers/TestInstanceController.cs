@@ -123,20 +123,20 @@ namespace WebApi.Controller
         }
 
         [HttpGet("GetTestInstanceToAssgin")]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Teacher")]
         public async Task<IActionResult> GetTestInstanceToAssgin()
         {
             return Ok(await Mediator.Send(new GetTestInstanceToAssginQuery()));
         }
 
         [HttpGet("GetTestInstanceByTeacher")]
-        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary,teacehr")]
-        public async Task<IActionResult> GetTestInstanceByTeacher(GetTestInstanceByTeacherQuery query)
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Teacher")]
+        public async Task<IActionResult> GetTestInstanceByTeacher(int Status)
         {
             return Ok(await Mediator.Send(new GetTestInstanceByTeacherQuery
             {
-                Status = query.Status,
-                TeacherId = query.TeacherId
+                Status = Status,
+                TeacherId = AuthenticatedUserService.UserId
             }));
         }
 

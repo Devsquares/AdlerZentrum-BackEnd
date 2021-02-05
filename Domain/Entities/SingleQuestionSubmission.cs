@@ -9,8 +9,6 @@ namespace Domain.Entities
     {
         public string AnswerText { get; set; }
         public string CorrectionText { get; set; }
-        public string CompleteWords { get; set; }
-        public string CompleteWordsCorrections { get; set; }
         public bool TrueOrFalseSubmission { get; set; }
         public string StudentId { get; set; }
         public ICollection<ChoiceSubmission> Choices { get; set; }
@@ -19,6 +17,7 @@ namespace Domain.Entities
         public SingleQuestion SingleQuestion { get; set; }
         public bool Corrected { get; set; }
         public bool RightAnswer { get; set; }
+        public int Points { get; set; }
         public int TestInstanceId { get; set; }
         public TestInstance TestInstance { get; set; }
     }

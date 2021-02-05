@@ -54,6 +54,18 @@ namespace WebApi.Controllers
             }));
         }
 
+
+        [HttpPost("AssignTeacherToGroupInstance")]
+        public async Task<IActionResult> AssignTeacherToGroupInstance([FromQuery] AssignTeacherToGroupInstanceCommand filter)
+        {
+            return Ok(await Mediator.Send(new AssignTeacherToGroupInstanceCommand()
+            {
+                GroupInstanceId = filter.GroupInstanceId
+            }));
+        }
+
+
+
         [HttpGet("GetListByGroupDefinitionId")]
         public async Task<IActionResult> GetListByGroupDefinitionId(int groupDefinitionId)
         {

@@ -49,7 +49,7 @@ namespace Infrastructure.Persistence.Repositories
             .Include(x => x.Student)
             .Include(x => x.LessonInstance)
             .ThenInclude(x => x.GroupInstance)
-             .Where(x => x.CorrectionTeacherId == null && x.Status == (int)TestInstanceEnum.Solved).ToListAsync();
+             .Where(x => x.CorrectionTeacherId == null).ToListAsync();
         }
 
         public virtual async Task<IReadOnlyList<TestInstance>> GetTestInstanceToActive()
