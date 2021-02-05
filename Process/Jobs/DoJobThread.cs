@@ -73,7 +73,7 @@ namespace Process
             {
                 testInstance.ManualCorrection = true;
             }
-            //TODO add required submtion date
+            //TODO add required submtion date.
             dbContext.TestInstances.Update(testInstance);
         }
 
@@ -89,6 +89,7 @@ namespace Process
                     if (item.TrueOrFalseSubmission == item.SingleQuestion.AnswerIsTrueOrFalse)
                     {
                         item.RightAnswer = true;
+                        item.Points = item.SingleQuestion.Points;
                         points += item.SingleQuestion.Points;
                     }
                     else
@@ -104,6 +105,7 @@ namespace Process
                     if (item.Choices.FirstOrDefault().ChoiceSubmissionId == item.SingleQuestion.Choices.Where(x => x.IsCorrect).FirstOrDefault().Id)
                     {
                         item.RightAnswer = true;
+                        item.Points = item.SingleQuestion.Points;
                         points += item.SingleQuestion.Points;
                     }
                     else
@@ -134,12 +136,14 @@ namespace Process
                         }
 
                         item.RightAnswer = true;
+                        item.Points = item.SingleQuestion.Points;
                         points += item.SingleQuestion.Points;
                     }
 
                     if (item.Choices.Count == item.SingleQuestion.Choices.Count)
                     {
                         item.RightAnswer = true;
+                        item.Points = item.SingleQuestion.Points;
                         points += item.SingleQuestion.Points;
                     }
                     else

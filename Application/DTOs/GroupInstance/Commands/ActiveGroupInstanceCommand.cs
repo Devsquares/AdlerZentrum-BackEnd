@@ -24,17 +24,20 @@ namespace Application.DTOs
             private readonly ILessonInstanceStudentRepositoryAsync _lessonInstanceStudentRepositoryAsync;
             private readonly ITestRepositoryAsync _testRepository;
             private readonly ITestInstanceRepositoryAsync _testInstanceRepository;
+            private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignment;
             public ActiveGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
                 ILessonInstanceRepositoryAsync lessonInstanceRepository,
                 ILessonInstanceStudentRepositoryAsync lessonInstanceStudent,
                 ITestRepositoryAsync testRepositoryAsync,
-                ITestInstanceRepositoryAsync testInstanceRepository)
+                ITestInstanceRepositoryAsync testInstanceRepository,
+                ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignment)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
                 _lessonInstanceRepositoryAsync = lessonInstanceRepository;
                 _lessonInstanceStudentRepositoryAsync = lessonInstanceStudent;
                 _testRepository = testRepositoryAsync;
                 _testInstanceRepository = testInstanceRepository;
+                _teacherGroupInstanceAssignment = teacherGroupInstanceAssignment;
             }
 
             public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
@@ -94,6 +97,7 @@ namespace Application.DTOs
                         // TODO get quiz for lesson.
                         // TODO add get final test or sublevel test.
                         var quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
+                        var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(item.GroupInstanceId);
                         if (quiz != null)
                         {
                             foreach (var student in lessonInstanceStudents)
@@ -103,7 +107,8 @@ namespace Application.DTOs
                                     LessonInstanceId = item.Id,
                                     StudentId = student.StudentId,
                                     Status = (int)TestInstanceEnum.Closed,
-                                    TestId = quiz.Id
+                                    TestId = quiz.Id,
+                                    CorrectionTeacherId = teacher?.TeacherId
                                 };
                                 testInstance.Add(obj);
                             }

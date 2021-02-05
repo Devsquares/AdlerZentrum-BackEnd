@@ -61,7 +61,6 @@ namespace Application.Features
                 singleQuestionSubmission.TrueOrFalseSubmission = item.TrueOrFalseSubmission;
                 singleQuestionSubmission.StudentId = request.StudentId;
                 singleQuestionSubmission.Corrected = false;
-                singleQuestionSubmission.CompleteWords = string.Join("-", item.CompleteWords);
                 var singleQuestionSubmissionId = _singleQuestionSubmission.AddAsync(singleQuestionSubmission).Result.Id;
                 if (item.Choices != null)
                 {

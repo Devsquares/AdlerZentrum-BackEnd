@@ -14,8 +14,8 @@ namespace Application.Features
     public class UpdateSingleQuestionSubmissionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public string AnswerText { get; set; }
-        public List<string> CompleteWordsCorrections { get; set; }
+        public bool RightAnswer { get; set; }
+        public int Points { get; set; }
         public string CorrectionText { get; set; }
 
         public class UpdateSingleQuestionSubmissionCommandHandler : IRequestHandler<UpdateSingleQuestionSubmissionCommand, Response<int>>
@@ -35,9 +35,10 @@ namespace Application.Features
                 }
                 else
                 {
-                    singlequestionsubmission.AnswerText = command.AnswerText;
-                    singlequestionsubmission.CompleteWordsCorrections = string.Join("-", command.CompleteWordsCorrections);
+                    singlequestionsubmission.RightAnswer = command.RightAnswer;
+                    singlequestionsubmission.Points = command.Points;
                     singlequestionsubmission.CorrectionText = command.CorrectionText;
+                    singlequestionsubmission.Corrected = true;
 
                     await _singlequestionsubmissionRepository.UpdateAsync(singlequestionsubmission);
                     return new Response<int>(singlequestionsubmission.Id);
