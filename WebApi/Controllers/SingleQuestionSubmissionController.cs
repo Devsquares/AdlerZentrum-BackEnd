@@ -32,6 +32,12 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetSingleQuestionSubmissionByIdQuery { Id = id }));
         }
 
+         [HttpGet("GetByTestInstanceId/{id}")]
+        public async Task<IActionResult> GetByTestInstanceId(int id)
+        {
+            return Ok(await Mediator.Send(new GetSingleQuestionSubmissionByIdQuery { Id = id }));
+        }
+
         // POST api/<controller>
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
