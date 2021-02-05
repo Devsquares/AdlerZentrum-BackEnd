@@ -44,10 +44,16 @@ namespace Infrastructure.Persistence.Repositories
             return _overpaymentstudents.Where(x => x.GroupDefinitionId == groupDefinitionId).Count();
         }
 
-        public List<OverPaymentStudent> GetListByGroupDefinitionId(int groupDefinitionId)
+        public List<OverPaymentStudent> GetDefaultListByGroupDefinitionId(int groupDefinitionId)
         {
             return _overpaymentstudents.Include(x => x.Student)
-                .Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x => x.Id).ToList();
+                .Where(x => x.GroupDefinitionId == groupDefinitionId && x.IsPlacementTest == false).OrderBy(x => x.Id).ToList();
+
+        }
+        public List<OverPaymentStudent> GetPlacementTestListByGroupDefinitionId(int groupDefinitionId)
+        {
+            return _overpaymentstudents.Include(x => x.Student)
+                .Where(x => x.GroupDefinitionId == groupDefinitionId && x.IsPlacementTest == true).OrderBy(x => x.Id).ToList();
 
         }
     }

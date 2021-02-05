@@ -93,7 +93,8 @@ namespace Application.DTOs
                             GroupInstanceId = groupInstans.Id,
                             StudentId = command.StudentId,
                             PromoCodeId = command.PromoCodeId,
-                            IsDefault = true
+                            IsDefault = true,
+                            CreatedDate = DateTime.Now
                         });
                     }
                     else if (!canApplyInSpecificGroup && canApplyInGroupDefinition)
@@ -103,7 +104,8 @@ namespace Application.DTOs
                         {
                             StudentId = command.StudentId,
                             PromoCodeId = command.PromoCodeId.Value,
-                            GroupDefinitionId = command.groupDefinitionId
+                            GroupDefinitionId = command.groupDefinitionId,
+                            CreatedDate = DateTime.Now
                         });
                     }
                     else
@@ -120,11 +122,20 @@ namespace Application.DTOs
                                     GroupInstanceId = groupInstans.Id,
                                     StudentId = command.StudentId,
                                     IsPlacementTest = true,
-                                    IsDefault = true
+                                    IsDefault = true,
+                                    CreatedDate = DateTime.Now
                                 });
                             }
-                            ///// todo has placmenttest but cannot apply in group need to add in waiting list
-                            else { }
+                            else
+                            {
+                                await _overPaymentStudentRepositoryAsync.AddAsync(new OverPaymentStudent()
+                                {
+                                    StudentId = command.StudentId,
+                                    GroupDefinitionId = command.groupDefinitionId,
+                                    IsPlacementTest = true,
+                                    CreatedDate = DateTime.Now
+                                });
+                            }
 
 
                         }
@@ -163,16 +174,32 @@ namespace Application.DTOs
                         {
                             StudentId = command.StudentId,
                             PromoCodeId = command.PromoCodeId.Value,
-                            GroupDefinitionId = command.groupDefinitionId
+                            GroupDefinitionId = command.groupDefinitionId,
+                            CreatedDate = DateTime.Now
                         });
                     }
                     else
                     {
-                        await _overPaymentStudentRepositoryAsync.AddAsync(new OverPaymentStudent()
+                        if (command.PlacmentTestId.HasValue)
                         {
-                            StudentId = command.StudentId,
-                            GroupDefinitionId = command.groupDefinitionId
-                        });
+                            await _overPaymentStudentRepositoryAsync.AddAsync(new OverPaymentStudent()
+                            {
+                                StudentId = command.StudentId,
+                                GroupDefinitionId = command.groupDefinitionId,
+                                IsPlacementTest = true,
+                                 CreatedDate = DateTime.Now
+                            });
+                        }
+                        else
+                        {
+                            await _overPaymentStudentRepositoryAsync.AddAsync(new OverPaymentStudent()
+                            {
+                                StudentId = command.StudentId,
+                                GroupDefinitionId = command.groupDefinitionId,
+                                IsPlacementTest = false,
+                                CreatedDate = DateTime.Now
+                            }) ;
+                        }
 
                     }
                 }

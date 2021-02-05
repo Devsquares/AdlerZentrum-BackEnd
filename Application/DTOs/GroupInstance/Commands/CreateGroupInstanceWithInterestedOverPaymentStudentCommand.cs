@@ -65,10 +65,13 @@ namespace Application.DTOs.GroupInstance.Commands
                     await _groupInstanceRepositoryAsync.AddAsync(groupInstanceobject);
 
                     var interestedStudentsList = _interestedStudentRepositoryAsync.GetListByGroupDefinitionId(command.GroupDefinitionId);
-                    var overPaymentStudentList = _overPaymentStudentRepositoryAsync.GetListByGroupDefinitionId(command.GroupDefinitionId);
+                    var overPaymentStudentList = _overPaymentStudentRepositoryAsync.GetDefaultListByGroupDefinitionId(command.GroupDefinitionId);
+                    var placemetTestStudentList = _overPaymentStudentRepositoryAsync.GetPlacementTestListByGroupDefinitionId(command.GroupDefinitionId);
                     bool canApplyInSpecificGroup = false;
                     int studentCount = 0;
+                    int PlaceMentStudentCount = 0;
                     int totalStudents = groupDefinitionobject.GroupCondition.NumberOfSlots;
+                    int totalPlacementTestStudents = groupDefinitionobject.GroupCondition.NumberOfSlotsWithPlacementTest;
                     List<GroupInstanceStudents> interestedGroupInstanceStudents = new List<GroupInstanceStudents>();
                     List<InterestedStudent> acceptedInterestedGroupInstanceStudents = new List<InterestedStudent>();
                     // Add interested with  promoCOdes
@@ -102,6 +105,39 @@ namespace Application.DTOs.GroupInstance.Commands
                             await _groupInstanceStudentRepositoryAsync.AddBulkAsync(interestedGroupInstanceStudents);
                             await _interestedStudentRepositoryAsync.DeleteBulkAsync(acceptedInterestedGroupInstanceStudents);
                         }
+                    }
+                    // Add placementTest Students
+                    List<GroupInstanceStudents> PlacementTestGroupInstanceStudents = new List<GroupInstanceStudents>();
+                    List<OverPaymentStudent> acceptedPlacementTestStudent = new List<OverPaymentStudent>();
+                    if (placemetTestStudentList !=null && placemetTestStudentList.Count>0)
+                    {
+
+                        foreach (var placemetTestStudent in placemetTestStudentList)
+                        {
+                            if (PlaceMentStudentCount < totalPlacementTestStudents)
+                            {
+                                PlacementTestGroupInstanceStudents.Add(new GroupInstanceStudents
+                                {
+                                    GroupInstanceId = groupInstanceobject.Id,
+                                    StudentId = placemetTestStudent.Student.Id,
+                                    IsDefault = true,
+                                    IsPlacementTest = true
+                                });
+                                PlaceMentStudentCount++;
+                                studentCount++;
+                                acceptedPlacementTestStudent.Add(placemetTestStudent);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        if (PlacementTestGroupInstanceStudents != null && PlacementTestGroupInstanceStudents.Count > 0)
+                        {
+                            await _groupInstanceStudentRepositoryAsync.AddBulkAsync(PlacementTestGroupInstanceStudents);
+                            await _overPaymentStudentRepositoryAsync.DeleteBulkAsync(acceptedPlacementTestStudent);
+                        }
+
                     }
 
                     List<GroupInstanceStudents> OverPaymentsGroupInstanceStudents = new List<GroupInstanceStudents>();
