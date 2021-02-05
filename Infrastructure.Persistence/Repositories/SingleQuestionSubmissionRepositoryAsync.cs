@@ -5,7 +5,9 @@ using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -18,6 +20,13 @@ namespace Infrastructure.Persistence.Repositories
         {
             _singlequestionsubmissions = dbContext.Set<SingleQuestionSubmission>();
 
+        }
+        
+        public async Task<IReadOnlyList<SingleQuestionSubmission>> GetByTestInstanceIdAsync(int TestInstanceId)
+        {
+            return await _singlequestionsubmissions
+              .Include(x => x.Choices)
+              .Where(x => x.TestInstanceId == TestInstanceId).ToListAsync();
         }
     }
 
