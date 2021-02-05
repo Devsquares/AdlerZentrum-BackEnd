@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,6 +19,6 @@ namespace Application.Interfaces.Repositories
         Task<List<ApplicationUser>> GetAllStudentInGroupInstanceByStudentId(string studentId);
         Task<List<ApplicationUser>> GetAllStudentInGroupDefinitionByStudentId(string studentId);
 
-        void SaveAllGroupInstanceStudents(int groupDefinitionId, List<GroupInstanceStudents> groupInstanceStudentslist);
+        void SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist);
     }
 }

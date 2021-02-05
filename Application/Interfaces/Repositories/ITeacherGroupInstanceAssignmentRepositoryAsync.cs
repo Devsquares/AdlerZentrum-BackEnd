@@ -7,5 +7,7 @@ namespace Application.Interfaces.Repositories
     {
         IEnumerable<TeacherGroupInstanceAssignment> GetByTeacher(string TeacherId);
         TeacherGroupInstanceAssignment GetByGroupInstanceId(int groupInstanceId);
+        TeacherGroupInstanceAssignment GetByTeachGroupInstanceId(string TeacherId, int groupInstanceId);
+        List<TeacherGroupInstanceAssignment> GetListByGroupInstanceId(int groupInstanceId);
     }
 }

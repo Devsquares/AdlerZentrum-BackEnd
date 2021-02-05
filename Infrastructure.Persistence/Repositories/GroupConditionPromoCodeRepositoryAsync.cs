@@ -1,6 +1,7 @@
 using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +35,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => ids.Contains(x.GroupConditionDetailsId)).ToList();
         }
 
-        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId, List<GroupInstanceStudents> groupInstanceStudentsList = null)
+        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId, List<GroupInstanceStudents> groupInstanceStudentsList = null, List<StudentsModel> studentsModelList = null)
         {
             bool canApply = false;
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
@@ -46,14 +47,22 @@ namespace Infrastructure.Persistence.Repositories
                 .Select(x => x.gcpc).ToList();
             var GroupConditionDetails = promocodes.GroupBy(x => x.GroupConditionDetailsId).ToList();
             //var studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId).ToList();
-
-            var studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodeId != null)
-               .GroupBy(x => x.PromoCodeId)
-               .Select(x => new { promocodeId = x.Key, count = x.Count() }).ToList();
+            var studentsGroup = new List<PromoCodeCountModel>();
             if (groupInstanceStudentsList != null && groupInstanceStudentsList.Count>0) // from list not database
             {
                 studentsGroup = groupInstanceStudentsList.GroupBy(x => x.PromoCodeId)
-                   .Select(x => new { promocodeId = x.Key, count = x.Count() }).ToList();
+                   .Select(x => new PromoCodeCountModel() { promocodeId = x.Key, count = x.Count() }).ToList();
+            }
+            else if (studentsModelList != null && studentsModelList.Count > 0) // from list not database
+            {
+                studentsGroup = studentsModelList.GroupBy(x => x.PromoCodeId)
+                   .Select(x => new PromoCodeCountModel()  { promocodeId = x.Key, count = x.Count() }).ToList();
+            }
+            else
+            {
+                studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodeId != null)
+             .GroupBy(x => x.PromoCodeId)
+             .Select(x => new PromoCodeCountModel() { promocodeId = x.Key, count = x.Count() }).ToList();
             }
             // List<int> promocodsIDS = new List<int>();
             //foreach (var item in studentsGroup)

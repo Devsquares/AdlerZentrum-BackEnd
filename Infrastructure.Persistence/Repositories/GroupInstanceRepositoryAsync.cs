@@ -131,13 +131,16 @@ namespace Infrastructure.Persistence.Repositories
             {
                 StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
                 StudentsGroupInstanceObject.GroupInstanceId = groupInstance.Id;
+                StudentsGroupInstanceObject.GroupInstanceSerail = groupInstance.Serial;
                 StudentsGroupInstanceObject.Status = ((GroupInstanceStatusEnum)groupInstance.Status).ToString();
                 StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCode).Include(x => x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
                 {
                     StudentId = x.StudentId,
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
                     PromoCodeId = x.PromoCodeId,
-                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name : string.Empty
+                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name : string.Empty,
+                    isPlacementTest = x.IsPlacementTest,
+                    CreationDate = x.CreatedDate
 
                 }).ToList(); 
                 StudentsGroupInstanceObject.Teachers = new List<TeachersModel>();
@@ -169,5 +172,6 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
                   .Where(x => x.Id == id && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
         }
+
     }
 }

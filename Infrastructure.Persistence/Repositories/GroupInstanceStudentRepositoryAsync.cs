@@ -1,9 +1,11 @@
 ﻿using Application.Filters;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,7 +42,7 @@ namespace Infrastructure.Persistence.Repositories
             return emailList;
         }
 
-        public  async Task<int> GetCountOfPlacmentTestStudents(int groupId)
+        public async Task<int> GetCountOfPlacmentTestStudents(int groupId)
         {
             return await groupInstanceStudents.Where(x => x.GroupInstanceId == groupId && x.IsPlacementTest == true).CountAsync();
         }
@@ -71,9 +73,81 @@ namespace Infrastructure.Persistence.Repositories
             return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).Select(x => x.Student).ToListAsync();
         }
 
-        public void SaveAllGroupInstanceStudents(int groupDefinitionId,List<GroupInstanceStudents> groupInstanceStudentslist)
+        public void SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist)
         {
-             groupInstanceStudents.UpdateRange(groupInstanceStudentslist);
+            GroupInstanceStudents groupInstanceStudentsobject = new GroupInstanceStudents();
+            List<GroupInstanceStudents> groupInstanceStudentsobjectList = new List<GroupInstanceStudents>();
+            foreach (var item in groupInstanceStudentslist)
+            {
+                groupInstanceStudentsobject = new GroupInstanceStudents();
+
+                foreach (var student in item.Students)
+                {
+                    groupInstanceStudentsobject.GroupInstanceId = item.GroupInstanceId;
+                    groupInstanceStudentsobject.StudentId = student.StudentId;
+                    groupInstanceStudentsobject.PromoCodeId = student.PromoCodeId;
+                    groupInstanceStudentsobject.IsPlacementTest = student.isPlacementTest;
+                    groupInstanceStudentsobject.CreatedDate = student.CreationDate;
+                    groupInstanceStudentsobject.LastModifiedDate = DateTime.Now;
+                    groupInstanceStudentsobject.IsDefault = true;
+                    groupInstanceStudentsobjectList.Add(groupInstanceStudentsobject);
+                }
+
+            }
+            var groupInstanceIds = groupInstanceStudentslist.Select(x => x.GroupInstanceId).ToList();
+            var students = groupInstanceStudents.Where(x => groupInstanceIds.Contains(x.GroupInstanceId)).ToList();
+            groupInstanceStudents.RemoveRange(students);
+            groupInstanceStudents.AddRange(groupInstanceStudentsobjectList);
+        }
+
+        public void ValidateGroupInstancesStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist)
+        {
+            var groupdefinition = groupDefinition.Include(x => x.GroupCondition).Where(x => x.Id == groupDefinitionId).FirstOrDefault();
+            if (groupDefinition == null)
+            {
+                throw new Exception("Group Definition Not Found");
+            }
+            foreach (var groupInstanceStudent in groupInstanceStudentslist)
+            {
+                int paymentStudents = groupInstanceStudent.Students.Where(x => x.isPlacementTest == false && x.PromoCodeId == null).Count();
+                int promocodesStudents = groupInstanceStudent.Students.Where(x => x.isPlacementTest == false && x.PromoCodeId != null).Count();
+                int placementStudents = groupInstanceStudent.Students.Where(x => x.isPlacementTest == true && x.PromoCodeId == null).Count();
+                if(groupInstanceStudent.Students.Count() > groupdefinition.GroupCondition.NumberOfSlots ) // check total students
+                {
+                    throw new Exception($"Group Instance Serial {groupInstanceStudent.GroupInstanceSerail} must contain {groupdefinition.GroupCondition.NumberOfSlots} student not {groupInstanceStudent.Students.Count()} ");
+                }
+
+                if (placementStudents > groupdefinition.GroupCondition.NumberOfSlotsWithPlacementTest) // check placement students
+                {
+                    throw new Exception($"Group Instance Serial {groupInstanceStudent.GroupInstanceSerail} must contain {groupdefinition.GroupCondition.NumberOfSlotsWithPlacementTest} placement stuident not {placementStudents} ");
+                }
+                // check promocode students
+
+            }
+           
+            GroupInstanceStudents groupInstanceStudentsobject = new GroupInstanceStudents();
+            List<GroupInstanceStudents> groupInstanceStudentsobjectList = new List<GroupInstanceStudents>();
+            foreach (var item in groupInstanceStudentslist)
+            {
+                groupInstanceStudentsobject = new GroupInstanceStudents();
+
+                foreach (var student in item.Students)
+                {
+                    groupInstanceStudentsobject.GroupInstanceId = item.GroupInstanceId;
+                    groupInstanceStudentsobject.StudentId = student.StudentId;
+                    groupInstanceStudentsobject.PromoCodeId = student.PromoCodeId;
+                    groupInstanceStudentsobject.IsPlacementTest = student.isPlacementTest;
+                    groupInstanceStudentsobject.CreatedDate = student.CreationDate;
+                    groupInstanceStudentsobject.LastModifiedDate = DateTime.Now;
+                    groupInstanceStudentsobject.IsDefault = true;
+                    groupInstanceStudentsobjectList.Add(groupInstanceStudentsobject);
+                }
+
+            }
+            var groupInstanceIds = groupInstanceStudentslist.Select(x => x.GroupInstanceId).ToList();
+            var students = groupInstanceStudents.Where(x => groupInstanceIds.Contains(x.GroupInstanceId)).ToList();
+            groupInstanceStudents.RemoveRange(students);
+            groupInstanceStudents.AddRange(groupInstanceStudentsobjectList);
         }
     }
 }
