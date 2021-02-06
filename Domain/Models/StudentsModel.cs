@@ -10,5 +10,7 @@ namespace Domain.Models
         public string StudentName { get; set; }
         public int? PromoCodeId { get; set; }
         public string PromoCodeName { get; set; }
+        public bool isPlacementTest { get; set; }
+        public DateTime? CreationDate { get; set; }
     }
 }

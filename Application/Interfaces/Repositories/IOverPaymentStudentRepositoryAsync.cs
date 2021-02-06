@@ -10,6 +10,7 @@ namespace Application.Interfaces.Repositories
         OverPaymentStudent GetByStudentId(string studentId, int groupDefinitionId);
         object GetByGroupDefinitionId(int groupDefinitionId);
         int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
-        List<OverPaymentStudent> GetListByGroupDefinitionId(int groupDefinitionId);
+        List<OverPaymentStudent> GetDefaultListByGroupDefinitionId(int groupDefinitionId);
+        List<OverPaymentStudent> GetPlacementTestListByGroupDefinitionId(int groupDefinitionId);
     }
 }

@@ -23,7 +23,15 @@ namespace Infrastructure.Persistence.Repositories
 
         public TeacherGroupInstanceAssignment GetByGroupInstanceId(int groupInstanceId)
         {
-            return groupInstances.Include(x=>x.Teacher).Where(x => x.GroupInstanceId == groupInstanceId).FirstOrDefault();
+            return groupInstances.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstanceId).FirstOrDefault();
+        }
+        public TeacherGroupInstanceAssignment GetByTeachGroupInstanceId(string TeacherId, int groupInstanceId)
+        {
+            return groupInstances.Where(x => x.GroupInstanceId == groupInstanceId && x.TeacherId == TeacherId).FirstOrDefault();
+        }
+        public List<TeacherGroupInstanceAssignment> GetListByGroupInstanceId(int groupInstanceId)
+        {
+            return groupInstances.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstanceId).ToList();
         }
     }
 }

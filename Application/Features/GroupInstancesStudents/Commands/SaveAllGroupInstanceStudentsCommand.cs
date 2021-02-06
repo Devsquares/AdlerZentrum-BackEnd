@@ -10,13 +10,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Application.Features.GroupInstancesStudents.Commands
 {
     public class SaveAllGroupInstanceStudentsCommand : IRequest<Response<int>>
     {
         public int GroupDefinitionId { get; set; }
-        public List<GroupInstanceStudentsViewModel> GroupInstancesStudentList { get; set; }
+        public List<StudentsGroupInstanceModel> GroupInstancesStudentList { get; set; }
         public class SaveAllGroupInstanceStudentsCommandHandler : IRequestHandler<SaveAllGroupInstanceStudentsCommand, Response<int>>
         {
             private readonly IGroupConditionDetailsRepositoryAsync _groupconditiondetailsRepository;
@@ -38,8 +39,12 @@ namespace Application.Features.GroupInstancesStudents.Commands
                 {
                     throw new ApiException($"GroupConditionDetails Not Found.");
                 }
-                List<GroupInstanceStudents>groupInstanceStidentObject = _mapper.Map<List<GroupInstanceStudents>>(command.GroupInstancesStudentList);
-                _groupInstanceStudentRepositoryAsync.SaveAllGroupInstanceStudents(command.GroupDefinitionId, groupInstanceStidentObject);
+                // List<GroupInstanceStudents>groupInstanceStidentObject = _mapper.Map<List<GroupInstanceStudents>>(command.GroupInstancesStudentList);
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    _groupInstanceStudentRepositoryAsync.SaveAllGroupInstanceStudents(command.GroupDefinitionId, command.GroupInstancesStudentList);
+                    scope.Complete();
+                }
                 return new Response<int>(groupconditiondetails.Id);
 
             }

@@ -128,9 +128,19 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("SaveAllGroupInstanceStudents")]
-        public async Task<IActionResult> SaveAllGroupInstanceStudents(int groupDefinitionId, List<GroupInstanceStudentsViewModel> groupInstanceStudents)
+        public async Task<IActionResult> SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudents)
         {
             return Ok(await Mediator.Send(new SaveAllGroupInstanceStudentsCommand()
+            {
+                GroupDefinitionId = groupDefinitionId,
+                GroupInstancesStudentList = groupInstanceStudents
+            }));
+        }
+
+        [HttpGet("ValidateGroupInstancesStudents")]
+        public async Task<IActionResult> ValidateGroupInstancesStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudents)
+        {
+            return Ok(await Mediator.Send(new ValidateGroupInstancesStudentsCommand()
             {
                 GroupDefinitionId = groupDefinitionId,
                 GroupInstancesStudentList = groupInstanceStudents
