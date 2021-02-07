@@ -49,7 +49,7 @@ namespace Application.DTOs
                 {
                     throw new ApiException($"Group definition Not Found");
                 }
-                else if (GroupDefinition.Status != (int)GroupDefinationStatusEnum.Pending || GroupDefinition.Status != (int)GroupDefinationStatusEnum.New)
+                else if (GroupDefinition.Status != (int)GroupDefinationStatusEnum.Pending && GroupDefinition.Status != (int)GroupDefinationStatusEnum.New)
                 {
                     throw new ApiException($"Group definition is already running.");
                 }
