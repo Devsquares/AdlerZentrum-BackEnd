@@ -1,3 +1,5 @@
+using Amazon.S3;
+using Amazon.S3.Transfer;
 using Application.Features;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,28 +14,49 @@ namespace WebApi.Controllers
     public class ListeningAudioFileController : BaseApiController
     {
         private IWebHostEnvironment _hostingEnvironment;
+        public static string bucketName = "adler-audio-files";
+        public static string endpoingURL = "https://fra1.digitaloceanspaces.com";
+        public static IAmazonS3 s3Client;
+
         public ListeningAudioFileController(IWebHostEnvironment environment)
         {
             _hostingEnvironment = environment;
         }
-        //// GET: api/<controller>
-        //[HttpGet]
-        //public async Task<IActionResult> Get([FromQuery] GetAllListeningAudioFilesParameter filter)
-        //{
 
-        //    return Ok(await Mediator.Send(new GetAllListeningAudioFilesQuery()
-        //    {
-        //        PageSize = filter.PageSize,
-        //        PageNumber = filter.PageNumber,
-        //        FilterArray = filter.FilterArray,
-        //        FilterRange = filter.FilterRange,
-        //        FilterSearch = filter.FilterSearch,
-        //        FilterValue = filter.FilterValue,
-        //        SortBy = filter.SortBy,
-        //        SortType = filter.SortType,
-        //        NoPaging = filter.NoPaging
-        //    }));
-        //}
+        public static bool UploadFile(Stream file, string fileName, string folderName)
+        {
+            var s3ClientConfig = new AmazonS3Config
+            {
+                ServiceURL = endpoingURL
+            };
+            s3Client = new AmazonS3Client(s3ClientConfig);
+            try
+            {
+                var fileTransferUtility = new TransferUtility(s3Client);
+                var fileTransferUtilityRequest = new TransferUtilityUploadRequest
+                {
+                    BucketName = bucketName + @"/" + folderName,
+                    StorageClass = S3StorageClass.StandardInfrequentAccess,
+                    PartSize = 6291456, // 6 MB
+                    Key = fileName,
+                    CannedACL = S3CannedACL.PublicReadWrite,
+                    InputStream = file,
+                };
+                fileTransferUtility.Upload(fileTransferUtilityRequest);
+                return true;
+            }
+            catch (AmazonS3Exception e)
+            {
+                Console.WriteLine("Error encountered ***. Message:'{0}' when writing an object", e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unknown encountered on server. Message:'{0}' when writing an object", e.Message);
+                if (e.Message.Contains("disposed"))
+                    return true;
+            }
+            return false;
+        }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
@@ -72,52 +95,31 @@ namespace WebApi.Controllers
         {
             try
             {
- 
+
                 CreateListeningAudioFileCommand command = new CreateListeningAudioFileCommand();
                 command.FileName = file.FileName;
                 var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "ListeningAudioFiles");
-                if (!Directory.Exists(uploads))
-                {
-                    Directory.CreateDirectory(uploads);
-                }
+                // if (!Directory.Exists(uploads))
+                // {
+                //     Directory.CreateDirectory(uploads);
+                // }
                 if (file.Length > 0)
                 {
                     command.FilePath = Path.Combine(uploads, command.FileName);
-                    using (var fileStream = new FileStream(command.FilePath, FileMode.Create))
-                    { 
-                        await file.CopyToAsync(fileStream);
+                    using (var fileStream = file.OpenReadStream())
+                    {
+                        // await file.CopyToAsync(fileStream);
+                        UploadFile(fileStream, file.FileName, "ListeningAudioFiles");
                     }
                 }
                 return Ok(await Mediator.Send(command));
             }
-            catch
+            catch (Exception ex)
             {
                 return NotFound();
             }
-           
+
         }
-
-        //// PUT api/<controller>/5
-        //[HttpPut("{id}")]
-        ////[Authorize(Roles = "SuperAdmin")]
-        ////TODO: enable authorization
-        //public async Task<IActionResult> Put(int id, UpdateListeningAudioFileCommand command)
-        //{
-        //    if (id != command.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    return Ok(await Mediator.Send(command));
-        //}
-
-        //// DELETE api/<controller>/5
-        //[HttpDelete("{id}")]
-        ////[Authorize(Roles = "SuperAdmin")]
-        ////TODO: enable authorization
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    return Ok(await Mediator.Send(new DeleteListeningAudioFileByIdCommand { Id = id }));
-        //}
 
     }
 }

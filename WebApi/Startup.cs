@@ -63,6 +63,8 @@ namespace WebApi
             services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
             services.Configure<MailSettings>(_config.GetSection("MailSettings"));
             services.AddTransient<IEmailService, EmailService>();
+            Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", _config["AWS:AccessKey"]);
+            Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", _config["AWS:SecretKey"]);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

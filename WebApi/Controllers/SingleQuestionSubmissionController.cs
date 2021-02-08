@@ -35,7 +35,7 @@ namespace WebApi.Controllers
          [HttpGet("GetByTestInstanceId/{id}")]
         public async Task<IActionResult> GetByTestInstanceId(int id)
         {
-            return Ok(await Mediator.Send(new GetSingleQuestionSubmissionByIdQuery { Id = id }));
+            return Ok(await Mediator.Send(new GetSingleQuestionSubmissionByTestInstanceIdQuery { Id = id }));
         }
 
         // POST api/<controller>

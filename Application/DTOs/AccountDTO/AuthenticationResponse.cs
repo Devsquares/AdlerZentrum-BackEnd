@@ -18,5 +18,6 @@ namespace Application.DTOs.Account
         public string BanComment { get; set; }
         [JsonIgnore]
         public string RefreshToken { get; set; }
+        public int? SubLevelId { get; set; }
     }
 }

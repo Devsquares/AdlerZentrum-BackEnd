@@ -49,6 +49,9 @@ namespace Process
                     default:
                         break;
                 }
+               _job.Status = (int)JobStatusEnum.Done;
+                dbContext.Update(_job);
+                dbContext.SaveChanges();
             }
         }
 
@@ -58,7 +61,8 @@ namespace Process
                                            .Where(x => x.Status == (int)TestInstanceEnum.Solved && x.Id == testId).FirstOrDefault();
 
 
-            var singleQuestions = dbContext.SingleQuestionSubmissions
+            var singleQuestions = dbContext.SingleQuestionSubmissions.Include(x => x.SingleQuestion).ThenInclude(x => x.Choices)
+            .Include(x => x.Choices)
                                            .Where(x => x.TestInstanceId == testId).ToListAsync().Result;
 
             bool autoCorrected = correctTheQuestions(dbContext, singleQuestions, out int points);
@@ -72,9 +76,10 @@ namespace Process
             else
             {
                 testInstance.ManualCorrection = true;
-            }
+            } 
             //TODO add required submtion date.
             dbContext.TestInstances.Update(testInstance);
+            dbContext.SaveChanges();
         }
 
         private bool correctTheQuestions(ApplicationDbContext dbContext, List<SingleQuestionSubmission> SingleQuestionSubmissions, out int points)
@@ -126,6 +131,7 @@ namespace Process
                     else
                     {
                         var correctIds = item.SingleQuestion.Choices.Where(x => x.IsCorrect == true).Select(x => x.Id);
+                        item.RightAnswer = true;
                         foreach (var submtionchoice in item.Choices)
                         {
                             if (!correctIds.Contains(submtionchoice.Id))
@@ -134,10 +140,12 @@ namespace Process
                                 break;
                             }
                         }
+                        if (item.RightAnswer)
+                        {
+                            item.Points = item.SingleQuestion.Points;
+                            points += item.SingleQuestion.Points;
+                        }
 
-                        item.RightAnswer = true;
-                        item.Points = item.SingleQuestion.Points;
-                        points += item.SingleQuestion.Points;
                     }
 
                     if (item.Choices.Count == item.SingleQuestion.Choices.Count)
@@ -158,8 +166,15 @@ namespace Process
                     autoCorrected = false;
                 }
             }
+            try
+            {
+                dbContext.SingleQuestionSubmissions.UpdateRange(SingleQuestionSubmissions);
+            }
+            catch (System.Exception ex)
+            {
 
-            dbContext.SingleQuestionSubmissions.UpdateRange(SingleQuestionSubmissions);
+                throw;
+            }
             return autoCorrected;
         }
 

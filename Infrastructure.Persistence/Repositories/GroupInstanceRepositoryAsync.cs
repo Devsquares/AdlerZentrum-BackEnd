@@ -142,17 +142,21 @@ namespace Infrastructure.Persistence.Repositories
                     isPlacementTest = x.IsPlacementTest,
                     CreationDate = x.CreatedDate
 
-                }).ToList(); 
+                }).ToList();
                 StudentsGroupInstanceObject.Teachers = new List<TeachersModel>();
-                
-                var teacher = teacherGroupInstanceAssignment.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => x.Teacher).FirstOrDefault();
-                StudentsGroupInstanceObject.Teachers.Add(new TeachersModel
-                {
-                    TeacherFirstName = teacher.FirstName,
-                    TeacherLastName = teacher.LastName,
-                    TeacherId = teacher.Id
 
-                });
+                var teacher = teacherGroupInstanceAssignment.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => x.Teacher).FirstOrDefault();
+                if (teacher != null)
+                {
+                    StudentsGroupInstanceObject.Teachers.Add(new TeachersModel
+                    {
+                        TeacherFirstName = teacher.FirstName,
+                        TeacherLastName = teacher.LastName,
+                        TeacherId = teacher.Id
+
+                    });
+                }
+
 
                 StudentsGroupInstanceModelList.Add(StudentsGroupInstanceObject);
             }

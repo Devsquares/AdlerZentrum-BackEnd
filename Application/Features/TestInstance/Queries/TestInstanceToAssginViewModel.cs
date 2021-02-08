@@ -7,6 +7,7 @@ namespace Application.Features
 {
     public class TestInstanceToAssginViewModel
     {
+        public int Id { get; set; }
         public string StudentName { get; set; }
         public DateTime SubmissionDate { get; set; }
         public string GroupSerial { get; set; }

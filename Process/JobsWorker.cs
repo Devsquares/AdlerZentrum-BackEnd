@@ -32,7 +32,7 @@ namespace Process
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                TimeSpan interval = new TimeSpan(0, 0, 0, 0);
+                TimeSpan interval = new TimeSpan(0, 0, 1, 0);
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -42,6 +42,7 @@ namespace Process
                     {
                         _doJob = new Thread(new ParameterizedThreadStart(_doJobThread.Run));
                         _doJob.Start(Jobs[0]);
+                        await Task.Delay(interval, stoppingToken);
                     }
                 }
 

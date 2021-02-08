@@ -69,9 +69,8 @@ namespace Infrastructure.Persistence.Repositories
                    .Include(x => x.Test)
                    .ThenInclude(x => x.Questions)
                    .ThenInclude(x => x.SingleQuestions)
+                   .ThenInclude(x => x.Choices)
                    .Include(x => x.Student)
-                   .Include(x => x.Test)
-                   .ThenInclude(x => x.Questions)
                    .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
         public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance)
@@ -111,6 +110,6 @@ namespace Infrastructure.Persistence.Repositories
               .Include(x => x.LessonInstance)
               .ThenInclude(x => x.GroupInstance)
                .Where(x => x.CorrectionTeacherId == correctionTeacherId && x.Status == status).ToListAsync();
-        } 
+        }
     }
 }
