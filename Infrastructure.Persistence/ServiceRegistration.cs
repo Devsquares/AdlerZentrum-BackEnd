@@ -71,6 +71,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IOverPaymentStudentRepositoryAsync, OverPaymentStudentRepositoryAsync>();
             services.AddTransient<IListeningAudioFileRepositoryAsync, ListeningAudioFileRepositoryAsync>();
             services.AddTransient<IDisqualificationRequestRepositoryAsync, DisqualificationRequestRepositoryAsync>();
+            services.AddTransient<IJobRepositoryAsync, JobRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

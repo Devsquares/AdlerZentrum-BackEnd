@@ -108,6 +108,7 @@ namespace Infrastructure.Persistence.Services
             response.ChangePassword = user.ChangePassword;
             response.Banned = user.Banned;
             response.BanComment = user.BanComment;
+            response.SubLevelId = user.SublevelId;
 
             user.RefreshTokens.Add(refreshToken);
             await _userManager.UpdateAsync(user);
@@ -155,6 +156,7 @@ namespace Infrastructure.Persistence.Services
             response.RefreshToken = refreshToken.Token;
             response.ActiveGroupInstance = activeGroup;
             response.ChangePassword = user.ChangePassword;
+            response.SubLevelId = user.SublevelId;
 
             return new Response<AuthenticationResponse>(response, $"Token Refreshed.");
         }
@@ -577,16 +579,17 @@ namespace Infrastructure.Persistence.Services
         {
             return _userManager.Users.Take(10).ToList();
         }
-        public async Task SendMessageToInstructor(string subject, string message,string studentId)
+        public async Task SendMessageToInstructor(string subject, string message, string studentId)
         {
             var groupInstanceObject = _groupInstanceStudentRepositoryAsync.GetLastByStudentId(studentId);
-            if(groupInstanceObject == null)
+            if (groupInstanceObject == null)
             {
                 throw new ApiException("No Group instance for this student");
             }
             var teacher = _teacherGroupInstanceAssignmentRepositoryAsync.GetByGroupInstanceId(groupInstanceObject.Id);
             var student = _userManager.Users.Where(x => x.Id == studentId).FirstOrDefault();
-            EmailRequest emailRequest = new EmailRequest() { 
+            EmailRequest emailRequest = new EmailRequest()
+            {
                 From = student.Email,
                 To = teacher.Teacher.Email,
                 Body = message,

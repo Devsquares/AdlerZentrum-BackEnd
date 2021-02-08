@@ -21,7 +21,7 @@ namespace Application.Features
     {
         public int SingleQuestionId { get; set; }
         public string AnswerText { get; set; }
-        public bool TrueOrFalseSubmission { get; set; }
+        public bool? TrueOrFalseSubmission { get; set; }
         public List<string> CompleteWords { get; set; }
         public ICollection<ChoiceSubmissionInputModel> Choices { get; set; }
 
@@ -36,16 +36,19 @@ namespace Application.Features
         private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
         private readonly ISingleQuestionSubmissionRepositoryAsync _singleQuestionSubmission;
         private readonly IChoiceSubmissionRepositoryAsync _choiceSubmissionRepository;
+        private readonly IJobRepositoryAsync _jobRepository;
         private readonly IMapper _mapper;
         public CreateTestInstanceCommandHandler(ITestInstanceRepositoryAsync testinstanceRepository,
         ISingleQuestionSubmissionRepositoryAsync singleQuestionSubmissionRepositoryAsync,
         IChoiceSubmissionRepositoryAsync choiceSubmissionRepositoryAsync,
+        IJobRepositoryAsync jobRepositoryAsync,
          IMapper mapper)
         {
             _testinstanceRepository = testinstanceRepository;
             _singleQuestionSubmission = singleQuestionSubmissionRepositoryAsync;
             _choiceSubmissionRepository = choiceSubmissionRepositoryAsync;
             _mapper = mapper;
+            _jobRepository = jobRepositoryAsync;
         }
 
         public async Task<Response<int>> Handle(TestInstanceSolutionCommand request, CancellationToken cancellationToken)
@@ -58,9 +61,11 @@ namespace Application.Features
                 SingleQuestionSubmission singleQuestionSubmission = new SingleQuestionSubmission();
                 singleQuestionSubmission.AnswerText = item.AnswerText;
                 singleQuestionSubmission.SingleQuestionId = item.SingleQuestionId;
-                singleQuestionSubmission.TrueOrFalseSubmission = item.TrueOrFalseSubmission;
+                singleQuestionSubmission.TrueOrFalseSubmission = item.TrueOrFalseSubmission.Value;
                 singleQuestionSubmission.StudentId = request.StudentId;
                 singleQuestionSubmission.Corrected = false;
+                singleQuestionSubmission.TestInstanceId = request.Id;
+
                 var singleQuestionSubmissionId = _singleQuestionSubmission.AddAsync(singleQuestionSubmission).Result.Id;
                 if (item.Choices != null)
                 {
@@ -68,12 +73,18 @@ namespace Application.Features
                     {
                         ChoiceSubmission choiceSubmission = new ChoiceSubmission();
                         choiceSubmission.SingleQuestionSubmissionId = singleQuestionSubmissionId;
+                        choiceSubmission.ChoiceSubmissionId = choice.ChoiceId;
                         await _choiceSubmissionRepository.AddAsync(choiceSubmission);
                     }
                 }
             }
             await _testinstanceRepository.UpdateAsync(testInstance);
-
+            await _jobRepository.AddAsync(new Job
+            {
+                Type = (int)JobTypeEnum.TestCorrection,
+                TestInstanceId = testInstance.Id,
+                Status = (int)JobStatusEnum.New
+            });
             return new Response<int>(testInstance.Id);
         }
     }
