@@ -147,5 +147,24 @@ namespace WebApi.Controllers
             }));
         }
 
+        [HttpDelete("RemoveGroupInstance")]
+        public async Task<IActionResult> RemoveGroupInstance(int groupDefinitionId)
+        {
+            return Ok(await Mediator.Send(new RemoveGroupInstanceCommand()
+            {
+                GroupDefinitionId = groupDefinitionId
+            }));
+        }
+
+        [HttpDelete("RemoveStudentGroupInstance")]
+        public async Task<IActionResult> RemoveStudentGroupInstance(string studentId, int groupInstanceId)
+        {
+            return Ok(await Mediator.Send(new RemoveStudentGroupInstanceCommand()
+            {
+                GroupInstanceId = groupInstanceId,
+                StudentId = studentId
+            }));
+        }
+
     }
 }
