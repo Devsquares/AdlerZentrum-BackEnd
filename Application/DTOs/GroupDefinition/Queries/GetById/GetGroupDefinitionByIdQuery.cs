@@ -22,7 +22,7 @@ namespace Application.DTOs
             }
             public async Task<Response<Domain.Entities.GroupDefinition>> Handle(GetGroupDefinitionByIdQuery query, CancellationToken cancellationToken)
             {
-                var GroupDefinition = await _GroupDefinitionRepository.GetByIdAsync(query.Id);
+                var GroupDefinition = _GroupDefinitionRepository.GetById(query.Id);
                 if (GroupDefinition == null) throw new ApiException($"Group Not Found.");
                 return new Response<Domain.Entities.GroupDefinition>(GroupDefinition);
             }
