@@ -176,6 +176,11 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
                   .Where(x => x.Id == id && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).FirstOrDefault();
         }
+        public void DeleteByGroupDefinition(int groupDefinitionId)
+        {
+            var groups = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId).ToList();
+            groupInstances.RemoveRange(groups);
+        }
 
     }
 }

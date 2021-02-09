@@ -105,8 +105,10 @@ namespace Application.DTOs
                             StudentId = command.StudentId,
                             PromoCodeId = command.PromoCodeId.Value,
                             GroupDefinitionId = command.groupDefinitionId,
-                            CreatedDate = DateTime.Now
-                        });
+                            CreatedDate = DateTime.Now,
+                            IsPlacementTest = false,
+                            RegisterDate = DateTime.Now
+                        }) ;
                     }
                     else
                     {
@@ -133,7 +135,8 @@ namespace Application.DTOs
                                     StudentId = command.StudentId,
                                     GroupDefinitionId = command.groupDefinitionId,
                                     IsPlacementTest = true,
-                                    CreatedDate = DateTime.Now
+                                    CreatedDate = DateTime.Now,
+                                    RegisterDate = DateTime.Now
                                 });
                             }
 
@@ -175,8 +178,11 @@ namespace Application.DTOs
                             StudentId = command.StudentId,
                             PromoCodeId = command.PromoCodeId.Value,
                             GroupDefinitionId = command.groupDefinitionId,
-                            CreatedDate = DateTime.Now
-                        });
+                            CreatedDate = DateTime.Now,
+                            IsPlacementTest = false,
+                            RegisterDate = DateTime.Now
+
+                        }) ;
                     }
                     else
                     {
@@ -187,7 +193,8 @@ namespace Application.DTOs
                                 StudentId = command.StudentId,
                                 GroupDefinitionId = command.groupDefinitionId,
                                 IsPlacementTest = true,
-                                 CreatedDate = DateTime.Now
+                                 CreatedDate = DateTime.Now,
+                                 RegisterDate = DateTime.Now
                             });
                         }
                         else
@@ -197,7 +204,8 @@ namespace Application.DTOs
                                 StudentId = command.StudentId,
                                 GroupDefinitionId = command.groupDefinitionId,
                                 IsPlacementTest = false,
-                                CreatedDate = DateTime.Now
+                                CreatedDate = DateTime.Now,
+                                RegisterDate = DateTime.Now
                             }) ;
                         }
 

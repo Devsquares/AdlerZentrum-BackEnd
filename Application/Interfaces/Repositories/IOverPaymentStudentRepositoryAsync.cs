@@ -2,6 +2,7 @@ using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Interfaces.Repositories
 {
@@ -12,5 +13,6 @@ namespace Application.Interfaces.Repositories
         int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
         List<OverPaymentStudent> GetDefaultListByGroupDefinitionId(int groupDefinitionId);
         List<OverPaymentStudent> GetPlacementTestListByGroupDefinitionId(int groupDefinitionId);
+        Task ADDList(List<OverPaymentStudent> students);
     }
 }
