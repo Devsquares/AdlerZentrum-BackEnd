@@ -24,6 +24,7 @@ namespace Process
                     optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
                     services.AddScoped<ApplicationDbContext>(s => new ApplicationDbContext(optionsBuilder.Options));
                     services.AddHostedService<JobsWorker>();
+                    services.AddHostedService<TestManagmentWorker>();
                 });
     }
 }

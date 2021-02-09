@@ -49,7 +49,7 @@ namespace Process
                     default:
                         break;
                 }
-               _job.Status = (int)JobStatusEnum.Done;
+                _job.Status = (int)JobStatusEnum.Done;
                 dbContext.Update(_job);
                 dbContext.SaveChanges();
             }
@@ -76,7 +76,7 @@ namespace Process
             else
             {
                 testInstance.ManualCorrection = true;
-            } 
+            }
             //TODO add required submtion date.
             dbContext.TestInstances.Update(testInstance);
             dbContext.SaveChanges();
@@ -160,21 +160,13 @@ namespace Process
                     }
                     item.Corrected = true;
                 }
-
                 else
                 {
                     autoCorrected = false;
                 }
             }
-            try
-            {
-                dbContext.SingleQuestionSubmissions.UpdateRange(SingleQuestionSubmissions);
-            }
-            catch (System.Exception ex)
-            {
 
-                throw;
-            }
+            dbContext.SingleQuestionSubmissions.UpdateRange(SingleQuestionSubmissions);
             return autoCorrected;
         }
 
