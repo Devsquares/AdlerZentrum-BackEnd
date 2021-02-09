@@ -30,6 +30,7 @@ namespace Infrastructure.Persistence.Repositories
             .Include(x => x.TimeSlot)
             .Include(x => x.GroupCondition)
             .Include(x => x.Sublevel)
+            .Include(x => x.Pricing)
             .Where(x => x.Id == groupDefinitionId).FirstOrDefault();
         }
     }
