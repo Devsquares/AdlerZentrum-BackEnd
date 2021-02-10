@@ -1,5 +1,6 @@
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -27,18 +28,20 @@ namespace Infrastructure.Persistence.Repositories
             return _interestedstudents.Where(x => x.StudentId == studentId && x.GroupDefinitionId == groupDefinitionId).FirstOrDefault();
         }
 
-        public object GetByGroupDefinitionId( int groupDefinitionId)
+        public List<StudentsModel> GetByGroupDefinitionId( int groupDefinitionId)
         {
             var interestedStudents =  _interestedstudents.Include(x=>x.Student)
                 .Include(x => x.GroupDefinition)
                 .Include(x => x.PromoCode)
                 .Where(x =>  x.GroupDefinitionId == groupDefinitionId)
-                .Select(x=>new { 
+                .Select(x=>new StudentsModel(){ 
                     StudentId = x.Student.Id,
                     StudentName =$"{x.Student.FirstName} {x.Student.LastName}",
                     PromocodeId = x.PromoCode.Id,
                     Promocode = x.PromoCode.Name,
                     IsPlacementTest = x.IsPlacementTest
+                    ProfilePhoto = x.Student.Profilephoto
+
                 }).ToList();
             return interestedStudents;
         }

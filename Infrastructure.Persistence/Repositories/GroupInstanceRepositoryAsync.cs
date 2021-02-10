@@ -140,7 +140,8 @@ namespace Infrastructure.Persistence.Repositories
                     PromoCodeId = x.PromoCodeId,
                     PromoCodeName = x.PromoCode != null ? x.PromoCode.Name : string.Empty,
                     isPlacementTest = x.IsPlacementTest,
-                    CreationDate = x.CreatedDate
+                    CreationDate = x.CreatedDate,
+                    ProfilePhoto = x.Student.Profilephoto
 
                 }).ToList();
                 StudentsGroupInstanceObject.Teachers = new List<TeachersModel>();
