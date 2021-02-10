@@ -143,6 +143,15 @@ namespace Infrastructure.Persistence.Repositories
             return canApply;
         }
 
+        public List<IGrouping<int, GroupConditionPromoCode>> GetAllByGroupCondition(int groupConditionId)
+        {
+            var proomcodes = _groupconditionpromocodes.Include(x=>x.PromoCode)
+                                                        .Where(x => x.GroupConditionDetails.GroupConditionId == groupConditionId).ToList();
+                                                        
+            var groupedpromocodes = proomcodes.GroupBy(x => x.GroupConditionDetailsId).ToList();
+            return groupedpromocodes;
+        }
+
     }
 
 }

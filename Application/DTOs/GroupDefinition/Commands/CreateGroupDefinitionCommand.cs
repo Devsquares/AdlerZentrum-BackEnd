@@ -35,7 +35,7 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(CreateGroupDefinitionCommand command, CancellationToken cancellationToken)
             {
-                var groupDefinition = new GroupDefinition();
+                var groupDefinition = new Domain.Entities.GroupDefinition();
 
                 Reflection.CopyProperties(command, groupDefinition);
                 groupDefinition.Status = (int)GroupDefinationStatusEnum.New;
