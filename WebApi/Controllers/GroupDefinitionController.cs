@@ -83,6 +83,12 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new GetOverPaymentStudentByGroupDefinitionIdQuery { GroupDefinitionId = groupDefinitionId }));
         }
-        
+
+        [HttpGet("GetGroupDefinitionDependcies")]
+        public async Task<IActionResult> GetGroupDefinitionDependcies(int groupDefinitionId)
+        {
+            return Ok(await Mediator.Send(new GetGroupDefinitionAllDependenciesByIdQuery { GroupDefinitionId = groupDefinitionId }));
+        }
+
     }
 }
