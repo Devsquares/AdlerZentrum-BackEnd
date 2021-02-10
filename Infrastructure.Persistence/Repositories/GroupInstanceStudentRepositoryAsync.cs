@@ -149,5 +149,18 @@ namespace Infrastructure.Persistence.Repositories
             groupInstanceStudents.RemoveRange(students);
             groupInstanceStudents.AddRange(groupInstanceStudentsobjectList);
         }
+
+        public List<IGrouping<int, GroupInstanceStudents>> GetAllByGroupDefinition(int groupDefinitionId)
+        {
+            var students = groupInstanceStudents.Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).ToList();
+            var groupedStudents = students.GroupBy(x => x.GroupInstanceId).ToList();
+            return groupedStudents;
+        }
+
+        public void DeleteByGroupDefinition(int groupDefinitionId)
+        {
+            var students = groupInstanceStudents.Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).ToList();
+            groupInstanceStudents.RemoveRange(students);
+        }
     }
 }

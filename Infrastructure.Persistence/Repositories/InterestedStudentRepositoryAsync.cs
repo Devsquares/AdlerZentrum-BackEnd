@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -36,9 +37,11 @@ namespace Infrastructure.Persistence.Repositories
                 .Select(x=>new StudentsModel(){ 
                     StudentId = x.Student.Id,
                     StudentName =$"{x.Student.FirstName} {x.Student.LastName}",
-                    PromoCodeId = x.PromoCode.Id,
-                    PromoCodeName = x.PromoCode.Name,
+                    PromocodeId = x.PromoCode.Id,
+                    Promocode = x.PromoCode.Name,
+                    IsPlacementTest = x.IsPlacementTest
                     ProfilePhoto = x.Student.Profilephoto
+
                 }).ToList();
             return interestedStudents;
         }
@@ -52,7 +55,12 @@ namespace Infrastructure.Persistence.Repositories
         {
             return _interestedstudents.AsNoTracking().Include(x => x.Student)
                 .Include(x => x.PromoCode)
-                .Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x=>x.Id).ToList();
+                .Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x=>x.RegisterDate).ToList();
+        }
+
+        public async Task ADDList(List<InterestedStudent> students)
+        {
+            await _interestedstudents.AddRangeAsync(students);
         }
     }
 

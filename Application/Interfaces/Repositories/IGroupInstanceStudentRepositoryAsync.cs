@@ -2,6 +2,7 @@
 using Domain.Models;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Interfaces.Repositories
@@ -20,5 +21,7 @@ namespace Application.Interfaces.Repositories
         Task<List<ApplicationUser>> GetAllStudentInGroupDefinitionByStudentId(string studentId);
 
         void SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist);
+        List<IGrouping<int, GroupInstanceStudents>> GetAllByGroupDefinition(int groupDefinitionId);
+        void DeleteByGroupDefinition(int groupDefinitionId);
     }
 }

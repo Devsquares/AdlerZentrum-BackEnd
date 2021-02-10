@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -29,17 +30,18 @@ namespace Infrastructure.Persistence.Repositories
 
         public List<StudentsModel> GetByGroupDefinitionId(int groupDefinitionId)
         {
-            var interestedStudents = _overpaymentstudents.Include(x => x.Student)
+            var overpaymentstudents = _overpaymentstudents.Include(x => x.Student)
                 .Include(x => x.GroupDefinition)
                 .Where(x => x.GroupDefinitionId == groupDefinitionId)
                 .Select(x => new StudentsModel()
                 {
                     StudentId = x.Student.Id,
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
+
                     ProfilePhoto = x.Student.Profilephoto,
                     isPlacementTest = x.IsPlacementTest
                 }).ToList();
-            return interestedStudents;
+            return overpaymentstudents;
         }
 
         public int GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId)
@@ -50,14 +52,19 @@ namespace Infrastructure.Persistence.Repositories
         public List<OverPaymentStudent> GetDefaultListByGroupDefinitionId(int groupDefinitionId)
         {
             return _overpaymentstudents.Include(x => x.Student)
-                .Where(x => x.GroupDefinitionId == groupDefinitionId && x.IsPlacementTest == false).OrderBy(x => x.Id).ToList();
+                .Where(x => x.GroupDefinitionId == groupDefinitionId && x.IsPlacementTest == false).OrderBy(x => x.RegisterDate).ToList();
 
         }
         public List<OverPaymentStudent> GetPlacementTestListByGroupDefinitionId(int groupDefinitionId)
         {
             return _overpaymentstudents.Include(x => x.Student)
-                .Where(x => x.GroupDefinitionId == groupDefinitionId && x.IsPlacementTest == true).OrderBy(x => x.Id).ToList();
+                .Where(x => x.GroupDefinitionId == groupDefinitionId && x.IsPlacementTest == true).OrderBy(x => x.RegisterDate).ToList();
 
+        }
+
+        public async Task ADDList(List<OverPaymentStudent> students)
+        {
+            await _overpaymentstudents.AddRangeAsync(students);
         }
     }
 
