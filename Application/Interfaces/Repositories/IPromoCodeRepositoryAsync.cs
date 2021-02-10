@@ -5,7 +5,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IPromoCodeRepositoryAsync : IGenericRepositoryAsync<PromoCode>
     {
-        bool CheckPromoCode(string name);
+        PromoCode CheckPromoCode(string name);
         PromoCode GetByName(string name);
     }
 }

@@ -12,10 +12,10 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpGet("GetGroupByPromoCodeQuery")]
-        public async Task<IActionResult> GetGroupByPromoCodeQuery([FromQuery] GetGroupByPromoCodeQuery command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
+        // [HttpGet("GetGroupByPromoCodeQuery")]
+        // public async Task<IActionResult> GetGroupByPromoCodeQuery([FromQuery] GetGroupByPromoCodeQuery command)
+        // {
+        //     return Ok(await Mediator.Send(command));
+        // }
     }
 }

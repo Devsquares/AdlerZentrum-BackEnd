@@ -20,11 +20,11 @@ namespace Infrastructure.Persistence.Repositories
             promoCodes = dbContext.Set<PromoCode>();
         }
 
-        public bool CheckPromoCode(string name)
+        public PromoCode CheckPromoCode(string name)
         {
             var data = promoCodes.Where(x => x.Name == name).ToList();
-            if (data.Count() > 0) { return true; }
-            else { return false; }
+            if (data.Count() > 0) { return data.FirstOrDefault(); }
+            else { return null; }
         }
 
         public PromoCode GetByName(string name)
