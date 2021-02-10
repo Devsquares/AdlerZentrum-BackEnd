@@ -37,11 +37,10 @@ namespace Infrastructure.Persistence.Repositories
                 .Select(x=>new StudentsModel(){ 
                     StudentId = x.Student.Id,
                     StudentName =$"{x.Student.FirstName} {x.Student.LastName}",
-                    PromocodeId = x.PromoCode.Id,
-                    Promocode = x.PromoCode.Name,
-                    IsPlacementTest = x.IsPlacementTest
+                    PromoCodeId = x.PromoCode.Id,
+                    PromoCodeName = x.PromoCode.Name,
+                    isPlacementTest = x.IsPlacementTest,
                     ProfilePhoto = x.Student.Profilephoto
-
                 }).ToList();
             return interestedStudents;
         }
