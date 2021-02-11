@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace Application.DTOs.GroupDefinition.Queries.GetById
     public class GetGroupDefinitionbyIdViewModel
     {
         public Domain.Entities.GroupDefinition GroupDefinition { get; set; }
-        public List<IGrouping<int, GroupConditionPromoCode>> PromoCodes { get; set; } = new List<IGrouping<int, GroupConditionPromoCode>>();
+        public List<List<PromoCodeCountModel>> PromoCodes { get; set; } = new List<List<PromoCodeCountModel>>();
     }
 }

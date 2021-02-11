@@ -74,7 +74,7 @@ namespace WebApi.Controllers
 
 
         [HttpGet("GetLastByStudent")]
-        public async Task<IActionResult> GetLastByStudent( string studentId )
+        public async Task<IActionResult> GetLastByStudent(string studentId)
         {
             return Ok(await Mediator.Send(new GetGroupInstanceByIdStudentQuery()
             {
@@ -147,12 +147,13 @@ namespace WebApi.Controllers
             }));
         }
 
-        [HttpDelete("RemoveAllGroupInstance")]
-        public async Task<IActionResult> RemoveAllGroupInstance(int groupDefinitionId)
+        [HttpDelete("RemoveGroupInstances")]
+        public async Task<IActionResult> RemoveGroupInstances(int? groupDefinitionId, int? groupInstanceId)
         {
             return Ok(await Mediator.Send(new RemoveGroupInstanceCommand()
             {
-                GroupDefinitionId = groupDefinitionId
+                GroupDefinitionId = groupDefinitionId,
+                GroupInstanceId = groupInstanceId
             }));
         }
 

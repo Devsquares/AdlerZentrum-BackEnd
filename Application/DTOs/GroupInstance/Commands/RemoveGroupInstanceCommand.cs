@@ -15,7 +15,8 @@ namespace Application.DTOs.GroupInstance.Commands
 {
     public class RemoveGroupInstanceCommand : IRequest<Response<int>>
     {
-        public int GroupDefinitionId { get; set; }
+        public int? GroupDefinitionId { get; set; }
+        public int? GroupInstanceId { get; set; }
         public class RemoveGroupInstanceCommandHandler : IRequestHandler<RemoveGroupInstanceCommand, Response<int>>
         {
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
@@ -43,9 +44,20 @@ namespace Application.DTOs.GroupInstance.Commands
             /// <returns></returns>
             public async Task<Response<int>> Handle(RemoveGroupInstanceCommand command, CancellationToken cancellationToken)
             {
-                var groupDefinitionInstance = _GroupDefinitionRepository.GetById(command.GroupDefinitionId);
-                if (groupDefinitionInstance == null) throw new ApiException($"Group definition Not Found.");
-                var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId);
+                int groupDefinitionID = 0;
+                if (command.GroupDefinitionId != null)
+                {
+                    var groupDefinitionInstance = _GroupDefinitionRepository.GetById(command.GroupDefinitionId.Value);
+                    if (groupDefinitionInstance == null) throw new ApiException($"Group definition Not Found.");
+                    groupDefinitionID = groupDefinitionInstance.Id;
+                }
+                if (command.GroupInstanceId != null)
+                {
+                    var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId.Value).Result;
+                    if (groupInstance == null) throw new ApiException($"Group Instance Not Found.");
+                    groupDefinitionID = groupInstance.GroupDefinitionId;
+                }
+                var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId,command.GroupInstanceId);
                 List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
                 List<OverPaymentStudent> overPaymentStudent = new List<OverPaymentStudent>();
                 using (TransactionScope scope = new TransactionScope())
@@ -60,7 +72,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                 interestedStudents.Add(new InterestedStudent()
                                 {
                                     StudentId = student.StudentId,
-                                    GroupDefinitionId = groupDefinitionInstance.Id,
+                                    GroupDefinitionId = groupDefinitionID,
                                     CreatedDate = DateTime.Now,
                                     IsPlacementTest = false,
                                     PromoCodeId = student.PromoCodeId.Value,
@@ -72,7 +84,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                 overPaymentStudent.Add(new OverPaymentStudent()
                                 {
                                     StudentId = student.StudentId,
-                                    GroupDefinitionId = groupDefinitionInstance.Id,
+                                    GroupDefinitionId = groupDefinitionID,
                                     CreatedDate = DateTime.Now,
                                     IsPlacementTest = student.IsPlacementTest,
                                     RegisterDate = student.CreatedDate.Value,
@@ -82,11 +94,11 @@ namespace Application.DTOs.GroupInstance.Commands
                     }
                     await _InterestedStudentRepositoryAsync.ADDList(interestedStudents);
                     await _overPaymentStudentRepositoryAsync.ADDList(overPaymentStudent);
-                    _groupInstanceStudentRepositoryAsync.DeleteByGroupDefinition(groupDefinitionInstance.Id);
-                    _groupInstanceRepositoryAsync.DeleteByGroupDefinition(groupDefinitionInstance.Id);
+                    _groupInstanceStudentRepositoryAsync.DeleteByGroupDefinition(groupDefinitionID);
+                    _groupInstanceRepositoryAsync.DeleteByGroupDefinition(groupDefinitionID);
                     scope.Complete();
                 }
-                return new Response<int>(groupDefinitionInstance.Id);
+                return new Response<int>(groupDefinitionID);
 
             }
         }

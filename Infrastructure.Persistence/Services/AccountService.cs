@@ -25,11 +25,13 @@ using Microsoft.EntityFrameworkCore;
 using Application.Interfaces.Repositories;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore.Internal;
+using Domain.Models;
 
 namespace Infrastructure.Persistence.Services
 {
     public class AccountService : IAccountService
     {
+        
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -616,6 +618,20 @@ namespace Infrastructure.Persistence.Services
             student.PhoneNumber = newPhoneNumber;
             await _userManager.UpdateAsync(student);
 
+        }
+
+        public async Task<PagedResponse<List<TeachersModel>>> GetAllTeachers(int pageNumber, int pageSize, string teacherName)
+        {
+            var teacherRoles = _userManager.GetUsersInRoleAsync("TEACHER").Result;
+              var teachers = teacherRoles.Where(x=> (!string.IsNullOrEmpty(teacherName) ? (x.FirstName.ToLower().Contains(teacherName.ToLower()) || x.LastName.ToLower().Contains(teacherName.ToLower())):true)).Select(x=> new TeachersModel() { 
+                    TeacherFirstName = x.FirstName,
+                    TeacherLastName = x.LastName,
+                    TeacherId = x.Id
+                })
+                .ToList();
+            int totalCount = teachers.Count();
+            teachers = teachers.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            return new PagedResponse<List<TeachersModel>>(teachers, pageNumber, pageSize, totalCount);
         }
     }
 
