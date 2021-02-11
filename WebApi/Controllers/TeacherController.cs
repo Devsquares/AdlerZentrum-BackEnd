@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Features.teacherActions.Commands;
+using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -7,6 +8,11 @@ namespace WebApi.Controllers
 {
     public class TeacherController : BaseApiController
     {
+        private readonly IAccountService _accountService;
+        public TeacherController(IAccountService accountService)
+        {
+            _accountService = accountService;
+        }
         [HttpPost("AssignTeacherToGroupInstance")]
         public async Task<IActionResult> AssignTeacherToGroupInstance(string teacherId, int groupInstanceId)
         {
@@ -39,6 +45,21 @@ namespace WebApi.Controllers
                 TeacherId = teacherId,
                 GroupInstanceId = groupInstanceId
             }));
+        }
+
+        [HttpPost("GetAllTeachers")]
+        public async Task<IActionResult> GetAllTeachers(int PageSize, int PageNumber, string teacherName)
+        {
+            if (PageSize == 0)
+            {
+                PageSize = 10;
+            }
+            if (PageNumber == 0)
+            {
+                PageNumber = 1;
+            }
+            var report = await _accountService.GetAllTeachers(PageNumber, PageSize, teacherName);
+            return Ok(report);
         }
 
     }

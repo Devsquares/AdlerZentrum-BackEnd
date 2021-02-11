@@ -112,7 +112,7 @@ namespace Infrastructure.Persistence.Repositories
                 int paymentStudents = groupInstanceStudent.Students.Where(x => x.isPlacementTest == false && x.PromoCodeId == null).Count();
                 int promocodesStudents = groupInstanceStudent.Students.Where(x => x.isPlacementTest == false && x.PromoCodeId != null).Count();
                 int placementStudents = groupInstanceStudent.Students.Where(x => x.isPlacementTest == true && x.PromoCodeId == null).Count();
-                if(groupInstanceStudent.Students.Count() > groupdefinition.GroupCondition.NumberOfSlots ) // check total students
+                if (groupInstanceStudent.Students.Count() > groupdefinition.GroupCondition.NumberOfSlots) // check total students
                 {
                     throw new Exception($"Group Instance Serial {groupInstanceStudent.GroupInstanceSerail} must contain {groupdefinition.GroupCondition.NumberOfSlots} student not {groupInstanceStudent.Students.Count()} ");
                 }
@@ -124,7 +124,7 @@ namespace Infrastructure.Persistence.Repositories
                 // check promocode students
 
             }
-           
+
             GroupInstanceStudents groupInstanceStudentsobject = new GroupInstanceStudents();
             List<GroupInstanceStudents> groupInstanceStudentsobjectList = new List<GroupInstanceStudents>();
             foreach (var item in groupInstanceStudentslist)
@@ -150,9 +150,11 @@ namespace Infrastructure.Persistence.Repositories
             groupInstanceStudents.AddRange(groupInstanceStudentsobjectList);
         }
 
-        public List<IGrouping<int, GroupInstanceStudents>> GetAllByGroupDefinition(int groupDefinitionId)
+        public List<IGrouping<int, GroupInstanceStudents>> GetAllByGroupDefinition(int? groupDefinitionId = null, int? groupInstanceId = null)
         {
-            var students = groupInstanceStudents.Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).ToList();
+            var students = groupInstanceStudents.Where(x =>
+                                                        (groupDefinitionId != null ? x.GroupInstance.GroupDefinitionId == groupDefinitionId : true)
+                                                        && (groupInstanceId != null ? (x.GroupInstanceId == groupInstanceId) : true)).ToList();
             var groupedStudents = students.GroupBy(x => x.GroupInstanceId).ToList();
             return groupedStudents;
         }

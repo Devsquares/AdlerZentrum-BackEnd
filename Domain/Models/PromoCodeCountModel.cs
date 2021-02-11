@@ -8,5 +8,6 @@ namespace Domain.Models
     {
         public int? promocodeId { get; set; }
         public int count { get; set; }
+        public string PromoCodeName { get; set; }
     }
 }

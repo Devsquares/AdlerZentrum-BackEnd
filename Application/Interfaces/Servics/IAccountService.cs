@@ -2,6 +2,7 @@
 using Application.DTOs.Account.Commands.UpdateAccount;
 using Application.Wrappers;
 using Domain.Entities;
+using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -30,5 +31,6 @@ namespace Application.Interfaces
         Task SendMessageToInstructor(string subject, string message, string studentId);
         Task UpdatePhoneNumber(string newPhoneNumber, string studentId);
         Task UpdatePhoto(string base64photo, string studentId);
+        Task<PagedResponse<List<TeachersModel>>> GetAllTeachers(int pageNumber, int pageSize, string teacherName);
     }
 }

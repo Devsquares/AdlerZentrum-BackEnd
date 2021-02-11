@@ -20,24 +20,24 @@ namespace Application.Features.GroupInstancesStudents.Commands
         public List<StudentsGroupInstanceModel> GroupInstancesStudentList { get; set; }
         public class SaveAllGroupInstanceStudentsCommandHandler : IRequestHandler<SaveAllGroupInstanceStudentsCommand, Response<int>>
         {
-            private readonly IGroupConditionDetailsRepositoryAsync _groupconditiondetailsRepository;
+            private readonly IGroupDefinitionRepositoryAsync _groupDefinitionRepositoryAsync;
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             private readonly IMapper _mapper;
-            public SaveAllGroupInstanceStudentsCommandHandler(IGroupConditionDetailsRepositoryAsync groupconditiondetailsRepository,
+            public SaveAllGroupInstanceStudentsCommandHandler(IGroupDefinitionRepositoryAsync groupDefinitionRepositoryAsync,
                 IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
                  IMapper mapper)
             {
-                _groupconditiondetailsRepository = groupconditiondetailsRepository;
+                _groupDefinitionRepositoryAsync = groupDefinitionRepositoryAsync;
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
                 _mapper = mapper;
             }
             public async Task<Response<int>> Handle(SaveAllGroupInstanceStudentsCommand command, CancellationToken cancellationToken)
             {
-                var groupconditiondetails = await _groupconditiondetailsRepository.GetByIdAsync(command.GroupDefinitionId);
+                var groupdefinitionobject =  _groupDefinitionRepositoryAsync.GetById(command.GroupDefinitionId);
 
-                if (groupconditiondetails == null)
+                if (groupdefinitionobject == null)
                 {
-                    throw new ApiException($"GroupConditionDetails Not Found.");
+                    throw new ApiException($"Group Definition Not Found.");
                 }
                 // List<GroupInstanceStudents>groupInstanceStidentObject = _mapper.Map<List<GroupInstanceStudents>>(command.GroupInstancesStudentList);
                 using (TransactionScope scope = new TransactionScope())
@@ -45,7 +45,7 @@ namespace Application.Features.GroupInstancesStudents.Commands
                     _groupInstanceStudentRepositoryAsync.SaveAllGroupInstanceStudents(command.GroupDefinitionId, command.GroupInstancesStudentList);
                     scope.Complete();
                 }
-                return new Response<int>(groupconditiondetails.Id);
+                return new Response<int>(groupdefinitionobject.Id);
 
             }
         }
