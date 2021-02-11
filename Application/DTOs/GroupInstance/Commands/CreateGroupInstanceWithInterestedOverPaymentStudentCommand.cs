@@ -103,6 +103,10 @@ namespace Application.DTOs.GroupInstance.Commands
                         if (interestedGroupInstanceStudents != null && interestedGroupInstanceStudents.Count > 0)
                         {
                             await _groupInstanceStudentRepositoryAsync.AddBulkAsync(interestedGroupInstanceStudents);
+                            foreach (var item in acceptedInterestedGroupInstanceStudents)
+                            {
+                                item.PromoCode = null;
+                            }
                             await _interestedStudentRepositoryAsync.DeleteBulkAsync(acceptedInterestedGroupInstanceStudents);
                         }
                     }

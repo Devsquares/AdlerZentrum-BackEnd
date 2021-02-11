@@ -54,7 +54,7 @@ namespace Application.Features.GroupInstancesStudents.Commands
                         await _InterestedStudentRepositoryAsync.AddAsync(new Domain.Entities.InterestedStudent()
                         {
                             StudentId = student.StudentId,
-                            GroupDefinitionId = groupInstance.Id,
+                            GroupDefinitionId = groupInstance.GroupDefinitionId,
                             CreatedDate = DateTime.Now,
                             IsPlacementTest = false,
                             PromoCodeId = student.PromoCodeId.Value,
@@ -66,7 +66,7 @@ namespace Application.Features.GroupInstancesStudents.Commands
                         await _overPaymentStudentRepositoryAsync.AddAsync(new Domain.Entities.OverPaymentStudent()
                         {
                             StudentId = student.StudentId,
-                            GroupDefinitionId = groupInstance.Id,
+                            GroupDefinitionId = groupInstance.GroupDefinitionId,
                             CreatedDate = DateTime.Now,
                             IsPlacementTest = student.IsPlacementTest,
                             RegisterDate = student.CreatedDate.Value,
