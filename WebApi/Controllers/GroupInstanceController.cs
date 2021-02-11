@@ -147,8 +147,8 @@ namespace WebApi.Controllers
             }));
         }
 
-        [HttpDelete("RemoveGroupInstance")]
-        public async Task<IActionResult> RemoveGroupInstance(int groupDefinitionId)
+        [HttpDelete("RemoveAllGroupInstance")]
+        public async Task<IActionResult> RemoveAllGroupInstance(int groupDefinitionId)
         {
             return Ok(await Mediator.Send(new RemoveGroupInstanceCommand()
             {
