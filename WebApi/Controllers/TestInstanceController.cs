@@ -89,7 +89,7 @@ namespace WebApi.Controller
         // [Authorize(Roles = "Student")]
         public async Task<IActionResult> Post(TestInstanceSolutionCommand command)
         {
-            command.StudentId = AuthenticatedUserService.UserId;
+            // command.StudentId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
 

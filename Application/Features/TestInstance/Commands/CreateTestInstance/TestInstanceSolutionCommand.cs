@@ -61,7 +61,7 @@ namespace Application.Features
                 SingleQuestionSubmission singleQuestionSubmission = new SingleQuestionSubmission();
                 singleQuestionSubmission.AnswerText = item.AnswerText;
                 singleQuestionSubmission.SingleQuestionId = item.SingleQuestionId;
-                singleQuestionSubmission.TrueOrFalseSubmission = item.TrueOrFalseSubmission.Value;
+                singleQuestionSubmission.TrueOrFalseSubmission = item.TrueOrFalseSubmission;
                 singleQuestionSubmission.StudentId = request.StudentId;
                 singleQuestionSubmission.Corrected = false;
                 singleQuestionSubmission.TestInstanceId = request.Id;
