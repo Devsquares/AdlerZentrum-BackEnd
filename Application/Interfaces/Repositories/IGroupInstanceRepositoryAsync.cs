@@ -16,6 +16,6 @@ namespace Application.Interfaces.Repositories
         List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, List<int> groupInstancelist = null);
         int GetCountByGroupDefinitionId(int groupDefinitionId);
         Task<GroupInstance> GetByIdPendingorCompleteAsync(int id);
-        void DeleteByGroupDefinition(int groupDefinitionId);
+        List<GroupInstance> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null);
     }
 }

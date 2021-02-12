@@ -22,6 +22,6 @@ namespace Application.Interfaces.Repositories
 
         void SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist);
         List<IGrouping<int, GroupInstanceStudents>> GetAllByGroupDefinition(int? groupDefinitionId= null, int? groupInstanceId = null);
-        void DeleteByGroupDefinition(int groupDefinitionId);
+        List<GroupInstanceStudents> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null);
     }
 }

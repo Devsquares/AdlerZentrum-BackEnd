@@ -45,6 +45,7 @@ namespace Application.DTOs.GroupInstance.Commands
             public async Task<Response<int>> Handle(RemoveGroupInstanceCommand command, CancellationToken cancellationToken)
             {
                 int groupDefinitionID = 0;
+                int? groupInstanceId = null;
                 if (command.GroupDefinitionId != null)
                 {
                     var groupDefinitionInstance = _GroupDefinitionRepository.GetById(command.GroupDefinitionId.Value);
@@ -56,6 +57,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId.Value).Result;
                     if (groupInstance == null) throw new ApiException($"Group Instance Not Found.");
                     groupDefinitionID = groupInstance.GroupDefinitionId;
+                    groupInstanceId = groupInstance.Id;
                 }
                 var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId,command.GroupInstanceId);
                 List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
@@ -94,8 +96,10 @@ namespace Application.DTOs.GroupInstance.Commands
                     }
                     await _InterestedStudentRepositoryAsync.ADDList(interestedStudents);
                     await _overPaymentStudentRepositoryAsync.ADDList(overPaymentStudent);
-                    _groupInstanceStudentRepositoryAsync.DeleteByGroupDefinition(groupDefinitionID);
-                    _groupInstanceRepositoryAsync.DeleteByGroupDefinition(groupDefinitionID);
+                   var groupStudents=  _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
+                    await _groupInstanceStudentRepositoryAsync.DeleteBulkAsync(groupStudents);
+                    var groups = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
+                    await _groupInstanceRepositoryAsync.DeleteBulkAsync(groups);
                     scope.Complete();
                 }
                 return new Response<int>(groupDefinitionID);
