@@ -32,5 +32,7 @@ namespace Infrastructure.Persistence.Repositories
             var data = promoCodes.Where(x => x.Name == name).ToList();
             return data.FirstOrDefault();
         }
+
+
     }
 }
