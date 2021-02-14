@@ -159,10 +159,12 @@ namespace Infrastructure.Persistence.Repositories
             return groupedStudents;
         }
 
-        public void DeleteByGroupDefinition(int groupDefinitionId)
+        public List<GroupInstanceStudents> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId,int? groupinstanceId=null)
         {
-            var students = groupInstanceStudents.Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).ToList();
-            groupInstanceStudents.RemoveRange(students);
+            var students = groupInstanceStudents.Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId 
+                                                        && (groupinstanceId!=null?x.GroupInstanceId ==groupinstanceId:true)).ToList();
+            return students;
+            
         }
     }
 }
