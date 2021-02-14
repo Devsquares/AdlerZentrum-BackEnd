@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Features.PromoCodeInstance.Commands;
 using Application.Features.PromoCodeInstance.Commands.CreatePromoCodeInstance;
 using Application.Features.PromoCodeInstance.Queries.GetAllPromoCodeInstances;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace WebApi.Controllers
     public class PromoCodeController : BaseApiController
     {
         [HttpGet("CheckPromoCode")]
-        public async Task<IActionResult> CheckPromoCode([FromQuery]CheckPromoCodeCommand command)
+        public async Task<IActionResult> CheckPromoCode([FromQuery] CheckPromoCodeCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
@@ -28,6 +29,13 @@ namespace WebApi.Controllers
 
         [HttpGet("GetAllReport")]
         public async Task<IActionResult> GetAllReport([FromQuery] GetAllPromoCodeInstancesQuery command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+
+        [HttpGet("CheckPromoCodeInstance")]
+        public async Task<IActionResult> CheckPromoCode([FromQuery] CheckPromoCodeInstanceCommand command)
         {
             return Ok(await Mediator.Send(command));
         }

@@ -66,6 +66,25 @@ namespace Infrastructure.Persistence.Repositories
            }).ToList();
             return promocodesInstancesList;
         }
+
+        public PromoCodeInstancesViewModel GetByPromoCodeKey(string promoKey)
+        {
+            return _promocodeinstances
+                .Include(x=>x.PromoCode)
+                .Include(x => x.Student)
+                .Where(x => x.PromoCodeKey == promoKey).DefaultIfEmpty().Select(x=> new PromoCodeInstancesViewModel() { 
+                    Id = x.Id,
+                    PromoCodeId = x.PromoCodeId,
+                    PromoCodeName = x.PromoCode.Name,
+                    PromoCodeKey = x.PromoCodeKey,
+                    StudentId = x.StudentId,
+                    StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
+                    StartDate = x.StartDate,
+                    EndDate = x.EndDate,
+                    IsUsed = x.IsUsed,
+                    CreatedDate = x.CreatedDate
+            }).FirstOrDefault();
+        }
     }
 
 }

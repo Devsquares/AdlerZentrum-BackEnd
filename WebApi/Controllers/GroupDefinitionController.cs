@@ -10,13 +10,14 @@ namespace WebApi.Controllers
     {
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] GroupDefinitionRequestParameter filter,string sublevelName)
+        public async Task<IActionResult> GetAll([FromQuery] GroupDefinitionRequestParameter filter,string sublevelName,int?sublevelID)
         {            
             return Ok(await Mediator.Send(new GetAllGroupDefinitionsQuery()
             {
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
-                SubLevel = sublevelName
+                SubLevel = sublevelName,
+                SubLevelId = sublevelID
             }));
         }
 
