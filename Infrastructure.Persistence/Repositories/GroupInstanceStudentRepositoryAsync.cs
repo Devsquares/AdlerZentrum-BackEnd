@@ -52,13 +52,42 @@ namespace Infrastructure.Persistence.Repositories
             return await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).CountAsync();
         }
 
-        public GroupInstance GetLastByStudentId(string studentId)
+        public GroupInstanceModel GetLastByStudentId(string studentId)
         {
-            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition).Where(x => x.StudentId == studentId && x.IsDefault == true).Select(x => x.GroupInstance).FirstOrDefault();
+            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition)
+                .Where(x => x.StudentId == studentId && x.IsDefault == true)
+                .Select(x => new GroupInstanceModel()
+                {
+                    GroupDefinitionId = x.GroupInstance.GroupDefinitionId,
+                    GroupDefinitionStartDate = x.GroupInstance.GroupDefinition.StartDate,
+                    GroupDefinitionEndDate = x.GroupInstance.GroupDefinition.EndDate,
+                    GroupDefinitionFinalTestDate = x.GroupInstance.GroupDefinition.FinalTestDate,
+                    Serial = x.GroupInstance.Serial,
+                    Status = x.GroupInstance.Status,
+                    CreatedDate = x.GroupInstance.CreatedDate,
+                    IsCurrent = x.IsDefault,
+                    GroupInstanceId = x.GroupInstance.Id
+
+                }).FirstOrDefault();
         }
-        public List<GroupInstance> GetAllLastByStudentId(string studentId)
+        public List<GroupInstanceModel> GetAllLastByStudentId(string studentId)
         {
-            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition).Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).Select(x => x.GroupInstance).ToList();
+            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition)
+                .Where(x => x.StudentId == studentId)
+                .OrderByDescending(x => x.CreatedDate)
+                .Select(x => new GroupInstanceModel() { 
+                    GroupDefinitionId = x.GroupInstance.GroupDefinitionId,
+                    GroupDefinitionStartDate = x.GroupInstance.GroupDefinition.StartDate,
+                    GroupDefinitionEndDate = x.GroupInstance.GroupDefinition.EndDate,
+                    GroupDefinitionFinalTestDate = x.GroupInstance.GroupDefinition.FinalTestDate,
+                    Serial = x.GroupInstance.Serial,
+                    Status = x.GroupInstance.Status,
+                    CreatedDate = x.GroupInstance.CreatedDate,
+                    IsCurrent = x.IsDefault,
+                    GroupInstanceId = x.GroupInstance.Id
+
+                })
+                .ToList();
         }
 
         public async Task<List<ApplicationUser>> GetAllStudentInGroupInstanceByStudentId(string studentId)
@@ -73,10 +102,10 @@ namespace Infrastructure.Persistence.Repositories
             return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).Select(x => x.Student).ToListAsync();
         }
 
-        public void SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist)
+        public List<GroupInstanceStudents> SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist,out List<GroupInstanceStudents> groupInstanceStudentsobjectList)
         {
             GroupInstanceStudents groupInstanceStudentsobject = new GroupInstanceStudents();
-            List<GroupInstanceStudents> groupInstanceStudentsobjectList = new List<GroupInstanceStudents>();
+             groupInstanceStudentsobjectList = new List<GroupInstanceStudents>();
             foreach (var item in groupInstanceStudentslist)
             {
                 groupInstanceStudentsobject = new GroupInstanceStudents();
@@ -96,8 +125,7 @@ namespace Infrastructure.Persistence.Repositories
             }
             var groupInstanceIds = groupInstanceStudentslist.Select(x => x.GroupInstanceId).ToList();
             var students = groupInstanceStudents.Where(x => groupInstanceIds.Contains(x.GroupInstanceId)).ToList();
-            groupInstanceStudents.RemoveRange(students);
-            groupInstanceStudents.AddRange(groupInstanceStudentsobjectList);
+            return students;
         }
 
         public void ValidateGroupInstancesStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist)

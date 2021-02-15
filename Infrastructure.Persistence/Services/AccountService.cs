@@ -588,7 +588,7 @@ namespace Infrastructure.Persistence.Services
             {
                 throw new ApiException("No Group instance for this student");
             }
-            var teacher = _teacherGroupInstanceAssignmentRepositoryAsync.GetByGroupInstanceId(groupInstanceObject.Id);
+            var teacher = _teacherGroupInstanceAssignmentRepositoryAsync.GetByGroupInstanceId(groupInstanceObject.GroupInstanceId);
             var student = _userManager.Users.Where(x => x.Id == studentId).FirstOrDefault();
             EmailRequest emailRequest = new EmailRequest()
             {

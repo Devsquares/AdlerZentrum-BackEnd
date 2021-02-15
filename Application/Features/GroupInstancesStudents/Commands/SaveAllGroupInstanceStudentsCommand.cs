@@ -42,7 +42,10 @@ namespace Application.Features.GroupInstancesStudents.Commands
                 // List<GroupInstanceStudents>groupInstanceStidentObject = _mapper.Map<List<GroupInstanceStudents>>(command.GroupInstancesStudentList);
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    _groupInstanceStudentRepositoryAsync.SaveAllGroupInstanceStudents(command.GroupDefinitionId, command.GroupInstancesStudentList);
+                    List<GroupInstanceStudents> groupInstanceStudentsObject = new List<GroupInstanceStudents>();
+                    var students = _groupInstanceStudentRepositoryAsync.SaveAllGroupInstanceStudents(command.GroupDefinitionId, command.GroupInstancesStudentList,out groupInstanceStudentsObject);
+                    await _groupInstanceStudentRepositoryAsync.DeleteBulkAsync(students);
+                    await _groupInstanceStudentRepositoryAsync.AddBulkAsync(groupInstanceStudentsObject);
                     scope.Complete();
                 }
                 return new Response<int>(groupdefinitionobject.Id);
