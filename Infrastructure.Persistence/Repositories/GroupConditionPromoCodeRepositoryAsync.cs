@@ -18,12 +18,14 @@ namespace Infrastructure.Persistence.Repositories
         ApplicationDbContext _dbContext;
         private readonly DbSet<GroupInstanceStudents> _groupInstanceStudents;
         private readonly DbSet<InterestedStudent> _interestedStudent;
+        private readonly DbSet<PromoCodeInstance> _promoCodeInstance;
         public GroupConditionPromoCodeRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             _groupconditionpromocodes = dbContext.Set<GroupConditionPromoCode>();
             _groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
             _interestedStudent = dbContext.Set<InterestedStudent>();
             _dbContext = dbContext;
+            _promoCodeInstance = dbContext.Set<PromoCodeInstance>();
         }
 
         public List<GroupConditionPromoCode> GetByGroupConditionDetailId(List<GroupConditionDetail> groupConditionDetails)
@@ -35,7 +37,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => ids.Contains(x.GroupConditionDetailsId)).ToList();
         }
 
-        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId, List<GroupInstanceStudents> groupInstanceStudentsList = null, List<StudentsModel> studentsModelList = null)
+        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId, List<GroupInstanceStudents> groupInstanceStudentsList = null, List<StudentsModel> studentsModelList = null,string promoCodeKey = null)
         {
             bool canApply = false;
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
@@ -114,7 +116,7 @@ namespace Infrastructure.Persistence.Repositories
             return canApply;
         }
 
-        public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeId)
+        public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeId, string promoCodeKey = null)
         {
             bool canApply = false;
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
