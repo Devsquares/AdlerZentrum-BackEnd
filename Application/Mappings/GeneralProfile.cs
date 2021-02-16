@@ -13,6 +13,7 @@ using Application.Features;
 using Application.Features.Bug.Queries.GetAllBugs;
 using Application.Features.Bug.Commands.CreateBug;
 using Domain.Models;
+using Application.DTOs.Level.Queries;
 
 namespace Application.Mappings
 {
@@ -46,6 +47,8 @@ namespace Application.Mappings
 
             CreateMap<SingleQuestion, GetAllSingleQuestionsViewModel>().ReverseMap();
             CreateMap<Question, GetQuestionViewModel>().ReverseMap();
+            CreateMap<RequestParameter, GetAllPromoCodesQuery>().ReverseMap();
+            CreateMap<PromoCode, GetAllPromoCodesViewModel>().ReverseMap();
 
             CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>()
             .ForMember(destination => destination.Student, opts => opts.MapFrom(source => source.Student.FirstName + " " + source.Student.LastName))

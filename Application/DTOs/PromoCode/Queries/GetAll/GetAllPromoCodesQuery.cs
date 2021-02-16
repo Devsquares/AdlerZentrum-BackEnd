@@ -14,8 +14,8 @@ namespace Application.DTOs.Level.Queries
 {
     public class GetAllPromoCodesQuery : IRequest<PagedResponse<IEnumerable<GetAllPromoCodesViewModel>>>
     {
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
     public class GetAllPromoCodesQueryHandler : IRequestHandler<GetAllPromoCodesQuery, PagedResponse<IEnumerable<GetAllPromoCodesViewModel>>>
     {
