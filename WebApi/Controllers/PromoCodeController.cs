@@ -22,12 +22,6 @@ namespace WebApi.Controllers
         //     return Ok(await Mediator.Send(command));
         // }
 
-        [HttpPost("CreatePromoCodeInstance")]
-        public async Task<IActionResult> CheckPromoCode([FromQuery] CreatePromoCodeInstanceCommand command)
-        {
-            return Ok(await Mediator.Send(command));
-        }
-
         [HttpGet("GetAllReport")]
         public async Task<IActionResult> GetAllReport([FromQuery] GetAllPromoCodeInstancesQuery command)
         {
@@ -46,6 +40,19 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(command));
         }
-        
+
+        [HttpPost("CreatePromoCodeInstance")]
+        public async Task<IActionResult> CheckPromoCode([FromQuery] CreatePromoCodeInstanceCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+
+        [HttpPost("CreatePromoCode")]
+        public async Task<IActionResult> CreatePromoCode([FromQuery] CreatePromoCodeCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
     }
 }
