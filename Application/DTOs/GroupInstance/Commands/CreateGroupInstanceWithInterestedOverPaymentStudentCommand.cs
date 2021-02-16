@@ -80,14 +80,15 @@ namespace Application.DTOs.GroupInstance.Commands
 
                         foreach (var interestedStudent in interestedStudentsList)
                         {
-                            canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeId, interestedGroupInstanceStudents);
+                            //Modified
+                            canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeInstanceId, interestedGroupInstanceStudents);
                             if (canApplyInSpecificGroup && studentCount < totalStudents)
                             {
                                 interestedGroupInstanceStudents.Add(new GroupInstanceStudents
                                 {
                                     GroupInstanceId = groupInstanceobject.Id,
                                     StudentId = interestedStudent.Student.Id,
-                                    PromoCodeId = interestedStudent.PromoCode.Id,
+                                    PromoCodenstanceId = interestedStudent.PromoCodeInstanceId,
                                     CreatedDate = DateTime.Now,
                                     IsDefault = true
                                 });
@@ -105,7 +106,7 @@ namespace Application.DTOs.GroupInstance.Commands
                             await _groupInstanceStudentRepositoryAsync.AddBulkAsync(interestedGroupInstanceStudents);
                             foreach (var item in acceptedInterestedGroupInstanceStudents)
                             {
-                                item.PromoCode = null;
+                                item.PromoCodeInstance = null;
                             }
                             await _interestedStudentRepositoryAsync.DeleteBulkAsync(acceptedInterestedGroupInstanceStudents);
                         }

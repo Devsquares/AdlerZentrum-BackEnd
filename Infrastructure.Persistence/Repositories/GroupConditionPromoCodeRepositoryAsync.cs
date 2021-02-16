@@ -37,7 +37,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => ids.Contains(x.GroupConditionDetailsId)).ToList();
         }
 
-        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeId, List<GroupInstanceStudents> groupInstanceStudentsList = null, List<StudentsModel> studentsModelList = null,string promoCodeKey = null)
+        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeInstanceId, List<GroupInstanceStudents> groupInstanceStudentsList = null,string promoCodeKey = null)
         {
             bool canApply = false;
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
@@ -52,18 +52,18 @@ namespace Infrastructure.Persistence.Repositories
             var studentsGroup = new List<PromoCodeCountModel>();
             if (groupInstanceStudentsList != null && groupInstanceStudentsList.Count>0) // from list not database
             {
-                studentsGroup = groupInstanceStudentsList.GroupBy(x => x.PromoCodeId)
+                studentsGroup = groupInstanceStudentsList.GroupBy(x => x.PromoCodeInstance.PromoCodeId) // modified
                    .Select(x => new PromoCodeCountModel() { promocodeId = x.Key, count = x.Count() }).ToList();
             }
-            else if (studentsModelList != null && studentsModelList.Count > 0) // from list not database
-            {
-                studentsGroup = studentsModelList.GroupBy(x => x.PromoCodeId)
-                   .Select(x => new PromoCodeCountModel()  { promocodeId = x.Key, count = x.Count() }).ToList();
-            }
+            //else if (studentsModelList != null && studentsModelList.Count > 0) // from list not database
+            //{
+            //    studentsGroup = studentsModelList.GroupBy(x => x.PromoCodeId)
+            //       .Select(x => new PromoCodeCountModel()  { promocodeId = x.Key, count = x.Count() }).ToList();
+            //}
             else
             {
-                studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodeId != null)
-             .GroupBy(x => x.PromoCodeId)
+                studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodenstanceId != null)
+             .GroupBy(x => x.PromoCodeInstance.PromoCodeId)//Modified
              .Select(x => new PromoCodeCountModel() { promocodeId = x.Key, count = x.Count() }).ToList();
             }
             // List<int> promocodsIDS = new List<int>();
@@ -93,11 +93,16 @@ namespace Infrastructure.Persistence.Repositories
                 }
 
             }
-            var studentpromocount = studentsGroup.Where(x => x.promocodeId == promocodeId).FirstOrDefault();
+            var promocodeObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
+            if(promocodeObject == null)
+            {
+                throw new Exception("PromoCode Not Found");
+            }
+            var studentpromocount = studentsGroup.Where(x => x.promocodeId == promocodeObject.PromoCodeId).FirstOrDefault();
 
             foreach (var item in validDetails)
             {
-                var validpromo = item.Where(x => x.PromoCodeId == promocodeId).FirstOrDefault();
+                var validpromo = item.Where(x => x.PromoCodeId == promocodeObject.PromoCodeId).FirstOrDefault();
                 if (studentpromocount == null && validpromo == null)
                 {
                     canApply = false;
@@ -116,7 +121,7 @@ namespace Infrastructure.Persistence.Repositories
             return canApply;
         }
 
-        public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeId, string promoCodeKey = null)
+        public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeInstanceId, string promoCodeKey = null)
         {
             bool canApply = false;
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
@@ -127,11 +132,15 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => x.gi.GroupDefinitionId == groupDefinitionId)
                 .Select(x => x.gcpc).ToList();
             var GroupConditionDetails = promocodes.GroupBy(x => x.GroupConditionDetailsId).ToList();
-
-            var interestedStudentsCount = _interestedStudent.Where(x => x.GroupDefinitionId == groupDefinitionId && x.PromoCodeId == promocodeId).Count();
+            var promocodeObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
+            if (promocodeObject == null)
+            {
+                throw new Exception("PromoCode Not Found");
+            }
+            var interestedStudentsCount = _interestedStudent.Include(x=>x.PromoCodeInstance).Where(x => x.GroupDefinitionId == groupDefinitionId && x.PromoCodeInstance.PromoCodeId == promocodeObject.PromoCodeId).Count();
             foreach (var item in GroupConditionDetails)
             {
-                var validpromo = item.Where(x => x.PromoCodeId == promocodeId).FirstOrDefault();
+                var validpromo = item.Where(x => x.PromoCodeId == promocodeObject.PromoCodeId).FirstOrDefault();
                 if (validpromo == null)
                 {
                     canApply = false;

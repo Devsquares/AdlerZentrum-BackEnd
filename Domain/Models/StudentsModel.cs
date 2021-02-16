@@ -13,5 +13,6 @@ namespace Domain.Models
         public bool isPlacementTest { get; set; }
         public DateTime? CreationDate { get; set; }
         public string ProfilePhoto { get; set; }
+        public int? PromoCodeInstanceId { get; set; }
     }
 }

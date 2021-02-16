@@ -133,15 +133,16 @@ namespace Infrastructure.Persistence.Repositories
                 StudentsGroupInstanceObject.GroupInstanceId = groupInstance.Id;
                 StudentsGroupInstanceObject.GroupInstanceSerail = groupInstance.Serial;
                 StudentsGroupInstanceObject.Status = ((GroupInstanceStatusEnum)groupInstance.Status).ToString();
-                StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCode).Include(x => x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
+                StudentsGroupInstanceObject.Students = groupInstanceStudents.Include(x => x.PromoCodeInstance.PromoCode).Include(x => x.Student).Where(x => x.GroupInstanceId == groupInstance.Id).Select(x => new StudentsModel
                 {
                     StudentId = x.StudentId,
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
-                    PromoCodeId = x.PromoCodeId,
-                    PromoCodeName = x.PromoCode != null ? x.PromoCode.Name : string.Empty,
+                    PromoCodeId = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCodeId:(int?)null,
+                    PromoCodeName = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCode.Name : string.Empty,
                     isPlacementTest = x.IsPlacementTest,
                     CreationDate = x.CreatedDate,
-                    ProfilePhoto = x.Student.Profilephoto
+                    ProfilePhoto = x.Student.Profilephoto,
+                    PromoCodeInstanceId = x.PromoCodenstanceId
 
                 }).ToList();
                 StudentsGroupInstanceObject.Teachers = new List<TeachersModel>();

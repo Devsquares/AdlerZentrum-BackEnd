@@ -17,7 +17,7 @@ namespace Application.DTOs
     {
         public int groupDefinitionId { get; set; }
         public string StudentId { get; set; }
-        public int? PromoCodeId { get; set; }
+        public int? PromoCodeInstanceId { get; set; }
         public int? PlacmentTestId { get; set; }
 
         public class RegisterStudentGroupDefinitionCommandHandler : IRequestHandler<RegisterStudentGroupDefinitionCommand, Response<int>>
@@ -78,10 +78,10 @@ namespace Application.DTOs
                 bool canApplyInGroupDefinition = false;
                 bool canApplyInSpecificGroup = false;
                 int studentCount = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(groupInstans.Id);
-                if (command.PromoCodeId.HasValue)
+                if (command.PromoCodeInstanceId.HasValue)
                 {
-                    canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstans.Id, command.PromoCodeId.Value);
-                    canApplyInGroupDefinition = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeInGroupDefinitionGeneral(command.groupDefinitionId, command.PromoCodeId.Value);
+                    canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstans.Id, command.PromoCodeInstanceId.Value);
+                    canApplyInGroupDefinition = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeInGroupDefinitionGeneral(command.groupDefinitionId, command.PromoCodeInstanceId.Value);
                 }
                 if (studentCount < groupInstans.GroupDefinition.GroupCondition.NumberOfSlots)
                 {
@@ -92,7 +92,7 @@ namespace Application.DTOs
                         {
                             GroupInstanceId = groupInstans.Id,
                             StudentId = command.StudentId,
-                            PromoCodeId = command.PromoCodeId,
+                            PromoCodenstanceId = command.PromoCodeInstanceId,
                             IsDefault = true,
                             CreatedDate = DateTime.Now
                         });
@@ -103,7 +103,7 @@ namespace Application.DTOs
                         await _interestedStudentRepositoryAsync.AddAsync(new InterestedStudent()
                         {
                             StudentId = command.StudentId,
-                            PromoCodeId = command.PromoCodeId.Value,
+                            PromoCodeInstanceId = command.PromoCodeInstanceId.Value,
                             GroupDefinitionId = command.groupDefinitionId,
                             CreatedDate = DateTime.Now,
                             IsPlacementTest = false,
@@ -176,7 +176,7 @@ namespace Application.DTOs
                         await _interestedStudentRepositoryAsync.AddAsync(new InterestedStudent()
                         {
                             StudentId = command.StudentId,
-                            PromoCodeId = command.PromoCodeId.Value,
+                            PromoCodeInstanceId = command.PromoCodeInstanceId.Value,
                             GroupDefinitionId = command.groupDefinitionId,
                             CreatedDate = DateTime.Now,
                             IsPlacementTest = false,

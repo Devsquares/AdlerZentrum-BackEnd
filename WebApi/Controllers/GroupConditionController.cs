@@ -63,9 +63,9 @@ namespace WebApi.Controllers
 
         [HttpPut("Check_AddStudentwithPromoCode")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Check_AddStudentwithPromoCode(int groupInstanceId,int promoCodeId,string studentId)
+        public async Task<IActionResult> Check_AddStudentwithPromoCode(int groupInstanceId,int promoCodeInstanceId,string studentId)
         {
-            return Ok(await Mediator.Send(new CheckGroupConditionPromoCodeCommand {GroupInstanceId = groupInstanceId , PromoCodeId = promoCodeId,StudentId = studentId}));
+            return Ok(await Mediator.Send(new CheckGroupConditionPromoCodeCommand {GroupInstanceId = groupInstanceId , PromoCodeInstanceId = promoCodeInstanceId,StudentId = studentId}));
         }
     }
 }

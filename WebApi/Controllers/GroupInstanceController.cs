@@ -102,14 +102,14 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("EditGroupInstanceByStudent")]
-        public async Task<IActionResult> EditGroupInstanceByStudent(int groupDefinitionId, int srcGroupInstanceId, int desGroupInstanceId, string studentId, int? promoCodeId)
+        public async Task<IActionResult> EditGroupInstanceByStudent(int groupDefinitionId, int srcGroupInstanceId, int desGroupInstanceId, string studentId, int? promoCodeInstanceId)
         {
             return Ok(await Mediator.Send(new EditGroupInstanceByAddingStudentFromAnotherCommand()
             {
                 GroupDefinitionId = groupDefinitionId,
                 srcGroupInstanceId = srcGroupInstanceId,
                 desGroupInstanceId = desGroupInstanceId,
-                promoCodeId = promoCodeId,
+                promoCodeInstanceId = promoCodeInstanceId,
                 studentId = studentId
             }));
         }

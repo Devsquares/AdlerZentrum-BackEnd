@@ -18,7 +18,7 @@ namespace Application.DTOs.GroupInstance.Commands
         public int srcGroupInstanceId { get; set; }
         public int desGroupInstanceId { get; set; }
         public string studentId { get; set; }
-        public int? promoCodeId { get; set; }
+        public int? promoCodeInstanceId { get; set; }
         public class EditGroupInstanceByAddingStudentFromAnotherCommandHandler : IRequestHandler<EditGroupInstanceByAddingStudentFromAnotherCommand, Response<List<StudentsGroupInstanceModel>>>
         {
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
@@ -65,9 +65,9 @@ namespace Application.DTOs.GroupInstance.Commands
                     throw new ApiException($"you cann't add student to the desyination group instance as it is full");
                 }
                 var student = _groupInstanceStudentRepositoryAsync.GetByStudentId(command.studentId, sourceGroupInstance.Id);
-                if (command.promoCodeId != null)
+                if (command.promoCodeInstanceId != null)
                 {
-                    canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(destinationGroupInstance.Id, command.promoCodeId.Value);
+                    canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(destinationGroupInstance.Id, command.promoCodeInstanceId.Value);
                     if (canApplyInSpecificGroup)
                     {
                         student.GroupInstanceId = destinationGroupInstance.Id;
