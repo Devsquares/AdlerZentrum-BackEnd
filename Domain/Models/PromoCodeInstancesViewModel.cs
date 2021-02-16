@@ -16,5 +16,7 @@ namespace Domain.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public bool? IsValid { get; set; }
+
     }
 }
