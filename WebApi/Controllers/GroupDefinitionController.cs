@@ -68,9 +68,9 @@ namespace WebApi.Controllers
 
         [HttpPut("StudentRegister")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> StudentRegister(int groupDefinitionId, int? promoCodeId,int? placmentTest)
+        public async Task<IActionResult> StudentRegister(int groupDefinitionId, int? promoCodeInstanceId,int? placmentTest)
         {
-            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand {groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeId = promoCodeId,PlacmentTestId = placmentTest}));
+            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand {groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeInstanceId = promoCodeInstanceId, PlacmentTestId = placmentTest}));
         }
 
         [HttpGet("GetInterestedStudent")]

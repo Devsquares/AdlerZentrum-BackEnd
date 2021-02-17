@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210215193448_add-value-column-promocode")]
+    partial class addvaluecolumnpromocode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -660,10 +662,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("PromoCodeInstanceId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PromoCodenstanceId")
+                    b.Property<int?>("PromoCodeId")
                         .HasColumnType("int");
 
                     b.Property<string>("StudentId")
@@ -673,7 +672,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GroupInstanceId");
 
-                    b.HasIndex("PromoCodeInstanceId");
+                    b.HasIndex("PromoCodeId");
 
                     b.HasIndex("StudentId");
 
@@ -828,7 +827,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("PromoCodeInstanceId")
+                    b.Property<int>("PromoCodeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RegisterDate")
@@ -841,7 +840,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GroupDefinitionId");
 
-                    b.HasIndex("PromoCodeInstanceId");
+                    b.HasIndex("PromoCodeId");
 
                     b.HasIndex("StudentId");
 
@@ -1942,9 +1941,9 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.PromoCodeInstance", "PromoCodeInstance")
+                    b.HasOne("Domain.Entities.PromoCode", "PromoCode")
                         .WithMany()
-                        .HasForeignKey("PromoCodeInstanceId");
+                        .HasForeignKey("PromoCodeId");
 
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
@@ -1995,9 +1994,9 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.PromoCodeInstance", "PromoCodeInstance")
+                    b.HasOne("Domain.Entities.PromoCode", "PromoCode")
                         .WithMany()
-                        .HasForeignKey("PromoCodeInstanceId")
+                        .HasForeignKey("PromoCodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

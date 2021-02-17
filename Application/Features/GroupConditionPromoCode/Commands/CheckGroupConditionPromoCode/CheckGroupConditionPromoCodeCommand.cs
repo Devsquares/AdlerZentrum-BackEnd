@@ -14,7 +14,7 @@ namespace Application.Features
     public partial class CheckGroupConditionPromoCodeCommand : IRequest<Response<bool>>
     {
 		public int GroupInstanceId { get; set; }
-		public int PromoCodeId { get; set; }
+		public int PromoCodeInstanceId { get; set; }
         public string StudentId { get; set; }
     }
 
@@ -33,7 +33,7 @@ namespace Application.Features
 
         public async Task<Response<bool>> Handle(CheckGroupConditionPromoCodeCommand request, CancellationToken cancellationToken)
         {
-            var result = _groupconditionpromocodeRepository.CheckPromoCodeCountInGroupInstance(request.GroupInstanceId, request.PromoCodeId);
+            var result = _groupconditionpromocodeRepository.CheckPromoCodeCountInGroupInstance(request.GroupInstanceId, request.PromoCodeInstanceId);
             if(result)
             {
                 var studentValid = _groupInstanceStudentRepository.GetByStudentId(request.StudentId,request.GroupInstanceId);
@@ -41,7 +41,7 @@ namespace Application.Features
                 {
                     GroupInstanceStudents groupInstanceStudents = new GroupInstanceStudents();
                     groupInstanceStudents.GroupInstanceId = request.GroupInstanceId;
-                    groupInstanceStudents.PromoCodeId = request.PromoCodeId;
+                   groupInstanceStudents.PromoCodeInstanceId = request.PromoCodeInstanceId;
                     groupInstanceStudents.StudentId = request.StudentId;
                     await _groupInstanceStudentRepository.AddAsync(groupInstanceStudents);
                 }
@@ -49,7 +49,7 @@ namespace Application.Features
                 {
                     if(studentValid.GroupInstanceId == request.GroupInstanceId)
                     {
-                        studentValid.PromoCodeId = request.PromoCodeId;
+                        studentValid.PromoCodeInstanceId = request.PromoCodeInstanceId;
                         await _groupInstanceStudentRepository.UpdateAsync(studentValid);
                     }
                 }

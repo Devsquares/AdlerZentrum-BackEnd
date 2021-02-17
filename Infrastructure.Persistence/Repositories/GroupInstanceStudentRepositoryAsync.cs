@@ -114,7 +114,7 @@ namespace Infrastructure.Persistence.Repositories
                 {
                     groupInstanceStudentsobject.GroupInstanceId = item.GroupInstanceId;
                     groupInstanceStudentsobject.StudentId = student.StudentId;
-                    groupInstanceStudentsobject.PromoCodeId = student.PromoCodeId;
+                    groupInstanceStudentsobject.PromoCodeInstanceId = student.PromoCodeInstanceId;
                     groupInstanceStudentsobject.IsPlacementTest = student.isPlacementTest;
                     groupInstanceStudentsobject.CreatedDate = student.CreationDate;
                     groupInstanceStudentsobject.LastModifiedDate = DateTime.Now;
@@ -163,7 +163,7 @@ namespace Infrastructure.Persistence.Repositories
                 {
                     groupInstanceStudentsobject.GroupInstanceId = item.GroupInstanceId;
                     groupInstanceStudentsobject.StudentId = student.StudentId;
-                    groupInstanceStudentsobject.PromoCodeId = student.PromoCodeId;
+                    groupInstanceStudentsobject.PromoCodeInstanceId = student.PromoCodeInstanceId;
                     groupInstanceStudentsobject.IsPlacementTest = student.isPlacementTest;
                     groupInstanceStudentsobject.CreatedDate = student.CreationDate;
                     groupInstanceStudentsobject.LastModifiedDate = DateTime.Now;

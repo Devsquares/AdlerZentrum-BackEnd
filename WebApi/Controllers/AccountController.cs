@@ -57,7 +57,7 @@ namespace WebApi.Controllers
         {
             var origin = Request.Headers["origin"];
             var student = await _accountService.RegisterAsync(request, origin);
-            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId, StudentId = student.data, PromoCodeId = request.PromoCodeID, PlacmentTestId = request.PlacmentTestId }));
+            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId }));
         }
 
         [HttpPost("addAccount")]

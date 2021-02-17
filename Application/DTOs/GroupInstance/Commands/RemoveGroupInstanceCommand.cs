@@ -69,7 +69,7 @@ namespace Application.DTOs.GroupInstance.Commands
                         var students = group.ToList();
                         foreach (var student in students)
                         {
-                            if (student.PromoCodeId != null)
+                            if (student.PromoCodeInstanceId != null)
                             {
                                 interestedStudents.Add(new InterestedStudent()
                                 {
@@ -77,7 +77,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                     GroupDefinitionId = groupDefinitionID,
                                     CreatedDate = DateTime.Now,
                                     IsPlacementTest = false,
-                                    PromoCodeId = student.PromoCodeId.Value,
+                                    PromoCodeInstanceId = student.PromoCodeInstanceId.Value,
                                     RegisterDate = student.CreatedDate.Value,
                                 });
                             }

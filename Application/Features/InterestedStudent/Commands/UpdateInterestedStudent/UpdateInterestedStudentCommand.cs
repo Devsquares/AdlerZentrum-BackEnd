@@ -13,7 +13,7 @@ namespace Application.Features.InterestedStudent.Commands.UpdateInterestedStuden
 	public class UpdateInterestedStudentCommand : IRequest<Response<int>>
     {
 		public int Id { get; set; }
-		public int PromoCodeId { get; set; }
+		public int PromoCodeInstanceId { get; set; }
 		public string StudentId { get; set; }
 		public int GroupDefinitionId { get; set; }
 
@@ -34,7 +34,7 @@ namespace Application.Features.InterestedStudent.Commands.UpdateInterestedStuden
                 }
                 else
                 {
-				interestedstudent.PromoCodeId = command.PromoCodeId;
+				interestedstudent.PromoCodeInstanceId = command.PromoCodeInstanceId;
 				interestedstudent.StudentId = command.StudentId;
 				interestedstudent.GroupDefinitionId = command.GroupDefinitionId;
 

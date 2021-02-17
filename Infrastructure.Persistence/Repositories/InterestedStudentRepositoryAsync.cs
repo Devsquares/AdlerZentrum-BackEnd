@@ -32,15 +32,17 @@ namespace Infrastructure.Persistence.Repositories
         {
             var interestedStudents =  _interestedstudents.Include(x=>x.Student)
                 .Include(x => x.GroupDefinition)
-                .Include(x => x.PromoCode)
+                .Include(x => x.PromoCodeInstance.PromoCode)
                 .Where(x =>  x.GroupDefinitionId == groupDefinitionId)
                 .Select(x=>new StudentsModel(){ 
                     StudentId = x.Student.Id,
                     StudentName =$"{x.Student.FirstName} {x.Student.LastName}",
-                    PromoCodeId = x.PromoCode.Id,
-                    PromoCodeName = x.PromoCode.Name,
+                    PromoCodeId = x.PromoCodeInstance.PromoCode.Id,
+                    PromoCodeName = x.PromoCodeInstance.PromoCode.Name,
                     isPlacementTest = x.IsPlacementTest,
-                    ProfilePhoto = x.Student.Profilephoto
+                    ProfilePhoto = x.Student.Profilephoto,
+                    PromoCodeInstanceId = x.PromoCodeInstanceId,
+                    PromoCodeValue = x.PromoCodeInstance.PromoCode.Value
                 }).ToList();
             return interestedStudents;
         }
@@ -53,7 +55,7 @@ namespace Infrastructure.Persistence.Repositories
         public List<InterestedStudent> GetListByGroupDefinitionId(int groupDefinitionId)
         {
             return _interestedstudents.AsNoTracking().Include(x => x.Student)
-                .Include(x => x.PromoCode)
+                .Include(x => x.PromoCodeInstance.PromoCode)
                 .Where(x => x.GroupDefinitionId == groupDefinitionId).OrderBy(x=>x.RegisterDate).ToList();
         }
 
