@@ -40,6 +40,16 @@ namespace Infrastructure.Persistence.Repositories
         public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeInstanceId, List<GroupInstanceStudents> groupInstanceStudentsList = null,string promoCodeKey = null)
         {
             bool canApply = false;
+            var promocodeInstanceObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
+            if (promocodeInstanceObject == null)
+            {
+                throw new Exception("PromoCode Instance Not Found");
+            }
+            if(promocodeInstanceObject.EndDate < DateTime.Now)
+            {
+                throw new Exception("This promocode Instance has been Expired");
+            }
+
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
                 .Join(_dbContext.GroupInstances,
                 gcpc => gcpc.GroupConditionDetails.GroupConditionId,
@@ -93,16 +103,13 @@ namespace Infrastructure.Persistence.Repositories
                 }
 
             }
-            var promocodeObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
-            if(promocodeObject == null)
-            {
-                throw new Exception("PromoCode Not Found");
-            }
-            var studentpromocount = studentsGroup.Where(x => x.promocodeId == promocodeObject.PromoCodeId).FirstOrDefault();
+            
+            
+            var studentpromocount = studentsGroup.Where(x => x.promocodeId == promocodeInstanceObject.PromoCodeId).FirstOrDefault();
 
             foreach (var item in validDetails)
             {
-                var validpromo = item.Where(x => x.PromoCodeId == promocodeObject.PromoCodeId).FirstOrDefault();
+                var validpromo = item.Where(x => x.PromoCodeId == promocodeInstanceObject.PromoCodeId).FirstOrDefault();
                 if (studentpromocount == null && validpromo == null)
                 {
                     canApply = false;
@@ -124,6 +131,15 @@ namespace Infrastructure.Persistence.Repositories
         public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeInstanceId, string promoCodeKey = null)
         {
             bool canApply = false;
+            var promocodeInstanceObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
+            if (promocodeInstanceObject == null)
+            {
+                throw new Exception("PromoCode Not Found");
+            }
+            if (promocodeInstanceObject.EndDate < DateTime.Now)
+            {
+                throw new Exception("This promocode Instance has been Expired");
+            }
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
                 .Join(_dbContext.GroupInstances,
                 gcpc => gcpc.GroupConditionDetails.GroupConditionId,
@@ -132,15 +148,11 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => x.gi.GroupDefinitionId == groupDefinitionId)
                 .Select(x => x.gcpc).ToList();
             var GroupConditionDetails = promocodes.GroupBy(x => x.GroupConditionDetailsId).ToList();
-            var promocodeObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
-            if (promocodeObject == null)
-            {
-                throw new Exception("PromoCode Not Found");
-            }
-            var interestedStudentsCount = _interestedStudent.Include(x=>x.PromoCodeInstance).Where(x => x.GroupDefinitionId == groupDefinitionId && x.PromoCodeInstance.PromoCodeId == promocodeObject.PromoCodeId).Count();
+           
+            var interestedStudentsCount = _interestedStudent.Include(x=>x.PromoCodeInstance).Where(x => x.GroupDefinitionId == groupDefinitionId && x.PromoCodeInstance.PromoCodeId == promocodeInstanceObject.PromoCodeId).Count();
             foreach (var item in GroupConditionDetails)
             {
-                var validpromo = item.Where(x => x.PromoCodeId == promocodeObject.PromoCodeId).FirstOrDefault();
+                var validpromo = item.Where(x => x.PromoCodeId == promocodeInstanceObject.PromoCodeId).FirstOrDefault();
                 if (validpromo == null)
                 {
                     canApply = false;

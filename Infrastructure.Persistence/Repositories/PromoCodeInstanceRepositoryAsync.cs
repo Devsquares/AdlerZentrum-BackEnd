@@ -85,6 +85,13 @@ namespace Infrastructure.Persistence.Repositories
                     CreatedDate = x.CreatedDate
             }).FirstOrDefault();
         }
+        public PromoCodeInstance GetById(int id)
+        {
+            return _promocodeinstances
+                .Include(x => x.PromoCode)
+                .Include(x => x.Student)
+                .Where(x => x.Id == id).DefaultIfEmpty().FirstOrDefault();
+        }
     }
 
 }
