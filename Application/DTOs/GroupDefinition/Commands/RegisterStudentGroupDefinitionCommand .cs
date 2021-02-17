@@ -67,6 +67,7 @@ namespace Application.DTOs
                         Status = (int)GroupInstanceStatusEnum.Pending
                     });
 
+                    groupInstans = _groupInstanceRepositoryAsync.GetByIdAsync(groupInstans.Id).Result;
                 }
                 //todo check if already registerd
                 //todo check on isdefault

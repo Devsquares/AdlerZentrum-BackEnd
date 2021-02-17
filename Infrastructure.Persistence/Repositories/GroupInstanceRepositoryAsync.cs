@@ -101,7 +101,7 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<GroupInstance> GetByIdAsync(int id)
         {
             return groupInstances
-                  .Include(x => x.GroupDefinition)
+                  .Include(x => x.GroupDefinition.GroupCondition)
                   .Include(x => x.Students)
                   .Include(x => x.GroupDefinition.TimeSlot)
                   .Include(x => x.GroupDefinition.Sublevel)
