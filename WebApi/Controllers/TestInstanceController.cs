@@ -154,6 +154,13 @@ namespace WebApi.Controller
             return Ok(await Mediator.Send(new GetTestInstanceToActiveQuery()));
         }
 
+        [HttpGet("GetAllTestsToManage")]
+        // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> GetAllTestsToManage()
+        {
+            return Ok(await Mediator.Send(new GetAllTestsToManageQuery()));
+        }
+
         [HttpPut("TestToActive")]
         [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
         public async Task<IActionResult> TestToActive(ActiveTestInstanceCommand command)
