@@ -49,7 +49,10 @@ namespace Infrastructure.Persistence.Repositories
             {
                 throw new Exception("This promocode Instance has been Expired");
             }
-
+            if (promocodeInstanceObject.IsUsed == true)
+            {
+                throw new Exception("This promocode Instance was used before");
+            }
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
                 .Join(_dbContext.GroupInstances,
                 gcpc => gcpc.GroupConditionDetails.GroupConditionId,
@@ -139,6 +142,10 @@ namespace Infrastructure.Persistence.Repositories
             if (promocodeInstanceObject.EndDate < DateTime.Now)
             {
                 throw new Exception("This promocode Instance has been Expired");
+            }
+            if (promocodeInstanceObject.IsUsed == true)
+            {
+                throw new Exception("This promocode Instance was used before");
             }
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
                 .Join(_dbContext.GroupInstances,
