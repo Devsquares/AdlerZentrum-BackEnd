@@ -62,6 +62,14 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.Status == (int)TestInstanceEnum.Closed).ToListAsync();
         }
 
+        public async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage()
+        {
+            return await _testInstances
+            .Include(x => x.Test)
+            .Include(x => x.Student)
+            .Include(x => x.LessonInstance)
+            .ThenInclude(x => x.GroupInstance).ToListAsync();
+        }
 
         public override Task<TestInstance> GetByIdAsync(int id)
         {
