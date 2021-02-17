@@ -92,7 +92,7 @@ namespace Application.DTOs
                         {
                             GroupInstanceId = groupInstans.Id,
                             StudentId = command.StudentId,
-                            PromoCodenstanceId = command.PromoCodeInstanceId,
+                            PromoCodeInstanceId = command.PromoCodeInstanceId,
                             IsDefault = true,
                             CreatedDate = DateTime.Now
                         });

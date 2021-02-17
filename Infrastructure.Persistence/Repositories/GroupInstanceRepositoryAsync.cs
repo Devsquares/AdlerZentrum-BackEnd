@@ -142,7 +142,7 @@ namespace Infrastructure.Persistence.Repositories
                     isPlacementTest = x.IsPlacementTest,
                     CreationDate = x.CreatedDate,
                     ProfilePhoto = x.Student.Profilephoto,
-                    PromoCodeInstanceId = x.PromoCodenstanceId
+                    PromoCodeInstanceId = x.PromoCodeInstanceId
 
                 }).ToList();
                 StudentsGroupInstanceObject.Teachers = new List<TeachersModel>();

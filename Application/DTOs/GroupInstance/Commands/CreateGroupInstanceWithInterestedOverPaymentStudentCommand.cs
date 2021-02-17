@@ -88,7 +88,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                 {
                                     GroupInstanceId = groupInstanceobject.Id,
                                     StudentId = interestedStudent.Student.Id,
-                                    PromoCodenstanceId = interestedStudent.PromoCodeInstanceId,
+                                    PromoCodeInstanceId = interestedStudent.PromoCodeInstanceId,
                                     CreatedDate = DateTime.Now,
                                     IsDefault = true
                                 });

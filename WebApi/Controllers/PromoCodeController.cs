@@ -28,8 +28,8 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpGet("GetAllReport")]
-        public async Task<IActionResult> GetAllReport([FromQuery] GetAllPromoCodeInstancesQuery command)
+        [HttpGet("GetAllPromocodeInstances")]
+        public async Task<IActionResult> GetAllPromocodeInstances([FromQuery] GetAllPromoCodeInstancesQuery command)
         {
             return Ok(await Mediator.Send(command));
         }

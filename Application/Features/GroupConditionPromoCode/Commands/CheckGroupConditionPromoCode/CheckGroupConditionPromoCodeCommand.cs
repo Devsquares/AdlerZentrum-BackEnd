@@ -41,7 +41,7 @@ namespace Application.Features
                 {
                     GroupInstanceStudents groupInstanceStudents = new GroupInstanceStudents();
                     groupInstanceStudents.GroupInstanceId = request.GroupInstanceId;
-                   groupInstanceStudents.PromoCodenstanceId = request.PromoCodeInstanceId;
+                   groupInstanceStudents.PromoCodeInstanceId = request.PromoCodeInstanceId;
                     groupInstanceStudents.StudentId = request.StudentId;
                     await _groupInstanceStudentRepository.AddAsync(groupInstanceStudents);
                 }
@@ -49,7 +49,7 @@ namespace Application.Features
                 {
                     if(studentValid.GroupInstanceId == request.GroupInstanceId)
                     {
-                        studentValid.PromoCodenstanceId = request.PromoCodeInstanceId;
+                        studentValid.PromoCodeInstanceId = request.PromoCodeInstanceId;
                         await _groupInstanceStudentRepository.UpdateAsync(studentValid);
                     }
                 }

@@ -62,7 +62,7 @@ namespace Infrastructure.Persistence.Repositories
             //}
             else
             {
-                studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodenstanceId != null)
+                studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodeInstanceId != null)
              .GroupBy(x => x.PromoCodeInstance.PromoCodeId)//Modified
              .Select(x => new PromoCodeCountModel() { promocodeId = x.Key, count = x.Count() }).ToList();
             }

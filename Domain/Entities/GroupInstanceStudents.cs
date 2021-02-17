@@ -10,7 +10,7 @@ namespace Domain.Entities
         public GroupInstance GroupInstance { get; set; }
         public bool IsDefault { get; set; }
         public bool IsPlacementTest { get; set; }
-        public int? PromoCodenstanceId { get; set; }
+        public int? PromoCodeInstanceId { get; set; }
         public virtual PromoCodeInstance PromoCodeInstance { get; set; }
 
     }

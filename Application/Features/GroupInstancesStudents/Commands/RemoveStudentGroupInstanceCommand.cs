@@ -49,7 +49,7 @@ namespace Application.Features.GroupInstancesStudents.Commands
                 var student = _groupInstanceStudentRepositoryAsync.GetByStudentId(command.StudentId, command.GroupInstanceId);
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    if (student.PromoCodenstanceId != null)
+                    if (student.PromoCodeInstanceId != null)
                     {
                         await _InterestedStudentRepositoryAsync.AddAsync(new Domain.Entities.InterestedStudent()
                         {
@@ -57,7 +57,7 @@ namespace Application.Features.GroupInstancesStudents.Commands
                             GroupDefinitionId = groupInstance.GroupDefinitionId,
                             CreatedDate = DateTime.Now,
                             IsPlacementTest = false,
-                            PromoCodeInstanceId = student.PromoCodenstanceId.Value,
+                            PromoCodeInstanceId = student.PromoCodeInstanceId.Value,
                             RegisterDate = student.CreatedDate.Value,
                         });
                     }

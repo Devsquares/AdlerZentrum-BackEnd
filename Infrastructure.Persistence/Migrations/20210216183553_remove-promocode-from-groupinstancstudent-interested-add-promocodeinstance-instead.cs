@@ -41,10 +41,10 @@ namespace Infrastructure.Persistence.Migrations
                 table: "GroupInstanceStudents",
                 nullable: true);
 
-            migrationBuilder.AddColumn<int>(
-                name: "PromoCodenstanceId",
-                table: "GroupInstanceStudents",
-                nullable: true);
+            //migrationBuilder.AddColumn<int>(
+            //    name: "PromoCodenstanceId",
+            //    table: "GroupInstanceStudents",
+            //    nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_InterestedStudents_PromoCodeInstanceId",
@@ -99,9 +99,9 @@ namespace Infrastructure.Persistence.Migrations
                 name: "PromoCodeInstanceId",
                 table: "GroupInstanceStudents");
 
-            migrationBuilder.DropColumn(
-                name: "PromoCodenstanceId",
-                table: "GroupInstanceStudents");
+            //migrationBuilder.DropColumn(
+            //    name: "PromoCodenstanceId",
+            //    table: "GroupInstanceStudents");
 
             migrationBuilder.AddColumn<int>(
                 name: "PromoCodeId",
