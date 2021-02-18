@@ -14,19 +14,11 @@ namespace Infrastructure.Persistence.Repositories
 {
     public class TestInstanceRepositoryAsync : GenericRepositoryAsync<TestInstance>, ITestInstanceRepositoryAsync
     {
-        private readonly DbSet<TestInstance> _testInstances;
-        private readonly DbSet<SingleQuestionSubmission> _singleQuestionSubmissions;
-        private readonly DbSet<Test> _tests;
-        private readonly DbSet<Question> _questions;
-        private readonly DbSet<SingleQuestion> _singleQuestions;
-        private readonly DbSet<Choice> _choice;
-        private readonly DbSet<ChoiceSubmission> _choiceSubmission;
+        private readonly DbSet<TestInstance> _testInstances; 
 
         public TestInstanceRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _testInstances = dbContext.Set<TestInstance>();
-            _singleQuestionSubmissions = dbContext.Set<SingleQuestionSubmission>();
-            _singleQuestions = dbContext.Set<SingleQuestion>();
+            _testInstances = dbContext.Set<TestInstance>(); 
         }
 
         public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType)
@@ -62,6 +54,15 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.Status == (int)TestInstanceEnum.Closed).ToListAsync();
         }
 
+        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage()
+        {
+            return await _testInstances
+            .Include(x => x.Test)
+            .Include(x => x.Student)
+            .Include(x => x.LessonInstance)
+            .ThenInclude(x => x.GroupInstance)
+            .ThenInclude(x => x.GroupDefinition).ToListAsync();
+        }
 
         public override Task<TestInstance> GetByIdAsync(int id)
         {
@@ -89,6 +90,12 @@ namespace Infrastructure.Persistence.Repositories
                 .ThenInclude(x => x.GroupInstance)
                 .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.Status == (int)TestInstanceEnum.Corrected).Count();
         }
+
+        public async Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance)
+        {
+            return await _testInstances.Where(x => x.LessonInstance.GroupInstanceId == groupInstance).ToListAsync();
+        }
+
         public virtual async Task<IReadOnlyList<object>> GetAllClosedAndPendingQuizzAsync(int GroupInstanceId)
         {
             return await _testInstances

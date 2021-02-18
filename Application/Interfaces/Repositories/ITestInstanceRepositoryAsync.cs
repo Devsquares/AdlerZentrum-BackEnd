@@ -17,5 +17,7 @@ namespace Application.Interfaces.Repositories
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToActive();
         Task<IReadOnlyList<object>> GetAllClosedAndPendingQuizzAsync(int GroupInstanceId);
         Task<List<TestInstance>> GetTestInstanceByLessonInstanceId(int LessonInstanceId);
-     }
+        Task<IReadOnlyList<TestInstance>> GetAllTestsToManage();
+        Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance);
+    }
 }

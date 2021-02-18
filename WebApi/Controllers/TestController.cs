@@ -26,6 +26,13 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpPut("UpdateTestCommand")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> Put(UpdateTestCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
         [HttpGet("GetAllQuizzes")]
         //[Authorize(Roles = "SuperAdmin,Supervisor")]
         public async Task<IActionResult> GetAllQuizzes([FromQuery] GetAllTestsQuery filter)

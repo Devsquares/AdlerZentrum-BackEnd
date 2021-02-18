@@ -38,5 +38,10 @@ namespace Infrastructure.Persistence.Repositories
             return _questions.Include(x => x.SingleQuestions)
                    .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
+
+        public async Task<List<Question>> GetByTestIdAsync(int id)
+        {
+            return await _questions.Where(x => x.TestId == id).ToListAsync();
+        }
     }
 }

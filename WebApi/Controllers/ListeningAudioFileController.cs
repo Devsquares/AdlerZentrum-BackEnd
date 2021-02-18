@@ -39,7 +39,7 @@ namespace WebApi.Controllers
                     StorageClass = S3StorageClass.StandardInfrequentAccess,
                     PartSize = 6291456, // 6 MB
                     Key = fileName,
-                    
+
                     CannedACL = S3CannedACL.PublicReadWrite,
                     InputStream = file,
                 };
@@ -115,7 +115,7 @@ namespace WebApi.Controllers
                 }
                 return Ok(await Mediator.Send(command));
             }
-            catch (Exception ex)
+            catch
             {
                 return NotFound();
             }
