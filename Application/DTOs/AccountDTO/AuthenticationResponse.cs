@@ -19,5 +19,6 @@ namespace Application.DTOs.Account
         [JsonIgnore]
         public string RefreshToken { get; set; }
         public int? SubLevelId { get; set; }
+        public bool IsFinal { get; set; }
     }
 }

@@ -8,5 +8,6 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<Question>> GetAllByTypeIdAsync(int questionTypeId, int pageNumber, int pageSize);
         int GetAllByTypeIdCountAsync(int questionTypeId);
+        Task<List<Question>> GetByTestIdAsync(int id);
     }
 }

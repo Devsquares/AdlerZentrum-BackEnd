@@ -32,13 +32,19 @@ namespace Application.Features
             }
             public async Task<Response<int>> Handle(UpdateGroupOfSingleQuestionSubmission command, CancellationToken cancellationToken)
             {
+                int points = 0;
                 foreach (var item in command.SingleQuestionSubmission)
                 {
                     await _medaitor.Send(item);
+                    if (item.RightAnswer)
+                    {
+                        points = points + item.Points;
+                    }
                 }
-                
+
                 var testInstance = _testInstanceRepository.GetByIdAsync(command.TestInstanceId).Result;
                 testInstance.Status = (int)TestInstanceEnum.Corrected;
+                testInstance.Points = testInstance.Points + points;
                 await _testInstanceRepository.UpdateAsync(testInstance);
 
                 return new Response<int>(testInstance.Id);

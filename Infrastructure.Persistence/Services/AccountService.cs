@@ -31,7 +31,7 @@ namespace Infrastructure.Persistence.Services
 {
     public class AccountService : IAccountService
     {
-        
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -42,8 +42,10 @@ namespace Infrastructure.Persistence.Services
         private readonly IGroupDefinitionRepositoryAsync _groupDefinitionRepositoryAsync;
         private readonly IGroupConditionRepositoryAsync _groupConditionRepositoryAsync;
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
+        private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
         private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignmentRepositoryAsync;
         private readonly ApplicationDbContext _context;
+
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
@@ -55,6 +57,7 @@ namespace Infrastructure.Persistence.Services
             IGroupDefinitionRepositoryAsync groupDefinitionRepositoryAsync,
             IGroupConditionRepositoryAsync groupConditionRepositoryAsync,
             ApplicationDbContext context,
+            ISublevelRepositoryAsync sublevelRepositoryAsync,
             ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignmentRepositoryAsync)
         {
             _userManager = userManager;
@@ -69,6 +72,7 @@ namespace Infrastructure.Persistence.Services
             _groupConditionRepositoryAsync = groupConditionRepositoryAsync;
             _context = context;
             _teacherGroupInstanceAssignmentRepositoryAsync = teacherGroupInstanceAssignmentRepositoryAsync;
+            _sublevelRepositoryAsync = sublevelRepositoryAsync;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -111,6 +115,10 @@ namespace Infrastructure.Persistence.Services
             response.Banned = user.Banned;
             response.BanComment = user.BanComment;
             response.SubLevelId = user.SublevelId;
+            if (user.SublevelId.HasValue && user.SublevelId != 0)
+            {
+                response.IsFinal = _sublevelRepositoryAsync.GetByIdAsync(user.SublevelId.Value).Result.IsFinal;
+            }
 
             user.RefreshTokens.Add(refreshToken);
             await _userManager.UpdateAsync(user);
@@ -623,12 +631,13 @@ namespace Infrastructure.Persistence.Services
         public async Task<PagedResponse<List<TeachersModel>>> GetAllTeachers(int pageNumber, int pageSize, string teacherName)
         {
             var teacherRoles = _userManager.GetUsersInRoleAsync("TEACHER").Result;
-              var teachers = teacherRoles.Where(x=> (!string.IsNullOrEmpty(teacherName) ? (x.FirstName.ToLower().Contains(teacherName.ToLower()) || x.LastName.ToLower().Contains(teacherName.ToLower())):true)).Select(x=> new TeachersModel() { 
-                    TeacherFirstName = x.FirstName,
-                    TeacherLastName = x.LastName,
-                    TeacherId = x.Id
-                })
-                .ToList();
+            var teachers = teacherRoles.Where(x => (!string.IsNullOrEmpty(teacherName) ? (x.FirstName.ToLower().Contains(teacherName.ToLower()) || x.LastName.ToLower().Contains(teacherName.ToLower())) : true)).Select(x => new TeachersModel()
+            {
+                TeacherFirstName = x.FirstName,
+                TeacherLastName = x.LastName,
+                TeacherId = x.Id
+            })
+              .ToList();
             int totalCount = teachers.Count();
             teachers = teachers.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return new PagedResponse<List<TeachersModel>>(teachers, pageNumber, pageSize, totalCount);

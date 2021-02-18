@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Features;
 using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
 using Application.Features.TestInstance.Commands.UpdateTestInstance;
@@ -154,13 +155,6 @@ namespace WebApi.Controller
             return Ok(await Mediator.Send(new GetTestInstanceToActiveQuery()));
         }
 
-        [HttpGet("GetAllTestsToManage")]
-        // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
-        public async Task<IActionResult> GetAllTestsToManage()
-        {
-            return Ok(await Mediator.Send(new GetAllTestsToManageQuery()));
-        }
-
         [HttpPut("TestToActive")]
         [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
         public async Task<IActionResult> TestToActive(ActiveTestInstanceCommand command)
@@ -175,5 +169,27 @@ namespace WebApi.Controller
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpGet("GetAllTestsToManage")]
+        // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> GetAllTestsToManage()
+        {
+            return Ok(await Mediator.Send(new GetAllTestsToManageQuery()));
+        }
+
+        [HttpPut("TestToActiveByGroup")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToActiveByGroup(UpdateTestInstanceStatusByGroupCommand command)
+        {
+            command.Status = (int)TestInstanceEnum.Pending;
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut("TestToCloseByGroup")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToCloseByGroup(UpdateTestInstanceStatusByGroupCommand command)
+        {
+            command.Status = (int)TestInstanceEnum.Missed;
+            return Ok(await Mediator.Send(command));
+        }
     }
 }

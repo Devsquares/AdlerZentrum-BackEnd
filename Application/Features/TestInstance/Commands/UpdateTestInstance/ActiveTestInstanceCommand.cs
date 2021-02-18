@@ -16,14 +16,14 @@ namespace Application.Features
     {
         public int Id { get; set; }
 
-        public class AssginTeacherTestInstanceCommandHandler : IRequestHandler<AssginTeacherTestInstanceCommand, Response<int>>
+        public class ActiveTestInstanceCommandHandler : IRequestHandler<ActiveTestInstanceCommand, Response<int>>
         {
             private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
-            public AssginTeacherTestInstanceCommandHandler(ITestInstanceRepositoryAsync testinstanceRepository)
+            public ActiveTestInstanceCommandHandler(ITestInstanceRepositoryAsync testinstanceRepository)
             {
                 _testinstanceRepository = testinstanceRepository;
             }
-            public async Task<Response<int>> Handle(AssginTeacherTestInstanceCommand command, CancellationToken cancellationToken)
+            public async Task<Response<int>> Handle(ActiveTestInstanceCommand command, CancellationToken cancellationToken)
             {
                 var testinstance = await _testinstanceRepository.GetByIdAsync(command.Id);
 

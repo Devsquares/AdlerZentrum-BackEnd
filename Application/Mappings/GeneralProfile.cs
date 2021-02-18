@@ -71,9 +71,8 @@ namespace Application.Mappings
             CreateMap<TestInstance, AllTestsToManageViewModel>()
                 .ForMember(destination => destination.GroupInstanceSerial, opts => opts.MapFrom(source => source.LessonInstance.GroupInstance.Serial))
                 .ForMember(destination => destination.GroupDefinitionSerial, opts => opts.MapFrom(source => source.LessonInstance.GroupInstance.GroupDefinition.Serial))
-                      .ForMember(destination => destination.TestName, opts => opts.MapFrom(source => source.Test.Name))
-             .ForMember(destination => destination.TestType,
-            opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.Test.TestTypeId)));
+                .ForMember(destination => destination.TestName, opts => opts.MapFrom(source => source.Test.Name))
+                .ForMember(destination => destination.TestType, opts => opts.MapFrom(source => source.Test.TestTypeId));
 
             CreateMap<Homework, GetAllomeworkBounsViewModel>()
             .ForMember(destination => destination.GroupInstanceSerial, opts => opts.MapFrom(source => source.GroupInstance.Serial))
