@@ -13,6 +13,7 @@ namespace Application.DTOs
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public int ? QuestionTypeId { get; set; }
     }
     public class GetAllQuestionsQueryHandler : IRequestHandler<GetAllQuestionsQuery, PagedResponse<IEnumerable<GetAllQuestionsViewModel>>>
     {
@@ -27,7 +28,7 @@ namespace Application.DTOs
         public async Task<PagedResponse<IEnumerable<GetAllQuestionsViewModel>>> Handle(GetAllQuestionsQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<RequestParameter>(request);
-            var user = await _QuestionService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize);
+            var user = await _QuestionService.GetAllAsync(validFilter.PageNumber, validFilter.PageSize, request.QuestionTypeId);
             var userViewModel = _mapper.Map<IEnumerable<GetAllQuestionsViewModel>>(user);
             return new PagedResponse<IEnumerable<GetAllQuestionsViewModel>>(userViewModel, validFilter.PageNumber, validFilter.PageSize, _QuestionService.GetCount());
         }

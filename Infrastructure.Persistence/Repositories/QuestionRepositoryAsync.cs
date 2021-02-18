@@ -43,5 +43,15 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _questions.Where(x => x.TestId == id).ToListAsync();
         }
+
+        public async Task<IReadOnlyList<Question>> GetAllAsync(int pageNumber, int pageSize, int? questionTypeId=null)
+        {
+            return await _questions.Include(x => x.SingleQuestions).ThenInclude(x => x.Choices)
+                .Where(x => questionTypeId!=null? x.QuestionTypeId == questionTypeId:true).Include(x => x.SingleQuestions)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .ToListAsync();
+        }
     }
 }

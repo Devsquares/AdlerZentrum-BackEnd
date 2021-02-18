@@ -8,7 +8,7 @@ namespace WebApi.Controllers
     public class QuestionController : BaseApiController
     {
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
+        public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter,int? QuestionTypeId)
         {
             if(filter.PageSize == 0)
             {
@@ -18,7 +18,7 @@ namespace WebApi.Controllers
             {
                 filter.PageNumber = 1;
             }
-            return Ok(await Mediator.Send(new GetAllQuestionsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
+            return Ok(await Mediator.Send(new GetAllQuestionsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber,QuestionTypeId = QuestionTypeId }));
         }
 
         [HttpGet("GetByType")]
