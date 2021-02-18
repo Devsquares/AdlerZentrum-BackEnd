@@ -10,6 +10,14 @@ namespace WebApi.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll([FromQuery] RequestParameter filter)
         {
+            if(filter.PageSize == 0)
+            {
+                filter.PageSize = 10;
+            }
+            if(filter.PageNumber == 0)
+            {
+                filter.PageNumber = 1;
+            }
             return Ok(await Mediator.Send(new GetAllQuestionsQuery() { PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
 
