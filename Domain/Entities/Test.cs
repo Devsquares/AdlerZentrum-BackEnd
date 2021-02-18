@@ -19,5 +19,6 @@ namespace Domain.Entities
         public int? SublevelId { get; set; }
         public Sublevel Sublevel { get; set; }
         public bool AutoCorrect { get; set; }
+        public int Status { get; set; }
     }
 }

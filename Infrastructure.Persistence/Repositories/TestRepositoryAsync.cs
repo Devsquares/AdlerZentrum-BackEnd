@@ -1,6 +1,7 @@
 ﻿using Application.Enums;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,42 @@ namespace Infrastructure.Persistence.Repositories
             tests = dbContext.Set<Test>();
         }
 
-        public async Task<IReadOnlyList<Test>> GetPagedReponseAsync(int pageNumber, int pageSize, int type)
+        public async Task<IReadOnlyList<TestsViewModel>> GetPagedReponseAsync(int pageNumber, int pageSize, int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null)
         {
-            return await tests
+            IQueryable<Test> test = tests
                 .Include(x => x.LessonDefinition)
-                .ThenInclude(x => x.Sublevel)
-                .Where(x => x.TestTypeId == type)
+                .Include(x => x.Sublevel)
+                .Include(x => x.Level);
+            if (testtype != null)
+            {
+                test = test.Where(x => x.TestTypeId == testtype);
+            }
+            if (levelId != null)
+            {
+                test = test.Where(x => x.LevelId == levelId);
+            }
+            if (subLevelId != null)
+            {
+                test = test.Where(x => x.SublevelId == subLevelId);
+            }
+            if (testStatus != null)
+            {
+                test = test.Where(x => x.Status == testStatus);
+            }
+            return await test
+                  .DefaultIfEmpty()
+                  .Select(x => new TestsViewModel() {
+                      Id = x.Id,
+                      Name = x.Name,
+                      TestTypeId = x.TestTypeId,
+                      LessonDefinition = x.LessonDefinition,
+                      LevelId = x.LevelId,
+                      LevelName = x.Level != null ? x.Level.Name : string.Empty,
+                      SublevelId = x.SublevelId,
+                      SubLevelName = x.Sublevel != null ? x.Sublevel.Name : string.Empty,
+                      Status = x.Status,
+                      StatusName =(Enum.Parse<TestStatusEnum>(x.Status.ToString())).ToString()
+                  })
                   .Skip((pageNumber - 1) * pageSize)
                   .Take(pageSize)
                   .AsNoTracking()
