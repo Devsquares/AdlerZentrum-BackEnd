@@ -10,8 +10,8 @@ namespace WebApi.Controllers
     {
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] GroupDefinitionRequestParameter filter,string sublevelName,int?sublevelID)
-        {            
+        public async Task<IActionResult> GetAll([FromQuery] GroupDefinitionRequestParameter filter, string sublevelName, int? sublevelID)
+        {
             return Ok(await Mediator.Send(new GetAllGroupDefinitionsQuery()
             {
                 PageSize = filter.PageSize,
@@ -66,11 +66,21 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new CancelGroupDefinitionByIdCommand { Id = id, UserId = AuthenticatedUserService.UserId }));
         }
 
+        [HttpPost("ActiveGroupInstances")]
+        public async Task<IActionResult> ActiveGroupInstances([FromQuery] ActiveGroupInstanceByGroupDefinationCommand filter)
+        {
+            return Ok(await Mediator.Send(new ActiveGroupInstanceByGroupDefinationCommand()
+            {
+                Id = filter.Id
+            }));
+        }
+
+
         [HttpPut("StudentRegister")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> StudentRegister(int groupDefinitionId, int? promoCodeInstanceId,int? placmentTest)
+        public async Task<IActionResult> StudentRegister(int groupDefinitionId, int? promoCodeInstanceId, int? placmentTest)
         {
-            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand {groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeInstanceId = promoCodeInstanceId, PlacmentTestId = placmentTest}));
+            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeInstanceId = promoCodeInstanceId, PlacmentTestId = placmentTest }));
         }
 
         [HttpGet("GetInterestedStudent")]
