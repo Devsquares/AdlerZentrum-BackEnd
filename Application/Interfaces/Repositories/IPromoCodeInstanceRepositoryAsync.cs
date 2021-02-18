@@ -10,5 +10,6 @@ namespace Application.Interfaces.Repositories
     {
         List<PromoCodeInstancesViewModel> GetAllReport(int pageNumber, int pageSize, out int count, int? promocodeId = null, bool? isValid = null, string promoCodeName = null, string studentName = null);
         PromoCodeInstancesViewModel GetByPromoCodeKey(string promoKey);
+        PromoCodeInstance GetById(int id);
     }
 }

@@ -28,12 +28,14 @@ namespace Application.DTOs
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             private readonly IInterestedStudentRepositoryAsync _interestedStudentRepositoryAsync;
             private readonly IOverPaymentStudentRepositoryAsync _overPaymentStudentRepositoryAsync;
+            private readonly IPromoCodeInstanceRepositoryAsync _promoCodeInstanceRepositoryAsync;
             public RegisterStudentGroupDefinitionCommandHandler(IGroupDefinitionRepositoryAsync GroupDefinitionRepository,
                 IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
                 IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync,
                 IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
                 IInterestedStudentRepositoryAsync interestedStudentRepositoryAsync,
-                IOverPaymentStudentRepositoryAsync overPaymentStudentRepositoryAsync)
+                IOverPaymentStudentRepositoryAsync overPaymentStudentRepositoryAsync,
+                IPromoCodeInstanceRepositoryAsync promoCodeInstanceRepositoryAsync)
             {
                 _GroupDefinitionRepositoryAsync = GroupDefinitionRepository;
                 _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
@@ -41,6 +43,7 @@ namespace Application.DTOs
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
                 _interestedStudentRepositoryAsync = interestedStudentRepositoryAsync;
                 _overPaymentStudentRepositoryAsync = overPaymentStudentRepositoryAsync;
+                _promoCodeInstanceRepositoryAsync = promoCodeInstanceRepositoryAsync;
             }
             public async Task<Response<int>> Handle(RegisterStudentGroupDefinitionCommand command, CancellationToken cancellationToken)
             {
@@ -64,6 +67,7 @@ namespace Application.DTOs
                         Status = (int)GroupInstanceStatusEnum.Pending
                     });
 
+                    groupInstans = _groupInstanceRepositoryAsync.GetByIdAsync(groupInstans.Id).Result;
                 }
                 //todo check if already registerd
                 //todo check on isdefault
@@ -96,6 +100,10 @@ namespace Application.DTOs
                             IsDefault = true,
                             CreatedDate = DateTime.Now
                         });
+                        var promocodeinstance = _promoCodeInstanceRepositoryAsync.GetById(command.PromoCodeInstanceId.Value);
+                        promocodeinstance.IsUsed = true;
+                        await _promoCodeInstanceRepositoryAsync.UpdateAsync(promocodeinstance);
+
                     }
                     else if (!canApplyInSpecificGroup && canApplyInGroupDefinition)
                     {
@@ -109,6 +117,9 @@ namespace Application.DTOs
                             IsPlacementTest = false,
                             RegisterDate = DateTime.Now
                         }) ;
+                        var promocodeinstance = _promoCodeInstanceRepositoryAsync.GetById(command.PromoCodeInstanceId.Value);
+                        promocodeinstance.IsUsed = true;
+                        await _promoCodeInstanceRepositoryAsync.UpdateAsync(promocodeinstance);
                     }
                     else
                     {
@@ -183,6 +194,9 @@ namespace Application.DTOs
                             RegisterDate = DateTime.Now
 
                         }) ;
+                        var promocodeinstance = _promoCodeInstanceRepositoryAsync.GetById(command.PromoCodeInstanceId.Value);
+                        promocodeinstance.IsUsed = true;
+                        await _promoCodeInstanceRepositoryAsync.UpdateAsync(promocodeinstance);
                     }
                     else
                     {

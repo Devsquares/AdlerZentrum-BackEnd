@@ -30,8 +30,15 @@ namespace WebApi.Controllers
 
         [HttpGet("GetAllPromocodeInstances")]
         public async Task<IActionResult> GetAllPromocodeInstances([FromQuery] GetAllPromoCodeInstancesQuery command)
-
         {
+            if(command.PageNumber == 0)
+            {
+                command.PageNumber = 1;
+            }
+            if (command.PageSize == 0)
+            {
+                command.PageSize = 10;
+            }
             return Ok(await Mediator.Send(command));
         }
 
