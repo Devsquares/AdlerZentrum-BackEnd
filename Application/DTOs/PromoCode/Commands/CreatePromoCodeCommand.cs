@@ -15,6 +15,7 @@ namespace Application.DTOs
     public class CreatePromoCodeCommand : IRequest<Response<int>>
     {
         public string Name { get; set; } 
+        public int value { get; set; }
 
         public class CreatePromoCodeCommandHandler : IRequestHandler<CreatePromoCodeCommand, Response<int>>
         {
@@ -29,6 +30,7 @@ namespace Application.DTOs
 
                 Reflection.CopyProperties(command, promo);
                 promo.Status = 0;
+                promo.Value = command.value;
                 await _promoCodeRepository.AddAsync(promo);
                 return new Response<int>(promo.Id);
 
