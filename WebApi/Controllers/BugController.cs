@@ -20,7 +20,10 @@ namespace WebApi.Controllers
 
             return Ok(await Mediator.Send(new GetAllBugsQuery() {
                 PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber
+                PageNumber = filter.PageNumber,
+                Status = filter.Status,
+                Priority = filter.Priority,
+                Type = filter.Type
             }));
         }
 

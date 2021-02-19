@@ -11,12 +11,15 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Bug.Queries.GetAllBugs
 {
-    public class GetAllBugsQuery : IRequest<PagedResponse<IEnumerable<GetAllBugsViewModel>>>
+    public class GetAllBugsQuery : IRequest<BugPagedResponse<IEnumerable<GetAllBugsViewModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public string Type { get; set; }
+        public string Priority { get; set; }
+        public string Status { get; set; }
     }
-    public class GetAllBugsQueryHandler : IRequestHandler<GetAllBugsQuery, PagedResponse<IEnumerable<GetAllBugsViewModel>>>
+    public class GetAllBugsQueryHandler : IRequestHandler<GetAllBugsQuery, BugPagedResponse<IEnumerable<GetAllBugsViewModel>>>
     {
         private readonly IBugRepositoryAsync _bugRepository;
         private readonly IMapper _mapper;
@@ -26,12 +29,12 @@ namespace Application.Features.Bug.Queries.GetAllBugs
             _mapper = mapper;
         }
 
-        public async Task<PagedResponse<IEnumerable<GetAllBugsViewModel>>> Handle(GetAllBugsQuery request, CancellationToken cancellationToken)
+        public async Task<BugPagedResponse<IEnumerable<GetAllBugsViewModel>>> Handle(GetAllBugsQuery request, CancellationToken cancellationToken)
         {
-            int count = _bugRepository.GetCount();
-            var bug = await _bugRepository.GetPagedReponseAsync(request.PageNumber, request.PageSize);
+            int count = _bugRepository.GetCount(request.Type, request.Status, request.Priority);
+            var bug = await _bugRepository.GetPagedReponseAsync(request.PageNumber, request.PageSize, request.Type, request.Status, request.Priority);
             var bugViewModel = _mapper.Map<IEnumerable<GetAllBugsViewModel>>(bug);
-            return new Wrappers.PagedResponse<IEnumerable<GetAllBugsViewModel>>(bugViewModel, request.PageNumber, request.PageSize,count);
+            return new Wrappers.BugPagedResponse<IEnumerable<GetAllBugsViewModel>>(bugViewModel, request.PageNumber, request.PageSize, count, request.Type, request.Status, request.Priority);
         }
     }
 }

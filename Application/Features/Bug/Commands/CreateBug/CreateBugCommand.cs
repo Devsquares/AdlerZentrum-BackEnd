@@ -33,6 +33,7 @@ namespace Application.Features.Bug.Commands.CreateBug
         public async Task<Response<int>> Handle(CreateBugCommand request, CancellationToken cancellationToken)
         {
             var bug = _mapper.Map<Domain.Entities.Bug>(request);
+            bug.Status = "Open";
             await _bugRepository.AddAsync(bug);
             return new Response<int>(bug.Id);
         }
