@@ -20,6 +20,7 @@ namespace Application.Features.Bug.Commands.UpdateBug
 		public string Description { get; set; }
 		public string Image { get; set; }
         public string Status { get; set; }
+        public string Notes { get; set; }
 
         public class UpdateBugCommandHandler : IRequestHandler<UpdateBugCommand, Response<int>>
         {
@@ -45,6 +46,7 @@ namespace Application.Features.Bug.Commands.UpdateBug
 				    bug.Description = command.Description;
 				    bug.Image = command.Image;
                     bug.Status = command.Status;
+                    bug.Notes = command.Notes;
 
                     await _bugRepository.UpdateAsync(bug);
                     return new Response<int>(bug.Id);

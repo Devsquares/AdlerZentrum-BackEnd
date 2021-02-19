@@ -14,5 +14,6 @@ namespace Domain.Entities
 		public string Description { get; set; }
 		public string Image { get; set; }
 		public string Status { get; set; }
+		public string Notes { get; set; }
 	}
 }
