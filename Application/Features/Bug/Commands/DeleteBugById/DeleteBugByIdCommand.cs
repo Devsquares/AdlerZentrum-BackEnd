@@ -24,7 +24,8 @@ namespace Application.Features.Bug.Commands.DeleteBugById
             {
                 var bug = await _bugRepository.GetByIdAsync(command.Id);
                 if (bug == null) throw new ApiException($"Bug Not Found.");
-                await _bugRepository.DeleteAsync(bug);
+                bug.Status = "Archived";
+                await _bugRepository.UpdateAsync(bug);
                 return new Response<int>(bug.Id);
             }
         }
