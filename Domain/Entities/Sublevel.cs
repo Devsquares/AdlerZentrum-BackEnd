@@ -16,5 +16,8 @@ namespace Domain.Entities
         public string Color { get; set; }
         public bool IsFinal { get; set; }
         public List<LessonDefinition> LessonDefinitions { get; set; }
+        public int Quizpercent { get; set; }
+        public int SublevelTestpercent { get; set; }
+        public int FinalTestpercent { get; set; }
     }
 }

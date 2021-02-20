@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Application.Filters;
 using Application.DTOs;
+using Domain.Models;
+using Application.Features.TestInstance.Queries;
 
 namespace WebApi.Controllers
 {
@@ -177,6 +179,12 @@ namespace WebApi.Controllers
         {
             await _accountService.UpdatePhoneNumber(newPhoneNumber, studentId);
             return Ok();
+        }
+
+        [HttpGet("GetCurrentProgress")]
+        public async Task<IActionResult> GetCurrentProgress(string studentId)
+        {
+            return Ok(await Mediator.Send(new GetCurrentProgressForStudent() { StudentId = studentId }));
         }
     }
 }

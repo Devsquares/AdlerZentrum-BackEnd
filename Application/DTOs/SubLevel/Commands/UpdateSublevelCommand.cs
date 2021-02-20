@@ -19,7 +19,9 @@ namespace Application.DTOs
         public int LevelId { get; set; } 
         public string Color { get; set; }
         public bool IsFinal { get; set; }
-
+        public int Quizpercent { get; set; }
+        public int SublevelTestpercent { get; set; }
+        public int FinalTestpercent { get; set; }
         public class UpdateSublevelCommandHandler : IRequestHandler<UpdateSublevelCommand, Response<int>>
         {
             private readonly ISublevelRepositoryAsync _SublevelRepository;

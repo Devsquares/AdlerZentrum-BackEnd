@@ -20,6 +20,9 @@ namespace Application.DTOs
         public int NumberOflessons { get; set; }
         public string Color { get; set; }
         public bool IsFinal { get; set; }
+        public int Quizpercent { get; set; }
+        public int SublevelTestpercent { get; set; }
+        public int FinalTestpercent { get; set; }
 
         public class CreateSublevelCommandHandler : IRequestHandler<CreateSublevelCommand, Response<int>>
         {
