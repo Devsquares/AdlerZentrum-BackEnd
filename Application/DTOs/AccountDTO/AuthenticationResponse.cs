@@ -20,5 +20,6 @@ namespace Application.DTOs.Account
         public string RefreshToken { get; set; }
         public int? SubLevelId { get; set; }
         public bool IsFinal { get; set; }
+        public string Profilephoto { get; set; }
     }
 }

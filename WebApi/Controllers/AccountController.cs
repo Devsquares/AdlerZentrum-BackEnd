@@ -155,14 +155,14 @@ namespace WebApi.Controllers
         [HttpPost("SendMessageToAdmin")]
         public async Task<IActionResult> SendMessageToAdmin([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
         {
-            // await _accountService.ForgotPassword(model, Request.Headers["origin"]);
+            // TODO: Which admin we will send to him.
             return Ok();
         }
 
         [HttpPost("SendMessageToInstructor")]
         public async Task<IActionResult> SendMessageToInstructor([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
         {
-            //await _accountService.SendMessageToInstructor(subject, message, studentId);
+            await _accountService.SendMessageToInstructor(subject, message, studentId);
             return Ok();
         }
         [HttpPut("UpdatePhoto")]
