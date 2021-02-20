@@ -49,5 +49,16 @@ namespace WebApi.Controllers
                 GroupInstanceId = filter.GroupInstanceId
             }));
         }
+
+          [HttpGet("GetAllLastByStudent")]
+        public async Task<IActionResult> GetByStudent(string studentId)
+        {
+            return Ok(await Mediator.Send(new GetAllLastGroupInstanceByIdStudentQuery()
+            {
+                StudentId = studentId
+            }));
+        }
+        
+        
     }
 }
