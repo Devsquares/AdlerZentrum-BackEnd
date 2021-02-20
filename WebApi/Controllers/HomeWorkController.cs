@@ -89,5 +89,17 @@ namespace WebApi.Controllers
                 HomeWorkSubmitionId = filter.HomeWorkSubmitionId
             }));
         }
+
+         [HttpGet("GetHomeworkForStudentByGroupInstanceId")]
+        //[Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetHomeworkForStudentByGroupInstanceId(int groupInstanceId)
+        {
+            return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsForStudentQuery()
+            {
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = groupInstanceId
+            }));
+        }
+        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Application.Filters;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,27 @@ namespace Infrastructure.Persistence.Repositories
         public int GetCountOfStudents(int groupId)
         {
             return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();
+        }
+
+        public List<GroupInstanceModel> GetAllLastByStudentId(string studentId)
+        {
+            var val = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition)
+                .Where(x => x.StudentId == studentId)
+                .OrderByDescending(x => x.CreatedDate)
+                .Select(x => new GroupInstanceModel()
+                {
+                    GroupDefinitionId = x.GroupInstance.GroupDefinitionId,
+                    GroupDefinitionStartDate = x.GroupInstance.GroupDefinition.StartDate,
+                    GroupDefinitionEndDate = x.GroupInstance.GroupDefinition.EndDate,
+                    GroupDefinitionFinalTestDate = x.GroupInstance.GroupDefinition.FinalTestDate,
+                    Serial = x.GroupInstance.Serial,
+                    Status = x.GroupInstance.Status,
+                    CreatedDate = x.GroupInstance.CreatedDate,
+                    IsCurrent = x.IsDefault,
+                    GroupInstanceId = x.GroupInstance.Id
+                })
+                .ToList();
+            return val;
         }
     }
 }
