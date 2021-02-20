@@ -81,7 +81,7 @@ namespace Application.DTOs.GroupInstance.Commands
                         foreach (var interestedStudent in interestedStudentsList)
                         {
                             //Modified
-                            canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeInstanceId, interestedGroupInstanceStudents);
+                            canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeInstanceId, interestedGroupInstanceStudents,isAutomaticCreate:true);
                             if (canApplyInSpecificGroup && studentCount < totalStudents)
                             {
                                 interestedGroupInstanceStudents.Add(new GroupInstanceStudents
@@ -89,6 +89,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                     GroupInstanceId = groupInstanceobject.Id,
                                     StudentId = interestedStudent.Student.Id,
                                     PromoCodeInstanceId = interestedStudent.PromoCodeInstanceId,
+                                    PromoCodeInstance = interestedStudent.PromoCodeInstance,
                                     CreatedDate = DateTime.Now,
                                     IsDefault = true
                                 });
@@ -103,6 +104,10 @@ namespace Application.DTOs.GroupInstance.Commands
                         }
                         if (interestedGroupInstanceStudents != null && interestedGroupInstanceStudents.Count > 0)
                         {
+                            foreach (var item in interestedGroupInstanceStudents)
+                            {
+                                item.PromoCodeInstance = null;
+                            }
                             await _groupInstanceStudentRepositoryAsync.AddBulkAsync(interestedGroupInstanceStudents);
                             foreach (var item in acceptedInterestedGroupInstanceStudents)
                             {
