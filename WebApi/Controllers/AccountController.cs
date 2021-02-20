@@ -57,7 +57,7 @@ namespace WebApi.Controllers
         {
             var origin = Request.Headers["origin"];
             var student = await _accountService.RegisterAsync(request, origin);
-            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId }));
+            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId }));
         }
 
         [HttpPost("addAccount")]
@@ -105,7 +105,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetAllUsersByRole([FromQuery] GetAllUsersParameter filter)
         {
             return Ok(await Mediator.Send(new GetAllUsersQuery() { Role = filter.Role, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
-        } 
+        }
 
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers([FromQuery] RequestParameter filter)
@@ -138,9 +138,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetAllStudentUsers")]
-        public async Task<IActionResult> GetAllStudentUsers(int PageSize, int PageNumber, int? groupDefinitionId, int? groupInstanceId,string studentName)
+        public async Task<IActionResult> GetAllStudentUsers(int PageSize, int PageNumber, int? groupDefinitionId, int? groupInstanceId, string studentName)
         {
-            if(PageSize ==0)
+            if (PageSize == 0)
             {
                 PageSize = 10;
             }
@@ -148,19 +148,19 @@ namespace WebApi.Controllers
             {
                 PageNumber = 1;
             }
-            var report = await _accountService.GetPagedReponseStudentUsersAsync(PageNumber, PageSize, groupDefinitionId, groupInstanceId,studentName);
+            var report = await _accountService.GetPagedReponseStudentUsersAsync(PageNumber, PageSize, groupDefinitionId, groupInstanceId, studentName);
             return Ok(report);
         }
 
         [HttpPost("SendMessageToAdmin")]
-        public async Task<IActionResult> SendMessageToAdmin(string subject, string message, string studentId)
+        public async Task<IActionResult> SendMessageToAdmin([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
         {
-           // await _accountService.ForgotPassword(model, Request.Headers["origin"]);
+            // await _accountService.ForgotPassword(model, Request.Headers["origin"]);
             return Ok();
         }
 
         [HttpPost("SendMessageToInstructor")]
-        public async Task<IActionResult> SendMessageToInstructor(string subject, string message, string studentId)
+        public async Task<IActionResult> SendMessageToInstructor([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
         {
             //await _accountService.SendMessageToInstructor(subject, message, studentId);
             return Ok();
