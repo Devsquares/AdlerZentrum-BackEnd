@@ -33,16 +33,19 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpGet("GetAllQuizzes")]
+        [HttpGet("GetAllTests")]
         //[Authorize(Roles = "SuperAdmin,Supervisor")]
-        public async Task<IActionResult> GetAllQuizzes([FromQuery] GetAllTestsQuery filter)
+        public async Task<IActionResult> GetAllTests([FromQuery] GetAllTestsQuery filter)
         {
-            return Ok(await Mediator.Send(new GetAllTestsQuery()
+            if(filter.PageNumber == 0)
             {
-                PageNumber = filter.PageNumber,
-                PageSize = filter.PageSize,
-                TestType = TestTypeEnum.quizz
-            }));
+                filter.PageNumber = 1;
+            }
+            if (filter.PageSize == 0)
+            {
+                filter.PageSize = 10;
+            }
+            return Ok(await Mediator.Send(filter));
         }
 
         [HttpGet("GetTestById")]
