@@ -19,5 +19,6 @@ namespace Application.Interfaces.Repositories
         Task<List<TestInstance>> GetTestInstanceByLessonInstanceId(int LessonInstanceId);
         Task<IReadOnlyList<TestInstance>> GetAllTestsToManage();
         Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance);
+        Task<List<TestInstance>> GetProgressByStudentId(string studentID);
     }
 }
