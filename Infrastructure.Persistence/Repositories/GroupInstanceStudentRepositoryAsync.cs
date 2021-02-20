@@ -23,13 +23,14 @@ namespace Infrastructure.Persistence.Repositories
         {
             return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();
         }
-        
-          public List<GroupInstanceModel> GetAllLastByStudentId(string studentId)
+
+        public List<GroupInstanceModel> GetAllLastByStudentId(string studentId)
         {
-            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition)
+            var val = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition)
                 .Where(x => x.StudentId == studentId)
                 .OrderByDescending(x => x.CreatedDate)
-                .Select(x => new GroupInstanceModel() { 
+                .Select(x => new GroupInstanceModel()
+                {
                     GroupDefinitionId = x.GroupInstance.GroupDefinitionId,
                     GroupDefinitionStartDate = x.GroupInstance.GroupDefinition.StartDate,
                     GroupDefinitionEndDate = x.GroupInstance.GroupDefinition.EndDate,
@@ -39,9 +40,9 @@ namespace Infrastructure.Persistence.Repositories
                     CreatedDate = x.GroupInstance.CreatedDate,
                     IsCurrent = x.IsDefault,
                     GroupInstanceId = x.GroupInstance.Id
-
                 })
                 .ToList();
+            return val;
         }
     }
 }
