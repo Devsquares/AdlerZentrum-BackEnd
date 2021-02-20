@@ -54,7 +54,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public GroupInstanceModel GetLastByStudentId(string studentId)
         {
-            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition)
+            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.TimeSlot)
                 .Where(x => x.StudentId == studentId && x.IsDefault == true)
                 .Select(x => new GroupInstanceModel()
                 {
@@ -66,13 +66,14 @@ namespace Infrastructure.Persistence.Repositories
                     Status = x.GroupInstance.Status,
                     CreatedDate = x.GroupInstance.CreatedDate,
                     IsCurrent = x.IsDefault,
-                    GroupInstanceId = x.GroupInstance.Id
+                    GroupInstanceId = x.GroupInstance.Id,
+                    TimeSlots = x.GroupInstance.GroupDefinition.TimeSlot
 
                 }).FirstOrDefault();
         }
         public List<GroupInstanceModel> GetAllLastByStudentId(string studentId)
         {
-            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition)
+            return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.TimeSlot)
                 .Where(x => x.StudentId == studentId)
                 .OrderByDescending(x => x.CreatedDate)
                 .Select(x => new GroupInstanceModel() { 
@@ -84,7 +85,8 @@ namespace Infrastructure.Persistence.Repositories
                     Status = x.GroupInstance.Status,
                     CreatedDate = x.GroupInstance.CreatedDate,
                     IsCurrent = x.IsDefault,
-                    GroupInstanceId = x.GroupInstance.Id
+                    GroupInstanceId = x.GroupInstance.Id,
+                    TimeSlots = x.GroupInstance.GroupDefinition.TimeSlot
 
                 })
                 .ToList();
