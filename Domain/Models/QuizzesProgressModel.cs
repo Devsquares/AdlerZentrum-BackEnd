@@ -9,6 +9,6 @@ namespace Domain.Models
     {
         public double AchievedScore { get; set; }
         public double TotalScore { get; set; }
-        public List<TestInstance> TestInstances { get; set; }
+        public List<TestInstance> QuizInstances { get; set; }
     }
 }
