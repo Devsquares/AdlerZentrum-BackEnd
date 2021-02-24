@@ -30,10 +30,26 @@ namespace Application.Features.TestInstance.Queries
             {
                 var testinstanceList = _testinstanceRepository.GetProgressByStudentId(query.StudentId).Result;
                 CurrentProgressModel currentProgressModel = new CurrentProgressModel();
-                currentProgressModel.Quizzes.TestInstances = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.quizz).ToList();
+                currentProgressModel.Quizzes.QuizInstances = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.quizz).ToList();
+                foreach (var quiz in currentProgressModel.Quizzes.QuizInstances)
+                {
+                    currentProgressModel.Quizzes.TotalScore += quiz.Test.TotalPoint;
+                    currentProgressModel.Quizzes.AchievedScore += quiz.Points;
+                }
                 currentProgressModel.Sublevels.SubLevelTests = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.subLevel).ToList();
-                currentProgressModel.Final.TestInstances = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.final).ToList();
-
+                foreach (var sublevel in currentProgressModel.Sublevels.SubLevelTests)
+                {
+                    currentProgressModel.Sublevels.TotalScore += sublevel.Test.TotalPoint;
+                    currentProgressModel.Sublevels.AchievedScore += sublevel.Points;
+                }
+                currentProgressModel.Final.FinalTestInstances = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.final).ToList();
+                foreach (var final in currentProgressModel.Final.FinalTestInstances)
+                {
+                    currentProgressModel.Final.TotalScore += final.Test.TotalPoint;
+                    currentProgressModel.Final.AchievedScore += final.Points;
+                }
+                currentProgressModel.TotalScore = currentProgressModel.Quizzes.TotalScore + currentProgressModel.Sublevels.TotalScore + currentProgressModel.Final.TotalScore;
+                currentProgressModel.AchievedScore = currentProgressModel.Quizzes.AchievedScore + currentProgressModel.Sublevels.AchievedScore + currentProgressModel.Final.AchievedScore;
                 //foreach (var testInstance in testinstanceList)
                 //{
 

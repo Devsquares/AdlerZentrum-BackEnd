@@ -17,6 +17,7 @@ namespace Application.DTOs
         public int TestTypeId { get; set; }
         public List<int> SingleQuestions { get; set; }
         public int LessonDefinitionId { get; set; }
+        public int TotalPoint { get; set; }
 
         public class CreateTestCommandHandler : IRequestHandler<CreateQuizCommand, Response<int>>
         {
@@ -40,6 +41,7 @@ namespace Application.DTOs
                 test.TestDuration = command.TestDuration;
                 test.TestTypeId = command.TestTypeId;
                 test.LessonDefinitionId = command.LessonDefinitionId;
+                test.TotalPoint = command.TotalPoint;
 
                 test = await _TestRepository.AddAsync(test);
                 var singleQuestions = await _singleQuestionRepository.GetAllByIdAsync(command.SingleQuestions);
