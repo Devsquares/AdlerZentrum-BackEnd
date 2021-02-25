@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210225095325_AdlerCardLevel")]
+    partial class AdlerCardLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,7 +143,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("varchar(85)");
 
-                    b.Property<int?>("TeacherId")
+                    b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.Property<string>("TeacherId1")
@@ -2026,7 +2028,7 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.AdlerCard", b =>
                 {
                     b.HasOne("Domain.Entities.AdlerCardsUnit", "AdlerCardsUnit")
-                        .WithMany("AdlerCards")
+                        .WithMany()
                         .HasForeignKey("AdlerCardsUnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -1,7 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Domain.Common;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Domain.Entities
 {
@@ -14,6 +14,5 @@ namespace Domain.Entities
         public DateTime? AvailableFrom { get; set; }
         public DateTime? AvailableTill { get; set; }
         public int Status { get; set; }
-
     }
 }

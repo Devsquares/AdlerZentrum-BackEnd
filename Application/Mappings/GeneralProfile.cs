@@ -117,6 +117,15 @@ namespace Application.Mappings
             CreateMap<DisqualificationRequest, GetAllDisqualificationRequestsViewModel>().ReverseMap();
             CreateMap<GetAllDisqualificationRequestsQuery, GetAllDisqualificationRequestsParameter>().ReverseMap();
             CreateMap<GroupInstanceStudents, GroupInstanceStudentsViewModel>().ReverseMap();
+
+
+
+            // Adler Cards
+            CreateMap<GetAllAdlerCardsBundlesParameter, GetAllAdlerCardsBundlesQuery>().ReverseMap();
+            CreateMap<CreateAdlerCardsBundleCommand, AdlerCardsBundle>().ReverseMap();
+            CreateMap<GetAllAdlerCardsBundlesViewModel, AdlerCardsBundle>().ReverseMap();
+            CreateMap<CreateAdlerCardsUnitCommand, AdlerCardsUnit>().ReverseMap();
+            CreateMap<CreateAdlerCardCommand, AdlerCard>().ReverseMap();
         }
     }
 }
