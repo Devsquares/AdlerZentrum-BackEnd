@@ -17,5 +17,6 @@ namespace Domain.Entities
         public int? NoOfRepeats { get; set; }
         public string Text { get; set; }
         public virtual ICollection<SingleQuestion> SingleQuestions { get; set; }
+        public bool IsAdlerService { get; set; } = false;
     }
 }
