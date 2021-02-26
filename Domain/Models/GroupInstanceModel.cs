@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,6 +16,7 @@ namespace Domain.Models
         public int? Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public bool IsCurrent { get; set; } = false;
+        public TimeSlot TimeSlots { get; set; }
 
 
     }

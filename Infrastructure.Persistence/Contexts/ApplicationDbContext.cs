@@ -61,7 +61,11 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<DisqualificationRequest> DisqualificationRequests { get; set; }
         public DbSet<GroupInstanceStudents> GroupInstanceStudents { get; set; }
         public DbSet<Job> Jobs { get; set; }
-        public DbSet<PromoCodeInstance> promoCodeInstances{ get; set; }
+        public DbSet<PromoCodeInstance> PromoCodeInstances { get; set; }
+        public DbSet<AdlerCard> AdlerCards { get; set; }
+        public DbSet<AdlerCardsBundle> AdlerCardsBundles { get; set; }
+        public DbSet<AdlerCardSubmission> AdlerCardSubmissions { get; set; }
+        public DbSet<AdlerCardsUnit> AdlerCardsUnits { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

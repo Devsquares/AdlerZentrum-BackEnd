@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface ITestRepositoryAsync : IGenericRepositoryAsync<Test>
     {
-        Task<IReadOnlyList<Test>> GetPagedReponseAsync(int pageNumber, int pageSize, int type);
+        Task<IReadOnlyList<TestsViewModel>> GetPagedReponseAsync(int pageNumber, int pageSize, int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null);
         Task<Test> GetQuizzByLessonDefinationAsync(int lessonDefinationdId);
         Task<Test> GetSubLevelTestBySublevelAsync(int Sublevel);
         Task<Test> GetFinalLevelTestBySublevelAsync(int level);

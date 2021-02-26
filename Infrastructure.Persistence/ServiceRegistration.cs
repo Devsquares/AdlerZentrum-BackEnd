@@ -73,6 +73,10 @@ namespace Infrastructure.Persistence
             services.AddTransient<IDisqualificationRequestRepositoryAsync, DisqualificationRequestRepositoryAsync>();
             services.AddTransient<IJobRepositoryAsync, JobRepositoryAsync>();
             services.AddTransient<IPromoCodeInstanceRepositoryAsync, PromoCodeInstanceRepositoryAsync>();
+            services.AddTransient<IAdlerCardRepositoryAsync,AdlerCardRepositoryAsync>();
+            services.AddTransient<IAdlerCardsBundleRepositoryAsync,AdlerCardsBundleRepositoryAsync>();
+            services.AddTransient<IAdlerCardSubmissionRepositoryAsync,AdlerCardSubmissionRepositoryAsync>();
+            services.AddTransient<IAdlerCardsUnitRepositoryAsync,AdlerCardsUnitRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

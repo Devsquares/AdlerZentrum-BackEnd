@@ -14,11 +14,11 @@ namespace Infrastructure.Persistence.Repositories
 {
     public class TestInstanceRepositoryAsync : GenericRepositoryAsync<TestInstance>, ITestInstanceRepositoryAsync
     {
-        private readonly DbSet<TestInstance> _testInstances; 
+        private readonly DbSet<TestInstance> _testInstances;
 
         public TestInstanceRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _testInstances = dbContext.Set<TestInstance>(); 
+            _testInstances = dbContext.Set<TestInstance>();
         }
 
         public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType)
@@ -118,5 +118,15 @@ namespace Infrastructure.Persistence.Repositories
               .ThenInclude(x => x.GroupInstance)
                .Where(x => x.CorrectionTeacherId == correctionTeacherId && x.Status == status).ToListAsync();
         }
+
+        public async Task<List<TestInstance>> GetProgressByStudentId(string studentID)
+        {
+            return await _testInstances
+                .Include(x => x.Test)
+                .Include(x => x.Test.Level)
+                .Include(x => x.Test.Sublevel)
+                .Where(x => x.StudentId == studentID).ToListAsync();
+        }
     }
 }
+

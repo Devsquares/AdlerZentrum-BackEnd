@@ -54,6 +54,201 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Address");
                 });
 
+            modelBuilder.Entity("Domain.Entities.AdlerCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdlerCardsTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdlerCardsUnitId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllowedDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("LevelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalScore")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdlerCardsUnitId");
+
+                    b.HasIndex("LevelId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("AdlerCards");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCardSubmission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("AchievedScore")
+                        .HasColumnType("double");
+
+                    b.Property<int>("AdlerCardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("varchar(85)");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TeacherId1")
+                        .HasColumnType("varchar(85)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdlerCardId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TeacherId1");
+
+                    b.ToTable("AdlerCardSubmissions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCardsBundle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AvailableFrom")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("AvailableTill")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<double>("DiscountPrice")
+                        .HasColumnType("double");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdlerCardsBundles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCardsUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdlerCardsTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("LevelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LevelId");
+
+                    b.ToTable("AdlerCardsUnits");
+                });
+
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -1233,7 +1428,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("promoCodeInstances");
+                    b.ToTable("PromoCodeInstances");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -1254,6 +1449,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Header")
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsAdlerService")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
@@ -1405,6 +1603,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("FinalTestpercent")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsFinal")
                         .HasColumnType("bit");
 
@@ -1422,6 +1623,12 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("NumberOflessons")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quizpercent")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SublevelTestpercent")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1502,6 +1709,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SublevelId")
                         .HasColumnType("int");
 
@@ -1509,6 +1719,9 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TestTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalPoint")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1829,6 +2042,53 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCard", b =>
+                {
+                    b.HasOne("Domain.Entities.AdlerCardsUnit", "AdlerCardsUnit")
+                        .WithMany("AdlerCards")
+                        .HasForeignKey("AdlerCardsUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCardSubmission", b =>
+                {
+                    b.HasOne("Domain.Entities.AdlerCard", "AdlerCard")
+                        .WithMany()
+                        .HasForeignKey("AdlerCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId1");
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCardsUnit", b =>
+                {
+                    b.HasOne("Domain.Entities.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>

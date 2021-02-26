@@ -37,7 +37,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => ids.Contains(x.GroupConditionDetailsId)).ToList();
         }
 
-        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeInstanceId, List<GroupInstanceStudents> groupInstanceStudentsList = null,string promoCodeKey = null)
+        public bool CheckPromoCodeCountInGroupInstance(int groupInstanceId, int promocodeInstanceId, List<GroupInstanceStudents> groupInstanceStudentsList = null,string promoCodeKey = null,bool isAutomaticCreate = false)
         {
             bool canApply = false;
             var promocodeInstanceObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
@@ -45,11 +45,11 @@ namespace Infrastructure.Persistence.Repositories
             {
                 throw new Exception("PromoCode Instance Not Found");
             }
-            if(promocodeInstanceObject.EndDate < DateTime.Now)
+            if(!isAutomaticCreate && promocodeInstanceObject.EndDate < DateTime.Now)
             {
                 throw new Exception("This promocode Instance has been Expired");
             }
-            if (promocodeInstanceObject.IsUsed == true)
+            if (!isAutomaticCreate && promocodeInstanceObject.IsUsed == true)
             {
                 throw new Exception("This promocode Instance was used before");
             }
@@ -131,7 +131,7 @@ namespace Infrastructure.Persistence.Repositories
             return canApply;
         }
 
-        public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeInstanceId, string promoCodeKey = null)
+        public bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeInstanceId, string promoCodeKey = null, bool isAutomaticCreate = false)
         {
             bool canApply = false;
             var promocodeInstanceObject = _promoCodeInstance.Include(x => x.PromoCode).Where(x => x.Id == promocodeInstanceId).FirstOrDefault();
@@ -139,11 +139,11 @@ namespace Infrastructure.Persistence.Repositories
             {
                 throw new Exception("PromoCode Not Found");
             }
-            if (promocodeInstanceObject.EndDate < DateTime.Now)
+            if (!isAutomaticCreate && promocodeInstanceObject.EndDate < DateTime.Now)
             {
                 throw new Exception("This promocode Instance has been Expired");
             }
-            if (promocodeInstanceObject.IsUsed == true)
+            if (!isAutomaticCreate && promocodeInstanceObject.IsUsed == true)
             {
                 throw new Exception("This promocode Instance was used before");
             }

@@ -119,6 +119,7 @@ namespace Infrastructure.Persistence.Services
             {
                 response.IsFinal = _sublevelRepositoryAsync.GetByIdAsync(user.SublevelId.Value).Result.IsFinal;
             }
+            response.Profilephoto = user.Profilephoto;
 
             user.RefreshTokens.Add(refreshToken);
             await _userManager.UpdateAsync(user);

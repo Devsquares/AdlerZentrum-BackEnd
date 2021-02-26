@@ -19,6 +19,7 @@ namespace Application.DTOs
         public int? LessonDefinitionId { get; set; }
         public int? SubLevelId { get; set; }
         public int? LevelId {get;set;}
+        public int TotalPoint { get; set; }
 
         public class CreateTestCommandHandler : IRequestHandler<CreateTestCommand, Response<int>>
         {
@@ -47,6 +48,7 @@ namespace Application.DTOs
                 test.LessonDefinitionId = command.LessonDefinitionId;
                 test.SublevelId = command.SubLevelId;
                 test.LevelId = command.LevelId;
+                test.TotalPoint = command.TotalPoint;
 
                 test = await _TestRepository.AddAsync(test);
 
