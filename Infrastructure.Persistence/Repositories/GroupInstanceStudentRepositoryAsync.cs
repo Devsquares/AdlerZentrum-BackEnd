@@ -110,10 +110,11 @@ namespace Infrastructure.Persistence.Repositories
              groupInstanceStudentsobjectList = new List<GroupInstanceStudents>();
             foreach (var item in groupInstanceStudentslist)
             {
-                groupInstanceStudentsobject = new GroupInstanceStudents();
+                
 
                 foreach (var student in item.Students)
                 {
+                    groupInstanceStudentsobject = new GroupInstanceStudents();
                     groupInstanceStudentsobject.GroupInstanceId = item.GroupInstanceId;
                     groupInstanceStudentsobject.StudentId = student.StudentId;
                     groupInstanceStudentsobject.PromoCodeInstanceId = student.PromoCodeInstanceId;
