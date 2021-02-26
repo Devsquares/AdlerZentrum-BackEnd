@@ -45,7 +45,8 @@ namespace Infrastructure.Persistence.Repositories
             }
             return await test
                   .DefaultIfEmpty()
-                  .Select(x => new TestsViewModel() {
+                  .Select(x => new TestsViewModel()
+                  {
                       Id = x.Id,
                       Name = x.Name,
                       TestTypeId = x.TestTypeId,
@@ -55,12 +56,37 @@ namespace Infrastructure.Persistence.Repositories
                       SublevelId = x.SublevelId,
                       SubLevelName = x.Sublevel != null ? x.Sublevel.Name : string.Empty,
                       Status = x.Status,
-                      StatusName =(Enum.Parse<TestStatusEnum>(x.Status.ToString())).ToString()
+                      StatusName = (Enum.Parse<TestStatusEnum>(x.Status.ToString())).ToString()
                   })
                   .Skip((pageNumber - 1) * pageSize)
                   .Take(pageSize)
                   .AsNoTracking()
                   .ToListAsync();
+        }
+
+        public int GetCount(int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null)
+        {
+            IQueryable<Test> test = tests
+                .Include(x => x.LessonDefinition)
+                .Include(x => x.Sublevel)
+                .Include(x => x.Level);
+            if (testtype != null)
+            {
+                test = test.Where(x => x.TestTypeId == testtype);
+            }
+            if (levelId != null)
+            {
+                test = test.Where(x => x.LevelId == levelId);
+            }
+            if (subLevelId != null)
+            {
+                test = test.Where(x => x.SublevelId == subLevelId);
+            }
+            if (testStatus != null)
+            {
+                test = test.Where(x => x.Status == testStatus);
+            }
+            return test.Count();
         }
 
         public virtual async Task<Test> GetByIdAsync(int id)

@@ -15,6 +15,7 @@ namespace Application.DTOs
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int QuestionType { get; set; }
+        public bool NotUsed { get; set; }
     }
     public class GetQuestionsByTypeQueryHandler : IRequestHandler<GetQuestionsByTypeQuery, PagedResponse<IEnumerable<Question>>>
     {
@@ -36,7 +37,16 @@ namespace Application.DTOs
             {
                 request.PageSize = 10;
             }
-            var questions = await _QuestionService.GetAllByTypeIdAsync(request.QuestionType, request.PageNumber, request.PageSize);
+            List<Question> questions = new List<Question>();
+
+            if (request.NotUsed)
+            {
+                questions = _QuestionService.GetAllByTypeIdNotUsedAsync(request.QuestionType, request.PageNumber, request.PageSize).Result;
+            }
+            else
+            {
+                questions = _QuestionService.GetAllByTypeIdAsync(request.QuestionType, request.PageNumber, request.PageSize).Result;
+            }
             int count = _QuestionService.GetAllByTypeIdCountAsync(request.QuestionType);
             return new PagedResponse<IEnumerable<Question>>(questions, request.PageNumber, request.PageSize, count);
         }

@@ -22,7 +22,7 @@ namespace Application.DTOs
         public int? TestType { get; set; }
         public int? LevelId { get; set; }
         public int? SubLevel { get; set; }
-        public int? Status {get;set;}
+        public int? Status { get; set; }
     }
     public class GetAllTestsQueryHandler : IRequestHandler<GetAllTestsQuery, PagedResponse<IEnumerable<TestsViewModel>>>
     {
@@ -37,9 +37,10 @@ namespace Application.DTOs
         public async Task<PagedResponse<IEnumerable<TestsViewModel>>> Handle(GetAllTestsQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<RequestParameter>(request);
-            var testModel = await _TestService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, request.TestType,request.LevelId,request.SubLevel,request.Status);
-           // var userViewModel = _mapper.Map<IEnumerable<GetAllTestsViewModel>>(user);
-            return new PagedResponse<IEnumerable<TestsViewModel>>(testModel, validFilter.PageNumber, validFilter.PageSize,_TestService.GetCount());
+            var testModel = await _TestService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, request.TestType, request.LevelId, request.SubLevel, request.Status);
+            int count = _TestService.GetCount(request.TestType, request.LevelId, request.SubLevel, request.Status);
+            // var userViewModel = _mapper.Map<IEnumerable<GetAllTestsViewModel>>(user);
+            return new PagedResponse<IEnumerable<TestsViewModel>>(testModel, validFilter.PageNumber, validFilter.PageSize, count);
         }
     }
 }

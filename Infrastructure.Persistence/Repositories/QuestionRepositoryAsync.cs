@@ -18,10 +18,20 @@ namespace Infrastructure.Persistence.Repositories
             _questions = dbContext.Set<Question>();
         }
 
-        public async Task<IReadOnlyList<Question>> GetAllByTypeIdAsync(int questionTypeId, int pageNumber, int pageSize)
+        public async Task<List<Question>> GetAllByTypeIdAsync(int questionTypeId, int pageNumber, int pageSize)
         {
             return await _questions.Include(x => x.SingleQuestions).ThenInclude(x => x.Choices)
                 .Where(x => x.QuestionTypeId == questionTypeId).Include(x => x.SingleQuestions)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .ToListAsync();
+        }
+
+        public async Task<List<Question>> GetAllByTypeIdNotUsedAsync(int questionTypeId, int pageNumber, int pageSize)
+        {
+            return await _questions.Include(x => x.SingleQuestions).ThenInclude(x => x.Choices)
+                .Where(x => x.QuestionTypeId == questionTypeId && x.TestId == null).Include(x => x.SingleQuestions)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
@@ -44,10 +54,10 @@ namespace Infrastructure.Persistence.Repositories
             return await _questions.Where(x => x.TestId == id).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Question>> GetAllAsync(int pageNumber, int pageSize, int? questionTypeId=null)
+        public async Task<IReadOnlyList<Question>> GetAllAsync(int pageNumber, int pageSize, int? questionTypeId = null)
         {
             return await _questions.Include(x => x.SingleQuestions).ThenInclude(x => x.Choices)
-                .Where(x => questionTypeId!=null? x.QuestionTypeId == questionTypeId:true).Include(x => x.SingleQuestions)
+                .Where(x => questionTypeId != null ? x.QuestionTypeId == questionTypeId : true).Include(x => x.SingleQuestions)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
