@@ -7,5 +7,6 @@ namespace Application.Interfaces.Repositories
 {
     public interface ISublevelRepositoryAsync : IGenericRepositoryAsync<Sublevel>
     {
+        List<Sublevel> GetNotFinalSublevels();
     }
 }
