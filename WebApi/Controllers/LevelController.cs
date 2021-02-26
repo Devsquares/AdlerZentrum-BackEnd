@@ -20,6 +20,12 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllSublevelsQuery()));
         }
 
+        [HttpGet("GetNotFinalSublevels")]
+        public async Task<IActionResult> GetNotFinalSublevels()
+        {
+            return Ok(await Mediator.Send(new GetNotFinalSublevelsQuery()));
+        }
+
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(int id)
         {
