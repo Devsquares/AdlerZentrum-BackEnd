@@ -32,5 +32,6 @@ namespace Application.Interfaces
         Task UpdatePhoneNumber(string newPhoneNumber, string studentId);
         Task UpdatePhoto(string base64photo, string studentId);
         Task<PagedResponse<List<TeachersModel>>> GetAllTeachers(int pageNumber, int pageSize, string teacherName);
+        Task UpdateAdlerCardBalance(string studentId, int balance);
     }
 }

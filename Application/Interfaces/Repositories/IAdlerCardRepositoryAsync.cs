@@ -9,5 +9,6 @@ namespace Application.Interfaces.Repositories
     public interface IAdlerCardRepositoryAsync : IGenericRepositoryAsync<AdlerCard>
     {
         List<GetAdlerCardGroupsForStudentViewModel> GetAdlerCardGroupsForStudent();
+        List<AdlerCard> GetAllByUnitId(int unitId);
     }
 }

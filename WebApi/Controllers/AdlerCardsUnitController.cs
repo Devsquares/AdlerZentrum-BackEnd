@@ -7,7 +7,7 @@ namespace WebApi.Controllers
     public class AdlerCardsUnitController : BaseApiController
     {
         // GET: api/<controller>
-        [HttpGet]
+        [HttpGet("GetALLAdlerCardUnits")]
         public async Task<IActionResult> Get([FromQuery] GetAllAdlerCardsUnitsParameter filter)
         {
 

@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
@@ -26,15 +27,26 @@ namespace Application.Features
     public class CreateAdlerCardCommandHandler : IRequestHandler<CreateAdlerCardCommand, Response<int>>
     {
         private readonly IAdlerCardRepositoryAsync _adlercardRepository;
+        private readonly IAdlerCardsUnitRepositoryAsync _adlercardUnitRepository;
         private readonly IMapper _mapper;
-        public CreateAdlerCardCommandHandler(IAdlerCardRepositoryAsync adlercardRepository, IMapper mapper)
+        public CreateAdlerCardCommandHandler(IAdlerCardRepositoryAsync adlercardRepository, IMapper mapper, IAdlerCardsUnitRepositoryAsync adlercardUnitRepository)
         {
             _adlercardRepository = adlercardRepository;
             _mapper = mapper;
+            _adlercardUnitRepository = adlercardUnitRepository;
         }
 
         public async Task<Response<int>> Handle(CreateAdlerCardCommand request, CancellationToken cancellationToken)
         {
+            var adlerCardUnit = _adlercardUnitRepository.GetByIdAsync(request.AdlerCardsUnitId).Result;
+            if(adlerCardUnit == null)
+            {
+                throw new ApiException("No Adler Card Unite");
+            }
+            if(request.AdlerCardsTypeId != adlerCardUnit.AdlerCardsTypeId)
+            {
+                throw new ApiException("The Type of Adler Card isn't the same as Adler Card unit");
+            }
             var adlercard = _mapper.Map<Domain.Entities.AdlerCard>(request);
             await _adlercardRepository.AddAsync(adlercard);
             return new Response<int>(adlercard.Id);

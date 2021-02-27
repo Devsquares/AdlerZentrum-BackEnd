@@ -643,6 +643,13 @@ namespace Infrastructure.Persistence.Services
             teachers = teachers.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return new PagedResponse<List<TeachersModel>>(teachers, pageNumber, pageSize, totalCount);
         }
+
+        public async Task UpdateAdlerCardBalance(string studentId,int balance)
+        {
+            var student = _userManager.FindByIdAsync(studentId).Result;
+            student.AdlerCardBalance += balance;
+            await _userManager.UpdateAsync(student);
+        }
     }
 
 }

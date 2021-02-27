@@ -37,6 +37,12 @@ namespace Infrastructure.Persistence.Repositories
             }
             return lst;
         }
+
+        public List<AdlerCard> GetAllByUnitId(int unitId)
+        {
+            var adlerCards = _adlercards.Where(x => x.AdlerCardsUnitId == unitId).ToList();
+            return adlerCards;
+        }
     }
 
 }
