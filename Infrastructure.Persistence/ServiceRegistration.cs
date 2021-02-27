@@ -77,6 +77,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IAdlerCardsBundleRepositoryAsync,AdlerCardsBundleRepositoryAsync>();
             services.AddTransient<IAdlerCardSubmissionRepositoryAsync,AdlerCardSubmissionRepositoryAsync>();
             services.AddTransient<IAdlerCardsUnitRepositoryAsync,AdlerCardsUnitRepositoryAsync>();
+            services.AddTransient<IAdlerCardBundleStudentRepositoryAsync, AdlerCardBundleStudentRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

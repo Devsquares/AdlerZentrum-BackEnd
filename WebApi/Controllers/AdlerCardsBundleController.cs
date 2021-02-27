@@ -7,7 +7,7 @@ namespace WebApi.Controllers
     public class AdlerCardsBundleController : BaseApiController
     {
         // GET: api/<controller>
-        [HttpGet]
+        [HttpGet("GetAllAdlerCardBundle")]
         public async Task<IActionResult> Get([FromQuery] GetAllAdlerCardsBundlesParameter filter)
         {
 
@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         }
 
         // POST api/<controller>
-        [HttpPost]
+        [HttpPost("CreateAdlerCardBundle")]
         //[Authorize(Roles = "SuperAdmin")]
         //TODO: enable authorization
         public async Task<IActionResult> Post(CreateAdlerCardsBundleCommand command)

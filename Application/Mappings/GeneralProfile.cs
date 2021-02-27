@@ -14,6 +14,8 @@ using Application.Features.Bug.Queries.GetAllBugs;
 using Application.Features.Bug.Commands.CreateBug;
 using Domain.Models;
 using Application.DTOs.Level.Queries;
+using Application.Features.AdlerCardBundleStudent.Commands.CreateAdlerCardBundleStudent;
+using Application.Features.AdlerCardBundleStudent.Queries.GetAllAdlerCardBundleStudents;
 
 namespace Application.Mappings
 {
@@ -49,6 +51,15 @@ namespace Application.Mappings
             CreateMap<Question, GetQuestionViewModel>().ReverseMap();
             CreateMap<RequestParameter, GetAllPromoCodesQuery>().ReverseMap();
             CreateMap<PromoCode, GetAllPromoCodesViewModel>().ReverseMap();
+            CreateMap<GetAllAdlerCardsUnitsQuery, GetAllAdlerCardsUnitsParameter>().ReverseMap();
+            CreateMap<AdlerCardsUnit, GetAllAdlerCardsUnitsViewModel>().ReverseMap();
+            CreateMap<GetAllAdlerCardsQuery, GetAllAdlerCardsParameter>().ReverseMap();
+            CreateMap<AdlerCard, GetAllAdlerCardsViewModel>().ReverseMap();
+            CreateMap<AdlerCardBundleStudent, CreateAdlerCardBundleStudentCommand>().ReverseMap();
+
+            CreateMap<GetAllAdlerCardBundleStudentsQuery, GetAllAdlerCardBundleStudentsParameter>().ReverseMap();
+            CreateMap<AdlerCardBundleStudent, GetAllAdlerCardBundleStudentsViewModel>().ReverseMap();
+
 
             CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>()
             .ForMember(destination => destination.Student, opts => opts.MapFrom(source => source.Student.FirstName + " " + source.Student.LastName))
