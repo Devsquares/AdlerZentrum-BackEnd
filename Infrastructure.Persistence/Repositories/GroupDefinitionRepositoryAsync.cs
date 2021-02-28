@@ -61,22 +61,21 @@ namespace Infrastructure.Persistence.Repositories
             sublevel = sublevels.Find(groupDefinition.SubLevelId).Name;
             sublevel = sublevel.Replace(".", "");
 
-            count = await groupDefinitions.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 7).CountAsync();
+            count = await groupDefinitions.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 7 && x.SubLevelId == groupDefinition.SubLevelId).CountAsync();
             if (count == 0)
                 number = "0".PadLeft(SERIAL_DIGITS, '0');
             else
-                number = _findNextSerial();
+                number = _findNextSerial(groupDefinition.SubLevelId);
             serial = sublevel + number;
             groupDefinition.Serial = serial;
         }
 
-        private string _findNextSerial()
+        private string _findNextSerial(int sublevelId)
         {
             string newSerial;
             int maxSerialInt, newSerialInt;
 
-            //query should look like "SELECT MAX(CONVERT(INT,SUBSTRING(SERIAL,4,4))) FROM GROUP DEFINITION"
-            maxSerialInt =  groupDefinitions.Where(x=> x.Serial != null && x.Serial != "" && x.Serial.Length == 7).ToList().Max(x => int.Parse(x.Serial.Substring(3,4)));
+            maxSerialInt =  groupDefinitions.Where(x=> x.Serial != null && x.Serial != "" && x.Serial.Length == 7 && x.SubLevelId == sublevelId).ToList().Max(x => int.Parse(x.Serial.Substring(3,4)));
             newSerialInt = maxSerialInt + 1;
             newSerial = newSerialInt.ToString().PadLeft(SERIAL_DIGITS, '0');
             return newSerial;

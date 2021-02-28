@@ -17,6 +17,7 @@ namespace Infrastructure.Persistence.Repositories
     public class GroupInstanceRepositoryAsync : GenericRepositoryAsync<GroupInstance>, IGroupInstanceRepositoryAsync
     {
         private readonly DbSet<GroupInstance> groupInstances;
+        private readonly DbSet<GroupDefinition> groupDefinitions;
         private readonly DbSet<GroupInstanceStudents> groupInstanceStudents;
         private readonly DbSet<InterestedStudent> InterestedStudents;
         private readonly DbSet<OverPaymentStudent> OverPaymentStudents;
@@ -24,6 +25,7 @@ namespace Infrastructure.Persistence.Repositories
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
         private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
         private readonly DbSet<TeacherGroupInstanceAssignment> teacherGroupInstanceAssignment;
+        private readonly int SERIAL_DIGITS = 2;
         public GroupInstanceRepositoryAsync(ApplicationDbContext dbContext,
             IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync,
              IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
@@ -31,6 +33,7 @@ namespace Infrastructure.Persistence.Repositories
 
         {
             groupInstances = dbContext.Set<GroupInstance>();
+            groupDefinitions = dbContext.Set<GroupDefinition>();
             groupInstanceStudents = dbContext.Set<GroupInstanceStudents>();
             InterestedStudents = dbContext.Set<InterestedStudent>();
             OverPaymentStudents = dbContext.Set<OverPaymentStudent>();
@@ -183,6 +186,44 @@ namespace Infrastructure.Persistence.Repositories
             var groups = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId 
                                         && (groupinstanceId != null ? x.Id == groupinstanceId : true)).ToList();
             return groups;
+        }
+
+        public new async Task<GroupInstance> AddAsync(GroupInstance entity)
+        {
+            await SetSerialNumberBeforeInsert(entity);
+            await groupInstances.AddAsync(entity);
+            return await base.AddAsync(entity);
+        }
+
+        private async Task SetSerialNumberBeforeInsert(GroupInstance groupInstance)
+        {
+            string serial = "";
+            string groupSerial, number;
+            int count;
+
+            if (groupInstance.GroupDefinitionId == 0)
+                throw new ApiException("Error while generating the serial number for the new " +
+                    "group instance. Group-Definition couldn't be found.");
+            groupSerial = groupDefinitions.Find(groupInstance.GroupDefinitionId).Serial;
+
+            count = await groupInstances.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 10 && x.GroupDefinitionId == groupInstance.GroupDefinitionId).CountAsync();
+            if (count == 0)
+                number = "0".PadLeft(SERIAL_DIGITS, '0');
+            else
+                number = _findNextSerial(groupInstance.GroupDefinitionId);
+            serial = groupSerial + "." + number;
+            groupInstance.Serial = serial;
+        }
+
+        private string _findNextSerial(int groupDefinitionId)
+        {
+            string newSerial;
+            int maxSerialInt, newSerialInt;
+
+            maxSerialInt = groupInstances.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 7 && x.GroupDefinitionId == groupDefinitionId).ToList().Max(x => int.Parse(x.Serial.Substring(7, 2)));
+            newSerialInt = maxSerialInt + 1;
+            newSerial = newSerialInt.ToString().PadLeft(SERIAL_DIGITS, '0');
+            return newSerial;
         }
 
     }
