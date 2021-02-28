@@ -191,5 +191,22 @@ namespace WebApi.Controller
             command.Status = (int)TestInstanceEnum.Missed;
             return Ok(await Mediator.Send(command));
         }
+
+        [HttpPut("TestToActiveByStudent")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToActiveByStudent(UpdateTestInstanceStatusByIdCommand command)
+        {
+            command.Status = (int)TestInstanceEnum.Pending;
+            return Ok(await Mediator.Send(command));
+        }
+
+
+        [HttpPut("TestToCloseByStudent")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToCloseByStudent(UpdateTestInstanceStatusByIdCommand command)
+        {
+            command.Status = (int)TestInstanceEnum.Missed;
+            return Ok(await Mediator.Send(command));
+        }
     }
 }
