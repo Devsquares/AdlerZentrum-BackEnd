@@ -34,7 +34,7 @@ namespace Domain.Entities
 
         public int MaxInstances { get; set; }
 
-        public int Serial { get; set; }
+        public string Serial { get; set; }
 
         public int? Status { get; set; }
     }

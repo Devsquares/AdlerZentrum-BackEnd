@@ -15,7 +15,7 @@ namespace Application.DTOs.GroupInstance.Commands
     public class CreateGroupInstanceCommand : IRequest<Response<int>>
     {
         public int GroupDefinitionId { get; set; }
-        public int Serial { get; set; }
+        public string Serial { get; set; }
         public int? Status { get; set; }
         public int? TeacherId { get; set; }
 
