@@ -63,7 +63,6 @@ namespace Application.DTOs
                     groupInstans = await _groupInstanceRepositoryAsync.AddAsync(new Domain.Entities.GroupInstance()
                     {
                         GroupDefinitionId = GroupDefinition.Id,
-                        Serial = 1.ToString(),
                         Status = (int)GroupInstanceStatusEnum.Pending
                     });
 
