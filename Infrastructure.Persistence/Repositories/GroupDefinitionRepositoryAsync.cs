@@ -16,11 +16,15 @@ namespace Infrastructure.Persistence.Repositories
             groupDefinitions = dbContext.Set<GroupDefinition>();
         }
 
-        public List<GroupDefinition> GetALL(int pageNumber, int pageSize, string subLevelName, out int totalCount,int? sublevelId=null)
+        public List<GroupDefinition> GetALL(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null)
         {
-            var groupDefinitionsList = groupDefinitions.Include(x => x.GroupCondition).Include(x => x.Sublevel)
+            var groupDefinitionsList = groupDefinitions
+            .Include(x => x.GroupCondition)
+            .Include(x => x.Sublevel)
+            .Include(x => x.Pricing)
+            .Include(x => x.TimeSlot)
                 .Where(x => (!string.IsNullOrEmpty(subLevelName) ? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()) : true)
-                        && (sublevelId !=null? x.SubLevelId== sublevelId.Value : true) ).ToList();
+                        && (sublevelId != null ? x.SubLevelId == sublevelId.Value : true)).ToList();
             totalCount = groupDefinitionsList.Count();
             groupDefinitionsList = groupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return groupDefinitionsList;

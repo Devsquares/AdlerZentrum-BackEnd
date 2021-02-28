@@ -60,7 +60,8 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new AssignTeacherToGroupInstanceCommand()
             {
-                GroupInstanceId = filter.GroupInstanceId
+                GroupInstanceId = filter.GroupInstanceId,
+                TeacherId = filter.TeacherId
             }));
         }
 
