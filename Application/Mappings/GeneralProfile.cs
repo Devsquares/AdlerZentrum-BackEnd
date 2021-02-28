@@ -83,6 +83,9 @@ namespace Application.Mappings
                 .ForMember(destination => destination.GroupInstanceSerial, opts => opts.MapFrom(source => source.LessonInstance.GroupInstance.Serial))
                 .ForMember(destination => destination.GroupDefinitionSerial, opts => opts.MapFrom(source => source.LessonInstance.GroupInstance.GroupDefinition.Serial))
                 .ForMember(destination => destination.TestName, opts => opts.MapFrom(source => source.Test.Name))
+                .ForMember(destination => destination.TestId, opts => opts.MapFrom(source => source.Test.Id))
+                .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName +" "+ source.Student.LastName))
+                .ForMember(destination => destination.GroupInstanceId, opts => opts.MapFrom(source => source.LessonInstance.GroupInstanceId))
                 .ForMember(destination => destination.TestType, opts => opts.MapFrom(source => source.Test.TestTypeId));
 
             CreateMap<Homework, GetAllomeworkBounsViewModel>()

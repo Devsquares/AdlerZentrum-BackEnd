@@ -22,6 +22,7 @@ namespace Domain.Entities
         public int TestId { get; set; }
         public virtual Test Test { get; set; }
         public bool ManualCorrection { get; set; }
+        public int? GroupInstanceId { get; set; }
         //TODO add required submtion date
     }
 }

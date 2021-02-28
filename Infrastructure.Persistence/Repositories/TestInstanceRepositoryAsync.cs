@@ -56,12 +56,30 @@ namespace Infrastructure.Persistence.Repositories
 
         public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage()
         {
-            return await _testInstances
+            var x = await _testInstances
             .Include(x => x.Test)
             .Include(x => x.Student)
             .Include(x => x.LessonInstance)
             .ThenInclude(x => x.GroupInstance)
-            .ThenInclude(x => x.GroupDefinition).ToListAsync();
+            .ThenInclude(x => x.GroupDefinition)
+            .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
+            .ToListAsync();
+
+            // var queryNumericRange =
+            //     from test in _testInstances
+            //     group new AllTestsToManageViewModel()
+            //     {
+            //         GroupInstanceId = test.GroupInstanceId.Value,
+            //         Status = test.Status,
+            //         TestName = test.Test.Name,
+            //         TestId = test.Test.Id
+            //     } by new { test.GroupInstanceId, test.TestId } into percentGroup
+            //     orderby percentGroup.Key
+            //     select percentGroup;
+
+
+            // var items = queryNumericRange.ToList();
+            return x;
         }
 
         public override Task<TestInstance> GetByIdAsync(int id)
