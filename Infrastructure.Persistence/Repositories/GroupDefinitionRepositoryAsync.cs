@@ -22,6 +22,13 @@ namespace Infrastructure.Persistence.Repositories
             sublevels = dbContext.Set<Sublevel>();
         }
 
+        public new async Task<GroupDefinition> AddAsync(GroupDefinition entity)
+        {
+            await SetSerialNumberBeforeInsert(entity);
+            await groupDefinitions.AddAsync(entity);
+            return await base.AddAsync(entity);
+        }
+
         public List<GroupDefinition> GetALL(int pageNumber, int pageSize, string subLevelName, out int totalCount,int? sublevelId=null)
         {
             var groupDefinitionsList = groupDefinitions.Include(x => x.GroupCondition).Include(x => x.Sublevel)
@@ -42,7 +49,7 @@ namespace Infrastructure.Persistence.Repositories
             .Where(x => x.Id == groupDefinitionId).FirstOrDefault();
         }
 
-        public async Task SetSerialNumberBeforeInsert(GroupDefinition groupDefinition)
+        private async Task SetSerialNumberBeforeInsert(GroupDefinition groupDefinition)
         {
             string serial = "";
             string sublevel,number;

@@ -39,7 +39,6 @@ namespace Application.DTOs
 
                 Reflection.CopyProperties(command, groupDefinition);
                 groupDefinition.Status = (int)GroupDefinationStatusEnum.New;
-                await _GroupDefinitionRepository.SetSerialNumberBeforeInsert(groupDefinition);
                 await _GroupDefinitionRepository.AddAsync(groupDefinition);
                 return new Response<int>(groupDefinition.Id);
 
