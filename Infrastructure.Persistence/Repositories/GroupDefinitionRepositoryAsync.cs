@@ -1,19 +1,25 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Exceptions;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
     public class GroupDefinitionRepositoryAsync : GenericRepositoryAsync<GroupDefinition>, IGroupDefinitionRepositoryAsync
     {
         private readonly DbSet<GroupDefinition> groupDefinitions;
+        private readonly DbSet<Sublevel> sublevels;
+        private readonly int SERIAL_DIGITS = 4;
         public GroupDefinitionRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             groupDefinitions = dbContext.Set<GroupDefinition>();
+            sublevels = dbContext.Set<Sublevel>();
         }
 
         public List<GroupDefinition> GetALL(int pageNumber, int pageSize, string subLevelName, out int totalCount,int? sublevelId=null)
@@ -34,6 +40,39 @@ namespace Infrastructure.Persistence.Repositories
             .Include(x => x.Sublevel)
             .Include(x => x.Pricing)
             .Where(x => x.Id == groupDefinitionId).FirstOrDefault();
+        }
+
+        public async Task SetSerialNumberBeforeInsert(GroupDefinition groupDefinition)
+        {
+            string serial = "";
+            string sublevel,number;
+            int count;
+           
+            if (groupDefinition.SubLevelId == 0)
+                throw new ApiException("Error while generating the serial number for the new " +
+                    "group definition. Sublevel couldn't be found.");
+            sublevel = sublevels.Find(groupDefinition.SubLevelId).Name;
+            sublevel = sublevel.Replace(".", "");
+
+            count = await groupDefinitions.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 7).CountAsync();
+            if (count == 0)
+                number = "0".PadLeft(SERIAL_DIGITS, '0');
+            else
+                number = _findNextSerial();
+            serial = sublevel + number;
+            groupDefinition.Serial = serial;
+        }
+
+        private string _findNextSerial()
+        {
+            string newSerial;
+            int maxSerialInt, newSerialInt;
+
+            //query should look like "SELECT MAX(CONVERT(INT,SUBSTRING(SERIAL,4,4))) FROM GROUP DEFINITION"
+            maxSerialInt =  groupDefinitions.Where(x=> x.Serial != null && x.Serial != "" && x.Serial.Length == 7).ToList().Max(x => int.Parse(x.Serial.Substring(3,4)));
+            newSerialInt = maxSerialInt + 1;
+            newSerial = newSerialInt.ToString().PadLeft(SERIAL_DIGITS, '0');
+            return newSerial;
         }
     }
 }
