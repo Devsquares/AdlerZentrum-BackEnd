@@ -1,4 +1,6 @@
 using Application.Features;
+using Application.Features.AdlerCard.Commands;
+using Application.Features.AdlerCard.Queries.GetAllAdlerCards;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -67,6 +69,31 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteAdlerCardByIdCommand { Id = id }));
+        }
+
+        [HttpPost("ActivateAdlerCard")]
+        //[Authorize(Roles = "SuperAdmin")]
+        //TODO: enable authorization
+        public async Task<IActionResult> ActivateAdlerCard(int AdlerCardID)
+        {
+            return Ok(await Mediator.Send(new ActivateAdlerCardCommand { AdlerCardId = AdlerCardID }));
+        }
+
+        [HttpGet("GetAdlerCardForStudent")]
+        //[Authorize(Roles = "SuperAdmin")]
+        //TODO: enable authorization
+        public async Task<IActionResult> GetAdlerCardForStudent(GetAdlerCardForStudent adlerCardForStudent)
+        {
+            
+            return Ok(await Mediator.Send(adlerCardForStudent));
+        }
+
+        [HttpGet("GetAllAdlerCardForStudent")]
+        //[Authorize(Roles = "SuperAdmin")]
+        //TODO: enable authorization
+        public async Task<IActionResult> GetALLAdlerCardForStudent(int adlerCardUnitId, string studentId)
+        {
+            return Ok(await Mediator.Send(new GetAllAdlerCardsForStudent { AdlerCardUnitId = adlerCardUnitId , StudentId = studentId }));
         }
 
     }
