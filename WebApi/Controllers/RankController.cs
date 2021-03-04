@@ -12,7 +12,7 @@ namespace WebApi.Controllers
 
             return Ok(await Mediator.Send(new GetAllRankedUsersQuery()
             {
-                UserId = AuthenticatedUserService.UserId,
+                UserId = StudentId,
                 isInstance = true
             })); ;
         }
@@ -23,7 +23,7 @@ namespace WebApi.Controllers
 
             return Ok(await Mediator.Send(new GetAllRankedUsersQuery()
             {
-                UserId = AuthenticatedUserService.UserId,
+                UserId = StudentId,
                 isInstance = false
             }));
         }
