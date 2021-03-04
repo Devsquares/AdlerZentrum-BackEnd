@@ -132,11 +132,12 @@ namespace WebApi.Controller
 
         [HttpGet("GetTestInstanceByTeacher")]
         [Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Teacher")]
-        public async Task<IActionResult> GetTestInstanceByTeacher(int Status)
+        public async Task<IActionResult> GetTestInstanceByTeacher(GetTestInstanceByTeacherQuery command)
         {
             return Ok(await Mediator.Send(new GetTestInstanceByTeacherQuery
             {
-                Status = Status,
+                Status = command.Status,
+                TestType = command.TestType,
                 TeacherId = AuthenticatedUserService.UserId
             }));
         }

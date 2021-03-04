@@ -43,6 +43,11 @@ namespace Application.DTOs
             public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
             {
                 var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId).Result;
+                var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(groupInstance.Id);
+                if (teacher == null)
+                {
+                    throw new Exception("This Group instance not acctive yet kindly choose the teacher.");
+                }
                 if (groupInstance.Status == 0)
                 {
                     var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions;
@@ -97,7 +102,6 @@ namespace Application.DTOs
                         // TODO get quiz for lesson.
                         // TODO add get final test or sublevel test.
                         var quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
-                        var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(item.GroupInstanceId);
                         if (quiz != null)
                         {
                             foreach (var student in lessonInstanceStudents)

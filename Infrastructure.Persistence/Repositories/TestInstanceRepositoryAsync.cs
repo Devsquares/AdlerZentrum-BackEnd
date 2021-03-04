@@ -127,14 +127,25 @@ namespace Infrastructure.Persistence.Repositories
             return await _testInstances.Where(x => x.LessonInstanceId == LessonInstanceId).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int status)
+        public async Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int? status, int? TestType)
         {
-            return await _testInstances
+            var query = _testInstances
               .Include(x => x.Test)
               .Include(x => x.Student)
               .Include(x => x.LessonInstance)
-              .ThenInclude(x => x.GroupInstance)
-               .Where(x => x.CorrectionTeacherId == correctionTeacherId && x.Status == status).ToListAsync();
+              .ThenInclude(x => x.GroupInstance);
+
+            if (status != null)
+            {
+                query.Where(x => x.Status == status);
+            }
+
+            if (TestType != null)
+            {
+                query.Where(x => x.Test.TestTypeId == TestType);
+            }
+
+            return await query.Where(x => x.CorrectionTeacherId == correctionTeacherId).ToListAsync();
         }
 
         public async Task<List<TestInstance>> GetProgressByStudentId(string studentID)
