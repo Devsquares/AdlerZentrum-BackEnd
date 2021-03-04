@@ -7,5 +7,6 @@ namespace Application.Interfaces.Repositories
 {
     public interface IAdlerCardSubmissionRepositoryAsync : IGenericRepositoryAsync<AdlerCardSubmission>
     {
+        AdlerCardSubmission GetAdlerCardForStudent(string studentId, int adlercardId);
     }
 }

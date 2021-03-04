@@ -168,7 +168,7 @@ namespace WebApi.Controllers
             return Ok();
         }
         [HttpPut("UpdatePhoto")]
-        public async Task<IActionResult> UpdatePhoto(string base64photo, string studentId)
+        public async Task<IActionResult> UpdatePhoto([FromBody] string base64photo, string studentId)
         {
             await _accountService.UpdatePhoto(base64photo, studentId);
             return Ok();

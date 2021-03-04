@@ -5,6 +5,7 @@ using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Infrastructure.Persistence.Repositories
@@ -18,6 +19,11 @@ namespace Infrastructure.Persistence.Repositories
         {
             _adlercardsubmissions = dbContext.Set<AdlerCardSubmission>();
 
+        }
+
+        public AdlerCardSubmission GetAdlerCardForStudent(string studentId,int adlercardId)
+        {
+            return _adlercardsubmissions.Include(x => x.AdlerCard.Question).Include(x => x.AdlerCard.Level).Where(x => x.AdlerCardId == adlercardId && x.StudentId == studentId).FirstOrDefault();
         }
     }
 

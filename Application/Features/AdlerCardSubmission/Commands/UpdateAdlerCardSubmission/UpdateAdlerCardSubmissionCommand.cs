@@ -14,7 +14,7 @@ namespace Application.Features
 	public class UpdateAdlerCardSubmissionCommand : IRequest<Response<int>>
     {
 		public int Id { get; set; }
-		public AdlerCard AdlerCard { get; set; }
+		public Domain.Entities.AdlerCard AdlerCard { get; set; }
 		public int AdlerCardId { get; set; }
 		public ApplicationUser Student { get; set; }
 		public string StudentId { get; set; }

@@ -1,6 +1,8 @@
+using Application.Enums;
 using Application.Features;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +16,13 @@ namespace Infrastructure.Persistence.Repositories
     public class AdlerCardRepositoryAsync : GenericRepositoryAsync<AdlerCard>, IAdlerCardRepositoryAsync
     {
         private readonly DbSet<AdlerCard> _adlercards;
+        private readonly ApplicationDbContext _context;
 
 
         public AdlerCardRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             _adlercards = dbContext.Set<AdlerCard>();
+            _context = dbContext;
         }
         public List<GetAdlerCardGroupsForStudentViewModel> GetAdlerCardGroupsForStudent()
         {
@@ -42,6 +46,27 @@ namespace Infrastructure.Persistence.Repositories
         {
             var adlerCards = _adlercards.Where(x => x.AdlerCardsUnitId == unitId).ToList();
             return adlerCards;
+        }
+
+        public List<AdlerCardModel> GetAdlerCardsForStudent(string studentId, int adlerCardUnitId)
+        {
+            var query = (from ac in _adlercards
+                         join acs in _context.AdlerCardSubmissions on ac.Id equals acs.AdlerCardId into gj
+                         from x in gj.DefaultIfEmpty()
+                         where ac.AdlerCardsUnitId == adlerCardUnitId || x.StudentId == studentId
+                         select new AdlerCardModel() {
+                             Name = ac.Name,
+                             AdlerCardsUnitId = ac.AdlerCardsUnitId,
+                             Question = ac.Question,
+                             QuestionId = ac.QuestionId,
+                             AllowedDuration = ac.AllowedDuration,
+                             TotalScore = ac.TotalScore,
+                             Status = (x == null) ? "unsolved" : "solved",
+                             AdlerCardsTypeId = ac.AdlerCardsTypeId,
+                             LevelId = ac.LevelId,
+                             Level = ac.Level
+                         }).ToList();
+            return query;
         }
     }
 

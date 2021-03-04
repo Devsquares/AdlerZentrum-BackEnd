@@ -59,6 +59,7 @@ namespace Application.Mappings
 
             CreateMap<GetAllAdlerCardBundleStudentsQuery, GetAllAdlerCardBundleStudentsParameter>().ReverseMap();
             CreateMap<AdlerCardBundleStudent, GetAllAdlerCardBundleStudentsViewModel>().ReverseMap();
+            CreateMap<AdlerCardSubmission, CreateAdlerCardSubmissionCommand>().ReverseMap();
 
 
             CreateMap<HomeWorkSubmition, GetAllHomeWorkSubmitionsViewModel>()
