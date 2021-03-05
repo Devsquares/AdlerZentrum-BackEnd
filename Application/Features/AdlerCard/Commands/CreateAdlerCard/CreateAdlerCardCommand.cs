@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -19,7 +20,7 @@ namespace Application.Features
         public int QuestionId { get; set; }
         public int AllowedDuration { get; set; }
         public double TotalScore { get; set; }
-        public int Status { get; set; }
+       // public int Status { get; set; }
         public int AdlerCardsTypeId { get; set; }
         public int LevelId { get; set; }
     }
@@ -48,6 +49,7 @@ namespace Application.Features
                 throw new ApiException("The Type of Adler Card isn't the same as Adler Card unit");
             }
             var adlercard = _mapper.Map<Domain.Entities.AdlerCard>(request);
+            adlercard.Status = (int)AdlerCardEnum.Draft;
             await _adlercardRepository.AddAsync(adlercard);
             return new Response<int>(adlercard.Id);
         }

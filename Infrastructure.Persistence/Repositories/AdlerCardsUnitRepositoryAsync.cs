@@ -27,7 +27,13 @@ namespace Infrastructure.Persistence.Repositories
             return null;
         }
 
-       
+        public List<AdlerCardsUnit> GetAdlerCardUnitsByLevelAndType( int levelId, int adlerCardTypeId)
+        {
+            var units = _adlercardsunits.Include(x => x.Level).Where(x => x.LevelId == levelId && x.AdlerCardsTypeId == adlerCardTypeId).ToList();
+            return units;
+        }
+
+
     }
 
 }
