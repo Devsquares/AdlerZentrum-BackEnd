@@ -26,9 +26,13 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetAdlerCardUnitsForStudent")]
-        public async Task<IActionResult> GetAdlerCardUnitsForStudent([FromQuery] GetAllAdlerCardsUnitsParameter filter)
+        public async Task<IActionResult> GetAdlerCardUnitsForStudent(string StudentId,int LevelId,int AdlerCardtypeId)//,[FromQuery] GetAllAdlerCardsUnitsParameter filter)
         {
-            return Ok(await Mediator.Send(new GetAdlerCardsUnitByIdQuery() ));
+            return Ok(await Mediator.Send(new GetAdlerCardUnitsForStudentQuery() {
+                AdlerCardTypeId = AdlerCardtypeId,
+                LevelId = LevelId,
+                StudentId = StudentId
+            } ));
         }
 
         // GET api/<controller>/5
