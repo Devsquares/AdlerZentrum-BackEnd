@@ -17,5 +17,7 @@ namespace Application.Features
 		public double TotalScore { get; set; }
 		public int Status { get; set; }
 		public int AdlerCardsTypeId { get; set; }
+		public Level Level { get; set; }
+		public int LevelId { get; set; }
 	}
 }

@@ -42,6 +42,10 @@ namespace Application.Features
 
             var adlercard = await _adlercardRepository.GetPagedReponseAsync(validFilter);
             var adlercardViewModel = _mapper.Map<IEnumerable<GetAllAdlerCardsViewModel>>(adlercard);
+            foreach (var item in adlercardViewModel)
+            {
+                item.AdlerCardsUnit.AdlerCards = null;
+            }
             return new Wrappers.FilteredPagedResponse<IEnumerable<GetAllAdlerCardsViewModel>>(adlercardViewModel, validFilter, count);
         }
     }

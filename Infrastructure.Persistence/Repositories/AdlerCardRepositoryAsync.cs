@@ -1,5 +1,6 @@
 using Application.Enums;
 using Application.Features;
+using Application.Filters;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Domain.Models;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -68,6 +70,42 @@ namespace Infrastructure.Persistence.Repositories
                          }).ToList();
             return query;
         }
+        public override async Task<IReadOnlyList<AdlerCard>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
+        {
+            bool noPaging = filteredRequestParameter.NoPaging;
+            if (noPaging)
+            {
+                filteredRequestParameter.PageNumber = 1;
+                filteredRequestParameter.PageSize = FilteredRequestParameter.MAX_ELEMENTS;
+            }
+            int pageNumber = filteredRequestParameter.PageNumber;
+            int pageSize = filteredRequestParameter.PageSize;
+
+            string sortBy = filteredRequestParameter.SortBy;
+            if (sortBy == null)
+            {
+                sortBy = "ID";
+            }
+            string sortType = filteredRequestParameter.SortType;
+            bool sortASC = true;
+
+            if (sortType.ToUpper().Equals("DESC"))
+            {
+                sortASC = false;
+            }
+            return await _adlercards
+                .Include(x => x.AdlerCardsUnit)
+                .Include(x => x.Level)
+                .Include(x => x.Question)
+                .Where(IsMatchedExpression(filteredRequestParameter))
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    //.OrderBy(sortBy, sortASC)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+        }
+
     }
 
 }
