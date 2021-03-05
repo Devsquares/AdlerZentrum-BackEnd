@@ -78,6 +78,9 @@ namespace Infrastructure.Persistence
             services.AddTransient<IAdlerCardSubmissionRepositoryAsync,AdlerCardSubmissionRepositoryAsync>();
             services.AddTransient<IAdlerCardsUnitRepositoryAsync,AdlerCardsUnitRepositoryAsync>();
             services.AddTransient<IAdlerCardBundleStudentRepositoryAsync, AdlerCardBundleStudentRepositoryAsync>();
+            services.AddTransient<IForumTopicRepositoryAsync, ForumTopicRepositoryAsync>();
+            services.AddTransient<IForumCommentRepositoryAsync, ForumCommentRepositoryAsync>();
+            services.AddTransient<IForumReplyRepositoryAsync, ForumReplyRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

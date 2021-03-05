@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.BasicData;
 using Application.Enums;
+using Application.Features.ForumType.Queries.GetAllForumTypes;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -57,6 +58,12 @@ namespace WebApi.Controllers
             }
             culuterList.Sort();
             return Ok(culuterList);
+        }
+
+        [HttpGet("GetAllForumTypes")]
+        public async Task<IActionResult> GetForumTypes()
+        {
+            return Ok(await Mediator.Send(new GetAllForumTypesQuery()));
         }
     }
 }

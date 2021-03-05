@@ -16,6 +16,12 @@ using Domain.Models;
 using Application.DTOs.Level.Queries;
 using Application.Features.AdlerCardBundleStudent.Commands.CreateAdlerCardBundleStudent;
 using Application.Features.AdlerCardBundleStudent.Queries.GetAllAdlerCardBundleStudents;
+using Application.Features.ForumTopic.Queries.GetAllForumTopics;
+using Application.Features.ForumTopic.Commands.CreateForumTopic;
+using Application.Features.ForumComment.Queries.GetAllForumComments;
+using Application.Features.ForumComment.Commands.CreateForumComment;
+using Application.Features.ForumReply.Queries.GetAllForumReplys;
+using Application.Features.ForumReply.Commands.CreateForumReply;
 
 namespace Application.Mappings
 {
@@ -27,6 +33,18 @@ namespace Application.Mappings
             CreateMap<Bug, GetAllBugsViewModel>().ReverseMap();
             CreateMap<CreateBugCommand, Bug>();
             CreateMap<GetAllBugsQuery, GetAllBugsParameter>();
+
+            CreateMap<ForumTopic, GetAllForumTopicsViewModel>().ReverseMap();
+            CreateMap<CreateForumTopicCommand, ForumTopic>();
+            CreateMap<GetAllForumTopicsQuery, GetAllForumTopicsParameter>();
+
+            CreateMap<ForumReply, GetAllForumReplysViewModel>().ReverseMap();
+            CreateMap<CreateForumReplyCommand, ForumReply>();
+
+            CreateMap<ForumComment, GetAllForumCommentsViewModel>()
+            .ForMember(destination => destination.ForumReplys, opts => opts.MapFrom(source => source.ForumReplys));
+            CreateMap<CreateForumCommentCommand, ForumComment>();
+            CreateMap<GetAllForumCommentsQuery, GetAllForumCommentsParameter>();
 
             CreateMap<Level, GetAllLevelsViewModel>().ReverseMap();
             CreateMap<Sublevel, SubLevelsViewModel>().ReverseMap();

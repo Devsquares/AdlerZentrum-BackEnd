@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210305185020_DiscussionForumInit")]
+    partial class DiscussionForumInit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -720,7 +722,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("ForumCommentId")
+                    b.Property<int?>("ForumCommentId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("Image")
@@ -2353,11 +2355,9 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.ForumReply", b =>
                 {
-                    b.HasOne("Domain.Entities.ForumComment", "ForumComment")
+                    b.HasOne("Domain.Entities.ForumComment", null)
                         .WithMany("ForumReplys")
-                        .HasForeignKey("ForumCommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ForumCommentId");
 
                     b.HasOne("Domain.Entities.ApplicationUser", "Writer")
                         .WithMany()
