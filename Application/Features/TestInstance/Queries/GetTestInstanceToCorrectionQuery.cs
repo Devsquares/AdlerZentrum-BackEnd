@@ -14,7 +14,8 @@ namespace Application.Features
     public class GetTestInstanceByTeacherQuery : IRequest<Response<IReadOnlyList<TestInstanceToAssginViewModel>>>
     {
         public string TeacherId { get; set; }
-        public int Status { get; set; }
+        public int? Status { get; set; }
+        public int? TestType { get; set; }
     }
     public class GetTestInstanceByTeacherQueryHandler : IRequestHandler<GetTestInstanceByTeacherQuery, Response<IReadOnlyList<TestInstanceToAssginViewModel>>>
     {
@@ -27,7 +28,7 @@ namespace Application.Features
         }
         public async Task<Response<IReadOnlyList<TestInstanceToAssginViewModel>>> Handle(GetTestInstanceByTeacherQuery query, CancellationToken cancellationToken)
         {
-            var testinstance = await _testinstanceRepository.GetTestInstanceByTeacher(query.TeacherId, query.Status);
+            var testinstance = await _testinstanceRepository.GetTestInstanceByTeacher(query.TeacherId, query.Status, query.TestType);
             if (testinstance == null) throw new ApiException($"TestInstance Not Found.");
 
             var testinstanceViewModel = _mapper.Map<IReadOnlyList<TestInstanceToAssginViewModel>>(testinstance);
