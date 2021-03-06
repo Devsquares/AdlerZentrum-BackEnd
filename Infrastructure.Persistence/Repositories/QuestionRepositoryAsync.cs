@@ -43,6 +43,12 @@ namespace Infrastructure.Persistence.Repositories
             return _questions.Where(x => x.QuestionTypeId == questionTypeId).ToList().Count();
         }
 
+        public int GetAllByTypeIdCountNotUsedAsync(int questionTypeId)
+        {
+            return _questions.Where(x => x.QuestionTypeId == questionTypeId && x.TestId == null).ToList().Count();
+        }
+
+
         public override Task<Question> GetByIdAsync(int id)
         {
             return _questions.Include(x => x.SingleQuestions)

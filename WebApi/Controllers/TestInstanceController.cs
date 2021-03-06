@@ -193,19 +193,23 @@ namespace WebApi.Controller
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPut("TestToActiveByStudent")]
-        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
-        public async Task<IActionResult> TestToActiveByStudent(UpdateTestInstanceStatusByIdCommand command)
+        [HttpGet("TestToActiveByStudent")]
+        // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToActiveByStudent(int id)
         {
+            UpdateTestInstanceStatusByIdCommand command = new UpdateTestInstanceStatusByIdCommand();
+            command.Id = id;
             command.Status = (int)TestInstanceEnum.Pending;
             return Ok(await Mediator.Send(command));
         }
 
 
-        [HttpPut("TestToCloseByStudent")]
-        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
-        public async Task<IActionResult> TestToCloseByStudent(UpdateTestInstanceStatusByIdCommand command)
+        [HttpGet("TestToCloseByStudent")]
+        // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToCloseByStudent(int id)
         {
+            UpdateTestInstanceStatusByIdCommand command = new UpdateTestInstanceStatusByIdCommand();
+            command.Id = id;
             command.Status = (int)TestInstanceEnum.Missed;
             return Ok(await Mediator.Send(command));
         }

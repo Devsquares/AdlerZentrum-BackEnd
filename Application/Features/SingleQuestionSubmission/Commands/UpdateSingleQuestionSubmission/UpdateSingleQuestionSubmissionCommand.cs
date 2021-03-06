@@ -41,7 +41,7 @@ namespace Application.Features
                     singlequestionsubmission.Corrected = true;
 
                     await _singlequestionsubmissionRepository.UpdateAsync(singlequestionsubmission);
-                    return new Response<int>(singlequestionsubmission.Id);
+                    return new Response<int>(singlequestionsubmission.TestInstanceId);
                 }
             }
         }

@@ -37,7 +37,7 @@ namespace WebApi.Controllers
         //[Authorize(Roles = "SuperAdmin,Supervisor")]
         public async Task<IActionResult> GetAllTests([FromQuery] GetAllTestsQuery filter)
         {
-            if(filter.PageNumber == 0)
+            if (filter.PageNumber == 0)
             {
                 filter.PageNumber = 1;
             }
@@ -56,6 +56,13 @@ namespace WebApi.Controllers
             {
                 Id = filter.Id
             }));
+        }
+
+        [HttpDelete("{id}")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            return Ok(await Mediator.Send(new DeleteTestByIdCommand { Id = id }));
         }
 
     }

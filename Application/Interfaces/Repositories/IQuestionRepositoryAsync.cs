@@ -11,5 +11,6 @@ namespace Application.Interfaces.Repositories
         int GetAllByTypeIdCountAsync(int questionTypeId);
         Task<List<Question>> GetByTestIdAsync(int id);
         Task<IReadOnlyList<Question>> GetAllAsync(int pageNumber, int pageSize, int? questionTypeId = null);
+        int GetAllByTypeIdCountNotUsedAsync(int questionTypeId);
     }
 }

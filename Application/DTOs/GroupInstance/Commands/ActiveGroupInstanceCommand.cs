@@ -117,16 +117,22 @@ namespace Application.DTOs
                                 };
                                 testInstance.Add(obj);
                             }
+                            if (quiz.Status == (int)TestStatusEnum.Draft)
+                            {
+                                quiz.Status = (int)TestStatusEnum.Final;
+                                await _testRepository.UpdateAsync(quiz);
+                            }
+
                         }
                     }
 
                     // check is final sublevl or not? then set sublevel or final.
                     if (groupInstance.GroupDefinition.Sublevel.IsFinal)
                     {
-                        var subLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
+                        var finalLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
                         var lastLesson = lessonInstances[lessonInstances.Count - 1];
 
-                        if (subLevelTest != null)
+                        if (finalLevelTest != null)
                         {
                             foreach (var student in lessonInstanceStudents)
                             {
@@ -135,10 +141,15 @@ namespace Application.DTOs
                                     LessonInstanceId = lastLesson.Id,
                                     StudentId = student.StudentId,
                                     Status = (int)TestInstanceEnum.Closed,
-                                    TestId = subLevelTest.Id,
+                                    TestId = finalLevelTest.Id,
                                     GroupInstanceId = groupInstance.Id
                                 };
                                 testInstance.Add(obj);
+                            }
+                            if (finalLevelTest.Status == (int)TestStatusEnum.Draft)
+                            {
+                                finalLevelTest.Status = (int)TestStatusEnum.Final;
+                                await _testRepository.UpdateAsync(finalLevelTest);
                             }
                         }
 
@@ -161,6 +172,11 @@ namespace Application.DTOs
                                     GroupInstanceId = groupInstance.Id
                                 };
                                 testInstance.Add(obj);
+                            }
+                            if (subLevelTest.Status == (int)TestStatusEnum.Draft)
+                            {
+                                subLevelTest.Status = (int)TestStatusEnum.Final;
+                                await _testRepository.UpdateAsync(subLevelTest);
                             }
                         }
 
