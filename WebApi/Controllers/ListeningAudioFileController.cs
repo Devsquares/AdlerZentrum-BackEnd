@@ -15,7 +15,7 @@ namespace WebApi.Controllers
     {
         private IWebHostEnvironment _hostingEnvironment;
         public static string bucketName = "adler-audio-files";
-        public static string endpoingURL = "https://fra1.digitaloceanspaces.com";
+        public static string endpoingURL = "https://fra1.s3a.digitaloceanspaces.com";
         public static IAmazonS3 s3Client;
 
         public ListeningAudioFileController(IWebHostEnvironment environment)
@@ -39,8 +39,7 @@ namespace WebApi.Controllers
                     StorageClass = S3StorageClass.StandardInfrequentAccess,
                     PartSize = 6291456, // 6 MB
                     Key = fileName,
-
-                    CannedACL = S3CannedACL.PublicReadWrite,
+                    CannedACL = S3CannedACL.PublicRead,
                     InputStream = file,
                 };
                 fileTransferUtility.Upload(fileTransferUtilityRequest);

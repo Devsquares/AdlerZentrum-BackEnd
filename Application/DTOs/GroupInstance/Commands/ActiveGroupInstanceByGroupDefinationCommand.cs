@@ -19,11 +19,14 @@ namespace Application.DTOs
         public class ActiveGroupInstanceByGroupDefinationCommandHandler : IRequestHandler<ActiveGroupInstanceByGroupDefinationCommand, Response<bool>>
         {
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
+            private readonly IGroupDefinitionRepositoryAsync _groupDefinitionRepositoryAsync;
             private readonly IMediator _mediator;
             public ActiveGroupInstanceByGroupDefinationCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
-            IMediator mediator)
+            IMediator mediator,
+            IGroupDefinitionRepositoryAsync groupDefinitionRepositoryAsync)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
+                _groupDefinitionRepositoryAsync = groupDefinitionRepositoryAsync;
                 _mediator = mediator;
             }
             public async Task<Response<bool>> Handle(ActiveGroupInstanceByGroupDefinationCommand command, CancellationToken cancellationToken)
@@ -34,6 +37,9 @@ namespace Application.DTOs
                 {
                     await _mediator.Send(new ActiveGroupInstanceCommand { GroupInstanceId = item.Id });
                 }
+                var groupDefinition = await _groupDefinitionRepositoryAsync.GetByIdAsync(command.Id);
+                groupDefinition.Status = (int)GroupDefinationStatusEnum.Running;
+                await _groupDefinitionRepositoryAsync.UpdateAsync(groupDefinition);
                 return new Response<bool>(true);
             }
         }

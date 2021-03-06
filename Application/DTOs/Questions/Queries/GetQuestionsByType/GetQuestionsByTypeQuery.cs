@@ -38,16 +38,17 @@ namespace Application.DTOs
                 request.PageSize = 10;
             }
             List<Question> questions = new List<Question>();
-
+            int count = 0;
             if (request.NotUsed)
             {
                 questions = _QuestionService.GetAllByTypeIdNotUsedAsync(request.QuestionType, request.PageNumber, request.PageSize).Result;
+                count = _QuestionService.GetAllByTypeIdCountNotUsedAsync(request.QuestionType);
             }
             else
             {
                 questions = _QuestionService.GetAllByTypeIdAsync(request.QuestionType, request.PageNumber, request.PageSize).Result;
+                count = _QuestionService.GetAllByTypeIdCountAsync(request.QuestionType);
             }
-            int count = _QuestionService.GetAllByTypeIdCountAsync(request.QuestionType);
             return new PagedResponse<IEnumerable<Question>>(questions, request.PageNumber, request.PageSize, count);
         }
     }

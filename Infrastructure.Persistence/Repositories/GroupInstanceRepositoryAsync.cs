@@ -129,7 +129,8 @@ namespace Infrastructure.Persistence.Repositories
             StudentsGroupInstanceModel StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
             var groupInstanceList = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId
             && ((groupInstancelist != null && groupInstancelist.Count > 0) ? (groupInstancelist.Contains(x.Id)) : true)
-            && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x => x.Id).ToList();
+            // && (x.Status == (int)GroupInstanceStatusEnum.Pending || x.Status == (int)GroupInstanceStatusEnum.SlotCompleted)).OrderByDescending(x => x.Id).ToList();
+          ).OrderByDescending(x => x.Id).ToList();
             foreach (var groupInstance in groupInstanceList)
             {
                 StudentsGroupInstanceObject = new StudentsGroupInstanceModel();
@@ -140,7 +141,7 @@ namespace Infrastructure.Persistence.Repositories
                 {
                     StudentId = x.StudentId,
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
-                    PromoCodeId = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCodeId:(int?)null,
+                    PromoCodeId = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCodeId : (int?)null,
                     PromoCodeName = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCode.Name : string.Empty,
                     isPlacementTest = x.IsPlacementTest,
                     CreationDate = x.CreatedDate,
@@ -183,7 +184,7 @@ namespace Infrastructure.Persistence.Repositories
         }
         public List<GroupInstance> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null)
         {
-            var groups = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId 
+            var groups = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId
                                         && (groupinstanceId != null ? x.Id == groupinstanceId : true)).ToList();
             return groups;
         }
