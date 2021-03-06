@@ -10,24 +10,24 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class GetAdlerCardUnitsForStudentQuery : IRequest<Response<GetAdlerCardUnitsForStudentViewModel>>
+    public class GetAdlerCardUnitsForStudentQuery : IRequest<Response<IEnumerable<GetAdlerCardUnitsForStudentViewModel>>>
     {
         public string StudentId { get; set; }
         public int LevelId { get; set; }
         public int AdlerCardTypeId { get; set; }
-        public class GetAdlerCardUnitsForStudentQueryHandler : IRequestHandler<GetAdlerCardUnitsForStudentQuery, Response<GetAdlerCardUnitsForStudentViewModel>>
+        public class GetAdlerCardUnitsForStudentQueryHandler : IRequestHandler<GetAdlerCardUnitsForStudentQuery, Response<IEnumerable<GetAdlerCardUnitsForStudentViewModel>>>
         {
             private readonly IAdlerCardsUnitRepositoryAsync _adlercardsunitRepository;
             public GetAdlerCardUnitsForStudentQueryHandler(IAdlerCardsUnitRepositoryAsync adlercardsunitRepository)
             {
                 _adlercardsunitRepository = adlercardsunitRepository;
             }
-            public async Task<Response<GetAdlerCardUnitsForStudentViewModel>> Handle(GetAdlerCardUnitsForStudentQuery query, CancellationToken cancellationToken)
+            public async Task<Response<IEnumerable<GetAdlerCardUnitsForStudentViewModel>>> Handle(GetAdlerCardUnitsForStudentQuery query, CancellationToken cancellationToken)
             {
                 var adlercardsunit = _adlercardsunitRepository.GetAdlerCardUnitsForStudent(query.StudentId, query.LevelId, query.AdlerCardTypeId);
                 if (adlercardsunit == null) throw new ApiException($"AdlerCardsUnit Not Found.");
                 // return new Response<GetAdlerCardUnitsForStudentViewModel>(adlercardsunit);
-                return null;
+                return new Response<IEnumerable<GetAdlerCardUnitsForStudentViewModel>>(adlercardsunit);
             }
         }
     }
