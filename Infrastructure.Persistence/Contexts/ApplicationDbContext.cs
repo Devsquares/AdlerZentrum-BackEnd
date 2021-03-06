@@ -67,6 +67,9 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<AdlerCardSubmission> AdlerCardSubmissions { get; set; }
         public DbSet<AdlerCardsUnit> AdlerCardsUnits { get; set; }
         public DbSet<AdlerCardBundleStudent> AdlerCardBundleStudents { get; set; }
+        public DbSet<ForumTopic> ForumTopics { get; set; }
+        public DbSet<ForumComment> ForumComments { get; set; }
+        public DbSet<ForumReply> ForumReplys { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
