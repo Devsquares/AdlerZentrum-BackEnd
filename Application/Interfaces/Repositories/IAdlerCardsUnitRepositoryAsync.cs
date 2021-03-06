@@ -8,5 +8,6 @@ namespace Application.Interfaces.Repositories
     public interface IAdlerCardsUnitRepositoryAsync : IGenericRepositoryAsync<AdlerCardsUnit>
     {
         List<GetAdlerCardUnitsForStudentViewModel> GetAdlerCardUnitsForStudent(string StudentId,int LevelId,int AdlerCardTypeId);
+        List<AdlerCardsUnit> GetAdlerCardUnitsByLevelAndType(int levelId, int adlerCardTypeId);
     }
 }

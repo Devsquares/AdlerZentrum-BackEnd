@@ -15,7 +15,7 @@ namespace Application.Features
     {
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public AdlerCardsUnit AdlerCardsUnit { get; set; }
+		public Domain.Entities.AdlerCardsUnit AdlerCardsUnit { get; set; }
 		public int AdlerCardsUnitId { get; set; }
 		public Question Question { get; set; }
 		public int QuestionId { get; set; }

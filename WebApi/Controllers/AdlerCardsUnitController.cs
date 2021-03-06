@@ -1,4 +1,5 @@
 using Application.Features;
+using Application.Features.AdlerCardsUnit.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -71,6 +72,17 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteAdlerCardsUnitByIdCommand { Id = id }));
+        }
+
+        [HttpGet("GetAdlerCardUnitsByLevelAndType")]
+        public async Task<IActionResult> GetAdlerCardUnitsByLevelAndType(int levelId,int adlerCardtypeId)
+        {
+
+            return Ok(await Mediator.Send(new GetAdlerCardUnitsByLevelAndTypeQuery()
+            {
+                AdlerCardTypeId = adlerCardtypeId,
+                LevelId = levelId
+            }));
         }
 
     }
