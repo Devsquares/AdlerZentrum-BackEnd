@@ -12,17 +12,17 @@ namespace Application.DTOs
     }
     public class GetAllSublevelsQueryHandler : IRequestHandler<GetAllSublevelsQuery, IEnumerable<GetAllSubLevelsViewModel>>
     {
-        private readonly ISublevelRepositoryAsync _levelService;
+        private readonly ISublevelRepositoryAsync _sublevelService;
         private readonly IMapper _mapper;
         public GetAllSublevelsQueryHandler(ISublevelRepositoryAsync levelService, IMapper mapper)
         {
-            _levelService = levelService;
+            _sublevelService = levelService;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<GetAllSubLevelsViewModel>> Handle(GetAllSublevelsQuery request, CancellationToken cancellationToken)
         {
-            var SubLevels = await _levelService.GetAllAsync("Level");
+            var SubLevels = await _sublevelService.GetAllAsync("Level");
             var userViewModel = _mapper.Map<IEnumerable<GetAllSubLevelsViewModel>>(SubLevels);
             return userViewModel;
         }
