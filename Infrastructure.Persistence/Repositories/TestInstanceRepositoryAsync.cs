@@ -129,23 +129,23 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int? status, int? TestType)
         {
-            var query = _testInstances
-              .Include(x => x.Test)
-              .Include(x => x.Student)
-              .Include(x => x.LessonInstance)
-              .ThenInclude(x => x.GroupInstance);
+            var query = _testInstances.AsQueryable();
 
             if (status != null)
             {
-                query.Where(x => x.Status == status);
+                query = query.Where(x => x.Status == status);
             }
 
             if (TestType != null)
             {
-                query.Where(x => x.Test.TestTypeId == TestType);
+                query = query.Where(x => x.Test.TestTypeId == TestType);
             }
 
-            return await query.Where(x => x.CorrectionTeacherId == correctionTeacherId).ToListAsync();
+            return await query.Where(x => x.CorrectionTeacherId == correctionTeacherId)
+              .Include(x => x.Test)
+              .Include(x => x.Student)
+              .Include(x => x.LessonInstance)
+              .ThenInclude(x => x.GroupInstance).ToListAsync();
         }
 
         public async Task<List<TestInstance>> GetProgressByStudentId(string studentID)
