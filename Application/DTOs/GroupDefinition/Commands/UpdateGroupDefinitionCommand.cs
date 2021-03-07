@@ -16,10 +16,15 @@ namespace Application.DTOs
     public class UpdateGroupDefinitionCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public int? Status { get; set; }
-        public int NumberOfSlots { get; set; }
-        public int NumberOfSlotsWithPlacementTest { get; set; }
-
+        public int SubLevelId { get; set; }
+        public int TimeSlotId { get; set; }
+        public int PricingId { get; set; }
+        public int GroupConditionId { get; set; }
+        public double Discount { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public DateTime? FinalTestDate { get; set; }
+        public int MaxInstances { get; set; }
         public class UpdateGroupDefinitionCommandHandler : IRequestHandler<UpdateGroupDefinitionCommand, Response<int>>
         {
             private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
@@ -29,21 +34,31 @@ namespace Application.DTOs
             }
             public async Task<Response<int>> Handle(UpdateGroupDefinitionCommand command, CancellationToken cancellationToken)
             {
-                var GroupDefinition = await _GroupDefinitionRepositoryAsync.GetByIdAsync(command.Id);
+                var groupDefinition = await _GroupDefinitionRepositoryAsync.GetByIdAsync(command.Id);
 
-                if (GroupDefinition == null)
+                if (groupDefinition == null)
                 {
                     throw new ApiException($"Group Not Found.");
                 }
-                else if (GroupDefinition.Status != (int)GroupDefinationStatusEnum.New)
+                else if (groupDefinition.Status != (int)GroupDefinationStatusEnum.New)
                 {
                     throw new ApiException($"Group can't be updated");
                 }
                 else
                 {
-                    Reflection.CopyProperties(command, GroupDefinition);
-                    await _GroupDefinitionRepositoryAsync.UpdateAsync(GroupDefinition);
-                    return new Response<int>(GroupDefinition.Id);
+
+                    groupDefinition.SubLevelId = command.SubLevelId;
+                    groupDefinition.TimeSlotId = command.TimeSlotId;
+                    groupDefinition.PricingId = command.PricingId;
+                    groupDefinition.GroupConditionId = command.GroupConditionId;
+                    groupDefinition.Discount = command.Discount;
+                    groupDefinition.StartDate = command.StartDate;
+                    groupDefinition.EndDate = command.EndDate;
+                    groupDefinition.FinalTestDate = command.FinalTestDate;
+                    groupDefinition.MaxInstances = command.MaxInstances;
+
+                    await _GroupDefinitionRepositoryAsync.UpdateAsync(groupDefinition);
+                    return new Response<int>(groupDefinition.Id);
                 }
             }
         }

@@ -61,7 +61,6 @@ namespace Application.DTOs
                     promocodeslst.Add(new GroupConditionPromoCodeInputModel()
                     {
                         PromoCodeId = promocode.PromoCodeId,
-                        Name = promocode.PromoCode.Name,
                         Count = promocode.Count
                     });
                 }

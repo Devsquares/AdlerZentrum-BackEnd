@@ -44,7 +44,6 @@ namespace Infrastructure.Persistence.Repositories
                 test = test.Where(x => x.Status == testStatus);
             }
             return await test
-                  .DefaultIfEmpty()
                   .Select(x => new TestsViewModel()
                   {
                       Id = x.Id,
