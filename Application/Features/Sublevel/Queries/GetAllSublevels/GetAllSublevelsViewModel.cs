@@ -13,6 +13,10 @@ namespace Application.Features
 		public virtual Level Level { get; set; }
 		public int NumberOflessons { get; set; }
 		public string Color { get; set; }
+		public bool IsFinal { get; set; }
+		public int Quizpercent { get; set; }
+		public int SublevelTestpercent { get; set; }
+		public int FinalTestpercent { get; set; }
 		public List<LessonDefinition> LessonDefinitions { get; set; }
 	}
 }
