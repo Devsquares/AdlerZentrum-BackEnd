@@ -2341,7 +2341,7 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ForumComment", b =>
                 {
                     b.HasOne("Domain.Entities.ForumTopic", "ForumTopic")
-                        .WithMany()
+                        .WithMany("ForumComments")
                         .HasForeignKey("ForumTopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

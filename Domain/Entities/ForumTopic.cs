@@ -17,5 +17,6 @@ namespace Domain.Entities
 		public int GroupInstanceId { get; set; }
 		public GroupDefinition GroupDefinition { get; set; }
 		public int GroupDefinitionId { get; set; }
-    }
+		public ICollection<ForumComment> ForumComments { get; set; }
+	}
 }

@@ -28,7 +28,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _dbContext.Set<ForumComment>()
                 .Include(b=>b.Writer)
-                .Include(b=>b.ForumReplys)
+                .Include(b=>b.ForumReplys).ThenInclude(p=>p.Writer)
                 .Where(b => (forumTopicId == 0 || b.ForumTopicId == forumTopicId))
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

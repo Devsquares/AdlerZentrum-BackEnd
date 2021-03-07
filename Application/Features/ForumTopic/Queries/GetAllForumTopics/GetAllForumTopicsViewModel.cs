@@ -19,5 +19,7 @@ namespace Application.Features.ForumTopic.Queries.GetAllForumTopics
 		public int GroupInstanceId { get; set; }
 		public GroupDefinition GroupDefinition { get; set; }
 		public int GroupDefinitionId { get; set; }
+		public DateTime? CreatedDate { get; set; }
+		public int ForumCommentsCount { get; set; }
 	}
 }
