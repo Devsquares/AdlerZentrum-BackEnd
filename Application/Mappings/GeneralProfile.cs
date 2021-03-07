@@ -122,8 +122,7 @@ namespace Application.Mappings
             .ForMember(destination => destination.FirstName, opts => opts.MapFrom(source => source.Student.FirstName))
             .ForMember(destination => destination.LastName, opts => opts.MapFrom(source => source.Student.LastName));
 
-            CreateMap<Sublevel, GetAllSubLevelsViewModel>()
-                .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.Level.Name + "." + source.Name));
+            CreateMap<Sublevel, GetAllSubLevelsViewModel>().ReverseMap();
 
             CreateMap<TestInstance, TestInstancesResultsViewModel>()
                 .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName + source.Student.LastName));
