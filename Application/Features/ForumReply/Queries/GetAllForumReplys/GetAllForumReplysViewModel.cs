@@ -13,5 +13,6 @@ namespace Application.Features.ForumReply.Queries.GetAllForumReplys
 		public string Text { get; set; }
 		public byte[] Image { get; set; }
 		public int ForumCommentId { get; set; }
+		public DateTime? CreatedDate { get; set; }
 	}
 }

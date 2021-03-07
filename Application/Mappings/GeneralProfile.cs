@@ -34,7 +34,8 @@ namespace Application.Mappings
             CreateMap<CreateBugCommand, Bug>();
             CreateMap<GetAllBugsQuery, GetAllBugsParameter>();
 
-            CreateMap<ForumTopic, GetAllForumTopicsViewModel>().ReverseMap();
+            CreateMap<ForumTopic, GetAllForumTopicsViewModel>()
+            .ForMember(destination => destination.ForumCommentsCount, opts => opts.MapFrom(source => source.ForumComments.Count)); ;
             CreateMap<CreateForumTopicCommand, ForumTopic>();
             CreateMap<GetAllForumTopicsQuery, GetAllForumTopicsParameter>();
 
@@ -42,7 +43,8 @@ namespace Application.Mappings
             CreateMap<CreateForumReplyCommand, ForumReply>();
 
             CreateMap<ForumComment, GetAllForumCommentsViewModel>()
-            .ForMember(destination => destination.ForumReplys, opts => opts.MapFrom(source => source.ForumReplys));
+            .ForMember(destination => destination.ForumReplys, opts => opts.MapFrom(source => source.ForumReplys))
+            .ForMember(destination => destination.ForumReplysCount, opts => opts.MapFrom(source => source.ForumReplys.Count));
             CreateMap<CreateForumCommentCommand, ForumComment>();
             CreateMap<GetAllForumCommentsQuery, GetAllForumCommentsParameter>();
 

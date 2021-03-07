@@ -35,7 +35,8 @@ namespace Infrastructure.Persistence.Repositories
 
         public new async Task<ForumTopic> GetByIdAsync(int id)
         {
-            return await _forumTopics.Include(b => b.GroupInstance).Include(b => b.GroupDefinition).Include(b => b.Writer).
+            return await _forumTopics.Include(b => b.Writer).
+                Include(b => b.ForumComments).
                 Where(b=>b.Id == id).FirstOrDefaultAsync();
 
         }
@@ -116,6 +117,7 @@ namespace Infrastructure.Persistence.Repositories
             return await _dbContext.Set<ForumTopic>()
                 //.Include(b=> b.GroupInstance).Include(b => b.GroupDefinition)
                 .Include(b => b.Writer)
+                .Include(b=> b.ForumComments)
                 .Where(b => (forumType == 0 || b.ForumType == (int)forumType) && (groupInstanceId == 0 || b.GroupInstanceId == groupInstanceId) && (groupDefinitionId == 0 || b.GroupDefinitionId == groupDefinitionId))
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
