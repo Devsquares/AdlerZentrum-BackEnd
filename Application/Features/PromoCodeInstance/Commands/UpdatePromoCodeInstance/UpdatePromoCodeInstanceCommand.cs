@@ -18,8 +18,9 @@ namespace Application.Features.PromoCodeInstance.Commands.UpdatePromoCodeInstanc
 		public string PromoCodeKey { get; set; }
 		public bool IsUsed { get; set; }
 		public string StudentId { get; set; }
-		//public ApplicationUser Student { get; set; }
-		public DateTime? StartDate { get; set; }
+        public string StudentEmail { get; set; }
+        //public ApplicationUser Student { get; set; }
+        public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 
         public class UpdatePromoCodeInstanceCommandHandler : IRequestHandler<UpdatePromoCodeInstanceCommand, Response<int>>
@@ -44,8 +45,9 @@ namespace Application.Features.PromoCodeInstance.Commands.UpdatePromoCodeInstanc
 				promocodeinstance.PromoCodeKey = command.PromoCodeKey;
 				promocodeinstance.IsUsed = command.IsUsed;
 				promocodeinstance.StudentId = command.StudentId;
-				//promocodeinstance.Student = command.Student;
-				promocodeinstance.StartDate = command.StartDate;
+                promocodeinstance.StudentEmail = command.StudentEmail;
+                //promocodeinstance.Student = command.Student;
+                promocodeinstance.StartDate = command.StartDate;
 				promocodeinstance.EndDate = command.EndDate; 
 
                     await _promocodeinstanceRepository.UpdateAsync(promocodeinstance);
