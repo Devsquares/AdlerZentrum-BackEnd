@@ -14,7 +14,7 @@ namespace Domain.Entities
         }
         public string Name { get; set; }
         public int? Status { get; set; }
-        
-        public virtual ICollection<TimeSlotDetails> TimeSlotDetails { get; private set; }
+
+        public virtual ICollection<TimeSlotDetails> TimeSlotDetails { get; set; }
     }
 }
