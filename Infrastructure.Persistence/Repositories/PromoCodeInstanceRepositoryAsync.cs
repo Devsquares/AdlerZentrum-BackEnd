@@ -61,7 +61,8 @@ namespace Infrastructure.Persistence.Repositories
            StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
            StartDate = x.StartDate,
            EndDate = x.EndDate,
-           CreatedDate = x.CreatedDate
+           CreatedDate = x.CreatedDate,
+           StudentEmail = x.StudentEmail
 
            }).ToList();
             return promocodesInstancesList;
@@ -82,7 +83,8 @@ namespace Infrastructure.Persistence.Repositories
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
                     IsUsed = x.IsUsed,
-                    CreatedDate = x.CreatedDate
+                    CreatedDate = x.CreatedDate,
+                    StudentEmail = x.StudentEmail
             }).FirstOrDefault();
         }
         public PromoCodeInstance GetById(int id)

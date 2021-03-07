@@ -19,8 +19,9 @@ namespace Application.Features.PromoCodeInstance.Commands.CreatePromoCodeInstanc
 		//public string PromoCodeKey { get; set; }
 		//public bool IsUsed { get; set; }
 		public string StudentId { get; set; }
-		//public ApplicationUser Student { get; set; }
-		public DateTime? StartDate { get; set; }
+        public string StudentEmail { get; set; }
+        //public ApplicationUser Student { get; set; }
+        public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 
         public int? count { get; set; }
