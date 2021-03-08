@@ -63,6 +63,10 @@ namespace Application.Mappings
             CreateMap<GroupCondition, GetAllGroupConditionViewModel>().ReverseMap();
 
             CreateMap<TimeSlot, GetAllTimeSlotsViewModel>().ReverseMap();
+            CreateMap<TimeSlotDetails, TimeSlotDetailsViewModel>()
+            .ForMember(destination => destination.TimeFrom, opts => opts.MapFrom(source => source.TimeFrom.ToString("HH:mm:ss")))
+            .ForMember(destination => destination.TimeTo, opts => opts.MapFrom(source => source.TimeTo.ToString("HH:mm:ss")))
+            .ReverseMap();
             CreateMap<Pricing, GetAllPricingViewModel>().ReverseMap();
             CreateMap<Test, GetAllTestsViewModel>().ReverseMap().ForMember(destination => destination.TestTypeId,
                  opt => opt.MapFrom(source => Enum.GetName(typeof(TestTypeEnum), source.TestTypeId)));
