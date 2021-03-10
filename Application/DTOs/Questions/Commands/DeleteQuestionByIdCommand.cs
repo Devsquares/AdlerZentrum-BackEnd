@@ -25,6 +25,8 @@ namespace Application.DTOs
             {
                 var Question = await _QuestionRepositoryAsync.GetByIdAsync(command.Id);
                 if (Question == null) throw new ApiException($"Question Not Found.");
+                if (Question.IsAdlerService) throw new ApiException($"Question Used in Adler Card.");
+                if (Question.TestId != null) throw new ApiException($"Question Used in Test.");
                 await _QuestionRepositoryAsync.DeleteAsync(Question);
                 return new Response<int>(Question.Id);
             }
