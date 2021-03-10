@@ -42,6 +42,21 @@ namespace Application.Features.PromoCodeInstance.Queries.GetAllPromoCodeInstance
         {
             int count = 0;
             var promocodesInstances = _promocodeinstanceRepository.GetAllReport(request.PageNumber, request.PageSize, out count, request.promocodeId, request.isValid, request.promoCodeName, request.studentName);
+            foreach (var item in promocodesInstances)
+            {
+                if (item.IsUsed)
+                {
+                    item.IsValid = false;
+                }
+                else if (item.EndDate < DateTime.Now)
+                {
+                    item.IsValid = false;
+                }
+                else
+                {
+                    item.IsValid = true;
+                }
+            }
             return  new PagedResponse<List<PromoCodeInstancesViewModel>>(promocodesInstances,request.PageNumber,request.PageSize,count);
             //var validFilter = _mapper.Map<GetAllPromoCodeInstancesParameter>(request);
             //FilteredRequestParameter filteredRequestParameter = new FilteredRequestParameter();
