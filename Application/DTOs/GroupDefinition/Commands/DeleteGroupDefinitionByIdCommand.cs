@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Enums;
 
 namespace Application.DTOs
 {
@@ -25,6 +26,8 @@ namespace Application.DTOs
             {
                 var groupDefinition = await _GroupDefinitionRepository.GetByIdAsync(command.Id);
                 if (groupDefinition == null) throw new ApiException($"Group Not Found.");
+                if (groupDefinition.Status != (int)GroupDefinationStatusEnum.New) throw new ApiException($"Group Not Allowed to update.");
+                
                 await _GroupDefinitionRepository.DeleteAsync(groupDefinition);
                 return new Response<int>(groupDefinition.Id);
             }

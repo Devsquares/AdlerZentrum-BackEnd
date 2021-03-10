@@ -9,6 +9,7 @@ namespace Domain.Models
         public int Id { get; set; }
         public int PromoCodeId { get; set; }
         public string PromoCodeName { get; set; }
+        public int PromoCodeValue { get; set; }
         public string PromoCodeKey { get; set; }
         public bool IsUsed { get; set; }
         public string StudentId { get; set; }
