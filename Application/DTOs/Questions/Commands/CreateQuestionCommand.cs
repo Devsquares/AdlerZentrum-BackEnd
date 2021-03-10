@@ -37,7 +37,13 @@ namespace Application.DTOs
                 var question = new Question();
 
                 Reflection.CopyProperties(command, question);
-                await _QuestionRepository.AddAsync(question); 
+                int total = 0;
+                foreach (var item in question.SingleQuestions)
+                {
+                    total = total + item.Points;
+                }
+                question.TotalPoint = total;
+                await _QuestionRepository.AddAsync(question);
                 return new Response<int>(question.Id);
             }
         }

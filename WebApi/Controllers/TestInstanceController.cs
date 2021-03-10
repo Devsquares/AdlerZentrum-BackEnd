@@ -172,9 +172,16 @@ namespace WebApi.Controller
 
         [HttpGet("GetAllTestsToManage")]
         // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
-        public async Task<IActionResult> GetAllTestsToManage()
+        public async Task<IActionResult> GetAllTestsToManage([FromQuery] GetAllTestsToManageQuery query)
         {
-            return Ok(await Mediator.Send(new GetAllTestsToManageQuery()));
+            return Ok(await Mediator.Send(new GetAllTestsToManageQuery()
+            {
+                GroupDefinitionId = query.GroupDefinitionId,
+                GroupInstanceId = query.GroupInstanceId,
+                TestTypeId = query.TestTypeId,
+                Status = query.Status
+            }
+            ));
         }
 
         [HttpPut("TestToActiveByGroup")]
