@@ -221,7 +221,7 @@ namespace Infrastructure.Persistence.Repositories
             string newSerial;
             int maxSerialInt, newSerialInt;
 
-            maxSerialInt = groupInstances.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 7 && x.GroupDefinitionId == groupDefinitionId).ToList().Max(x => int.Parse(x.Serial.Substring(7, 2)));
+            maxSerialInt = groupInstances.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 10 && x.GroupDefinitionId == groupDefinitionId).ToList().Max(x => int.Parse(x.Serial.Substring(8, 2)));
             newSerialInt = maxSerialInt + 1;
             newSerial = newSerialInt.ToString().PadLeft(SERIAL_DIGITS, '0');
             return newSerial;

@@ -26,6 +26,8 @@ using Application.Interfaces.Repositories;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore.Internal;
 using Domain.Models;
+using MediatR;
+using Application.DTOs;
 
 namespace Infrastructure.Persistence.Services
 {
