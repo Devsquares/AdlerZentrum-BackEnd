@@ -186,5 +186,36 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(new GetCurrentProgressForStudent() { StudentId = studentId }));
         }
+
+        [HttpPost("TestRegister")]
+        public async Task TestRegisterAsync(TestRegisterRequest request)
+        {
+
+            var origin = Request.Headers["origin"];
+
+            int count = request.count;
+            string identifier = request.identifier;
+            string email;
+            string firstName;
+            string lastName;
+            string userName;
+
+            for (int i = 0; i < count; i++)
+            {
+                email = identifier + "testStudent" + request.GroupDefinitionId + i + "@gmail.com";
+                firstName = identifier + "student" + request.GroupDefinitionId + i;
+                lastName = identifier + "student" + request.GroupDefinitionId + i;
+                userName = email;
+
+                RegisterRequest registerRequest = new RegisterRequest();
+                Reflection.CopyProperties(request, registerRequest);
+                registerRequest.Email = email;
+                registerRequest.FirstName = firstName;
+                registerRequest.LastName = lastName;
+                registerRequest.UserName = userName;
+                var student = await _accountService.RegisterAsync(registerRequest, origin);
+                await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId });
+            }
+        }
     }
 }
