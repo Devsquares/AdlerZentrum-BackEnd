@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public IEnumerable<TeacherGroupInstanceAssignment> GetByTeacher(string TeacherId)
         {
-            return groupInstances.Where(x => x.TeacherId == TeacherId);
+            return groupInstances.Include(x => x.GroupInstance).Where(x => x.TeacherId == TeacherId);
         }
 
         public TeacherGroupInstanceAssignment GetByGroupInstanceId(int groupInstanceId)

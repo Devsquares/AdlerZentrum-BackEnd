@@ -644,7 +644,7 @@ namespace Infrastructure.Persistence.Services
             return new PagedResponse<List<TeachersModel>>(teachers, pageNumber, pageSize, totalCount);
         }
 
-        public async Task UpdateAdlerCardBalance(string studentId,int balance)
+        public async Task UpdateAdlerCardBalance(string studentId, int balance)
         {
             var student = _userManager.FindByIdAsync(studentId).Result;
             student.AdlerCardBalance += balance;

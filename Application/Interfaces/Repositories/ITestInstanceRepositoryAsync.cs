@@ -11,13 +11,13 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType);
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin();
-        Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int? status, int? TestType);
+        Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int? status, int? TestType, int? GroupInstanceId);
         Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance);
         int GetAllTestInstancesResultsCount(int groupInstance);
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToActive();
         Task<IReadOnlyList<object>> GetAllClosedAndPendingQuizzAsync(int GroupInstanceId);
         Task<List<TestInstance>> GetTestInstanceByLessonInstanceId(int LessonInstanceId);
-        Task<IReadOnlyList<TestInstance>> GetAllTestsToManage();
+        Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId,int? GroupInstanceId, int? TestTypeId,int? Status);
         Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance);
         Task<List<TestInstance>> GetProgressByStudentId(string studentID);
     }

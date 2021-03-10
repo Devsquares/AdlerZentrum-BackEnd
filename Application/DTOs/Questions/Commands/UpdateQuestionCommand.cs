@@ -36,7 +36,7 @@ namespace Application.DTOs
                 {
                     question.TestId = command.TestId;
                     await _QuestionRepository.UpdateAsync(question);
-                    return new Response<int>(question.Id);
+                    return new Response<int>(question.TotalPoint);
                 }
             }
         }

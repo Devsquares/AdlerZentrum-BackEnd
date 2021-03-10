@@ -18,7 +18,7 @@ namespace Application.DTOs
         public List<UpdateQuestionCommand> Questions { get; set; }
         public int? LessonDefinitionId { get; set; }
         public int? SubLevelId { get; set; }
-        public int? LevelId {get;set;}
+        public int? LevelId { get; set; }
         public int TotalPoint { get; set; }
 
         public class CreateTestCommandHandler : IRequestHandler<CreateTestCommand, Response<int>>
@@ -51,17 +51,21 @@ namespace Application.DTOs
                 test.TotalPoint = command.TotalPoint;
 
                 test = await _TestRepository.AddAsync(test);
-
+                int total = 0;
                 foreach (var item in command.Questions)
                 {
                     item.TestId = test.Id;
-                    var responaceQuestionId = await _mediator.Send(new UpdateQuestionCommand
+                    var questionTotalPoints = await _mediator.Send(new UpdateQuestionCommand
                     {
                         Id = item.Id,
                         TestId = item.TestId,
                     });
-                    item.Id = responaceQuestionId.data;
+
+                    total = total + questionTotalPoints.data;
                 }
+                test.TotalPoint = total;
+                await _TestRepository.UpdateAsync(test);
+
                 return new Response<int>(test.Id);
             }
         }

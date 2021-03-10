@@ -54,16 +54,33 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.Status == (int)TestInstanceEnum.Closed).ToListAsync();
         }
 
-        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage()
+        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status)
         {
-            var x = await _testInstances
-            .Include(x => x.Test)
-            .Include(x => x.Student)
-            .Include(x => x.LessonInstance)
-            .ThenInclude(x => x.GroupInstance)
-            .ThenInclude(x => x.GroupDefinition)
-            .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
-            .ToListAsync();
+            var query = _testInstances.AsQueryable();
+            if (GroupDefinitionId != null)
+            {
+                query = query.Where(x => x.GroupInstance.GroupDefinitionId == GroupDefinitionId);
+            }
+            if (GroupInstanceId != null)
+            {
+                query = query.Where(x => x.GroupInstanceId == GroupInstanceId);
+            }
+            if (TestTypeId != null)
+            {
+                query = query.Where(x => x.Test.TestTypeId == TestTypeId);
+            }
+            if (Status != null)
+            {
+                query = query.Where(x => x.Status == Status);
+            }
+            return await query
+           .Include(x => x.Test)
+           .Include(x => x.Student)
+           .Include(x => x.LessonInstance)
+           .ThenInclude(x => x.GroupInstance)
+           .ThenInclude(x => x.GroupDefinition)
+           //    .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
+           .ToListAsync();
 
             // var queryNumericRange =
             //     from test in _testInstances
@@ -79,7 +96,6 @@ namespace Infrastructure.Persistence.Repositories
 
 
             // var items = queryNumericRange.ToList();
-            return x;
         }
 
         public override Task<TestInstance> GetByIdAsync(int id)
@@ -127,7 +143,7 @@ namespace Infrastructure.Persistence.Repositories
             return await _testInstances.Where(x => x.LessonInstanceId == LessonInstanceId).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int? status, int? TestType)
+        public async Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int? status, int? TestType, int? GroupInstanceId)
         {
             var query = _testInstances.AsQueryable();
 
@@ -139,6 +155,10 @@ namespace Infrastructure.Persistence.Repositories
             if (TestType != null)
             {
                 query = query.Where(x => x.Test.TestTypeId == TestType);
+            }
+            if (GroupInstanceId != null)
+            {
+                query = query.Where(x => x.GroupInstanceId == GroupInstanceId);
             }
 
             return await query.Where(x => x.CorrectionTeacherId == correctionTeacherId)

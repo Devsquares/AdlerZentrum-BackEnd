@@ -13,6 +13,10 @@ namespace Application.Features
 {
     public class GetAllTestsToManageQuery : IRequest<Response<IReadOnlyList<AllTestsToManageViewModel>>>
     {
+        public int? GroupDefinitionId { get; set; }
+        public int? GroupInstanceId { get; set; }
+        public int? TestTypeId { get; set; }
+        public int? Status { get; set; }
     }
     public class GetAllTestsToManageQueryHandler : IRequestHandler<GetAllTestsToManageQuery, Response<IReadOnlyList<AllTestsToManageViewModel>>>
     {
@@ -25,7 +29,7 @@ namespace Application.Features
         }
         public async Task<Response<IReadOnlyList<AllTestsToManageViewModel>>> Handle(GetAllTestsToManageQuery query, CancellationToken cancellationToken)
         {
-            var testinstance = await _testinstanceRepository.GetAllTestsToManage();
+            var testinstance = await _testinstanceRepository.GetAllTestsToManage(query.GroupDefinitionId, query.GroupInstanceId, query.TestTypeId, query.Status);
             if (testinstance == null) throw new ApiException($"TestInstance Not Found.");
 
             var testinstanceViewModel = _mapper.Map<IReadOnlyList<AllTestsToManageViewModel>>(testinstance);

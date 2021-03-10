@@ -34,7 +34,6 @@ namespace Application.Features
                 }
                 else
                 {
-
                     if (command.Status == (int)TestInstanceEnum.Pending)
                     {
                         item.Status = (int)TestInstanceEnum.Pending;
