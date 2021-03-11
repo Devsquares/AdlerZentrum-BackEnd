@@ -21,9 +21,11 @@ namespace Application.DTOs
         public class HomeworkCorrectionCommandHandler : IRequestHandler<HomeworkCorrectionCommand, Response<int>>
         {
             private readonly IHomeWorkSubmitionRepositoryAsync _HomeWorkSubmitionRepository;
-            public HomeworkCorrectionCommandHandler(IHomeWorkSubmitionRepositoryAsync HomeWorkSubmitionRepository)
+            private readonly IHomeWorkRepositoryAsync _homework;
+            public HomeworkCorrectionCommandHandler(IHomeWorkSubmitionRepositoryAsync HomeWorkSubmitionRepository, IHomeWorkRepositoryAsync homeWorkRepositoryAsync)
             {
                 _HomeWorkSubmitionRepository = HomeWorkSubmitionRepository;
+                _homework = homeWorkRepositoryAsync;
             }
             public async Task<Response<int>> Handle(HomeworkCorrectionCommand command, CancellationToken cancellationToken)
             {
@@ -34,7 +36,18 @@ namespace Application.DTOs
                 HomeWorkSubmition.Points = command.Points;
                 HomeWorkSubmition.Comment = command.Comment;
                 HomeWorkSubmition.Status = (int)HomeWorkSubmitionStatusEnum.Corrected;
-                //TODO calc the bouns.
+                
+                var homework = _homework.GetByIdAsync(HomeWorkSubmition.HomeworkId).Result;
+                int bouns = 0;
+                if (homework.BonusPoints > 0 && homework.BonusPointsStatus == (int)BonusPointsStatusEnum.Approved)
+                {
+                    if (bouns < (command.Points - homework.BonusPoints))
+                    {
+                        bouns = command.Points - homework.BonusPoints;
+                    }
+                }
+                HomeWorkSubmition.BonusPoints = bouns;
+
                 await _HomeWorkSubmitionRepository.UpdateAsync(HomeWorkSubmition);
                 return new Response<int>(HomeWorkSubmition.Id);
             }
