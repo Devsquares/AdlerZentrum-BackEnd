@@ -59,7 +59,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     groupDefinitionID = groupInstance.GroupDefinitionId;
                     groupInstanceId = groupInstance.Id;
                 }
-                var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId,command.GroupInstanceId);
+                var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId, command.GroupInstanceId);
                 List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
                 List<OverPaymentStudent> overPaymentStudent = new List<OverPaymentStudent>();
                 using (TransactionScope scope = new TransactionScope())
@@ -96,7 +96,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     }
                     await _InterestedStudentRepositoryAsync.ADDList(interestedStudents);
                     await _overPaymentStudentRepositoryAsync.ADDList(overPaymentStudent);
-                   var groupStudents=  _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
+                    var groupStudents = _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
                     await _groupInstanceStudentRepositoryAsync.DeleteBulkAsync(groupStudents);
                     var groups = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
                     await _groupInstanceRepositoryAsync.DeleteBulkAsync(groups);

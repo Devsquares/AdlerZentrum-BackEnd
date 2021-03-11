@@ -26,7 +26,7 @@ namespace Application.DTOs
             {
                 var groupDefinition = await _GroupDefinitionRepository.GetByIdAsync(command.Id);
                 if (groupDefinition == null) throw new ApiException($"Group Not Found.");
-                if (groupDefinition.Status != (int)GroupDefinationStatusEnum.New) throw new ApiException($"Group Not Allowed to update.");
+                if (groupDefinition.Status != (int)GroupDefinationStatusEnum.New) throw new ApiException($"Group Not Allowed to delete.");
                 
                 await _GroupDefinitionRepository.DeleteAsync(groupDefinition);
                 return new Response<int>(groupDefinition.Id);

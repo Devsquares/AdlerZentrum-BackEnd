@@ -16,7 +16,7 @@ namespace Application.DTOs
     public class CancelGroupDefinitionByIdCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public string  UserId { get; set; }
+        public string UserId { get; set; }
         public class CancelGroupDefinitionByIdCommandHandler : IRequestHandler<CancelGroupDefinitionByIdCommand, Response<int>>
         {
             private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepository;
@@ -40,19 +40,22 @@ namespace Application.DTOs
             {
                 var groupDefinition = await _GroupDefinitionRepository.GetByIdAsync(command.Id);
                 if (groupDefinition == null) throw new ApiException($"Group Not Found.");
+
+                // send mail.
                 var emailTemplates = _EmailTemplateRepository.GetEmailTemplateByEmailTypeId((int)EmailTypeEnum.Cancel);
-                if (emailTemplates == null || (emailTemplates!=null && emailTemplates.Count ==0)) throw new ApiException($"Cancel Email Template Not Found.");
+                if (emailTemplates == null || (emailTemplates != null && emailTemplates.Count == 0)) throw new ApiException($"Cancel Email Template Not Found.");
                 var studentEmails = _GroupInstanceStudentRepository.GetEmailsByGroupDefinationId(command.Id);
                 var user = _UsersRepository.GetUserById(command.UserId);
                 EmailRequest emailRequest = new EmailRequest();
                 emailRequest.Body = emailTemplates[0].TemplateBody;
-                emailRequest.Subject = "Cancle Group defination";
+                emailRequest.Subject = "Cancel Group defination";
                 emailRequest.From = user.Email;
                 for (int i = 0; i < studentEmails.Count; i++)
                 {
                     emailRequest.To += studentEmails[i] + ";";
                 }
                 await _EmailService.SendAsync(emailRequest);
+
                 groupDefinition.Status = (int)GroupDefinationStatusEnum.Canceld;
                 await _GroupDefinitionRepository.UpdateAsync(groupDefinition);
                 return new Response<int>(groupDefinition.Id);
