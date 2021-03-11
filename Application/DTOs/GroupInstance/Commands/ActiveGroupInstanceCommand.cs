@@ -77,8 +77,7 @@ namespace Application.DTOs
                             Serial = item.Order.ToString()
                         });
                     }
-                    // TODO: update group status set it with 1 and change it in the next iteration.
-                    groupInstance.Status = 1;
+                    groupInstance.Status = (int)GroupInstanceStatusEnum.Running;
                     await _groupInstanceRepositoryAsync.UpdateAsync(groupInstance);
                     // TODO: check before add
                     // await _lessonInstanceRepositoryAsync.DeleteBulkAsync(lessonInstances);
@@ -99,8 +98,6 @@ namespace Application.DTOs
                     List<TestInstance> testInstance = new List<TestInstance>();
                     foreach (var item in lessonInstances)
                     {
-                        // TODO get quiz for lesson.
-                        // TODO add get final test or sublevel test.
                         var quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
                         if (quiz != null)
                         {

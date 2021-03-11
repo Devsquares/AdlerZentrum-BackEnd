@@ -50,7 +50,6 @@ namespace WebApi
                 }
                 catch (Exception ex)
                 {
-                    // TODO make logger service
                     Log.Warning(ex, "An error occurred seeding the DB");
                 }
                 finally

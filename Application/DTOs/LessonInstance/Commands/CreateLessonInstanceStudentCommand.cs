@@ -22,8 +22,6 @@ namespace Application.DTOs
             }
             public async Task<Response<bool>> Handle(CreateLessonInstanceStudentCommand command, CancellationToken cancellationToken)
             {
-                // TODO need to be check if not working make it selcet then update then save.
-
                 // TODO if it absence again check last two lessons:
                 // if just last one create absnce reminder.
                 // if it is the third one make him disquilified.

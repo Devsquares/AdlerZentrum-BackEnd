@@ -255,6 +255,5 @@ Ref: "TimeSlot"."Id" < "TimeSlotDetails"."TimeTo"
 
 Ref: "GroupInstance"."Id" < "GroupDefinition"."TimeSlotId"
 
-//TODO:
 // 1) Grading (before tests + After tests)
 // 2) Review lessoninstace Table with its subtables (LessonInstanceStudent,Homework)

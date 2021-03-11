@@ -85,7 +85,6 @@ namespace WebApi.Controller
             }));
         }
 
-        // TODO need to be reviewd
         [HttpPut("TestInstanceSolution")]
         // [Authorize(Roles = "Student")]
         public async Task<IActionResult> Post(TestInstanceSolutionCommand command)
