@@ -21,5 +21,6 @@ namespace Domain.Entities
         public bool AutoCorrect { get; set; }
         public int Status { get; set; }
         public int TotalPoint { get; set; }
+        public DateTime? PlacementStartDate { get; set; }
     }
 }

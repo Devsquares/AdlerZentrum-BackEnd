@@ -65,5 +65,31 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new DeleteTestByIdCommand { Id = id }));
         }
 
+        [HttpPut("PlacementRelease")]
+        public async Task<IActionResult> PlacementRelease(int PlacementTestId, DateTime StartDate)
+        {
+            return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = PlacementTestId, StartDate = StartDate }));
+        }
+
+        [HttpPut("PlacementUnrelease")]
+        public async Task<IActionResult> PlacementUnrelease(int PlacementTestId)
+        {
+            return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = PlacementTestId, StartDate = null }));
+        }
+
+        [HttpGet("GetAllPlacementTests")]
+        public async Task<IActionResult> GetAllPlacementTests([FromQuery] GetAllPlacementTestsQuery filter)
+        {
+            if (filter.PageNumber == 0)
+            {
+                filter.PageNumber = 1;
+            }
+            if (filter.PageSize == 0)
+            {
+                filter.PageSize = 10;
+            }
+            return Ok(await Mediator.Send(filter));
+        }
+
     }
 }

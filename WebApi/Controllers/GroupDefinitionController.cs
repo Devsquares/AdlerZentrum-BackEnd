@@ -21,6 +21,18 @@ namespace WebApi.Controllers
             }));
         }
 
+        [HttpGet("GetAvailableForRegisteration")]
+        public async Task<IActionResult> GetAvailableForRegisteration([FromQuery] GroupDefinitionRequestParameter filter, string sublevelName, int? sublevelID)
+        {
+            return Ok(await Mediator.Send(new GetAvailableForRegisterationGroupDefinitionsQuery()
+            {
+                PageSize = filter.PageSize,
+                PageNumber = filter.PageNumber,
+                SubLevel = sublevelName,
+                SubLevelId = sublevelID
+            }));
+        }
+
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(int id)
         {

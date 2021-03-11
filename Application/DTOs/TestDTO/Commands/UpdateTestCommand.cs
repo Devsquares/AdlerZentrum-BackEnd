@@ -1,4 +1,5 @@
 ﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using Domain.Entities;
@@ -43,6 +44,7 @@ namespace Application.DTOs
             public async Task<Response<int>> Handle(UpdateTestCommand command, CancellationToken cancellationToken)
             {
                 var test = _TestRepository.GetByIdAsync(command.Id).Result;
+                if (test.Status == (int)TestStatusEnum.Final) throw new ApiException($"Cann't update used test.");
                 test.Name = command.Name;
                 test.TestDuration = command.TestDuration;
                 test.TestTypeId = command.TestTypeId;
@@ -51,19 +53,23 @@ namespace Application.DTOs
                 test.LevelId = command.LevelId;
                 test.TotalPoint = command.TotalPoint;
                 await _TestRepository.UpdateAsync(test);
-                
+
                 await _mediator.Send(new RemoveTestFromQuestionsCommand { TestId = command.Id });
 
+                int total = 0;
                 foreach (var item in command.Questions)
                 {
                     item.TestId = test.Id;
-                    var responaceQuestionId = await _mediator.Send(new UpdateQuestionCommand
+                    var questionTotalPoints = await _mediator.Send(new UpdateQuestionCommand
                     {
                         Id = item.Id,
                         TestId = item.TestId,
                     });
-                    item.Id = responaceQuestionId.data;
+
+                    total = total + questionTotalPoints.data;
                 }
+                test.TotalPoint = total;
+                await _TestRepository.UpdateAsync(test);
                 return new Response<int>(test.Id);
             }
         }

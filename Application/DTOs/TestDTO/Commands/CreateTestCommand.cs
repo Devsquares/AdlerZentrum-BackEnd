@@ -49,7 +49,8 @@ namespace Application.DTOs
                 test.SublevelId = command.SubLevelId;
                 test.LevelId = command.LevelId;
                 test.TotalPoint = command.TotalPoint;
-
+                test.PlacementStartDate = null;
+                
                 test = await _TestRepository.AddAsync(test);
                 int total = 0;
                 foreach (var item in command.Questions)

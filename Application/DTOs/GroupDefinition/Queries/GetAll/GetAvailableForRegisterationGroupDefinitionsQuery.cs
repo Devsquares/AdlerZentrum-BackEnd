@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class GetAllGroupDefinitionsQuery : IRequest<PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
+    public class GetAvailableForRegisterationGroupDefinitionsQuery : IRequest<PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string SubLevel { get; set; }
         public int? SubLevelId { get; set; }
     }
-    public class GetAllGroupDefinitionsQueryHandler : IRequestHandler<GetAllGroupDefinitionsQuery, PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
+    public class GetAvailableForRegisterationGroupDefinitionsQueryHandler : IRequestHandler<GetAvailableForRegisterationGroupDefinitionsQuery, PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
     {
         private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
         private readonly IGroupInstanceRepositoryAsync _GroupInstanceRepositoryAsync;
@@ -28,7 +28,7 @@ namespace Application.DTOs
         private readonly IInterestedStudentRepositoryAsync _InterestedStudentRepositoryAsync;
         private readonly IOverPaymentStudentRepositoryAsync _OverPaymentStudentRepositoryAsync;
         private readonly IMapper _mapper;
-        public GetAllGroupDefinitionsQueryHandler(IGroupDefinitionRepositoryAsync GroupDefinitionService, IMapper mapper,
+        public GetAvailableForRegisterationGroupDefinitionsQueryHandler(IGroupDefinitionRepositoryAsync GroupDefinitionService, IMapper mapper,
             IGroupInstanceRepositoryAsync GroupInstanceRepositoryAsync,
             IGroupInstanceStudentRepositoryAsync GroupInstanceStudentRepositoryAsync,
             IInterestedStudentRepositoryAsync InterestedStudentRepositoryAsync,
@@ -43,12 +43,12 @@ namespace Application.DTOs
 
         }
 
-        public async Task<PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>> Handle(GetAllGroupDefinitionsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>> Handle(GetAvailableForRegisterationGroupDefinitionsQuery request, CancellationToken cancellationToken)
         {
             int totalCount = 0;
             var validFilter = _mapper.Map<RequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
-            GroupDefinitions = _GroupDefinitionRepositoryAsync.GetAll(request.PageNumber, request.PageSize, request.SubLevel, out totalCount,request.SubLevelId);
+            GroupDefinitions = _GroupDefinitionRepositoryAsync.GetAvailableForRegisteration(request.PageNumber, request.PageSize, request.SubLevel, out totalCount,request.SubLevelId);
             var groupDefinitionsModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
             foreach (var groupDefinition in groupDefinitionsModel)
             {

@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
@@ -29,7 +30,7 @@ namespace Infrastructure.Persistence.Repositories
             return await base.AddAsync(entity);
         }
 
-        public List<GroupDefinition> GetALL(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null)
+        public List<GroupDefinition> GetAll(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null)
         {
             var groupDefinitionsList = groupDefinitions
             .Include(x => x.GroupCondition)
@@ -38,6 +39,21 @@ namespace Infrastructure.Persistence.Repositories
             .Include(x => x.TimeSlot)
                 .Where(x => (!string.IsNullOrEmpty(subLevelName) ? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()) : true)
                         && (sublevelId != null ? x.SubLevelId == sublevelId.Value : true)).ToList();
+            totalCount = groupDefinitionsList.Count();
+            groupDefinitionsList = groupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            return groupDefinitionsList;
+        }
+
+        public List<GroupDefinition> GetAvailableForRegisteration(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null)
+        {
+            var groupDefinitionsList = groupDefinitions
+            .Include(x => x.GroupCondition)
+            .Include(x => x.Sublevel)
+            .Include(x => x.Pricing)
+            .Include(x => x.TimeSlot)
+                .Where(x => (!string.IsNullOrEmpty(subLevelName) ? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()) : true)
+                        && (sublevelId != null ? x.SubLevelId == sublevelId.Value : true)
+                        && (x.Status == (int)GroupDefinationStatusEnum.New || x.Status == (int)GroupDefinationStatusEnum.Pending)).ToList();
             totalCount = groupDefinitionsList.Count();
             groupDefinitionsList = groupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return groupDefinitionsList;
@@ -56,9 +72,9 @@ namespace Infrastructure.Persistence.Repositories
         private async Task SetSerialNumberBeforeInsert(GroupDefinition groupDefinition)
         {
             string serial = "";
-            string sublevel,number;
+            string sublevel, number;
             int count;
-           
+
             if (groupDefinition.SubLevelId == 0)
                 throw new ApiException("Error while generating the serial number for the new " +
                     "group definition. Sublevel couldn't be found.");
@@ -79,7 +95,7 @@ namespace Infrastructure.Persistence.Repositories
             string newSerial;
             int maxSerialInt, newSerialInt;
 
-            maxSerialInt =  groupDefinitions.Where(x=> x.Serial != null && x.Serial != "" && x.Serial.Length == 7 && x.SubLevelId == sublevelId).ToList().Max(x => int.Parse(x.Serial.Substring(3,4)));
+            maxSerialInt = groupDefinitions.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 7 && x.SubLevelId == sublevelId).ToList().Max(x => int.Parse(x.Serial.Substring(3, 4)));
             newSerialInt = maxSerialInt + 1;
             newSerial = newSerialInt.ToString().PadLeft(SERIAL_DIGITS, '0');
             return newSerial;
