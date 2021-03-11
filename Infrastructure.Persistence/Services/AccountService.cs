@@ -644,11 +644,43 @@ namespace Infrastructure.Persistence.Services
             return new PagedResponse<List<TeachersModel>>(teachers, pageNumber, pageSize, totalCount);
         }
 
-        public async Task UpdateAdlerCardBalance(string studentId,int balance)
+        public async Task UpdateAdlerCardBalance(string studentId, int balance)
         {
             var student = _userManager.FindByIdAsync(studentId).Result;
             student.AdlerCardBalance += balance;
             await _userManager.UpdateAsync(student);
+        }
+
+        public async Task<PagedResponse<IEnumerable<UserClaimsModel>>> GetNonAllUserClaims(int pageNumber, int pageSize, string email, string name, string claimtype)
+        {
+            Claim filterclaim = new Claim(claimtype, claimtype);
+            var claimedusers = _userManager.GetUsersForClaimAsync(filterclaim).Result;
+            var claimedusersIds = claimedusers.Select(x => x.Id);
+            var teachers = _userManager.GetUsersInRoleAsync("TEACHER").Result;
+            var query = teachers.Where(x => !claimedusersIds.Contains(x.Id));
+            if (!string.IsNullOrEmpty(email))
+            {
+                query = teachers.Where(x => x.Email.ToLower() == email);
+            }
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = teachers.Where(x => x.FirstName.ToLower() == name.ToLower() || x.LastName == name.ToLower());
+            }
+
+
+            int totalCount = query.Count();
+
+            var queryData = query
+               .Select(x => new UserClaimsModel()
+               {
+                   userId = x.Id,
+                   FirstName = x.FirstName,
+                   LastName = x.LastName,
+                   Email = x.Email
+               })
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize)
+                .ToList();
+            return new PagedResponse<IEnumerable<UserClaimsModel>>(queryData, pageNumber, pageSize, totalCount);
         }
     }
 
