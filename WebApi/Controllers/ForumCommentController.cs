@@ -36,7 +36,7 @@ namespace WebApi.Controllers.v1
         // POST api/<controller>
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Post(CreateForumCommentCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -45,7 +45,7 @@ namespace WebApi.Controllers.v1
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Put(int id, UpdateForumCommentCommand command)
         {
             if (id != command.Id)
@@ -58,7 +58,7 @@ namespace WebApi.Controllers.v1
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteForumCommentByIdCommand { Id = id }));

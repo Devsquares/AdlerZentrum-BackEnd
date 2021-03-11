@@ -34,7 +34,7 @@ namespace Application.DTOs
                 HomeWorkSubmition.Points = command.Points;
                 HomeWorkSubmition.Comment = command.Comment;
                 HomeWorkSubmition.Status = (int)HomeWorkSubmitionStatusEnum.Corrected;
-
+                //TODO calc the bouns.
                 await _HomeWorkSubmitionRepository.UpdateAsync(HomeWorkSubmition);
                 return new Response<int>(HomeWorkSubmition.Id);
             }

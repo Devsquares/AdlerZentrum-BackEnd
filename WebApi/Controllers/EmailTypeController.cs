@@ -41,7 +41,7 @@ namespace WebApi.Controllers
         // POST api/<controller>
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Post(CreateEmailTypeCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Put(int id, UpdateEmailTypeCommand command)
         {
             if (id != command.Id)
@@ -63,7 +63,7 @@ namespace WebApi.Controllers
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteEmailTypeByIdCommand { Id = id }));

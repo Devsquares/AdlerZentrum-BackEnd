@@ -43,7 +43,7 @@ namespace WebApi.Controllers
         // POST api/<controller>
         [HttpPost("CreateAdlerCard")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Post(CreateAdlerCardCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -52,7 +52,7 @@ namespace WebApi.Controllers
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Put(int id, UpdateAdlerCardCommand command)
         {
             if (id != command.Id)
@@ -65,7 +65,7 @@ namespace WebApi.Controllers
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteAdlerCardByIdCommand { Id = id }));
@@ -73,7 +73,7 @@ namespace WebApi.Controllers
 
         [HttpPost("ActivateAdlerCard")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> ActivateAdlerCard(int AdlerCardID)
         {
             return Ok(await Mediator.Send(new ActivateAdlerCardCommand { AdlerCardId = AdlerCardID }));
@@ -81,7 +81,7 @@ namespace WebApi.Controllers
 
         [HttpGet("GetAdlerCardForStudent")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> GetAdlerCardForStudent(GetAdlerCardForStudent adlerCardForStudent)
         {
             
@@ -90,7 +90,7 @@ namespace WebApi.Controllers
 
         [HttpGet("GetAllAdlerCardForStudent")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> GetALLAdlerCardForStudent(int adlerCardUnitId, string studentId)
         {
             return Ok(await Mediator.Send(new GetAllAdlerCardsForStudent { AdlerCardUnitId = adlerCardUnitId , StudentId = studentId }));

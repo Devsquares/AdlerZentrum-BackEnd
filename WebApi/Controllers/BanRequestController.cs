@@ -46,7 +46,7 @@ namespace WebApi.Controllers
         // POST api/<controller>
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Post(CreateBanRequestCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -55,7 +55,7 @@ namespace WebApi.Controllers
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Put(int id, UpdateBanRequestCommand command)
         {
             if (id != command.Id)

@@ -34,7 +34,7 @@ namespace WebApi.Controllers
         // POST api/<controller>
         [HttpPost("CreateAdlerCardBundle")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Post(CreateAdlerCardsBundleCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -43,7 +43,7 @@ namespace WebApi.Controllers
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Put(int id, UpdateAdlerCardsBundleCommand command)
         {
             if (id != command.Id)
@@ -56,7 +56,7 @@ namespace WebApi.Controllers
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        //TODO: enable authorization
+        
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteAdlerCardsBundleByIdCommand { Id = id }));
