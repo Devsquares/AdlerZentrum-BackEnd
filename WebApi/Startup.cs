@@ -65,6 +65,9 @@ namespace WebApi
             services.AddTransient<IEmailService, EmailService>();
             Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", _config["AWS:AccessKey"]);
             Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", _config["AWS:SecretKey"]);
+            services.AddAuthorization(options =>
+         options.AddPolicy("AdlerCardPolicy",policy => policy.RequireClaim("AddAdlerCard")));
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

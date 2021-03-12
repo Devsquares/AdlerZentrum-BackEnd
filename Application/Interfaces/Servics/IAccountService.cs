@@ -33,5 +33,6 @@ namespace Application.Interfaces
         Task UpdatePhoto(string base64photo, string studentId);
         Task<PagedResponse<List<TeachersModel>>> GetAllTeachers(int pageNumber, int pageSize, string teacherName);
         Task UpdateAdlerCardBalance(string studentId, int balance);
+        Task<PagedResponse<IEnumerable<UserClaimsModel>>> GetNonAllUserClaims(int pageNumber, int pageSize, string email, string name, string claimtype);
     }
 }
