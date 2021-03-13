@@ -19,7 +19,7 @@ namespace Application.DTOs
         public string StudentId { get; set; }
         public int? PromoCodeInstanceId { get; set; }
         public int? PlacmentTestId { get; set; }
-
+        public string Email { get; set; }
         public class RegisterStudentGroupDefinitionCommandHandler : IRequestHandler<RegisterStudentGroupDefinitionCommand, Response<int>>
         {
             private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
@@ -83,6 +83,11 @@ namespace Application.DTOs
                 int studentCount = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(groupInstans.Id);
                 if (command.PromoCodeInstanceId.HasValue)
                 {
+                    var isPromoCodeInstanceStudent = _groupConditionPromoCodeRepositoryAsync.CheckStudentPromoCodeInstance(command.Email,command.StudentId,command.PromoCodeInstanceId.Value);
+                    if(!isPromoCodeInstanceStudent)
+                    {
+                        throw new Exception("this promocode is not for this student");
+                    }
                     canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstans.Id, command.PromoCodeInstanceId.Value);
                     canApplyInGroupDefinition = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeInGroupDefinitionGeneral(command.groupDefinitionId, command.PromoCodeInstanceId.Value);
                 }
