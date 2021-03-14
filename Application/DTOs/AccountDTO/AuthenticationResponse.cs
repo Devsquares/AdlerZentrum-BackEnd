@@ -21,5 +21,6 @@ namespace Application.DTOs.Account
         public int? SubLevelId { get; set; }
         public bool IsFinal { get; set; }
         public string Profilephoto { get; set; }
+        public string SubLevelName { get; set; }
     }
 }

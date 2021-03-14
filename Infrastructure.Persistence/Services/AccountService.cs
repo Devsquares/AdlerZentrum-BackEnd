@@ -119,7 +119,9 @@ namespace Infrastructure.Persistence.Services
             response.SubLevelId = user.SublevelId;
             if (user.SublevelId.HasValue && user.SublevelId != 0)
             {
-                response.IsFinal = _sublevelRepositoryAsync.GetByIdAsync(user.SublevelId.Value).Result.IsFinal;
+                var subLevel = _sublevelRepositoryAsync.GetByIdAsync(user.SublevelId.Value).Result;
+                response.IsFinal = subLevel.IsFinal;
+                response.SubLevelName = subLevel.Name;
             }
             response.Profilephoto = user.Profilephoto;
 
@@ -170,6 +172,13 @@ namespace Infrastructure.Persistence.Services
             response.ActiveGroupInstance = activeGroup;
             response.ChangePassword = user.ChangePassword;
             response.SubLevelId = user.SublevelId;
+
+            if (user.SublevelId.HasValue && user.SublevelId != 0)
+            {
+                var subLevel = _sublevelRepositoryAsync.GetByIdAsync(user.SublevelId.Value).Result;
+                response.IsFinal = subLevel.IsFinal;
+                response.SubLevelName = subLevel.Name;
+            }
 
             return new Response<AuthenticationResponse>(response, $"Token Refreshed.");
         }
