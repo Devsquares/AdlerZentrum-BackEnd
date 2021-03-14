@@ -156,7 +156,7 @@ namespace Application.Mappings
             CreateMap<DisqualificationRequest, GetAllDisqualificationRequestsViewModel>().ReverseMap();
             CreateMap<GetAllDisqualificationRequestsQuery, GetAllDisqualificationRequestsParameter>().ReverseMap();
             CreateMap<GroupInstanceStudents, GroupInstanceStudentsViewModel>().ReverseMap();
-
+            CreateMap<GetAvailableForRegisterationGroupDefinitionsQuery, RequestParameter>();
 
 
             // Adler Cards

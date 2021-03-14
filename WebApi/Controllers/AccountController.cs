@@ -59,7 +59,7 @@ namespace WebApi.Controllers
         {
             var origin = Request.Headers["origin"];
             var student = await _accountService.RegisterAsync(request, origin);
-            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId }));
+            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId,Email = request.Email }));
         }
 
         [HttpPost("addAccount")]
@@ -214,7 +214,7 @@ namespace WebApi.Controllers
                 registerRequest.LastName = lastName;
                 registerRequest.UserName = userName;
                 var student = await _accountService.RegisterAsync(registerRequest, origin);
-                await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId });
+                await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email= registerRequest.Email  });
             }
         }
     }

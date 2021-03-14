@@ -1,4 +1,5 @@
-﻿using Application.Exceptions;
+﻿using Application.Enums;
+using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using Domain.Entities;
@@ -56,6 +57,10 @@ namespace Application.DTOs.GroupInstance.Commands
                 {
                     var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId.Value).Result;
                     if (groupInstance == null) throw new ApiException($"Group Instance Not Found.");
+                    if(groupInstance.Status != (int)GroupInstanceStatusEnum.Pending )
+                    {
+                        throw new ApiException($"Can't remove this group Instance as the status isn't pending");
+                    }
                     groupDefinitionID = groupInstance.GroupDefinitionId;
                     groupInstanceId = groupInstance.Id;
                 }
