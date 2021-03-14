@@ -44,10 +44,9 @@ namespace WebApi.Controllers
 
         [AllowAnonymous]
         [HttpPost("refresh-token")]
-        public IActionResult RefreshToken()
+        public IActionResult RefreshToken([FromBody] string RefreshToken)
         {
-            var refreshToken = Request.Cookies["refreshToken"];
-            var response = _accountService.RefreshToken(refreshToken, GenerateIPAddress());
+            var response = _accountService.RefreshToken(RefreshToken, GenerateIPAddress());
 
             if (response == null)
                 return Unauthorized(new { message = "Invalid token" });
@@ -64,6 +63,7 @@ namespace WebApi.Controllers
                 var student = await _accountService.RegisterAsync(request, origin);
                 return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email }));
             }
+
         }
 
         [HttpPost("addAccount")]

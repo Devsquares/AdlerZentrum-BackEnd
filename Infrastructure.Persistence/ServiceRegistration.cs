@@ -57,7 +57,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<ITestRepositoryAsync, TestRepositoryAsync>();
             services.AddTransient<IGroupDefinitionRepositoryAsync, GroupDefinitionRepositoryAsync>();
             services.AddTransient<ITestRepositoryAsync, TestRepositoryAsync>();
-            services.AddTransient<ITestInstanceRepositoryAsync, TestInstanceRepositoryAsync>(); 
+            services.AddTransient<ITestInstanceRepositoryAsync, TestInstanceRepositoryAsync>();
             services.AddTransient<IGroupInstanceStudentRepositoryAsync, GroupInstanceStudentRepositoryAsync>();
             services.AddTransient<ISingleQuestionSubmissionRepositoryAsync, SingleQuestionSubmissionRepositoryAsync>();
             services.AddTransient<IChoiceSubmissionRepositoryAsync, ChoiceSubmissionRepositoryAsync>();
@@ -73,10 +73,10 @@ namespace Infrastructure.Persistence
             services.AddTransient<IDisqualificationRequestRepositoryAsync, DisqualificationRequestRepositoryAsync>();
             services.AddTransient<IJobRepositoryAsync, JobRepositoryAsync>();
             services.AddTransient<IPromoCodeInstanceRepositoryAsync, PromoCodeInstanceRepositoryAsync>();
-            services.AddTransient<IAdlerCardRepositoryAsync,AdlerCardRepositoryAsync>();
-            services.AddTransient<IAdlerCardsBundleRepositoryAsync,AdlerCardsBundleRepositoryAsync>();
-            services.AddTransient<IAdlerCardSubmissionRepositoryAsync,AdlerCardSubmissionRepositoryAsync>();
-            services.AddTransient<IAdlerCardsUnitRepositoryAsync,AdlerCardsUnitRepositoryAsync>();
+            services.AddTransient<IAdlerCardRepositoryAsync, AdlerCardRepositoryAsync>();
+            services.AddTransient<IAdlerCardsBundleRepositoryAsync, AdlerCardsBundleRepositoryAsync>();
+            services.AddTransient<IAdlerCardSubmissionRepositoryAsync, AdlerCardSubmissionRepositoryAsync>();
+            services.AddTransient<IAdlerCardsUnitRepositoryAsync, AdlerCardsUnitRepositoryAsync>();
             services.AddTransient<IAdlerCardBundleStudentRepositoryAsync, AdlerCardBundleStudentRepositoryAsync>();
             services.AddTransient<IForumTopicRepositoryAsync, ForumTopicRepositoryAsync>();
             services.AddTransient<IForumCommentRepositoryAsync, ForumCommentRepositoryAsync>();
@@ -116,8 +116,13 @@ namespace Infrastructure.Persistence
                         {
                             c.NoResult();
                             c.Response.StatusCode = 500;
-                            c.Response.ContentType = "text/plain";
-                            return c.Response.WriteAsync(c.Exception.ToString());
+                            c.Response.ContentType = "application/json";
+                            if (c.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                c.Response.Headers.Add("Token-Expired", "true");
+                            }
+                            var result = JsonConvert.SerializeObject(new Response<string>(c.Exception.ToString()));
+                            return c.Response.WriteAsync(result);
                         },
                         OnChallenge = context =>
                         {
