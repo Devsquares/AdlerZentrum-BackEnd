@@ -17,7 +17,8 @@ namespace Application.Interfaces.Repositories
         Task<IReadOnlyList<TestInstance>> GetTestInstanceToActive();
         Task<IReadOnlyList<object>> GetAllClosedAndPendingQuizzAsync(int GroupInstanceId);
         Task<List<TestInstance>> GetTestInstanceByLessonInstanceId(int LessonInstanceId);
-        Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId,int? GroupInstanceId, int? TestTypeId,int? Status);
+        Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, int PageNumber, int PageSize);
+        Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status);
         Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance);
         Task<List<TestInstance>> GetProgressByStudentId(string studentID);
     }

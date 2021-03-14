@@ -54,7 +54,7 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.Status == (int)TestInstanceEnum.Closed).ToListAsync();
         }
 
-        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status)
+        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, int pageNumber, int pageSize)
         {
             var query = _testInstances.AsQueryable();
             if (GroupDefinitionId != null)
@@ -79,6 +79,9 @@ namespace Infrastructure.Persistence.Repositories
            .Include(x => x.LessonInstance)
            .ThenInclude(x => x.GroupInstance)
            .ThenInclude(x => x.GroupDefinition)
+           .Skip((pageNumber - 1) * pageSize)
+            .AsNoTracking()
+            .Take(pageSize)
            //    .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
            .ToListAsync();
 
@@ -97,6 +100,52 @@ namespace Infrastructure.Persistence.Repositories
 
             // var items = queryNumericRange.ToList();
         }
+
+        public virtual async Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status)
+        {
+            var query = _testInstances.AsQueryable();
+            if (GroupDefinitionId != null)
+            {
+                query = query.Where(x => x.GroupInstance.GroupDefinitionId == GroupDefinitionId);
+            }
+            if (GroupInstanceId != null)
+            {
+                query = query.Where(x => x.GroupInstanceId == GroupInstanceId);
+            }
+            if (TestTypeId != null)
+            {
+                query = query.Where(x => x.Test.TestTypeId == TestTypeId);
+            }
+            if (Status != null)
+            {
+                query = query.Where(x => x.Status == Status);
+            }
+            return query
+           .Include(x => x.Test)
+           .Include(x => x.Student)
+           .Include(x => x.LessonInstance)
+           .ThenInclude(x => x.GroupInstance)
+           .ThenInclude(x => x.GroupDefinition)
+           //    .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
+           .Count();
+
+            // var queryNumericRange =
+            //     from test in _testInstances
+            //     group new AllTestsToManageViewModel()
+            //     {
+            //         GroupInstanceId = test.GroupInstanceId.Value,
+            //         Status = test.Status,
+            //         TestName = test.Test.Name,
+            //         TestId = test.Test.Id
+            //     } by new { test.GroupInstanceId, test.TestId } into percentGroup
+            //     orderby percentGroup.Key
+            //     select percentGroup;
+
+
+            // var items = queryNumericRange.ToList();
+        }
+
+
 
         public override Task<TestInstance> GetByIdAsync(int id)
         {

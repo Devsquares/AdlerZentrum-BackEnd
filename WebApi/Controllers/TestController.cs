@@ -65,10 +65,10 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new DeleteTestByIdCommand { Id = id }));
         }
 
-        [HttpPut("PlacementRelease")]
-        public async Task<IActionResult> PlacementRelease(int PlacementTestId, DateTime StartDate)
+        [HttpPost("PlacementRelease")]
+        public async Task<IActionResult> PlacementRelease([FromBody] PlacementReleaseCommand command)
         {
-            return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = PlacementTestId, StartDate = StartDate }));
+            return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = command.PlacementTestId, StartDate = command.StartDate }));
         }
 
         [HttpPut("PlacementUnrelease")]

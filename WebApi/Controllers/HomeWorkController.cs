@@ -36,17 +36,17 @@ namespace WebApi.Controllers
 
         [HttpGet("GetHomeworkForStudent")]
         //[Authorize(Roles = "Student")]
-        public async Task<IActionResult> GetHomeworkForStudent()
+        public async Task<IActionResult> GetHomeworkForStudent(GetAllHomeWorkSubmitionsForStudentQuery query)
         {
-            if (AuthenticatedUserService.GroupInstanceId == null)
+            if (AuthenticatedUserService.Role == "Student" && AuthenticatedUserService.GroupInstanceId == null)
             {
-                return Ok(new Response<object>("Not registerd in any group."));
+                return NotFound(new Response<object>("Not registerd in any group."));
             }
 
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsForStudentQuery()
             {
-                StudentId = AuthenticatedUserService.UserId,
-                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value
+                StudentId = query.StudentId,
+                GroupInstanceId = query.GroupInstanceId
             }));
         }
 
