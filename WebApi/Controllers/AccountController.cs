@@ -107,8 +107,8 @@ namespace WebApi.Controllers
                 return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
 
-        [HttpGet("GetAllUsersByRole")]
-        public async Task<IActionResult> GetAllUsersByRole([FromQuery] GetAllUsersParameter filter)
+        [HttpGet("GetAllStaffByRole")]
+        public async Task<IActionResult> GetAllStaffByRole([FromQuery] GetAllUsersParameter filter)
         {
             return Ok(await Mediator.Send(new GetAllUsersQuery() { Role = filter.Role, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }

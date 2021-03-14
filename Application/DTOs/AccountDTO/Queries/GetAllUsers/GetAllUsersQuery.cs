@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs 
+namespace Application.DTOs
 {
     public class GetAllUsersQuery : IRequest<UserPagedResponse<IEnumerable<GetAllUsersViewModel>>>
     {
@@ -30,7 +30,7 @@ namespace Application.DTOs
         public async Task<UserPagedResponse<IEnumerable<GetAllUsersViewModel>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<GetAllUsersParameter>(request);
-            var user = await _userRepository.GetPagedReponseUsersAsync(validFilter.PageNumber, validFilter.PageSize);
+            var user = await _userRepository.GetPagedReponseUsersAsync(validFilter.PageNumber, validFilter.PageSize, request.Role);
             var userViewModel = _mapper.Map<IEnumerable<GetAllUsersViewModel>>(user);
             return new UserPagedResponse<IEnumerable<GetAllUsersViewModel>>(userViewModel, validFilter.Role, validFilter.PageNumber, validFilter.PageSize);
         }
