@@ -552,11 +552,13 @@ namespace Infrastructure.Persistence.Services
         public async Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName)
         {
             var studentRoles = (from user in _userManager.Users
+                                join userrole in _context.UserRoles on user.Id equals userrole.UserId
+                                join role in _context.Roles on userrole.RoleId equals role.Id
                                 join gis in _context.GroupInstanceStudents on user.Id equals gis.StudentId
 
                                 into gj
                                 from x in gj.DefaultIfEmpty()
-                                where user.Role.NormalizedName == "STUDENT" &&
+                                where role.NormalizedName.ToLower() == RolesEnum.Student.ToString().ToLower() &&
                                 ((groupDefinitionId != null ? x.GroupInstance.GroupDefinitionId == groupDefinitionId : true)) &&
                                 (groupInstanceId != null ? x.GroupInstanceId == groupInstanceId : true) &&
                                 (!string.IsNullOrEmpty(studentName) ? (user.FirstName.ToLower().Contains(studentName.ToLower()) || user.LastName.ToLower().Contains(studentName.ToLower())) : true)

@@ -17,6 +17,7 @@ using Application.Filters;
 using Application.DTOs;
 using Domain.Models;
 using Application.Features.TestInstance.Queries;
+using System.Transactions;
 
 namespace WebApi.Controllers
 {
@@ -58,8 +59,11 @@ namespace WebApi.Controllers
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
             var origin = Request.Headers["origin"];
-            var student = await _accountService.RegisterAsync(request, origin);
-            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId,Email = request.Email }));
+            using (TransactionScope scope = new TransactionScope())
+            {
+                var student = await _accountService.RegisterAsync(request, origin);
+                return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email }));
+            }
         }
 
         [HttpPost("addAccount")]
@@ -168,9 +172,9 @@ namespace WebApi.Controllers
             return Ok();
         }
         [HttpPut("UpdatePhoto")]
-        public async Task<IActionResult> UpdatePhoto([FromBody] string base64photo, string studentId)
+        public async Task<IActionResult> UpdatePhoto([FromBody] UserPhotoModel userPhoto)
         {
-            await _accountService.UpdatePhoto(base64photo, studentId);
+            await _accountService.UpdatePhoto(userPhoto.base64photo, userPhoto.UserId);
             return Ok();
         }
 
@@ -213,8 +217,11 @@ namespace WebApi.Controllers
                 registerRequest.FirstName = firstName;
                 registerRequest.LastName = lastName;
                 registerRequest.UserName = userName;
-                var student = await _accountService.RegisterAsync(registerRequest, origin);
-                await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email= registerRequest.Email  });
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    var student = await _accountService.RegisterAsync(registerRequest, origin);
+                    await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = registerRequest.Email });
+                }
             }
         }
     }
