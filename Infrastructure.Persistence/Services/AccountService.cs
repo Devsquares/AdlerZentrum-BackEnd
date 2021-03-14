@@ -133,12 +133,12 @@ namespace Infrastructure.Persistence.Services
 
         public async Task<Response<AuthenticationResponse>> RefreshToken(string token, string ipAddress)
         {
-            var user = _userManager.Users.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
+            var user = _userManager.Users.Include(x => x.RefreshTokens).SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
 
             // return null if no user found with token
             if (user == null) return null;
 
-            var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+            var refreshToken = user.RefreshTokens.Where(x => x.Token == token).SingleOrDefault();
 
             // return null if token is no longer active
             if (!refreshToken.IsActive) return null;
