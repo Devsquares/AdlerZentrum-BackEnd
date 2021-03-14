@@ -453,10 +453,19 @@ namespace Infrastructure.Persistence.Services
             return true;
         }
 
-        public async Task<IReadOnlyList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize)
+        public async Task<IList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize, string role)
         {
-            List<ApplicationUser> users = _userManager.Users.Include(u => u.Role).ToList();
-            return users.AsReadOnly();
+            IList<ApplicationUser> users;
+            if (role == "Student") return null;
+            if (!string.IsNullOrEmpty(role) && role != "Guest")
+            {
+                users = _userManager.GetUsersInRoleAsync(role).Result;
+            }
+            else
+            {
+                users = _userManager.Users.Include(u => u.Role).ToList();
+            }
+            return users.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
         public async Task DeleteAsync(string id)
