@@ -19,6 +19,7 @@ namespace Application.DTOs
         public int PageSize { get; set; }
         public string SubLevel { get; set; }
         public int? SubLevelId { get; set; }
+        public int? PromoCodeInstanceId { get; set; }
     }
     public class GetAvailableForRegisterationGroupDefinitionsQueryHandler : IRequestHandler<GetAvailableForRegisterationGroupDefinitionsQuery, PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
     {
@@ -48,7 +49,7 @@ namespace Application.DTOs
             int totalCount = 0;
             var validFilter = _mapper.Map<RequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
-            GroupDefinitions = _GroupDefinitionRepositoryAsync.GetAvailableForRegisteration(request.PageNumber, request.PageSize, request.SubLevel, out totalCount,request.SubLevelId);
+            GroupDefinitions = _GroupDefinitionRepositoryAsync.GetAvailableForRegisteration(request.PageNumber, request.PageSize, request.SubLevel, out totalCount,request.SubLevelId,request.PromoCodeInstanceId);
             var groupDefinitionsModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
             foreach (var groupDefinition in groupDefinitionsModel)
             {

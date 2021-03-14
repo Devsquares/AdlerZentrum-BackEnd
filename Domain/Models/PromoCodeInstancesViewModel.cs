@@ -19,6 +19,7 @@ namespace Domain.Models
         public DateTime? EndDate { get; set; }
         public DateTime? CreatedDate { get; set; }
         public bool? IsValid { get; set; }
+        public string GroupDefinitionSerial { get; set; }
 
     }
 }
