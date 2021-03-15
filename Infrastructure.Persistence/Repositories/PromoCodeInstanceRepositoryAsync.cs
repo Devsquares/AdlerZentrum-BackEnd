@@ -25,6 +25,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             var promocodesInstancesquery = _promocodeinstances
                 .Include(x => x.Student)
+                 .Include(x => x.GroupDefinition)
                 .Include(x => x.PromoCode).AsQueryable();
             //.Where(x => (promocodeId != null ? x.PromoCodeId == promocodeId:true) &&
             //            (!string.IsNullOrEmpty(promoCodeName)? x.PromoCode.Name == promoCodeName:true) &&
@@ -64,7 +65,8 @@ namespace Infrastructure.Persistence.Repositories
                 EndDate = x.EndDate,
                 CreatedDate = x.CreatedDate,
                 StudentEmail = x.StudentEmail,
-                PromoCodeValue = x.PromoCode.Value
+                PromoCodeValue = x.PromoCode.Value,
+                GroupDefinitionSerial = x.GroupDefinition != null ? x.GroupDefinition.Serial : null
             }).ToList();
             return promocodesInstancesList;
         }
@@ -74,6 +76,7 @@ namespace Infrastructure.Persistence.Repositories
             return _promocodeinstances
                 .Include(x => x.PromoCode)
                 .Include(x => x.Student)
+                 .Include(x => x.GroupDefinition)
                 .Where(x => x.PromoCodeKey == promoKey).DefaultIfEmpty().Select(x => new PromoCodeInstancesViewModel()
                 {
                     Id = x.Id,
@@ -87,7 +90,8 @@ namespace Infrastructure.Persistence.Repositories
                     IsUsed = x.IsUsed,
                     CreatedDate = x.CreatedDate,
                     StudentEmail = x.StudentEmail,
-                    PromoCodeValue = x.PromoCode.Value
+                    PromoCodeValue = x.PromoCode.Value,
+                    GroupDefinitionSerial = x.GroupDefinition != null? x.GroupDefinition.Serial:null
                 }).FirstOrDefault();
         }
         public PromoCodeInstance GetById(int id)

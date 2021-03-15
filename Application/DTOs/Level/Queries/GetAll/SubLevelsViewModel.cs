@@ -15,6 +15,8 @@ namespace Application.DTOs
         public bool IsFinal { get; set; }
         public DateTime? CreatedDate { get; set; }
         public List<LessonDefinitionViewModel> LessonDefinitions { get; set; }
-
+        public int Quizpercent { get; set; }
+        public int SublevelTestpercent { get; set; }
+        public int FinalTestpercent { get; set; }
     }
 }

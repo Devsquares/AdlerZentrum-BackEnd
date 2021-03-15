@@ -21,7 +21,7 @@ namespace Application.DTOs
             }
             public async Task<Response<Domain.Entities.Level>> Handle(GetLevelByIdQuery query, CancellationToken cancellationToken)
             {
-                var level = await _levelService.GetByIdAsync(query.Id);
+                var level = await _levelService.GetById(query.Id);
                 if (level == null) throw new ApiException($"Level Not Found.");
                 return new Response<Domain.Entities.Level>(level);
             }

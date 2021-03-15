@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
-using System; 
+using Domain.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Application.DTOs
 {
@@ -40,6 +42,6 @@ namespace Application.DTOs
         public int ActualTotalGroupInstances { get; set; }
         public int TotalOverPaymentStudents { get; set; }
         public int TotalInterestedStudents { get; set; }
-
+        public List<List<PromoCodeCountModel>> PromoCodes { get; set; } = new List<List<PromoCodeCountModel>>();
     }
 }

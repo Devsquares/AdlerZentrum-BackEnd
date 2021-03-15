@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;
+using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -28,11 +29,13 @@ namespace Application.DTOs
         private readonly IInterestedStudentRepositoryAsync _InterestedStudentRepositoryAsync;
         private readonly IOverPaymentStudentRepositoryAsync _OverPaymentStudentRepositoryAsync;
         private readonly IMapper _mapper;
+        private readonly IGroupConditionPromoCodeRepositoryAsync _groupconditionpromocodeRepository;
         public GetAllGroupDefinitionsQueryHandler(IGroupDefinitionRepositoryAsync GroupDefinitionService, IMapper mapper,
             IGroupInstanceRepositoryAsync GroupInstanceRepositoryAsync,
             IGroupInstanceStudentRepositoryAsync GroupInstanceStudentRepositoryAsync,
             IInterestedStudentRepositoryAsync InterestedStudentRepositoryAsync,
-            IOverPaymentStudentRepositoryAsync OverPaymentStudentRepositoryAsync)
+            IOverPaymentStudentRepositoryAsync OverPaymentStudentRepositoryAsync,
+            IGroupConditionPromoCodeRepositoryAsync groupconditionpromocodeRepository)
         {
             _GroupDefinitionRepositoryAsync = GroupDefinitionService;
             _mapper = mapper;
@@ -40,6 +43,7 @@ namespace Application.DTOs
             _GroupInstanceStudentRepositoryAsync = GroupInstanceStudentRepositoryAsync;
             _InterestedStudentRepositoryAsync = InterestedStudentRepositoryAsync;
             _OverPaymentStudentRepositoryAsync = OverPaymentStudentRepositoryAsync;
+            _groupconditionpromocodeRepository = groupconditionpromocodeRepository;
 
         }
 
@@ -56,6 +60,17 @@ namespace Application.DTOs
                 groupDefinition.ActualTotalStudents = await _GroupInstanceStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
                 groupDefinition.TotalInterestedStudents = _InterestedStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
                 groupDefinition.TotalOverPaymentStudents = _OverPaymentStudentRepositoryAsync.GetCountOfStudentsByGroupDefinitionId(groupDefinition.Id);
+                var promos = _groupconditionpromocodeRepository.GetAllByGroupCondition(groupDefinition.GroupConditionId);
+                foreach (var promo in promos)
+                {
+                    var promocodemodel = promo.Select(x => new PromoCodeCountModel()
+                    {
+                        count = x.Count,
+                        promocodeId = x.PromoCodeId,
+                        PromoCodeName = x.PromoCode.Name
+                    }).ToList();
+                    groupDefinition.PromoCodes.Add(promocodemodel);
+                }
             }
             return new PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>(groupDefinitionsModel, request.PageNumber, request.PageSize, totalCount);
         }

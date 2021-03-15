@@ -22,14 +22,15 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetAvailableForRegisteration")]
-        public async Task<IActionResult> GetAvailableForRegisteration([FromQuery] GroupDefinitionRequestParameter filter, string sublevelName, int? sublevelID)
+        public async Task<IActionResult> GetAvailableForRegisteration([FromQuery] GroupDefinitionRequestParameter filter, string sublevelName, int? sublevelID,int? PromoCodeInstanceId)
         {
             return Ok(await Mediator.Send(new GetAvailableForRegisterationGroupDefinitionsQuery()
             {
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
                 SubLevel = sublevelName,
-                SubLevelId = sublevelID
+                SubLevelId = sublevelID,
+                PromoCodeInstanceId = PromoCodeInstanceId
             }));
         }
 
