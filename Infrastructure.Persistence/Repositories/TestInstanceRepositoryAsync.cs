@@ -179,6 +179,11 @@ namespace Infrastructure.Persistence.Repositories
             return await _testInstances.Where(x => x.LessonInstance.GroupInstanceId == groupInstance).ToListAsync();
         }
 
+        public async Task<List<TestInstance>> GetAllTestInstancesByGroupAndTest(int groupInstance, int testId)
+        {
+            return await _testInstances.Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.TestId == testId).ToListAsync();
+        }
+
         public virtual async Task<IReadOnlyList<object>> GetAllClosedAndPendingQuizzAsync(int GroupInstanceId)
         {
             return await _testInstances

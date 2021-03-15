@@ -7,5 +7,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface ITimeSlotRepositoryAsync : IGenericRepositoryAsync<TimeSlot>
     {
+        void DeleteDetails(int TimeSlotId);
+        void AddDetails(List<TimeSlotDetails> list);
     }
 }
