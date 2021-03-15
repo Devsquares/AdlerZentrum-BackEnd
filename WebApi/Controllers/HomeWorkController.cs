@@ -36,7 +36,7 @@ namespace WebApi.Controllers
 
         [HttpGet("GetHomeworkForStudent")]
         //[Authorize(Roles = "Student")]
-        public async Task<IActionResult> GetHomeworkForStudent(GetAllHomeWorkSubmitionsForStudentQuery query)
+        public async Task<IActionResult> GetHomeworkForStudent([FromQuery] GetAllHomeWorkSubmitionsForStudentQuery query)
         {
             if (AuthenticatedUserService.Role == "Student" && AuthenticatedUserService.GroupInstanceId == null)
             {
@@ -52,12 +52,12 @@ namespace WebApi.Controllers
 
         [HttpGet("GetHomeworkForStudentByGroupInstanceId")]
         //[Authorize(Roles = "Student")]
-        public async Task<IActionResult> GetHomeworkForStudentByGroupInstanceId(int groupInstanceId)
+        public async Task<IActionResult> GetHomeworkForStudentByGroupInstanceId([FromQuery] GetAllHomeWorkSubmitionsForStudentQuery query)
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsForStudentQuery()
             {
-                StudentId = AuthenticatedUserService.UserId,
-                GroupInstanceId = groupInstanceId
+                StudentId = query.StudentId,
+                GroupInstanceId = query.GroupInstanceId
             }));
         }
 
@@ -88,7 +88,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetHomeworkSubmitions")]
-        [Authorize(Roles = "Teacher")]
+        // [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> GetAllHomeworkSubmitions()
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
