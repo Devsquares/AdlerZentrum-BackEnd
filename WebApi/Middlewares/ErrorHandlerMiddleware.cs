@@ -50,6 +50,10 @@ namespace WebApi.Middlewares
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
+                    case Microsoft.IdentityModel.Tokens.SecurityTokenValidationException e:
+                        // not found error
+                        response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                        break;
                     default:
                         // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
