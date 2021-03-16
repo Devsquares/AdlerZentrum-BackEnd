@@ -12,6 +12,7 @@ namespace Domain.Entities
         public bool IsPlacementTest { get; set; }
         public int? PromoCodeInstanceId { get; set; }
         public virtual PromoCodeInstance PromoCodeInstance { get; set; }
+        public double AchievedScore { get; set; }
 
     }
 }

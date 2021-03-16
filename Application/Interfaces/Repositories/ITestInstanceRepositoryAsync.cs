@@ -20,6 +20,6 @@ namespace Application.Interfaces.Repositories
         Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, int PageNumber, int PageSize);
         Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status);
         Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance);
-        Task<List<TestInstance>> GetProgressByStudentId(string studentID);
+        Task<List<TestInstance>> GetProgressByStudentId(string studentID, List<int> groupInstanceIds);
     }
 }
