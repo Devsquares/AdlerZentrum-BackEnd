@@ -99,7 +99,7 @@ namespace Infrastructure.Persistence.Repositories
             {
                 return new List<GroupInstanceStudents>();
             }
-            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstanceId == groupinstance.GroupInstanceId).OrderBy(x=>x.AchievedScore).ToListAsync();
+            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstanceId == groupinstance.GroupInstanceId).OrderByDescending(x=>x.AchievedScore).ToListAsync();
 
         }
         public async Task<List<GroupInstanceStudents>> GetAllStudentInGroupDefinitionByStudentId(string studentId)
@@ -109,7 +109,7 @@ namespace Infrastructure.Persistence.Repositories
             {
                 return new List<GroupInstanceStudents>();
             }
-            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).OrderBy(x => x.AchievedScore).ToListAsync();
+            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).OrderByDescending(x => x.AchievedScore).ToListAsync();
         }
 
         public List<GroupInstanceStudents> SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist,out List<GroupInstanceStudents> groupInstanceStudentsobjectList)
