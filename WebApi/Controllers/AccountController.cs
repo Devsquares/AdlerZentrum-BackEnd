@@ -61,7 +61,9 @@ namespace WebApi.Controllers
             using (TransactionScope scope = new TransactionScope())
             {
                 var student = await _accountService.RegisterAsync(request, origin);
-                return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email }));
+                await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email });
+                scope.Complete();
+                return Ok();
             }
 
         }

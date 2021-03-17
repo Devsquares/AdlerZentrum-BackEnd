@@ -45,7 +45,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public int? GetActiveGroupInstance(string userId)
         {
-            return groupInstanceStudents.Where(x => x.StudentId == userId && x.IsDefault == true).FirstOrDefault()?.GroupInstanceId;
+            return groupInstanceStudents.Where(x => x.StudentId == userId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDefault == true).FirstOrDefault()?.GroupInstanceId;
         }
 
         public override async Task<IReadOnlyList<GroupInstance>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)

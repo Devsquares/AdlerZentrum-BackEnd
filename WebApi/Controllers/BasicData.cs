@@ -48,12 +48,16 @@ namespace WebApi.Controllers
             List<string> culuterList = new List<string>();
             CultureInfo[] cultureInfos = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 
-            foreach (CultureInfo item in cultureInfos)
-            {
-                RegionInfo regionInfo = new RegionInfo(item.LCID);
-                if (!(culuterList.Contains(regionInfo.EnglishName)))
+            IEnumerable<RegionInfo> AllRegionInfo =
+               CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                   .Select(culture => new RegionInfo(culture.Name)) // using Name instead of LCID
+                   .ToList();
+
+            foreach (RegionInfo item in AllRegionInfo)
+            { 
+                if (!(culuterList.Contains(item.EnglishName)))
                 {
-                    culuterList.Add(regionInfo.EnglishName);
+                    culuterList.Add(item.EnglishName);
                 }
             }
             culuterList.Sort();
