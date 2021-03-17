@@ -17,11 +17,12 @@ namespace Application.Interfaces.Repositories
         Task<int> GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId);
         GroupInstanceModel GetLastByStudentId(string studentId);
         List<GroupInstanceModel> GetAllLastByStudentId(string studentId);
-        Task<List<ApplicationUser>> GetAllStudentInGroupInstanceByStudentId(string studentId);
-        Task<List<ApplicationUser>> GetAllStudentInGroupDefinitionByStudentId(string studentId);
+        Task<List<GroupInstanceStudents>> GetAllStudentInGroupInstanceByStudentId(string studentId);
+        Task<List<GroupInstanceStudents>> GetAllStudentInGroupDefinitionByStudentId(string studentId);
 
         List<GroupInstanceStudents> SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist, out List<GroupInstanceStudents> groupInstanceStudentsobjectList);
         List<IGrouping<int, GroupInstanceStudents>> GetAllByGroupDefinition(int? groupDefinitionId= null, int? groupInstanceId = null);
         List<GroupInstanceStudents> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null);
+        List<GroupInstanceStudents> GetgroupInstanceByStudentId(string studentId);
     }
 }

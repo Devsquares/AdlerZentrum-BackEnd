@@ -222,13 +222,13 @@ namespace Infrastructure.Persistence.Repositories
               .ThenInclude(x => x.GroupInstance).ToListAsync();
         }
 
-        public async Task<List<TestInstance>> GetProgressByStudentId(string studentID)
+        public async Task<List<TestInstance>> GetProgressByStudentId(string studentID,List<int> groupInstanceIds)
         {
             return await _testInstances
                 .Include(x => x.Test)
                 .Include(x => x.Test.Level)
                 .Include(x => x.Test.Sublevel)
-                .Where(x => x.StudentId == studentID).ToListAsync();
+                .Where(x => x.StudentId == studentID && groupInstanceIds.Contains(x.GroupInstanceId.Value)).ToListAsync();
         }
     }
 }
