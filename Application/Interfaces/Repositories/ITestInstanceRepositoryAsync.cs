@@ -21,5 +21,6 @@ namespace Application.Interfaces.Repositories
         Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status);
         Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance);
         Task<List<TestInstance>> GetProgressByStudentId(string studentID, List<int> groupInstanceIds);
+        Task<List<TestInstance>> GetAllTestInstancesByGroupAndTest(int groupInstance, int testId);
     }
 }

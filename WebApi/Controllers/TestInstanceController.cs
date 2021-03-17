@@ -163,7 +163,7 @@ namespace WebApi.Controller
         }
 
         [HttpPut("TestToClose")]
-        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
         public async Task<IActionResult> TestToClose(CloseTestInstanceCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -194,6 +194,22 @@ namespace WebApi.Controller
         [HttpPut("TestToCloseByGroup")]
         [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
         public async Task<IActionResult> TestToCloseByGroup(UpdateTestInstanceStatusByGroupCommand command)
+        {
+            command.Status = (int)TestInstanceEnum.Missed;
+            return Ok(await Mediator.Send(command));
+        }
+
+         [HttpPut("TestToActiveAll")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToActiveAll(UpdateTestInstanceStatusAllCommand command)
+        {
+            command.Status = (int)TestInstanceEnum.Pending;
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut("TestToCloseAll")]
+        [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> TestToCloseAll(UpdateTestInstanceStatusAllCommand command)
         {
             command.Status = (int)TestInstanceEnum.Missed;
             return Ok(await Mediator.Send(command));

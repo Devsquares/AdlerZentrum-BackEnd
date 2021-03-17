@@ -6,18 +6,19 @@ using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs 
+namespace Application.DTOs
 {
     public class UpdateTimeSlotCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int? Status { get; set; }
-        public virtual ICollection<TimeSlotDetails> TimeSlotDetails { get; set; }
+        public ICollection<TimeSlotDetails> TimeSlotDetails { get; set; }
 
         public class UpdateTimeSlotCommandHandler : IRequestHandler<UpdateTimeSlotCommand, Response<int>>
         {
@@ -37,7 +38,13 @@ namespace Application.DTOs
                 else
                 {
                     Reflection.CopyProperties(command, TimeSlot);
+                    _TimeSlotRepository.DeleteDetails(command.Id);
                     await _TimeSlotRepository.UpdateAsync(TimeSlot);
+                    foreach (var item in TimeSlot.TimeSlotDetails)
+                    {
+                        item.TimeSlotId = command.Id;
+                    }
+                    _TimeSlotRepository.AddDetails(TimeSlot.TimeSlotDetails.ToList());
                     return new Response<int>(TimeSlot.Id);
                 }
             }

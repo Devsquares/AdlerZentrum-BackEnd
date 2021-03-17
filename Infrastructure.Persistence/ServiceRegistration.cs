@@ -17,6 +17,7 @@ using Domain.Settings;
 using Newtonsoft.Json;
 using Application.Wrappers;
 using Domain.Entities;
+using System.Net;
 
 namespace Infrastructure.Persistence
 {
@@ -115,11 +116,11 @@ namespace Infrastructure.Persistence
                         OnAuthenticationFailed = c =>
                         {
                             c.NoResult();
-                            c.Response.StatusCode = 500;
+                            c.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                             c.Response.ContentType = "application/json";
                             if (c.Exception.GetType() == typeof(SecurityTokenExpiredException))
                             {
-                                c.Response.Headers.Add("Token-Expired", "true");
+                                c.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
                             }
                             var result = JsonConvert.SerializeObject(new Response<string>(c.Exception.ToString()));
                             return c.Response.WriteAsync(result);
@@ -127,14 +128,14 @@ namespace Infrastructure.Persistence
                         OnChallenge = context =>
                         {
                             context.HandleResponse();
-                            context.Response.StatusCode = 401;
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                             context.Response.ContentType = "application/json";
                             var result = JsonConvert.SerializeObject(new Response<string>("You are not Authorized"));
                             return context.Response.WriteAsync(result);
                         },
                         OnForbidden = context =>
                         {
-                            context.Response.StatusCode = 403;
+                            context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
                             context.Response.ContentType = "application/json";
                             var result = JsonConvert.SerializeObject(new Response<string>("You are not authorized to access this resource"));
                             return context.Response.WriteAsync(result);

@@ -16,14 +16,14 @@ namespace Application.Features
     {
         public int Id { get; set; }
 
-        public class AssginTeacherTestInstanceCommandHandler : IRequestHandler<AssginTeacherTestInstanceCommand, Response<int>>
+        public class CloseTestInstanceCommandHandler : IRequestHandler<CloseTestInstanceCommand, Response<int>>
         {
             private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
-            public AssginTeacherTestInstanceCommandHandler(ITestInstanceRepositoryAsync testinstanceRepository)
+            public CloseTestInstanceCommandHandler(ITestInstanceRepositoryAsync testinstanceRepository)
             {
                 _testinstanceRepository = testinstanceRepository;
             }
-            public async Task<Response<int>> Handle(AssginTeacherTestInstanceCommand command, CancellationToken cancellationToken)
+            public async Task<Response<int>> Handle(CloseTestInstanceCommand command, CancellationToken cancellationToken)
             {
                 var testinstance = await _testinstanceRepository.GetByIdAsync(command.Id);
 
@@ -33,8 +33,11 @@ namespace Application.Features
                 }
                 else
                 {
-                    testinstance.Status = (int)TestInstanceEnum.Closed;
-                    testinstance.SubmissionDate = DateTime.Now;
+                    if (testinstance.Status != (int)TestInstanceEnum.Solved)
+                    {
+                        testinstance.Status = (int)TestInstanceEnum.Missed;
+                        testinstance.SubmissionDate = DateTime.Now;
+                    }
 
                     await _testinstanceRepository.UpdateAsync(testinstance);
                     return new Response<int>(testinstance.Id);

@@ -168,7 +168,8 @@ namespace WebApi.Controllers
         [HttpPost("SendMessageToInstructor")]
         public async Task<IActionResult> SendMessageToInstructor([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
         {
-            await _accountService.SendMessageToInstructor(subject, message, studentId);
+            // TODO: fix it.
+            // await _accountService.SendMessageToInstructor(subject, message, studentId);
             return Ok();
         }
         [HttpPut("UpdatePhoto")]
