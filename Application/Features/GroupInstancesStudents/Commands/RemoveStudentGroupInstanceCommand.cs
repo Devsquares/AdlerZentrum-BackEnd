@@ -72,10 +72,16 @@ namespace Application.Features.GroupInstancesStudents.Commands
                             RegisterDate = student.CreatedDate.Value,
                         });
                     }
+                    student.GroupInstance = null;
+                    student.PromoCodeInstance = null;
+                    student.Student = null;
                     await _groupInstanceStudentRepositoryAsync.DeleteAsync(student);
                     var studentCount = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(groupInstance.Id);
                     if (studentCount == 0)
                     {
+                        groupInstance.GroupDefinition = null;
+                        groupInstance.Students = null;
+                        groupInstance.LessonInstances = null;
                         await _groupInstanceRepositoryAsync.DeleteAsync(groupInstance);
                     }
                     scope.Complete();
