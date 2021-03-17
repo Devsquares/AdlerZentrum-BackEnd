@@ -37,7 +37,7 @@ namespace Application.DTOs
             List<KeyValuePair<string, RankModel>> rankedStudents = new List<KeyValuePair<string, RankModel>>();
             // KeyValuePair<string, RankModel> rankedStudent = new KeyValuePair<string, RankModel>();
             RankModel rankmodel = new RankModel();
-            List<ApplicationUser> users;
+            List<GroupInstanceStudents> users;
             if (request.isInstance)
             {
                 users = await _GroupInstanceStudentRepositoryAsync.GetAllStudentInGroupInstanceByStudentId(request.UserId);
@@ -52,9 +52,15 @@ namespace Application.DTOs
             //    int rand_num = rd.Next(1, 20);
             //    rankedStudents.Add(new KeyValuePair<string, RankModel>(item.Id, new RankModel() { StudentName = item.FirstName, Rank = rand_num }));
             //}
+            int rank = 0;
             for (int i = 1; i <= users.Count; i++)
             {
-                rankedStudents.Add(new KeyValuePair<string, RankModel>(users[i-1].Id, new RankModel() { StudentName = users[i-1].FirstName, Rank = i }));
+                rank = i;
+                if(i > 1 && users[i-1].AchievedScore == users[i-2].AchievedScore)
+                {
+                    rank = i - 2;
+                }
+                rankedStudents.Add(new KeyValuePair<string, RankModel>(users[i-1].StudentId, new RankModel() { StudentName = users[i-1].Student.FirstName, Rank = rank }));
             }
             rankedStudents = rankedStudents.OrderBy(x => x.Value.Rank).ToList();
             return new List<KeyValuePair<string, RankModel>>(rankedStudents);

@@ -92,24 +92,24 @@ namespace Infrastructure.Persistence.Repositories
                 .ToList();
         }
 
-        public async Task<List<ApplicationUser>> GetAllStudentInGroupInstanceByStudentId(string studentId)
+        public async Task<List<GroupInstanceStudents>> GetAllStudentInGroupInstanceByStudentId(string studentId)
         {
             var groupinstance = await groupInstanceStudents.Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
             if(groupinstance == null)
             {
-                return new List<ApplicationUser>();
+                return new List<GroupInstanceStudents>();
             }
-            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstanceId == groupinstance.GroupInstanceId).Select(x => x.Student).ToListAsync();
+            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstanceId == groupinstance.GroupInstanceId).OrderByDescending(x=>x.AchievedScore).ToListAsync();
 
         }
-        public async Task<List<ApplicationUser>> GetAllStudentInGroupDefinitionByStudentId(string studentId)
+        public async Task<List<GroupInstanceStudents>> GetAllStudentInGroupDefinitionByStudentId(string studentId)
         {
             var groupinstance = await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.StudentId == studentId).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
             if (groupinstance == null)
             {
-                return new List<ApplicationUser>();
+                return new List<GroupInstanceStudents>();
             }
-            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).Select(x => x.Student).ToListAsync();
+            return await groupInstanceStudents.Include(x => x.Student).Where(x => x.GroupInstance.GroupDefinitionId == groupinstance.GroupInstance.GroupDefinitionId).OrderByDescending(x => x.AchievedScore).ToListAsync();
         }
 
         public List<GroupInstanceStudents> SaveAllGroupInstanceStudents(int groupDefinitionId, List<StudentsGroupInstanceModel> groupInstanceStudentslist,out List<GroupInstanceStudents> groupInstanceStudentsobjectList)
@@ -204,6 +204,25 @@ namespace Infrastructure.Persistence.Repositories
                                                         && (groupinstanceId!=null?x.GroupInstanceId ==groupinstanceId:true)).ToList();
             return students;
             
+        }
+
+        public List<GroupInstanceStudents> GetgroupInstanceByStudentId(string studentId)
+        {
+            List<GroupInstanceStudents> list = new List<GroupInstanceStudents>();
+            var groupinstancestudent =  groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+                .Where(x => x.StudentId == studentId && x.IsDefault == true).FirstOrDefault();
+            list.Add(groupinstancestudent);
+            if (groupinstancestudent == null)
+            {
+                return null;
+            }
+            if(groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.IsFinal)
+            {
+                list = new List<GroupInstanceStudents>();
+               list = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+                .Where(x => x.StudentId == studentId && x.GroupInstance.GroupDefinition.Sublevel.Level.Id == groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.LevelId).ToList();
+            }
+            return list;
         }
     }
 }
