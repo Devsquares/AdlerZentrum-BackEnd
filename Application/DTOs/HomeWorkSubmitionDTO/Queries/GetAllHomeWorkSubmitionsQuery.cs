@@ -12,6 +12,7 @@ namespace Application.DTOs
     {
         public int? GroupInstanceId { get; set; }
         public string TeacherId { get; set; }
+        public int? Status { get; set; }
     }
     public class GetAllHomeWorkSubmitionsQueryHandler : IRequestHandler<GetAllHomeWorkSubmitionsQuery, IEnumerable<GetAllHomeWorkSubmitionsViewModel>>
     {
@@ -28,11 +29,11 @@ namespace Application.DTOs
             IReadOnlyList<HomeWorkSubmition> homeWorkSubmitions = null;
             if (request.GroupInstanceId == null)
             {
-                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByTeacherIdAsync(request.TeacherId);
+                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByTeacherIdAsync(request.TeacherId, request.Status);
             }
             else
             {
-                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByGroupInstanceAsync(request.GroupInstanceId.Value);
+                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByGroupInstanceAsync(request.GroupInstanceId.Value, request.Status);
             }
             var userViewModel = _mapper.Map<IEnumerable<GetAllHomeWorkSubmitionsViewModel>>(homeWorkSubmitions);
             return userViewModel;

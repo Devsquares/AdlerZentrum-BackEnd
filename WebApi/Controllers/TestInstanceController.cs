@@ -142,7 +142,7 @@ namespace WebApi.Controller
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "SuperAdmin")]
+        //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteTestInstanceByIdCommand { Id = id }));
