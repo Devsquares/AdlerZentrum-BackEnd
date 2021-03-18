@@ -49,7 +49,8 @@ namespace Application.DTOs
                         promocodeslst.Add(new GroupConditionPromoCodeInputModel()
                         {
                             PromoCodeId = promocode.PromoCodeId,
-                            Count = promocode.Count
+                            Count = promocode.Count,
+                            PromoCodeName = promocode.PromoCode.Name
                         });
                     }
                     groupConditionViewModel.PromoCodes.AddRange(new List<List<GroupConditionPromoCodeInputModel>>() { promocodeslst });
