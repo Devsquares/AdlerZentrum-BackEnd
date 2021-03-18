@@ -88,11 +88,11 @@ namespace WebApi.Controller
 
         [HttpGet("GetPlacementTestForStudent")]
         [Authorize(Roles = "Student")]
-        public async Task<IActionResult> GetPlacementTestForStudent([FromQuery] int id)
+        public async Task<IActionResult> GetPlacementTestForStudent()
         {
             return Ok(await Mediator.Send(new GetPlacementByStudentQuery
             {
-                Id = id
+                StudentId = AuthenticatedUserService.UserId,
             }));
         }
 

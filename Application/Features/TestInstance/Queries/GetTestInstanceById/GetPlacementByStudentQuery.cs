@@ -14,7 +14,7 @@ namespace Application.Features
 {
     public class GetPlacementByStudentQuery : IRequest<Response<GetAllTestInstancesViewModel>>
     {
-        public int Id { get; set; }
+        public string StudentId { get; set; }
         public class GetPlacementByStudentQueryHandler : IRequestHandler<GetPlacementByStudentQuery, Response<GetAllTestInstancesViewModel>>
         {
             private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
@@ -26,7 +26,7 @@ namespace Application.Features
             }
             public async Task<Response<GetAllTestInstancesViewModel>> Handle(GetPlacementByStudentQuery query, CancellationToken cancellationToken)
             {
-                var testinstance = await _testinstanceRepository.GetByIdAsync(query.Id);
+                var testinstance = await _testinstanceRepository.GetAllPlacementTestsByStudent(query.StudentId);
                 if (testinstance == null) throw new ApiException($"Test Instance Not Found.");
                 var viewModel = _mapper.Map<GetAllTestInstancesViewModel>(testinstance);
                 return new Response<GetAllTestInstancesViewModel>(viewModel);
