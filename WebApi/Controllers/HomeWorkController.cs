@@ -78,12 +78,13 @@ namespace WebApi.Controllers
 
 
         [HttpGet("GetHomeworkSubmitionByGroupInstance")]
-        [Authorize(Roles = "Student")]
+        // [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetHomeworkSubmitionByGroupInstance([FromQuery] GetAllHomeWorkSubmitionsQuery filter)
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
             {
-                GroupInstanceId = filter.GroupInstanceId
+                GroupInstanceId = filter.GroupInstanceId,
+                Status = filter.Status
             }));
         }
 
