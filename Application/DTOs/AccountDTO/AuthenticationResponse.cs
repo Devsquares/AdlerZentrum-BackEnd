@@ -22,5 +22,6 @@ namespace Application.DTOs.Account
         public bool IsFinal { get; set; }
         public string Profilephoto { get; set; }
         public string SubLevelName { get; set; }
+        public int? PlacementTestId { get; set; }
     }
 }

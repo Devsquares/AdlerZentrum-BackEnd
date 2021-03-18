@@ -70,6 +70,7 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<ForumTopic> ForumTopics { get; set; }
         public DbSet<ForumComment> ForumComments { get; set; }
         public DbSet<ForumReply> ForumReplys { get; set; }
+        public DbSet<PlacementRelease> PlacementReleases { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
