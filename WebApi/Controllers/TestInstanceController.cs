@@ -85,6 +85,17 @@ namespace WebApi.Controller
             }));
         }
 
+
+        [HttpGet("GetPlacementTestForStudent")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetPlacementTestForStudent()
+        {
+            return Ok(await Mediator.Send(new GetPlacementByStudentQuery
+            {
+                StudentId = AuthenticatedUserService.UserId,
+            }));
+        }
+
         [HttpPut("TestInstanceSolution")]
         // [Authorize(Roles = "Student")]
         public async Task<IActionResult> Post(TestInstanceSolutionCommand command)
@@ -199,7 +210,7 @@ namespace WebApi.Controller
             return Ok(await Mediator.Send(command));
         }
 
-         [HttpPut("TestToActiveAll")]
+        [HttpPut("TestToActiveAll")]
         [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
         public async Task<IActionResult> TestToActiveAll(UpdateTestInstanceStatusAllCommand command)
         {

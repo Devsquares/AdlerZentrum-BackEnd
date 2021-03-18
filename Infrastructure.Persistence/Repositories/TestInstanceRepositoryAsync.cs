@@ -222,13 +222,25 @@ namespace Infrastructure.Persistence.Repositories
               .ThenInclude(x => x.GroupInstance).ToListAsync();
         }
 
-        public async Task<List<TestInstance>> GetProgressByStudentId(string studentID,List<int> groupInstanceIds)
+        public async Task<List<TestInstance>> GetProgressByStudentId(string studentID, List<int> groupInstanceIds)
         {
             return await _testInstances
                 .Include(x => x.Test)
                 .Include(x => x.Test.Level)
                 .Include(x => x.Test.Sublevel)
                 .Where(x => x.StudentId == studentID && groupInstanceIds.Contains(x.GroupInstanceId.Value)).ToListAsync();
+        }
+
+        public async Task<List<TestInstance>> GetAllPlacementTestsByStudent(string studentId)
+        {
+            return await _testInstances
+                 .Include(x => x.LessonInstance)
+                 .Include(x => x.Test)
+                 .Include(x => x.Test.Questions)
+                 .ThenInclude(x => x.SingleQuestions)
+                 .ThenInclude(x => x.Choices)
+                 .Where(x => x.StudentId == studentId &&
+                 x.Test.TestTypeId == (int)TestTypeEnum.placement).ToListAsync();
         }
     }
 }

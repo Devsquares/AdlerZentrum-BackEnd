@@ -33,6 +33,7 @@ namespace Domain.Entities
         public bool Disqualified { get; set; }
         public string DisqualifiedComment { get; set; }
         public int AdlerCardBalance { get; set; }
+        public int? PlacmentTestId { get; set; }
         public bool OwnsToken(string token)
         {
             return this.RefreshTokens?.Find(x => x.Token == token) != null;
