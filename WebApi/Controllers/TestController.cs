@@ -65,17 +65,17 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new DeleteTestByIdCommand { Id = id }));
         }
 
-        [HttpPost("PlacementRelease")]
-        public async Task<IActionResult> PlacementRelease([FromBody] PlacementReleaseCommand command)
-        {
-            return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = command.PlacementTestId, StartDate = command.StartDate }));
-        }
+        // [HttpPost("PlacementRelease")]
+        // public async Task<IActionResult> PlacementRelease([FromBody] PlacementReleaseCommand command)
+        // {
+        //     return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = command.PlacementTestId, StartDate = command.StartDate }));
+        // }
 
-        [HttpPut("PlacementUnrelease")]
-        public async Task<IActionResult> PlacementUnrelease(int PlacementTestId)
-        {
-            return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = PlacementTestId, StartDate = null }));
-        }
+        // [HttpPut("PlacementUnrelease")]
+        // public async Task<IActionResult> PlacementUnrelease(int PlacementTestId)
+        // {
+        //     return Ok(await Mediator.Send(new PlacementReleaseCommand { PlacementTestId = PlacementTestId, StartDate = null }));
+        // }
 
         [HttpGet("GetAllPlacementTests")]
         public async Task<IActionResult> GetAllPlacementTests([FromQuery] GetAllPlacementTestsQuery filter)

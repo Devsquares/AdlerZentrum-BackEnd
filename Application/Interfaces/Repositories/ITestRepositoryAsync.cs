@@ -13,6 +13,8 @@ namespace Application.Interfaces.Repositories
         Task<Test> GetQuizzByLessonDefinationAsync(int lessonDefinationdId);
         Task<Test> GetSubLevelTestBySublevelAsync(int Sublevel);
         Task<Test> GetFinalLevelTestBySublevelAsync(int level);
-         int GetCount(int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null);
+        int GetCount(int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null);
+        Task<IReadOnlyList<TestsViewModel>> GetPlacementPagedReponseAsync(int pageNumber, int pageSize, int? testStatus = null);
+        int GetPlacementCount();
     }
 }

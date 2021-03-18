@@ -46,7 +46,7 @@ namespace Infrastructure.Persistence.Services
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
         private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
         private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignmentRepositoryAsync;
-   
+
         private readonly ApplicationDbContext _context;
 
         public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
@@ -97,10 +97,9 @@ namespace Infrastructure.Persistence.Services
 
             var roles = await _userManager.GetRolesAsync(user);
             int? activeGroup = null;
-            int? PlacementTestId = null;
             if (roles.Contains("Student"))
             {
-                activeGroup = _groupInstanceRepositoryAsync.GetActiveGroupInstance(user.Id); 
+                activeGroup = _groupInstanceRepositoryAsync.GetActiveGroupInstance(user.Id);
             }
 
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user, roles, activeGroup);
@@ -119,6 +118,8 @@ namespace Infrastructure.Persistence.Services
             response.Banned = user.Banned;
             response.BanComment = user.BanComment;
             response.SubLevelId = user.SublevelId;
+            response.PlacementTestId = user.PlacmentTestId;
+
             if (user.SublevelId.HasValue && user.SublevelId != 0)
             {
                 var subLevel = _sublevelRepositoryAsync.GetByIdAsync(user.SublevelId.Value).Result;
@@ -174,6 +175,7 @@ namespace Infrastructure.Persistence.Services
             response.ActiveGroupInstance = activeGroup;
             response.ChangePassword = user.ChangePassword;
             response.SubLevelId = user.SublevelId;
+            response.PlacementTestId = user.PlacmentTestId;
 
             if (user.SublevelId.HasValue && user.SublevelId != 0)
             {

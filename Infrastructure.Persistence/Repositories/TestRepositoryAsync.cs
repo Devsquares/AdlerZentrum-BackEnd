@@ -16,9 +16,11 @@ namespace Infrastructure.Persistence.Repositories
     public class TestRepositoryAsync : GenericRepositoryAsync<Test>, ITestRepositoryAsync
     {
         private readonly DbSet<Test> tests;
+        private readonly DbSet<PlacementRelease> _placementReleases;
         public TestRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
             tests = dbContext.Set<Test>();
+            _placementReleases = dbContext.Set<PlacementRelease>();
         }
 
         public async Task<IReadOnlyList<TestsViewModel>> GetPagedReponseAsync(int pageNumber, int pageSize, int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null)
@@ -63,12 +65,43 @@ namespace Infrastructure.Persistence.Repositories
                   .ToListAsync();
         }
 
+        public async Task<IReadOnlyList<TestsViewModel>> GetPlacementPagedReponseAsync(int pageNumber, int pageSize, int? testStatus = null)
+        {
+            IQueryable<PlacementRelease> placementReleases = _placementReleases
+                .Include(x => x.Test)
+                .ThenInclude(x => x.LessonDefinition)
+                .ThenInclude(x => x.Sublevel)
+                .ThenInclude(x => x.Level);
+
+            if (testStatus != null)
+            {
+                placementReleases = placementReleases.Where(x => x.Test.Status == testStatus);
+            }
+            return await placementReleases.Where(x => x.Cancel == false && x.RelaeseDate <= DateTime.Now)
+                  .Select(x => new TestsViewModel()
+                  {
+                      Id = x.Test.Id,
+                      Name = x.Test.Name,
+                      TestTypeId = x.Test.TestTypeId,
+                      LessonDefinition = x.Test.LessonDefinition,
+                      Status = x.Test.Status,
+                      StatusName = (Enum.Parse<TestStatusEnum>(x.Test.Status.ToString())).ToString()
+                  })
+                  .Skip((pageNumber - 1) * pageSize)
+                  .Take(pageSize)
+                  .AsNoTracking()
+                  .ToListAsync();
+        }
+
+        public int GetPlacementCount()
+        {
+            return _placementReleases.Where(x => x.Cancel == false && x.RelaeseDate <= DateTime.Now).Count();
+        }
+
         public int GetCount(int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null)
         {
-            IQueryable<Test> test = tests
-                .Include(x => x.LessonDefinition)
-                .Include(x => x.Sublevel)
-                .Include(x => x.Level);
+            IQueryable<Test> test = tests;
+
             if (testtype != null)
             {
                 test = test.Where(x => x.TestTypeId == testtype);

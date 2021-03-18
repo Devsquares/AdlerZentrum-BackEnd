@@ -31,11 +31,10 @@ namespace Application.DTOs
         }
 
         public async Task<PagedResponse<IEnumerable<TestsViewModel>>> Handle(GetAllPlacementTestsQuery request, CancellationToken cancellationToken)
-        {
-            var validFilter = _mapper.Map<RequestParameter>(request);
-            var testModel = await _TestService.GetPagedReponseAsync(validFilter.PageNumber, validFilter.PageSize, (int)TestTypeEnum.placement, null, null, null);
-            int count = _TestService.GetCount((int)TestTypeEnum.placement, null, null, null);
-            return new PagedResponse<IEnumerable<TestsViewModel>>(testModel, validFilter.PageNumber, validFilter.PageSize, count);
+        { 
+            var testModel = await _TestService.GetPlacementPagedReponseAsync(request.PageNumber, request.PageSize);
+            int count = _TestService.GetPlacementCount();
+            return new PagedResponse<IEnumerable<TestsViewModel>>(testModel, request.PageNumber, request.PageSize, count);
         }
     }
 }
