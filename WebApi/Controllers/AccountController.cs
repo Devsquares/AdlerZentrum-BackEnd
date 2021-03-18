@@ -224,6 +224,7 @@ namespace WebApi.Controllers
                 {
                     var student = await _accountService.RegisterAsync(registerRequest, origin);
                     await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = registerRequest.Email });
+                    scope.Complete();
                 }
             }
         }
