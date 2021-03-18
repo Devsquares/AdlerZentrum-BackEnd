@@ -82,6 +82,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IForumTopicRepositoryAsync, ForumTopicRepositoryAsync>();
             services.AddTransient<IForumCommentRepositoryAsync, ForumCommentRepositoryAsync>();
             services.AddTransient<IForumReplyRepositoryAsync, ForumReplyRepositoryAsync>();
+            services.AddTransient<IPlacementReleaseReopsitoryAsync, PlacementReleaseReopsitoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
