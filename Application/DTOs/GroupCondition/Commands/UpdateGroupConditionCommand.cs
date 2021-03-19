@@ -49,6 +49,11 @@ namespace Application.DTOs
                     //delete group condition promocodes and details
                     var deletedGroupConditionDetail = _groupConditionDetailsRepository.GetByGroupConditionId(command.Id);
                     var deletedPromocodes = _groupConditionPromoCodeRepository.GetByGroupConditionDetailId(deletedGroupConditionDetail);
+                    foreach (var item in deletedPromocodes)
+                    {
+                        item.GroupConditionDetails = null;
+                        item.PromoCode = null;
+                    }
                     await _groupConditionPromoCodeRepository.DeleteBulkAsync(deletedPromocodes);
                     await _groupConditionDetailsRepository.DeleteBulkAsync(deletedGroupConditionDetail);
                     // add new ones

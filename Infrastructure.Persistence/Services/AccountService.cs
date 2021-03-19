@@ -582,7 +582,7 @@ namespace Infrastructure.Persistence.Services
                                     LastName = user.LastName,
                                     Email = user.Email,
                                     PhoneNumber = user.PhoneNumber,
-                                    GroupSerial = x.GroupInstance != null ? $"{x.GroupInstance.GroupDefinitionId}.{x.GroupInstanceId}" : string.Empty
+                                    GroupSerial = x.GroupInstance != null ?x.GroupInstance.Serial : string.Empty
                                 }).ToList();
             //var studentRoles = _userManager.Users.Include(x => x.Role).Where(x => x.Role.NormalizedName == "STUDENT").LeftJoin(
             //          _context.GroupInstanceStudents,

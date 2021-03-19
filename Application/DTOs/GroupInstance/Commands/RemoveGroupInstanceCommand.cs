@@ -57,9 +57,9 @@ namespace Application.DTOs.GroupInstance.Commands
                 {
                     var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId.Value).Result;
                     if (groupInstance == null) throw new ApiException($"Group Instance Not Found.");
-                    if(groupInstance.Status != (int)GroupInstanceStatusEnum.Pending )
+                    if(groupInstance.Status == (int)GroupInstanceStatusEnum.Running )
                     {
-                        throw new ApiException($"Can't remove this group Instance as the status isn't pending");
+                        throw new ApiException($"Can't remove this group Instance as the status is Running");
                     }
                     groupDefinitionID = groupInstance.GroupDefinitionId;
                     groupInstanceId = groupInstance.Id;
