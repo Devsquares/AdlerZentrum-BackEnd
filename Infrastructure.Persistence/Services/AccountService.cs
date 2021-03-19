@@ -240,6 +240,12 @@ namespace Infrastructure.Persistence.Services
             {
                 //TODO need to be change
                 user.EmailConfirmed = true;
+                if (request.GroupDefinitionId.HasValue)
+                {
+                    // TODO: need to be changed.
+                    user.SublevelId = 1;
+                }
+
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)
                 {
@@ -249,28 +255,9 @@ namespace Infrastructure.Persistence.Services
                         return new Response<string>(user.Id, message: $"User Registered.");
                     }
 
-                    ////var verificationUri = await SendVerificationEmail(user, origin);
+                    //var verificationUri = await SendVerificationEmail(user, origin);
+                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
 
-
-                    ////return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
-                    //// _groupInstanceRepositoryAsync.AddStudentToTheGroupInstance(request.GroupInstanceId, user.Id);
-
-                    //int count = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(request.GroupInstanceId);
-                    //var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(request.GroupInstanceId).Result;
-
-                    //var groupDefinition = _groupDefinitionRepositoryAsync.GetByIdAsync(groupInstance.GroupDefinitionId).Result;
-                    //var condtion = _groupConditionRepositoryAsync.GetByIdAsync(groupDefinition.GroupConditionId);
-
-                    //if (count > condtion.Result.NumberOfSolts)
-                    //{
-                    //    throw new ApiException($"Group is complate now, Contact the admin.");
-                    //}
-                    //await _groupInstanceStudentRepositoryAsync.AddAsync(new GroupInstanceStudents
-                    //{
-                    //    GroupInstanceId = request.GroupInstanceId,
-                    //    StudentId = user.Id,
-                    //    IsDefault = true
-                    //});
                     return new Response<string>(user.Id, message: $"User Registered.");
                 }
                 else
@@ -582,7 +569,7 @@ namespace Infrastructure.Persistence.Services
                                     LastName = user.LastName,
                                     Email = user.Email,
                                     PhoneNumber = user.PhoneNumber,
-                                    GroupSerial = x.GroupInstance != null ?x.GroupInstance.Serial : string.Empty
+                                    GroupSerial = x.GroupInstance != null ? x.GroupInstance.Serial : string.Empty
                                 }).ToList();
             //var studentRoles = _userManager.Users.Include(x => x.Role).Where(x => x.Role.NormalizedName == "STUDENT").LeftJoin(
             //          _context.GroupInstanceStudents,

@@ -31,7 +31,8 @@ namespace Infrastructure.Persistence.Repositories
                   .ThenInclude(x => x.Choices)
                   .Where(x => x.LessonInstance.GroupInstanceId == groupInstance &&
                   x.StudentId == student &&
-                  x.Test.TestTypeId == (int)testType).ToListAsync();
+                  x.Test.TestTypeId == (int)testType)
+                  .OrderBy(x => x.LessonInstanceId).ToListAsync();
         }
 
         public virtual async Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin()

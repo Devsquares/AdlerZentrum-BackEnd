@@ -75,9 +75,9 @@ namespace Infrastructure.Persistence.Repositories
 
             if (testStatus != null)
             {
-                placementReleases = placementReleases.Where(x => x.Test.Status == testStatus);
+                placementReleases = placementReleases.Where(x => x.Test.Status == testStatus && x.RelaeseDate < DateTime.Now);
             }
-            return await placementReleases.Where(x => x.Cancel == false && x.RelaeseDate <= DateTime.Now)
+            return await placementReleases.Where(x => x.Cancel == false)
                   .Select(x => new TestsViewModel()
                   {
                       Id = x.Test.Id,

@@ -23,5 +23,7 @@ namespace Application.DTOs
         public DateTime? SubmitionDate { get; set; }
         public int Points { get; set; }
         public string Comment { get; set; }
+
+        public int BonusPoints { get; set; }
     }
 }

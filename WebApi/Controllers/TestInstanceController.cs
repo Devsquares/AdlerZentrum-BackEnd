@@ -40,7 +40,7 @@ namespace WebApi.Controller
         }
 
         [HttpGet("GetQuizzesForStudent")]
-        [Authorize(Roles = "SuperAdmin,Student")]
+        //[Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Student")]
         public async Task<IActionResult> GetQuizzesForStudent()
         {
             if (AuthenticatedUserService.GroupInstanceId == null)
@@ -50,8 +50,8 @@ namespace WebApi.Controller
 
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {
-                StudentId = AuthenticatedUserService.UserId,
-                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
+                StudentId = "d68cf5b5-7b6f-4f7f-96be-ae033aeedf1b",
+                GroupInstanceId = 82,//AuthenticatedUserService.GroupInstanceId.Value,
                 TestType = Application.Enums.TestTypeEnum.quizz
             }));
         }
