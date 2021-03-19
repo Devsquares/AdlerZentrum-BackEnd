@@ -17,7 +17,7 @@ namespace Domain.Models
         public DateTime? CreatedDate { get; set; }
         public bool IsCurrent { get; set; } = false;
         public TimeSlot TimeSlots { get; set; }
-
+        public Sublevel sublevel { get; set; }
 
     }
 }
