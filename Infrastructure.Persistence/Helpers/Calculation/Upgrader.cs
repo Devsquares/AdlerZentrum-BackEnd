@@ -18,6 +18,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
         private DbContext dbContext;
         private ApplicationUser user;
         private GroupInstanceStudents currentGroup;
+
         private bool isFinal;
 
         public Upgrader(DbContext dbContext, ApplicationUser user)
@@ -121,6 +122,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 .Include(x => x.LessonInstance.GroupInstance.GroupDefinition.Sublevel)
                 .Where(x => x.StudentId == user.Id
                 && x.LessonInstance.GroupInstanceId == currentGroup.Id
+                && x.LessonInstance.SubmittedReport
                 && !x.Attend)
                 .Count();
 
@@ -142,7 +144,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
         public void fail()
         {
             currentGroup.Succeeded = false;
-            currentGroup.IsDefault = false; //he should be removed from the group, do we need here a disqualified column?
+            //he should be removed from the group, do we need here a disqualified column?
             dbContext.Update(currentGroup);
         }
 
@@ -154,8 +156,8 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 .Where(x => x.StudentId == user.Id
                 && x.IsDefault == false
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Pending
-                && x.GroupInstance.GroupDefinition.SubLevelId == currentGroup.GroupInstance.GroupDefinition.Sublevel.NextSublevelId
-                && x.IsEligible)
+                && x.GroupInstance.GroupDefinition.Sublevel.Order == currentGroup.GroupInstance.GroupDefinition.Sublevel.Order + 1 
+                && !x.IsEligible)
                 .FirstOrDefault();
 
             if (nextGroup != null)

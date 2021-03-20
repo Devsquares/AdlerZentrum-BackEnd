@@ -31,6 +31,8 @@ namespace Application.Features.TestInstance.Queries
             }
             public async Task<Response<CurrentProgressModel>> Handle(GetCurrentProgressForStudent query, CancellationToken cancellationToken)
             {
+
+                
                 var groupinstanceStudent = _groupInstanceStudentRepositoryAsync.GetgroupInstanceByStudentId(query.StudentId);
                 if(groupinstanceStudent== null)
                 {
@@ -51,6 +53,8 @@ namespace Application.Features.TestInstance.Queries
                     currentProgressModel.Quizzes.TotalScore += quiz.Test.TotalPoint;
                     currentProgressModel.Quizzes.AchievedScore += quiz.Points;
                 }
+
+                //TODO : Remove all percent calculations and get the achievedscore from the groupinstancestudent table
                 var quizPercent = 0.0;
                 var studentquizPercent = 0.0;
                 if (currentProgressModel.Quizzes.QuizInstances.Count > 0)
