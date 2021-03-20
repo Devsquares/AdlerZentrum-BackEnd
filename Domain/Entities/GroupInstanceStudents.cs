@@ -13,6 +13,8 @@ namespace Domain.Entities
         public int? PromoCodeInstanceId { get; set; }
         public virtual PromoCodeInstance PromoCodeInstance { get; set; }
         public double AchievedScore { get; set; }
+        public bool Succeeded { get; set; }
+        public bool IsEligible { get; set; }
 
     }
 }
