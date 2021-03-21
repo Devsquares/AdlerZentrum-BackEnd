@@ -168,58 +168,5 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 upgrader.CheckAndProcess();
             }
         }
-
-
-        /*
-         * 
-         * 0) GetProgree
-         *  Remove all percent calculations and get the achievedscore from the groupinstancestudent table
-         * 
-         * 1) When to set the status of a group instance to be finished
-         *  a) in case of a not final sublevel, on the submission of the last report
-         *  b) in case of a final, on the sumbission of the correction of all final tests
-         *  
-         * 2) All score/points should be double instead of int
-         *  done
-         * 3) GroupInstanceStudents: isEligible, succeeded, Sublevel: order 
-         *  done
-         * 44) when the isDefault is used
-         *  the isdefault should be set to true when the group is activated (running)
-         *  the isdefault should be set to false when the group is finished
-         *  
-         * 5) when the sublevelId in the application user application is updated
-         *  upon activating the group instance (not registeration/not success)
-         *  upon correcting a placement test
-         *  
-         * 6) how to control the status of the disqualified student (?) -> disqualified in the groupInstanceStudents?
-         *   1) Remove the disqualified column from the applicationuser
-         *   2) Add a disqualified column in the groupInstanceStudent
-         *   
-         * 7) we need a bool value called:sublevelSuccess (in applicationuser or in a new table like below)
-         * StudentSubLevelwith unique key: studentid
-         * StudentId:string SublevelId:int sublevelSuccess:bool
-         * 
-         * then when a student applies for a course in a sublevel X
-         * We need to check that the student has min. X-1 in this table
-         * and then if sublevelSuccess == true -> isEligible
-         * or  sublevelSuccess == false -> !isEligible
-         * 
-         * 8) upon acitavting a group a check of the boolean iseligible should be done, 
-         * if there is a group instance with a student (not eligible) the whole process should be stopped with an error.
-         * 
-         * 9) When the ScoreCalculator should be called:
-         *  1) When submission of correction of quizzes, sublevels and final tests
-         *  2) When submission of homeworks with bonus (TODO the bonus should be integrated in this class)
-         *  
-         * 10) When the Upgrader should be called:
-         *  1) When submission of lesson report
-         *  
-         *  
-         * 11) WHen the downgdrader should be called:
-         *  1) AFter two months inactivity:
-         *  As soon as the last lesson report is submitted, and the upgrader is called
-         *  a job should be created for each of the students to run after two months
-         *  and call the downgrader class
-         */
     }
 }
