@@ -81,8 +81,8 @@ namespace Infrastructure.Persistence.Repositories
            .ThenInclude(x => x.GroupInstance)
            .ThenInclude(x => x.GroupDefinition)
            .Skip((pageNumber - 1) * pageSize)
-            .AsNoTracking()
             .Take(pageSize)
+            .AsNoTracking()
            //    .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
            .ToListAsync();
 

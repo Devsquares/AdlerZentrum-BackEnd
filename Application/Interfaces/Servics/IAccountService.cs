@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Account;
+﻿using Application.DTOs;
+using Application.DTOs.Account;
 using Application.DTOs.Account.Commands.UpdateAccount;
 using Application.Wrappers;
 using Domain.Entities;
@@ -21,7 +22,7 @@ namespace Application.Interfaces
         Task<Response<string>> ResetPassword(ResetPasswordRequest model);
         Task<Response<string>> ChangePassword(VerifyEmailRequest model);
         Task<ApplicationUser> GetByIdAsync(string id);
-        Task<IList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize, string role);
+        IList<GetAllUsersViewModel> GetPagedReponseUsersAsync(int pageNumber, int pageSize, string role, out int count);
         Task<IdentityResult> UpdateAsync(UpdateBasicUserCommand updateUserCommand);
         Task DeleteAsync(string id);
         Task<ApplicationUser> GetByClaimsPrincipalAsync(ClaimsPrincipal user);

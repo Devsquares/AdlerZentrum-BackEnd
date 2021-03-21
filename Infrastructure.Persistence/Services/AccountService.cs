@@ -444,19 +444,31 @@ namespace Infrastructure.Persistence.Services
             return true;
         }
 
-        public async Task<IList<ApplicationUser>> GetPagedReponseUsersAsync(int pageNumber, int pageSize, string role)
+        public IList<GetAllUsersViewModel> GetPagedReponseUsersAsync(int pageNumber, int pageSize, string role, out int count)
         {
-            IList<ApplicationUser> users;
+
+            count = 0;
             if (role == "Student") return null;
-            if (!string.IsNullOrEmpty(role) && role != "Guest")
-            {
-                users = _userManager.GetUsersInRoleAsync(role).Result;
-            }
-            else
-            {
-                users = _userManager.Users.Include(u => u.Role).ToList();
-            }
-            return users.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            var staff = (from user in _userManager.Users
+                         join userrole in _context.UserRoles on user.Id equals userrole.UserId
+                         join roles in _context.Roles on userrole.RoleId equals roles.Id
+                         join gis in _context.GroupInstanceStudents on user.Id equals gis.StudentId
+
+                         into gj
+                         from x in gj.DefaultIfEmpty()
+                         where string.IsNullOrEmpty(role) ? true : roles.NormalizedName.ToLower() == role.ToLower()
+                         select new GetAllUsersViewModel
+                         {
+                             Id = user.Id,
+                             FirstName = user.FirstName,
+                             LastName = user.LastName,
+                             Email = user.Email,
+                             PhoneNumber = user.PhoneNumber,
+                             Role = roles.Name
+                         }).AsQueryable();
+            count = staff.Count();
+            return staff.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
         public async Task DeleteAsync(string id)
@@ -551,6 +563,7 @@ namespace Infrastructure.Persistence.Services
         }
         public async Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName)
         {
+            // TODO: remove tolist()
             var studentRoles = (from user in _userManager.Users
                                 join userrole in _context.UserRoles on user.Id equals userrole.UserId
                                 join role in _context.Roles on userrole.RoleId equals role.Id
@@ -571,29 +584,6 @@ namespace Infrastructure.Persistence.Services
                                     PhoneNumber = user.PhoneNumber,
                                     GroupSerial = x.GroupInstance != null ? x.GroupInstance.Serial : string.Empty
                                 }).ToList();
-            //var studentRoles = _userManager.Users.Include(x => x.Role).Where(x => x.Role.NormalizedName == "STUDENT").LeftJoin(
-            //          _context.GroupInstanceStudents,
-            //          user => user.Id,
-            //          gis => gis.StudentId,
-            //          (user, gis) => new
-            //          {
-            //              user,
-            //              gis
-            //          }
-            //         )
-            //   // .Include(x => x.gis.GroupInstance)
-            //    .Where(x => (groupDefinitionId != null ? x.gis.GroupInstance.GroupDefinitionId == groupDefinitionId : true) &&
-            //     (groupInstanceId != null ? x.gis.GroupInstanceId == groupInstanceId : true))
-            //    .Select(x => new
-            //    {
-            //        Id = x.user.Id,
-            //        FirstName = x.user.FirstName,
-            //        LastName = x.user.LastName,
-            //        Email = x.user.Email,
-            //        PhoneNumber = x.user.PhoneNumber,
-            //        GroupDefinitionId = x.gis.GroupInstance.GroupDefinitionId,
-            //        GroupInstancenId = x.gis.GroupInstanceId
-            //    }).ToList();
             int totalCount = studentRoles.Count();
             studentRoles = studentRoles.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return new PagedResponse<IEnumerable<object>>(studentRoles, pageNumber, pageSize, totalCount);

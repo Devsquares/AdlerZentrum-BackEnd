@@ -24,13 +24,13 @@ namespace Application.Features.PromoCodeInstance.Commands
             public async Task<Response<PromoCodeInstancesViewModel>> Handle(CheckPromoCodeInstanceCommand query, CancellationToken cancellationToken)
             {
                 var promoCodeInstance = _promoCodeInstanceRepository.GetByPromoCodeKey(query.PromoCodeKey);
-                if (promoCodeInstance == null) throw new ApiException($"Promo Code Instance Not Found.");
-                if (promoCodeInstance.Id == 0) throw new ApiException($"Promo Code Instance Not Found.");
-                if(promoCodeInstance.IsUsed)
+                if (promoCodeInstance == null) return new Response<PromoCodeInstancesViewModel>("Promo Code Instance Not Found.)");
+                if (promoCodeInstance.Id == 0) return new Response<PromoCodeInstancesViewModel>("Promo Code Instance Not Found.");
+                if (promoCodeInstance.IsUsed)
                 {
                     promoCodeInstance.IsValid = false;
                 }
-                else if(promoCodeInstance.EndDate < DateTime.Now)
+                else if (promoCodeInstance.EndDate < DateTime.Now)
                 {
                     promoCodeInstance.IsValid = false;
                 }

@@ -30,9 +30,10 @@ namespace Application.DTOs
         public async Task<UserPagedResponse<IEnumerable<GetAllUsersViewModel>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<GetAllUsersParameter>(request);
-            var user = await _userRepository.GetPagedReponseUsersAsync(validFilter.PageNumber, validFilter.PageSize, request.Role);
+            int count = 0;
+            var user = _userRepository.GetPagedReponseUsersAsync(validFilter.PageNumber, validFilter.PageSize, request.Role, out count);
             var userViewModel = _mapper.Map<IEnumerable<GetAllUsersViewModel>>(user);
-            return new UserPagedResponse<IEnumerable<GetAllUsersViewModel>>(userViewModel, validFilter.Role, validFilter.PageNumber, validFilter.PageSize);
+            return new UserPagedResponse<IEnumerable<GetAllUsersViewModel>>(userViewModel, validFilter.Role, validFilter.PageNumber, validFilter.PageSize, count);
         }
     }
 }

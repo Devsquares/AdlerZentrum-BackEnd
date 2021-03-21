@@ -40,7 +40,7 @@ namespace WebApi.Controllers
         {
             if (AuthenticatedUserService.Role == "Student" && AuthenticatedUserService.GroupInstanceId == null)
             {
-                return NotFound(new Response<object>("Not registerd in any group."));
+                return Ok(new Response<object>("Not registerd in any group."));
             }
 
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsForStudentQuery()

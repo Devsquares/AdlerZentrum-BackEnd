@@ -50,8 +50,8 @@ namespace WebApi.Controller
 
             return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
             {
-                StudentId = "d68cf5b5-7b6f-4f7f-96be-ae033aeedf1b",
-                GroupInstanceId = 82,//AuthenticatedUserService.GroupInstanceId.Value,
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
                 TestType = Application.Enums.TestTypeEnum.quizz
             }));
         }
@@ -189,7 +189,9 @@ namespace WebApi.Controller
                 GroupDefinitionId = query.GroupDefinitionId,
                 GroupInstanceId = query.GroupInstanceId,
                 TestTypeId = query.TestTypeId,
-                Status = query.Status
+                Status = query.Status,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
             }
             ));
         }
