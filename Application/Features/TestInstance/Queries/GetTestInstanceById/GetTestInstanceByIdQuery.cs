@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -26,8 +27,12 @@ namespace Application.Features
             public async Task<Response<TestInstanceViewModel>> Handle(GetTestInstanceByIdQuery query, CancellationToken cancellationToken)
             {
                 var testinstance = await _testinstanceRepository.GetByIdAsync(query.Id);
-                if (testinstance == null) throw new ApiException($"TestInstance Not Found.");
+                if (testinstance == null) return new Response<TestInstanceViewModel>($"TestInstance Not Found.");
                 var viewModel = _mapper.Map<TestInstanceViewModel>(testinstance);
+                if (testinstance.Status == (int)TestInstanceEnum.Pending)
+                {
+                    viewModel.Timer = testinstance.Test.TestDuration - (DateTime.Now - testinstance.StartDate).TotalMinutes;
+                }
                 return new Response<TestInstanceViewModel>(viewModel);
             }
         }

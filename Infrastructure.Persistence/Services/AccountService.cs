@@ -457,7 +457,7 @@ namespace Infrastructure.Persistence.Services
 
                          into gj
                          from x in gj.DefaultIfEmpty()
-                         where string.IsNullOrEmpty(role) ? true : roles.NormalizedName.ToLower() == role.ToLower()
+                         where string.IsNullOrEmpty(role) || role == "Guest" ? true : roles.NormalizedName.ToLower() == role.ToLower()
                          select new GetAllUsersViewModel
                          {
                              Id = user.Id,
@@ -465,7 +465,9 @@ namespace Infrastructure.Persistence.Services
                              LastName = user.LastName,
                              Email = user.Email,
                              PhoneNumber = user.PhoneNumber,
-                             Role = roles.Name
+                             Role = roles.Name,
+                             UserName = user.UserName,
+                             Profilephoto = user.Profilephoto
                          }).AsQueryable();
             count = staff.Count();
             return staff.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();

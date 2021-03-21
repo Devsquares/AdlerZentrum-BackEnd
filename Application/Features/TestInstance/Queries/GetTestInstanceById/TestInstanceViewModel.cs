@@ -7,7 +7,7 @@ namespace Application.Features
 {
     public class TestInstanceViewModel
     {
-        public string StudentId { get; set; } 
+        public string StudentId { get; set; }
         public int Points { get; set; }
         public int Status { get; set; }
         public int? LessonInstanceId { get; set; }
@@ -16,5 +16,6 @@ namespace Application.Features
         public DateTime SubmissionDate { get; set; }
         public int TestId { get; set; }
         public virtual Test Test { get; set; }
+        public double Timer { get; set; }
     }
 }
