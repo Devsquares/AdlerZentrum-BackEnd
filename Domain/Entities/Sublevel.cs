@@ -19,5 +19,6 @@ namespace Domain.Entities
         public int Quizpercent { get; set; }
         public int SublevelTestpercent { get; set; }
         public int FinalTestpercent { get; set; }
+        public int Order { get; set; }
     }
 }

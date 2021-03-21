@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210320012816_Grading")]
+    partial class Grading
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1859,10 +1861,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("NumberOflessons")
+                    b.Property<int>("NextSublevelId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Order")
+                    b.Property<int>("NumberOflessons")
                         .HasColumnType("int");
 
                     b.Property<int>("Quizpercent")
@@ -1874,6 +1876,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LevelId");
+
+                    b.HasIndex("NextSublevelId");
 
                     b.ToTable("SubLevels");
                 });
@@ -2707,6 +2711,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.Level", "Level")
                         .WithMany("SubLevels")
                         .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Sublevel", "NextSublevel")
+                        .WithMany()
+                        .HasForeignKey("NextSublevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
