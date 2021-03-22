@@ -11,7 +11,7 @@ namespace Application.DTOs
     public class UpdateHomeworkBounsCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public int BonusPoints { get; set; }
+        public double BonusPoints { get; set; }
         public int BonusPointsStatus { get; set; }
 
         public class UpdateHomeworkBounsCommandHandler : IRequestHandler<UpdateHomeworkBounsCommand, Response<int>>

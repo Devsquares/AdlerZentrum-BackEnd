@@ -9,8 +9,8 @@ namespace Domain.Entities
     {
         public string Text { get; set; }
         public int MinCharacters { get; set; }
-        public int Points { get; set; }
-        public int BonusPoints { get; set; }
+        public double Points { get; set; }
+        public double BonusPoints { get; set; }
         public int BonusPointsStatus { get; set; }
         public int GroupInstanceId { get; set; }
         public GroupInstance GroupInstance { get; set; }

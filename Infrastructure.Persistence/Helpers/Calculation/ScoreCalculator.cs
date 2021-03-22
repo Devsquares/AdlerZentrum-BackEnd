@@ -22,8 +22,8 @@ namespace Infrastructure.Persistence.Helpers.Calculation
         private bool isFinal;
         private TestInstance finalTest;
 
-        private Dictionary<TestTypeEnum, int> grading;
-        private int achievedScore;
+        private Dictionary<TestTypeEnum, double> grading;
+        private double achievedScore;
 
 
         public ScoreCalculator(DbContext dbContext, ApplicationUser user)
@@ -110,16 +110,16 @@ namespace Infrastructure.Persistence.Helpers.Calculation
 
         private void Execute()
         {
-            var quizAchievedScore = 0;
-            var quizTotalScore = 0;
+            var quizAchievedScore = 0.0;
+            var quizTotalScore = 0.0;
 
-            var sublevelTestAchievedScore = 0;
-            var sublevelTestTotalScore = 0;
+            var sublevelTestAchievedScore = 0.0;
+            var sublevelTestTotalScore = 0.0;
 
-            var finalTestAchievedScore = 0;
-            var finalTestTotalScore = 0;
+            var finalTestAchievedScore = 0.0;
+            var finalTestTotalScore = 0.0;
 
-            var score = 0;
+            var score = 0.0;
 
             //calculate quizzes
             foreach (var quiz in quizzes)

@@ -19,8 +19,8 @@ namespace Domain.Entities
         public ApplicationUser CorrectionTeacher { get; set; }
         public int Status { get; set; }
         public DateTime? SubmitionDate { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
         public string Comment { get; set; }
-        public int BonusPoints { get; set; }
+        public double BonusPoints { get; set; }
     }
 }

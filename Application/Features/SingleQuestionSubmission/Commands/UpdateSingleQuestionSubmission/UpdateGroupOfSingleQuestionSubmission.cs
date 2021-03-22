@@ -32,7 +32,7 @@ namespace Application.Features
             }
             public async Task<Response<int>> Handle(UpdateGroupOfSingleQuestionSubmission command, CancellationToken cancellationToken)
             {
-                int points = 0;
+                double points = 0;
                 var testInstanceId = command.TestInstanceId;
                 foreach (var item in command.SingleQuestionSubmission)
                 {

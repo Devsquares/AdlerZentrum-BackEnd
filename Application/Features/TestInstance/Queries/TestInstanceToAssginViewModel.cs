@@ -15,6 +15,6 @@ namespace Application.Features
         public TestTypeEnum TestType { get; set; }
         public int Status { get; set; }
         public bool ManualCorrection { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
     }
 }

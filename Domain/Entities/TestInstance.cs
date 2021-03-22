@@ -11,7 +11,7 @@ namespace Domain.Entities
         [Required]
         public string StudentId { get; set; }
         public ApplicationUser Student { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
         public int Status { get; set; }
         public int? LessonInstanceId { get; set; }
         public virtual LessonInstance LessonInstance { get; set; }

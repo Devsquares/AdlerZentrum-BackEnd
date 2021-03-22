@@ -18,6 +18,6 @@ namespace Domain.Entities
         public string Text { get; set; }
         public virtual ICollection<SingleQuestion> SingleQuestions { get; set; }
         public bool IsAdlerService { get; set; } = false;
-        public int TotalPoint { get; set; }
+        public double TotalPoint { get; set; }
     }
 }

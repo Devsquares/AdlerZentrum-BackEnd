@@ -9,7 +9,7 @@ namespace Application.Features.TestInstance.Queries.GetAllTestInstances
 	{
 		public int Id { get; set; }
         public string StudentId { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
         public int Status { get; set; }
         public int LessonInstanceId { get; set; }
         public virtual LessonInstance LessonInstance { get; set; }
