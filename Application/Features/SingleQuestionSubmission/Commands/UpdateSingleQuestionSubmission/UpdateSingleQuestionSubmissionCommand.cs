@@ -15,7 +15,7 @@ namespace Application.Features
     {
         public int Id { get; set; }
         public bool RightAnswer { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
         public string CorrectionText { get; set; }
 
         public class UpdateSingleQuestionSubmissionCommandHandler : IRequestHandler<UpdateSingleQuestionSubmissionCommand, Response<int>>

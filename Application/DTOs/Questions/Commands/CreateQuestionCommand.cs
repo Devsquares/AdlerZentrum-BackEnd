@@ -37,7 +37,7 @@ namespace Application.DTOs
                 var question = new Question();
 
                 Reflection.CopyProperties(command, question);
-                int total = 0;
+                double total = 0;
                 foreach (var item in question.SingleQuestions)
                 {
                     total = total + item.Points;

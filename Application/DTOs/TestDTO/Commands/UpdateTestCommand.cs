@@ -21,7 +21,7 @@ namespace Application.DTOs
         public int? LessonDefinitionId { get; set; }
         public int? SubLevelId { get; set; }
         public int? LevelId { get; set; }
-        public int TotalPoint { get; set; }
+        public double TotalPoint { get; set; }
 
         public class UpdateTestCommandHandler : IRequestHandler<UpdateTestCommand, Response<int>>
         {
@@ -56,7 +56,7 @@ namespace Application.DTOs
 
                 await _mediator.Send(new RemoveTestFromQuestionsCommand { TestId = command.Id });
 
-                int total = 0;
+                double total = 0;
                 foreach (var item in command.Questions)
                 {
                     item.TestId = test.Id;

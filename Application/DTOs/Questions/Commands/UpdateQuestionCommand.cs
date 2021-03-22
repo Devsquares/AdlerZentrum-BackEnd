@@ -12,19 +12,19 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class UpdateQuestionCommand : IRequest<Response<int>>
+    public class UpdateQuestionCommand : IRequest<Response<double>>
     {
         public int Id { get; set; }
         public int? TestId { get; set; }
 
-        public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, Response<int>>
+        public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, Response<double>>
         {
             private readonly IQuestionRepositoryAsync _QuestionRepository;
             public UpdateQuestionCommandHandler(IQuestionRepositoryAsync QuestionRepository)
             {
                 _QuestionRepository = QuestionRepository;
             }
-            public async Task<Response<int>> Handle(UpdateQuestionCommand command, CancellationToken cancellationToken)
+            public async Task<Response<double>> Handle(UpdateQuestionCommand command, CancellationToken cancellationToken)
             {
                 var question = await _QuestionRepository.GetByIdAsync(command.Id);
 
@@ -36,7 +36,7 @@ namespace Application.DTOs
                 {
                     question.TestId = command.TestId;
                     await _QuestionRepository.UpdateAsync(question);
-                    return new Response<int>(question.TotalPoint);
+                    return new Response<double>(question.TotalPoint);
                 }
             }
         }

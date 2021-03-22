@@ -18,8 +18,8 @@ namespace Application.DTOs
     {
         public string Text { get; set; }
         public int MinCharacters { get; set; }
-        public int Points { get; set; }
-        public int BonusPoints { get; set; }
+        public double Points { get; set; }
+        public double BonusPoints { get; set; }
         public int GroupInstanceId { get; set; }
         public int LessonInstanceId { get; set; }
         public string TeacherId { get; set; }

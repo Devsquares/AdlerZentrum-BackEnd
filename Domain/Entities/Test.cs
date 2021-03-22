@@ -20,7 +20,7 @@ namespace Domain.Entities
         public Sublevel Sublevel { get; set; }
         public bool AutoCorrect { get; set; }
         public int Status { get; set; }
-        public int TotalPoint { get; set; }
+        public double TotalPoint { get; set; }
         public DateTime? PlacementStartDate { get; set; }
     }
 }

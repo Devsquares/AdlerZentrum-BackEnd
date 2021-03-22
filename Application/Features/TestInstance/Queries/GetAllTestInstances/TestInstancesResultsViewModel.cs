@@ -7,6 +7,6 @@ namespace Application.Features
     public class TestInstancesResultsViewModel
     {
         public string StudentName { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
     }
 }

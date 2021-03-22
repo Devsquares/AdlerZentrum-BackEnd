@@ -82,7 +82,7 @@ namespace Process
             dbContext.SaveChanges();
         }
 
-        private bool correctTheQuestions(ApplicationDbContext dbContext, List<SingleQuestionSubmission> SingleQuestionSubmissions, out int points)
+        private bool correctTheQuestions(ApplicationDbContext dbContext, List<SingleQuestionSubmission> SingleQuestionSubmissions, out double points)
         {
             bool autoCorrected = true;
             points = 0;

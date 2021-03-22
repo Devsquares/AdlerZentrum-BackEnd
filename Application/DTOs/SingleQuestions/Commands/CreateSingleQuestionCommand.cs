@@ -16,7 +16,7 @@ namespace Application.DTOs
         public string Text { get; set; }
         public ICollection<Choice> Choices { get; set; }
         public bool AnswerIsTrueOrFalse { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
 
         public class CreateSingleQuestionCommandHandler : IRequestHandler<CreateSingleQuestionCommand, Response<int>>
         {

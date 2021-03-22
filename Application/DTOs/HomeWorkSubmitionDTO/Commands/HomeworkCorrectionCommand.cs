@@ -15,7 +15,7 @@ namespace Application.DTOs
         public int Id { get; set; }
         public string Solution { get; set; }
         public string CorrectionTeacherId { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
         public string Comment { get; set; }
 
         public class HomeworkCorrectionCommandHandler : IRequestHandler<HomeworkCorrectionCommand, Response<int>>
@@ -38,7 +38,7 @@ namespace Application.DTOs
                 HomeWorkSubmition.Status = (int)HomeWorkSubmitionStatusEnum.Corrected;
                 
                 var homework = _homework.GetByIdAsync(HomeWorkSubmition.HomeworkId).Result;
-                int bouns = 0;
+                double bouns = 0;
                 if (homework.BonusPoints > 0 && homework.BonusPointsStatus == (int)BonusPointsStatusEnum.Approved)
                 {
                     if (bouns < (command.Points - homework.BonusPoints))
