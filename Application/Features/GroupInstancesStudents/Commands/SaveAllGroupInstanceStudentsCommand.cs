@@ -7,6 +7,7 @@ using Domain.Models;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +39,14 @@ namespace Application.Features.GroupInstancesStudents.Commands
                 if (groupdefinitionobject == null)
                 {
                     throw new ApiException($"Group Definition Not Found.");
+                }
+                var groupinstancestudents = command.GroupInstancesStudentList.Select(x=>x.Students).ToList();
+                foreach (var item in groupinstancestudents)
+                {
+                    if(item.Count() > groupdefinitionobject.GroupCondition.NumberOfSlots)
+                    {
+                        throw new ApiException($"Please check the number of students in group instances as the Number must be <= "+ groupdefinitionobject.GroupCondition.NumberOfSlots);
+                    }
                 }
                 // List<GroupInstanceStudents>groupInstanceStidentObject = _mapper.Map<List<GroupInstanceStudents>>(command.GroupInstancesStudentList);
                 using (TransactionScope scope = new TransactionScope())
