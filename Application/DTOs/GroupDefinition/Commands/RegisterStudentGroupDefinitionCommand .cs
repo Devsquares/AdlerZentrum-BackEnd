@@ -101,7 +101,7 @@ namespace Application.DTOs
                             GroupInstanceId = groupInstans.Id,
                             StudentId = command.StudentId,
                             PromoCodeInstanceId = command.PromoCodeInstanceId,
-                            IsDefault = true,
+                            IsDefault = false,
                             CreatedDate = DateTime.Now
                         });
                         var promocodeinstance = _promoCodeInstanceRepositoryAsync.GetById(command.PromoCodeInstanceId.Value);
@@ -139,7 +139,7 @@ namespace Application.DTOs
                                     GroupInstanceId = groupInstans.Id,
                                     StudentId = command.StudentId,
                                     IsPlacementTest = true,
-                                    IsDefault = true,
+                                    IsDefault = false,
                                     CreatedDate = DateTime.Now
                                 });
                             }
@@ -165,7 +165,7 @@ namespace Application.DTOs
                             {
                                 GroupInstanceId = groupInstans.Id,
                                 StudentId = command.StudentId,
-                                IsDefault = true
+                                IsDefault = false
                             });
                         }
                     }

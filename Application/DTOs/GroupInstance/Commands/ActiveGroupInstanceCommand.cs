@@ -7,6 +7,7 @@ using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Application.DTOs
         public class ActiveGroupInstanceCommandHandler : IRequestHandler<ActiveGroupInstanceCommand, Response<int>>
         {
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
+            private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             private readonly ILessonInstanceRepositoryAsync _lessonInstanceRepositoryAsync;
             private readonly ILessonInstanceStudentRepositoryAsync _lessonInstanceStudentRepositoryAsync;
             private readonly ITestRepositoryAsync _testRepository;
@@ -30,7 +32,8 @@ namespace Application.DTOs
                 ILessonInstanceStudentRepositoryAsync lessonInstanceStudent,
                 ITestRepositoryAsync testRepositoryAsync,
                 ITestInstanceRepositoryAsync testInstanceRepository,
-                ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignment)
+                ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignment,
+                IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
                 _lessonInstanceRepositoryAsync = lessonInstanceRepository;
@@ -38,6 +41,7 @@ namespace Application.DTOs
                 _testRepository = testRepositoryAsync;
                 _testInstanceRepository = testInstanceRepository;
                 _teacherGroupInstanceAssignment = teacherGroupInstanceAssignment;
+                _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
             }
 
             public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
@@ -63,7 +67,9 @@ namespace Application.DTOs
                             Student = item.Student,
                             StudentId = item.StudentId
                         });
+                        item.IsDefault = true;
                     }
+                    await _groupInstanceStudentRepositoryAsync.UpdateBulkAsync(groupInstance.Students.ToList());
 
                     List<LessonInstance> lessonInstances = new List<LessonInstance>();
                     foreach (var item in LessonDefinitions)
@@ -176,9 +182,7 @@ namespace Application.DTOs
                                 await _testRepository.UpdateAsync(subLevelTest);
                             }
                         }
-
                     }
-
                     await _testInstanceRepository.AddBulkAsync(testInstance);
                 }
                 return new Response<int>(groupInstance.Id);

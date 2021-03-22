@@ -30,8 +30,6 @@ namespace Domain.Entities
         public Sublevel Sublevel { get; set; }
         public int? SublevelId { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
-        public bool Disqualified { get; set; }
-        public string DisqualifiedComment { get; set; }
         public int AdlerCardBalance { get; set; }
         public int? PlacmentTestId { get; set; }
         public bool OwnsToken(string token)
