@@ -8,5 +8,6 @@ namespace Domain.Entities
         public int Status { get; set; }
         public int Type { get; set; }
         public string Failure { get; set; }
+        public string StudentId { get; set; }
     }
 }
