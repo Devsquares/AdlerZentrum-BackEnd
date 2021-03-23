@@ -65,7 +65,7 @@ namespace Process
             .Include(x => x.Choices)
                                            .Where(x => x.TestInstanceId == testId).ToListAsync().Result;
 
-            bool autoCorrected = correctTheQuestions(dbContext, singleQuestions, out int points);
+            bool autoCorrected = correctTheQuestions(dbContext, singleQuestions, out double points);
 
             testInstance.Points += points;
             // check if all single quesition not corrected, if so then add task to the teacher to correct it.

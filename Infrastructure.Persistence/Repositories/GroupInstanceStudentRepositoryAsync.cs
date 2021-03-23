@@ -30,6 +30,11 @@ namespace Infrastructure.Persistence.Repositories
             return groupInstanceStudents.Where(x => x.StudentId == studentId && x.GroupInstanceId == groupId).FirstOrDefault();
         }
 
+        public GroupInstanceStudents GetByStudentIdIsDefault(string StudentId)
+        {
+            return groupInstanceStudents.Where(x => x.StudentId == StudentId && x.IsDefault == true).FirstOrDefault();
+        }
+
         public int GetCountOfStudents(int groupId)
         {
             return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();

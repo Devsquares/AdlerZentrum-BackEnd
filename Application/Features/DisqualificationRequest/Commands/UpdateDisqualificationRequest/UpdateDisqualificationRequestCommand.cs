@@ -23,12 +23,12 @@ namespace Application.Features
         public class UpdateDisqualificationRequestCommandHandler : IRequestHandler<UpdateDisqualificationRequestCommand, Response<int>>
         {
             private readonly IDisqualificationRequestRepositoryAsync _disqualificationrequestRepository;
-            private readonly UserManager<ApplicationUser> _userManager;
+            private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             public UpdateDisqualificationRequestCommandHandler(IDisqualificationRequestRepositoryAsync disqualificationrequestRepository,
-                UserManager<ApplicationUser> userManager)
+               IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync)
             {
                 _disqualificationrequestRepository = disqualificationrequestRepository;
-                _userManager = userManager;
+                _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
             }
             public async Task<Response<int>> Handle(UpdateDisqualificationRequestCommand command, CancellationToken cancellationToken)
             {
@@ -36,7 +36,7 @@ namespace Application.Features
 
                 if (disqualificationrequest == null)
                 {
-                    throw new ApiException($"DisqualificationRequest Not Found.");
+                    new Response<int>($"Disqualification Request Not Found.");
                 }
                 else
                 {
@@ -45,15 +45,15 @@ namespace Application.Features
                     disqualificationrequest.DisqualificationRequestStatus = command.DisqualificationRequestStatus;
 
                     await _disqualificationrequestRepository.UpdateAsync(disqualificationrequest);
-                    var student = _userManager.FindByIdAsync(command.StudentId);
+                    var student = _groupInstanceStudentRepositoryAsync.GetByStudentIdIsDefault(command.StudentId);
                     if (command.DisqualificationRequestStatus == (int)DisqualificationRequestStatusEnum.Disqualified)
                     {
-                        student.Result.Disqualified = true;
-                        student.Result.DisqualifiedComment = command.Comment;
-                        await _userManager.UpdateAsync(student.Result);
+                        student.Disqualified = true;
+                        student.DisqualifiedComment = command.Comment;
+                        await _groupInstanceStudentRepositoryAsync.UpdateAsync(student);
                     }
-                    return new Response<int>(disqualificationrequest.Id);
                 }
+                return new Response<int>(disqualificationrequest.Id);
             }
         }
 
