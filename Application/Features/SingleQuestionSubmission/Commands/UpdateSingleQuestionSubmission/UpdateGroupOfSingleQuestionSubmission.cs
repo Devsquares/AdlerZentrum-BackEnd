@@ -21,13 +21,16 @@ namespace Application.Features
         {
             private readonly ISingleQuestionSubmissionRepositoryAsync _singlequestionsubmissionRepository;
             private readonly ITestInstanceRepositoryAsync _testInstanceRepository;
+            private readonly IJobRepositoryAsync _jobRepository;
             private readonly IMediator _medaitor;
             public UpdateGroupOfSingleQuestionSubmissionHandler(ISingleQuestionSubmissionRepositoryAsync singlequestionsubmissionRepository,
             ITestInstanceRepositoryAsync testInstanceRepositoryAsync,
+            IJobRepositoryAsync jobRepositoryAsync,
             IMediator Mediator)
             {
                 _singlequestionsubmissionRepository = singlequestionsubmissionRepository;
                 _testInstanceRepository = testInstanceRepositoryAsync;
+                _jobRepository = jobRepositoryAsync;
                 _medaitor = Mediator;
             }
             public async Task<Response<int>> Handle(UpdateGroupOfSingleQuestionSubmission command, CancellationToken cancellationToken)
@@ -43,9 +46,15 @@ namespace Application.Features
                         points = points + item.Points;
                     }
                 }
-               
+
                 var testInstance = _testInstanceRepository.GetByIdAsync(testInstanceId).Result;
                 testInstance.Status = (int)TestInstanceEnum.Corrected;
+                await _jobRepository.AddAsync(new Job
+                {
+                    Type = (int)JobTypeEnum.ScoreCalculator,
+                    StudentId = testInstance.StudentId,
+                    Status = (int)JobStatusEnum.New
+                });
                 testInstance.Points = testInstance.Points + points;
                 await _testInstanceRepository.UpdateAsync(testInstance);
 

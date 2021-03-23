@@ -121,7 +121,8 @@ namespace Infrastructure.Persistence
                             c.Response.ContentType = "application/json";
                             if (c.Exception.GetType() == typeof(SecurityTokenExpiredException))
                             {
-                                c.Response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                                c.Response.StatusCode = (int)HttpStatusCode.NotAcceptable;
+                                c.Response.Headers.Add("Error", "7amada");
                             }
                             var result = JsonConvert.SerializeObject(new Response<string>(c.Exception.ToString()));
                             return c.Response.WriteAsync(result);

@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Enums;
+using Domain.Entities;
+using Infrastructure.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Infrastructure.Persistence.Helpers.Calculation;
+
+namespace Process
+{
+    public class DoJobThread
+    {
+        private readonly IServiceProvider _serviceProvider;
+
+        public DoJobThread(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+        public void Run(object job)
+        {
+            Job _job = (Job)job;
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                // update job to running.
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                _job.Status = (int)JobStatusEnum.Running;
+                dbContext.Update(_job);
+                dbContext.SaveChanges();
+
+                switch (_job.Type)
+                {
+                    case (int)JobTypeEnum.TestCorrection:
+                        try
+                        {
+                            AutoCorrection autoCorrection = new AutoCorrection();
+                            autoCorrection.Run(dbContext, _job.TestInstanceId);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
+                        }
+                        break;
+                    case (int)JobTypeEnum.ScoreCalculator:
+                        try
+                        {
+                            var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                            ScoreCalculator ScoreCalculator = new ScoreCalculator(dbContext, student);
+                        }
+                        catch (System.Exception)
+                        {
+
+                            throw;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                _job.Status = (int)JobStatusEnum.Done;
+                dbContext.Update(_job);
+                dbContext.SaveChanges();
+            }
+        }
+
+
+        public static DoJobThread Create(IServiceProvider serviceProvider)
+        {
+            return new DoJobThread(serviceProvider);
+        }
+    }
+}
