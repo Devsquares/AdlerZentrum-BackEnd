@@ -17,6 +17,7 @@ namespace Application.Features
         public int? GroupInstanceId { get; set; }
         public int? TestTypeId { get; set; }
         public int? Status { get; set; }
+        public bool? reCorrectionRequest { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
     }
@@ -33,9 +34,9 @@ namespace Application.Features
         {
             if (query.PageNumber == 0) query.PageNumber = 1;
             if (query.PageSize == 0) query.PageSize = 10;
-            var testinstance = await _testinstanceRepository.GetAllTestsToManage(query.GroupDefinitionId, query.GroupInstanceId, query.TestTypeId, query.Status, query.PageNumber, query.PageSize);
+            var testinstance = await _testinstanceRepository.GetAllTestsToManage(query.GroupDefinitionId, query.GroupInstanceId, query.TestTypeId, query.Status, query.reCorrectionRequest, query.PageNumber, query.PageSize);
             if (testinstance == null) throw new ApiException($"TestInstance Not Found.");
-            int count = _testinstanceRepository.GetAllTestsToManageCount(query.GroupDefinitionId, query.GroupInstanceId, query.TestTypeId, query.Status).Result;
+            int count = _testinstanceRepository.GetAllTestsToManageCount(query.GroupDefinitionId, query.GroupInstanceId, query.TestTypeId, query.Status,query.reCorrectionRequest).Result;
             var testinstanceViewModel = _mapper.Map<IReadOnlyList<AllTestsToManageViewModel>>(testinstance);
             return new PagedResponse<IReadOnlyList<AllTestsToManageViewModel>>(testinstanceViewModel, query.PageNumber, query.PageSize, count);
         }

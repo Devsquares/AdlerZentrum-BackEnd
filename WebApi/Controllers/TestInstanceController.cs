@@ -248,5 +248,39 @@ namespace WebApi.Controller
             command.Status = (int)TestInstanceEnum.Missed;
             return Ok(await Mediator.Send(command));
         }
+
+        [HttpPut("RequestRecorrection")]
+        public async Task<IActionResult> RequestRecorrection(int TestInstanceId)
+        {
+            return Ok(await Mediator.Send(new UpdateTestInstanceReCorrectionRequestCommand() {TestInstanceId = TestInstanceId,status = true }));
+        }
+        [HttpPut("OpenTestToReview")]
+        public async Task<IActionResult> OpenTestToReview(int TestInstanceId)
+        {
+            return Ok(await Mediator.Send(new UpdateTestInstanceReopenedCommand() { TestInstanceId = TestInstanceId, status = true }));
+        }
+        [HttpPut("CloseTestToReview")]
+        public async Task<IActionResult> CloseTestToReview(int TestInstanceId)
+        {
+            return Ok(await Mediator.Send(new UpdateTestInstanceReopenedCommand() { TestInstanceId = TestInstanceId, status = false }));
+        }
+
+        [HttpGet("GetTestsToReview")]
+        // [Authorize(Roles = "SuperAdmin,Supervisor,Secretary")]
+        public async Task<IActionResult> GetTestsToReview([FromQuery] GetAllTestsToManageQuery query)
+        {
+            return Ok(await Mediator.Send(new GetAllTestsToManageQuery()
+            {
+                GroupDefinitionId = query.GroupDefinitionId,
+                GroupInstanceId = query.GroupInstanceId,
+                TestTypeId = query.TestTypeId,
+                Status = query.Status,
+                reCorrectionRequest = query.reCorrectionRequest == null?true: query.reCorrectionRequest,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            }
+            ));
+        }
+
     }
 }

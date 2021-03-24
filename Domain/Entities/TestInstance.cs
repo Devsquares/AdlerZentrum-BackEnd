@@ -24,6 +24,8 @@ namespace Domain.Entities
         public bool ManualCorrection { get; set; }
         public int? GroupInstanceId { get; set; }
         public GroupInstance GroupInstance { get; set; }
+        public bool ReCorrectionRequest { get; set; }
+        public bool Reopened { get; set; }
         //TODO add required submtion date
     }
 }

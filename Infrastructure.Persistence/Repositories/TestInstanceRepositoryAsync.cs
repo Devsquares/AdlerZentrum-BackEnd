@@ -55,7 +55,7 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.Status == (int)TestInstanceEnum.Closed).ToListAsync();
         }
 
-        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, int pageNumber, int pageSize)
+        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status,bool? reCorrectionRequest, int pageNumber, int pageSize)
         {
             var query = _testInstances.AsQueryable();
             if (GroupDefinitionId != null)
@@ -73,6 +73,10 @@ namespace Infrastructure.Persistence.Repositories
             if (Status != null)
             {
                 query = query.Where(x => x.Status == Status);
+            }
+            if (reCorrectionRequest != null)
+            {
+                query = query.Where(x => x.ReCorrectionRequest == reCorrectionRequest);
             }
             return await query
            .Include(x => x.Test)
@@ -102,7 +106,7 @@ namespace Infrastructure.Persistence.Repositories
             // var items = queryNumericRange.ToList();
         }
 
-        public virtual async Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status)
+        public virtual async Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, bool? reCorrectionRequest)
         {
             var query = _testInstances.AsQueryable();
             if (GroupDefinitionId != null)
@@ -120,6 +124,10 @@ namespace Infrastructure.Persistence.Repositories
             if (Status != null)
             {
                 query = query.Where(x => x.Status == Status);
+            }
+            if (reCorrectionRequest != null)
+            {
+                query = query.Where(x => x.ReCorrectionRequest == reCorrectionRequest);
             }
             return query
            .Include(x => x.Test)
