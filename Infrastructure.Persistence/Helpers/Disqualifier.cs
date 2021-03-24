@@ -1,4 +1,4 @@
-﻿using Application.Enums;
+using Application.Enums;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,18 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Persistence.Helpers.Calculation
+namespace Infrastructure.Persistence.Helpers
 {
-   public class Downgrader
+    public class Disqualifier
     {
         private DbContext dbContext;
         private ApplicationUser user;
         private GroupInstanceStudents currentGroup;
-        private GroupInstanceStudents lastGroup;
+        private List<TestInstance> testInstances;
+        private List<HomeWorkSubmition> homeWorkSubmitions;
 
-        private bool completeExecution;
-
-        public Downgrader(DbContext dbContext, ApplicationUser user)
+        public Disqualifier(DbContext dbContext, ApplicationUser user)
         {
             this.dbContext = dbContext;
             this.user = user;
@@ -49,16 +48,6 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running)
                 .FirstOrDefault();
 
-
-            //Get the last group
-            lastGroup = dbContext.Set<GroupInstanceStudents>()
-                .Include(x => x.GroupInstance.GroupDefinition.Sublevel.Level)
-                .Where(x => x.StudentId == user.Id
-                && x.IsDefault == false
-                && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Finished)
-                .OrderByDescending(x => x.Id)
-                .FirstOrDefault();
-
         }
 
         private void DoExecutionChecks()
@@ -68,14 +57,17 @@ namespace Infrastructure.Persistence.Helpers.Calculation
 
         private void Execute()
         {
-            if (!completeExecution)
-                return;
+            foreach (var item in testInstances)
+            {
+                item.Status = (int)TestInstanceEnum.Canceled;
+            }
 
-            //check the data of the last group and if more than 2 months ago then downgrade
-
-            //TODO: set the new sublevel id.
-
-
+            foreach (var item in homeWorkSubmitions)
+            {
+                item.Status = (int)HomeWorkSubmitionStatusEnum.Canceled;
+            }
+            currentGroup.IsDefault = false;
+            
             dbContext.SaveChanges();
         }
 

@@ -167,6 +167,9 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 Upgrader upgrader = new Upgrader(dbContext, user);
                 upgrader.CheckAndProcess();
             }
+
+
+            dbContext.SaveChanges();
         }
     }
 }

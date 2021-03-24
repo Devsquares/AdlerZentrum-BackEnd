@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Infrastructure.Persistence.Helpers.Calculation
 {
-    class Upgrader
+    public class Upgrader
     {
 
         private static int SUCCESS_FINAL_CRITERIA = 60;
@@ -17,6 +17,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
 
         private DbContext dbContext;
         private ApplicationUser user;
+        private StudentInfo studentInfo;
         private GroupInstanceStudents currentGroup;
 
         private bool isFinal;
@@ -25,6 +26,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
         {
             this.dbContext = dbContext;
             this.user = user;
+            studentInfo = new StudentInfo();
         }
 
         public void CheckAndProcess()
@@ -67,7 +69,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 CheckAndExecuteFinal();
             else
                 CheckAndExecuteNotFinal();
-           
+            dbContext.SaveChanges();
         }
 
         private void CheckAndExecuteFinal()
@@ -84,7 +86,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
             {
                 ExecuteFinal();
             }
-           
+
         }
 
         private void ExecuteFinal()
@@ -94,7 +96,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 //success
                 success();
             }
-            else 
+            else
             {
                 //failed
                 fail();
@@ -113,10 +115,11 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 .Count();
 
 
-            if ((countAttendance/noOfLessons) * 100 >= Upgrader.SUCCESS_ATTENDANCE_CRITERIA)
+            if ((countAttendance / noOfLessons) * 100 >= Upgrader.SUCCESS_ATTENDANCE_CRITERIA)
             {
                 success();
-            } else
+            }
+            else
             {
                 var countAbsence = dbContext.Set<LessonInstanceStudent>()
                 .Include(x => x.LessonInstance.GroupInstance.GroupDefinition.Sublevel)
@@ -137,6 +140,10 @@ namespace Infrastructure.Persistence.Helpers.Calculation
         public void success()
         {
             currentGroup.Succeeded = true;
+            studentInfo.StudentId = user.Id;
+            // TODO: change it to be with order
+            studentInfo.SublevelId = currentGroup.GroupInstance.GroupDefinition.SubLevelId + 1;
+            dbContext.Update(studentInfo);
             dbContext.Update(currentGroup);
             Upgrade();
         }
@@ -156,7 +163,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 .Where(x => x.StudentId == user.Id
                 && x.IsDefault == false
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Pending
-                && x.GroupInstance.GroupDefinition.Sublevel.Order == currentGroup.GroupInstance.GroupDefinition.Sublevel.Order + 1 
+                && x.GroupInstance.GroupDefinition.Sublevel.Order == currentGroup.GroupInstance.GroupDefinition.Sublevel.Order + 1
                 && !x.IsEligible)
                 .FirstOrDefault();
 
@@ -165,8 +172,6 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 nextGroup.IsEligible = true;
                 dbContext.Update(nextGroup);
             }
-
-
         }
     }
 }

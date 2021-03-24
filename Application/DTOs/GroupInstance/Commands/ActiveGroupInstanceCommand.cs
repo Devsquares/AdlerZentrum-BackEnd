@@ -27,13 +27,18 @@ namespace Application.DTOs
             private readonly ITestRepositoryAsync _testRepository;
             private readonly ITestInstanceRepositoryAsync _testInstanceRepository;
             private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignment;
+            private readonly IUsersRepositoryAsync _usersRepositoryAsync;
+            private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
+
             public ActiveGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
                 ILessonInstanceRepositoryAsync lessonInstanceRepository,
                 ILessonInstanceStudentRepositoryAsync lessonInstanceStudent,
                 ITestRepositoryAsync testRepositoryAsync,
                 ITestInstanceRepositoryAsync testInstanceRepository,
                 ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignment,
-                IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync)
+                IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
+                IUsersRepositoryAsync usersRepositoryAsync,
+                ISublevelRepositoryAsync sublevelRepositoryAsync)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
                 _lessonInstanceRepositoryAsync = lessonInstanceRepository;
@@ -42,6 +47,8 @@ namespace Application.DTOs
                 _testInstanceRepository = testInstanceRepository;
                 _teacherGroupInstanceAssignment = teacherGroupInstanceAssignment;
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
+                _usersRepositoryAsync = usersRepositoryAsync;
+                _sublevelRepositoryAsync = sublevelRepositoryAsync;
             }
 
             public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
@@ -68,6 +75,9 @@ namespace Application.DTOs
                             StudentId = item.StudentId
                         });
                         item.IsDefault = true;
+                        var student = _usersRepositoryAsync.GetByIdAsync(item.Id).Result;
+                        student.SublevelId = groupInstance.GroupDefinition.SubLevelId;
+                        await _usersRepositoryAsync.UpdateAsync(student);
                     }
                     await _groupInstanceStudentRepositoryAsync.UpdateBulkAsync(groupInstance.Students.ToList());
 

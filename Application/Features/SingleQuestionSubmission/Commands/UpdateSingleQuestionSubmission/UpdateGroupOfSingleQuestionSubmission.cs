@@ -36,6 +36,7 @@ namespace Application.Features
             public async Task<Response<int>> Handle(UpdateGroupOfSingleQuestionSubmission command, CancellationToken cancellationToken)
             {
                 double points = 0;
+                int PLACEMENTA1 = 60;
                 var testInstanceId = command.TestInstanceId;
                 foreach (var item in command.SingleQuestionSubmission)
                 {
@@ -56,6 +57,15 @@ namespace Application.Features
                     Status = (int)JobStatusEnum.New
                 });
                 testInstance.Points = testInstance.Points + points;
+                if (testInstance.Test.TestTypeId == (int)TestTypeEnum.placement)
+                {
+                    //TODO: set the sublevel of the student.
+
+                    if (testInstance.Points / testInstance.Test.TotalPoint >= PLACEMENTA1)
+                    {
+                        
+                    }
+                }
                 await _testInstanceRepository.UpdateAsync(testInstance);
 
                 return new Response<int>(testInstance.Id);

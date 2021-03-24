@@ -20,9 +20,20 @@ namespace Infrastructure.Persistence.Repositories
             _subLevels = dbContext.Set<Sublevel>();
         }
 
+        public Sublevel GetNextById(int id)
+        {
+            var current = _subLevels.Where(x => x.Id == id).FirstOrDefault();
+            return GetNextByOrder(current.Order);
+        }
+
+        public Sublevel GetNextByOrder(int order)
+        {
+            return _subLevels.Where(x => x.Order == order + 1).FirstOrDefault();
+        }
+
         public List<Sublevel> GetNotFinalSublevels()
         {
-            return _subLevels.Include(x=>x.Level).Where(x => x.IsFinal == false).ToList();
+            return _subLevels.Include(x => x.Level).Where(x => x.IsFinal == false).ToList();
         }
     }
 }

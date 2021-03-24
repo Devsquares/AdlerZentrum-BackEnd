@@ -8,5 +8,7 @@ namespace Application.Interfaces.Repositories
     public interface ISublevelRepositoryAsync : IGenericRepositoryAsync<Sublevel>
     {
         List<Sublevel> GetNotFinalSublevels();
+        Sublevel GetNextByOrder(int order);
+        Sublevel GetNextById(int id);
     }
 }
