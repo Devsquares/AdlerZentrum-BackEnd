@@ -9,4 +9,5 @@ public class AllTestsToManageViewModel
     public int TestType { get; set; }
     public int Status { get; set; }
     public string StudentName { get; set; }
+    public bool Reopened { get; set; }
 }
