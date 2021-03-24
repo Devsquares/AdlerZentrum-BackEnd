@@ -54,6 +54,15 @@ namespace Application.DTOs
             public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
             {
                 var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId).Result;
+                if (groupInstance == null)
+                {
+                    throw new Exception("This Group instance not found");
+                }
+                var notIsEligablStudents = groupInstance.Students.Where(x => x.IsEligible == false).ToList();
+                if(notIsEligablStudents != null && notIsEligablStudents.Count() > 0)
+                {
+                    throw new Exception("This Group instance cannot be activated because some students are not Eligible ");
+                }
                 var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(groupInstance.Id);
                 if (teacher == null)
                 {

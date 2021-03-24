@@ -83,6 +83,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IForumCommentRepositoryAsync, ForumCommentRepositoryAsync>();
             services.AddTransient<IForumReplyRepositoryAsync, ForumReplyRepositoryAsync>();
             services.AddTransient<IPlacementReleaseReopsitoryAsync, PlacementReleaseReopsitoryAsync>();
+            services.AddTransient<IStudentInfoRepositoryAsync, StudentInfoRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();

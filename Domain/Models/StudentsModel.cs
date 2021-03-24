@@ -15,5 +15,6 @@ namespace Domain.Models
         public DateTime? CreationDate { get; set; }
         public string ProfilePhoto { get; set; }
         public int? PromoCodeInstanceId { get; set; }
+        public bool IsEligible { get; set; }
     }
 }

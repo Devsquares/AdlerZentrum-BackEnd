@@ -146,7 +146,8 @@ namespace Infrastructure.Persistence.Repositories
                     isPlacementTest = x.IsPlacementTest,
                     CreationDate = x.CreatedDate,
                     ProfilePhoto = x.Student.Profilephoto,
-                    PromoCodeInstanceId = x.PromoCodeInstanceId
+                    PromoCodeInstanceId = x.PromoCodeInstanceId,
+                    IsEligible = x.IsEligible
 
                 }).ToList();
                 StudentsGroupInstanceObject.Teachers = new List<TeachersModel>();

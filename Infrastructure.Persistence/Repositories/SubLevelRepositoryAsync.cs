@@ -35,5 +35,10 @@ namespace Infrastructure.Persistence.Repositories
         {
             return _subLevels.Include(x => x.Level).Where(x => x.IsFinal == false).ToList();
         }
+
+        public Sublevel GetPreviousByOrder(int order)
+        {
+            return _subLevels.Where(x => x.Order == order - 1).FirstOrDefault();
+        }
     }
 }

@@ -91,7 +91,8 @@ namespace Application.DTOs.GroupInstance.Commands
                                     PromoCodeInstanceId = interestedStudent.PromoCodeInstanceId,
                                     PromoCodeInstance = interestedStudent.PromoCodeInstance,
                                     CreatedDate = DateTime.Now,
-                                    IsDefault = true
+                                    IsDefault = true,
+                                    IsEligible = interestedStudent.IsEligible
                                 });
 
                                 studentCount++;
@@ -131,7 +132,8 @@ namespace Application.DTOs.GroupInstance.Commands
                                     GroupInstanceId = groupInstanceobject.Id,
                                     StudentId = placemetTestStudent.Student.Id,
                                     IsDefault = true,
-                                    IsPlacementTest = true
+                                    IsPlacementTest = true,
+                                    IsEligible = placemetTestStudent.IsEligible
                                 });
                                 PlaceMentStudentCount++;
                                 studentCount++;
@@ -163,7 +165,8 @@ namespace Application.DTOs.GroupInstance.Commands
                                 {
                                     GroupInstanceId = groupInstanceobject.Id,
                                     StudentId = overPaymentStudent.Student.Id,
-                                    IsDefault = true
+                                    IsDefault = true,
+                                    IsEligible = overPaymentStudent.IsEligible
                                 });
 
                                 studentCount++;

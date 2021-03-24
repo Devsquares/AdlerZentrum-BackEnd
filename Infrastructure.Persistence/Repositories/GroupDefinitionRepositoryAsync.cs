@@ -122,5 +122,6 @@ namespace Infrastructure.Persistence.Repositories
             newSerial = newSerialInt.ToString().PadLeft(SERIAL_DIGITS, '0');
             return newSerial;
         }
+
     }
 }
