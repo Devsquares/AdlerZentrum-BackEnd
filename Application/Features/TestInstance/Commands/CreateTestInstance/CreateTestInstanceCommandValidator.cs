@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.TestInstance.Commands.CreateTestInstance
+namespace Application.Features
 {
     public class CreateTestInstanceCommandValidator : AbstractValidator<TestInstanceSolutionCommand>
     {

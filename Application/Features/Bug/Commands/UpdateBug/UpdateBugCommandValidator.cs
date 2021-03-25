@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.Bug.Commands.UpdateBug
+namespace Application.Features 
 {
     public class UpdateBugCommandValidator : AbstractValidator<UpdateBugCommand>
     {

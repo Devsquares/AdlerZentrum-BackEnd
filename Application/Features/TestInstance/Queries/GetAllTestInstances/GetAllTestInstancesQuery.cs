@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.TestInstance.Queries.GetAllTestInstances
+namespace Application.Features
 {
     public class GetAllTestInstancesQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllTestInstancesViewModel>>>
     {

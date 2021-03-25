@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumComment.Queries.GetForumCommentById
+namespace Application.Features
 {
     public class GetForumCommentByIdQuery : IRequest<Response<Domain.Entities.ForumComment>>
     {

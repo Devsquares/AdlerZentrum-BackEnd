@@ -38,7 +38,8 @@ namespace Application.DTOs
                 Reflection.CopyProperties(command, Sublevel);
                 for (int i = 0; i < command.NumberOflessons; i++)
                 {
-                    Sublevel.LessonDefinitions.Add(new LessonDefinition { Order = i + 1 });
+                    bool isLast = i == command.NumberOflessons - 1;
+                    Sublevel.LessonDefinitions.Add(new LessonDefinition { Order = i + 1, LastLesson = isLast });
                 }
                 await _SublevelRepository.AddAsync(Sublevel);
                 return new Response<int>(Sublevel.Id);

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.InterestedStudent.Commands.CreateInterestedStudent
+namespace Application.Features
 {
     public partial class CreateInterestedStudentCommand : IRequest<Response<int>>
     {

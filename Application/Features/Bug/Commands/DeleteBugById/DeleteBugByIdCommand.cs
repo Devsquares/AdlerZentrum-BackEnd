@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Bug.Commands.DeleteBugById
+namespace Application.Features 
 {
     public class DeleteBugByIdCommand : IRequest<Response<int>>
     {

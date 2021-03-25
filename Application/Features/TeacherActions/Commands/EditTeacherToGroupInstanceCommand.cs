@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.teacherActions.Commands
+namespace Application.Features
 {
     public class EditTeacherToGroupInstanceCommand : IRequest<Response<int>>
     {

@@ -1,17 +1,12 @@
-using Application.Features.ForumComment.Commands.CreateForumComment;
-using Application.Features.ForumComment.Commands.DeleteForumCommentById;
-using Application.Features.ForumComment.Commands.UpdateForumComment;
-using Application.Features.ForumComment.Queries.GetAllForumComments;
-using Application.Features.ForumComment.Queries.GetForumCommentById;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApi.Controllers.v1
-{
-    [ApiVersion("1.0")]
+namespace WebApi.Controllers
+{ 
     public class ForumCommentController : BaseApiController
     {
         // GET: api/<controller>

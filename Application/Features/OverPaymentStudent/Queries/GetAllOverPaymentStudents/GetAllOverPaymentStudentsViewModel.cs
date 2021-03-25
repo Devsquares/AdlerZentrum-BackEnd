@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.OverPaymentStudent.Queries.GetAllOverPaymentStudents
+namespace Application.Features
 {
 	public class GetAllOverPaymentStudentsViewModel
 	{

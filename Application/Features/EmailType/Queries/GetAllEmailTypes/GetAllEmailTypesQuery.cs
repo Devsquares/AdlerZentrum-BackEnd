@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailType.Queries.GetAllEmailTypes
+namespace Application.Features
 {
     public class GetAllEmailTypesQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllEmailTypesViewModel>>>
     {

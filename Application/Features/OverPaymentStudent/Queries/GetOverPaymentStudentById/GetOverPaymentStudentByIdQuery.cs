@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.OverPaymentStudent.Queries.GetOverPaymentStudentById
+namespace Application.Features
 {
     public class GetOverPaymentStudentByIdQuery : IRequest<Response<Domain.Entities.OverPaymentStudent>>
     {

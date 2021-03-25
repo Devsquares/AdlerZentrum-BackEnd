@@ -1,11 +1,7 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Level.Queries;
 using Application.Exceptions;
-using Application.Features.Claims.Command;
-using Application.Features.Claims.Queries;
-using Application.Features.PromoCodeInstance.Commands;
-using Application.Features.PromoCodeInstance.Commands.CreatePromoCodeInstance;
-using Application.Features.PromoCodeInstance.Queries.GetAllPromoCodeInstances;
+using Application.Features;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

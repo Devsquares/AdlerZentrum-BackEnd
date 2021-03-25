@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Bug.Commands.CreateBug
+namespace Application.Features 
 {
     public partial class CreateBugCommand : IRequest<Response<int>>
     {

@@ -53,26 +53,37 @@ namespace Application.DTOs
 
             public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
             {
+
                 var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId).Result;
                 if (groupInstance == null)
                 {
-                    throw new Exception("This Group instance not found");
+                    return new Response<int>("This Group instance not found");
                 }
-                var notIsEligablStudents = groupInstance.Students.Where(x => x.IsEligible == false).ToList();
-                if(notIsEligablStudents != null && notIsEligablStudents.Count() > 0)
+                if (groupInstance.Status == (int)GroupInstanceStatusEnum.Pending)
                 {
-                    throw new Exception("This Group instance cannot be activated because some students are not Eligible ");
-                }
-                var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(groupInstance.Id);
-                if (teacher == null)
-                {
-                    throw new Exception("This Group instance not acctive yet kindly choose the teacher.");
-                }
-                if (groupInstance.Status == 0)
-                {
-                    var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions;
+                    var subLevelTest = _testRepository.GetSubLevelTestBySublevelAsync(groupInstance.GroupDefinition.SubLevelId).Result;
+                    var finalLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
 
-                    // TODO: remove it to API..
+                    var notIsEligablStudents = groupInstance.Students.Where(x => x.IsEligible == false).ToList();
+                    if (notIsEligablStudents != null && notIsEligablStudents.Count() > 0)
+                    {
+                        return new Response<int>("This Group instance cannot be activated because some students are not Eligible ");
+                    }
+                    var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(groupInstance.Id);
+                    if (teacher == null)
+                    {
+                        return new Response<int>("This Group instance not acctive yet kindly choose the teacher.");
+                    }
+                    if (groupInstance.GroupDefinition.Sublevel.IsFinal)
+                    {
+                        if (finalLevelTest == null) return new Response<int>("Cann't active group please create Final test.");
+                    }
+                    else
+                    {
+                        if (subLevelTest == null) return new Response<int>("Cann't active group please create sublevel test.");
+                    }
+                    var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions;
+                    // TODO: genrate date time for lesson instance.
                     List<LessonInstanceStudent> lessonInstanceStudents = new List<LessonInstanceStudent>();
                     foreach (var item in groupInstance.Students)
                     {
@@ -104,9 +115,8 @@ namespace Application.DTOs
                     }
                     groupInstance.Status = (int)GroupInstanceStatusEnum.Running;
                     await _groupInstanceRepositoryAsync.UpdateAsync(groupInstance);
-                    // TODO: check before add
-                    // await _lessonInstanceRepositoryAsync.DeleteBulkAsync(lessonInstances);
                     await _lessonInstanceRepositoryAsync.AddBulkAsync(lessonInstances);
+
                     List<LessonInstanceStudent> LessonInstanceStudentsList = new List<LessonInstanceStudent>();
 
                     foreach (var item in lessonInstances)
@@ -148,10 +158,8 @@ namespace Application.DTOs
                         }
                     }
 
-                    // check is final sublevl or not? then set sublevel or final.
                     if (groupInstance.GroupDefinition.Sublevel.IsFinal)
                     {
-                        var finalLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
                         var lastLesson = lessonInstances[lessonInstances.Count - 1];
 
                         if (finalLevelTest != null)
@@ -178,7 +186,6 @@ namespace Application.DTOs
                     }
                     else
                     {
-                        var subLevelTest = _testRepository.GetSubLevelTestBySublevelAsync(groupInstance.GroupDefinition.SubLevelId).Result;
                         var lastLesson = lessonInstances[lessonInstances.Count - 1];
 
                         if (subLevelTest != null)
@@ -203,6 +210,10 @@ namespace Application.DTOs
                         }
                     }
                     await _testInstanceRepository.AddBulkAsync(testInstance);
+                }
+                else
+                {
+                    return new Response<int>("Cann't active group please check the status.");
                 }
                 return new Response<int>(groupInstance.Id);
             }

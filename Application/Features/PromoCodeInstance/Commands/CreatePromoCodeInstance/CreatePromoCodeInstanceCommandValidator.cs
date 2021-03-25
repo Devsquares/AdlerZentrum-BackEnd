@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.PromoCodeInstance.Commands.CreatePromoCodeInstance
+namespace Application.Features
 {
     public class CreatePromoCodeInstanceCommandValidator : AbstractValidator<CreatePromoCodeInstanceCommand>
     {

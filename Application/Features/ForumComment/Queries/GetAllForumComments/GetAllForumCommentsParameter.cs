@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.ForumComment.Queries.GetAllForumComments
+namespace Application.Features
 {
     public class GetAllForumCommentsParameter : RequestParameter
     {

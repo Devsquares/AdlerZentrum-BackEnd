@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailType.Commands.CreateEmailType
+namespace Application.Features
 {
     public partial class CreateEmailTypeCommand : IRequest<Response<int>>
     {

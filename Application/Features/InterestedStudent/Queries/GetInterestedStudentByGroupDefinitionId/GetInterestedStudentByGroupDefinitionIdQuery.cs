@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.InterestedStudent.Queries.GetInterestedStudentByGroupDefinitionId
+namespace Application.Features
 {
     public class GetInterestedStudentByGroupDefinitionIdQuery : IRequest<Response<List<StudentsModel>>>
     {

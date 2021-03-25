@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionDetails.Queries.GetGroupConditionDetailsById
+namespace Application.Features
 {
     public class GetGroupConditionDetailsByIdQuery : IRequest<Response<Domain.Entities.GroupConditionDetail>>
     {

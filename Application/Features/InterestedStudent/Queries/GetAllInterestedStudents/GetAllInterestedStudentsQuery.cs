@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.InterestedStudent.Queries.GetAllInterestedStudents
+namespace Application.Features
 {
     public class GetAllInterestedStudentsQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllInterestedStudentsViewModel>>>
     {

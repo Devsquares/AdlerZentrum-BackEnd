@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.InterestedStudent.Commands.DeleteInterestedStudentById
+namespace Application.Features
 {
     public class DeleteInterestedStudentByIdCommand : IRequest<Response<int>>
     {

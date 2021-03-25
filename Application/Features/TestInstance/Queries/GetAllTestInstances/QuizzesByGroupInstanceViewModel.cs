@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.TestInstance.Queries.GetAllTestInstances
+namespace Application.Features
 {
     public class QuizzesByGroupInstanceViewModel
     {

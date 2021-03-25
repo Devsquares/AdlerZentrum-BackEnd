@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.PromoCodeInstance.Commands.CreatePromoCodeInstance
+namespace Application.Features
 {
     public partial class CreatePromoCodeInstanceCommand : IRequest<Response<int>>
     {

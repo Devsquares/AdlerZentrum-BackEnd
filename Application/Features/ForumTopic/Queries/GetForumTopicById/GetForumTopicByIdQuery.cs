@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumTopic.Queries.GetForumTopicById
+namespace Application.Features
 {
     public class GetForumTopicByIdQuery : IRequest<Response<Domain.Entities.ForumTopic>>
     {

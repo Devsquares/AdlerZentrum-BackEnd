@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.InterestedStudent.Queries.GetInterestedStudentById
+namespace Application.Features
 {
     public class GetInterestedStudentByIdQuery : IRequest<Response<Domain.Entities.InterestedStudent>>
     {

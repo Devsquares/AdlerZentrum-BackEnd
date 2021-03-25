@@ -1,10 +1,10 @@
-using Application.Features.ForumReply.Queries.GetAllForumReplys;
+using Application.Features;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.ForumComment.Queries.GetAllForumComments
+namespace Application.Features
 {
 	public class GetAllForumCommentsViewModel
 	{

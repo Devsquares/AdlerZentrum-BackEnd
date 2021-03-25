@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.GroupConditionDetails.Queries.GetAllGroupConditionDetailss
+namespace Application.Features
 {
 	public class GetAllGroupConditionDetailssViewModel
 	{

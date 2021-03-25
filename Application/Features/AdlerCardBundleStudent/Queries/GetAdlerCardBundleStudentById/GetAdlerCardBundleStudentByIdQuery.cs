@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdlerCardBundleStudent.Queries.GetAdlerCardBundleStudentById
+namespace Application.Features 
 {
     public class GetAdlerCardBundleStudentByIdQuery : IRequest<Response<Domain.Entities.AdlerCardBundleStudent>>
     {

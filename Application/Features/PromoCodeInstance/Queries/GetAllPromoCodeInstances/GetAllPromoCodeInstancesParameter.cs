@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.PromoCodeInstance.Queries.GetAllPromoCodeInstances
+namespace Application.Features
 {
     public class GetAllPromoCodeInstancesParameter : FilteredRequestParameter
     {

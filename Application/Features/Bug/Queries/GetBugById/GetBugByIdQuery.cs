@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Bug.Queries.GetBugById
+namespace Application.Features 
 {
     public class GetBugByIdQuery : IRequest<Response<Domain.Entities.Bug>>
     {

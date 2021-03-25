@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Persistence.Helpers.Calculation
+namespace Application.Features
 {
     public class Upgrader
     {

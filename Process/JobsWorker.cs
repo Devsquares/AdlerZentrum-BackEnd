@@ -32,12 +32,14 @@ namespace Process
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                TimeSpan interval = new TimeSpan(0, 0, 1, 0);
+                TimeSpan interval = new TimeSpan(0, 0, 0, 10);
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var Jobs = dbContext.Jobs
-                       .Where(x => x.Status == (int)JobStatusEnum.New).ToList();
+                       .Where(x => x.Status == (int)JobStatusEnum.New
+                       && (x.StartDate > DateTime.Now || x.StartDate == null)
+                       ).ToList();
                     if (Jobs.Count > 0)
                     {
                         _doJob = new Thread(new ParameterizedThreadStart(_doJobThread.Run));

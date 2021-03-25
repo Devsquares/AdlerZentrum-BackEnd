@@ -1,5 +1,5 @@
 using Application.Enums;
-using Application.Features.TestInstance.Queries.GetAllTestInstances;
+using Application.Features;
 using Application.Filters;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;

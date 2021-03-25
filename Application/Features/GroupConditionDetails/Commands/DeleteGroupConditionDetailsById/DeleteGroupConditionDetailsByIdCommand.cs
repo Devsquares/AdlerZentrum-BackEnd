@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionDetails.Commands.DeleteGroupConditionDetailsById
+namespace Application.Features
 {
     public class DeleteGroupConditionDetailsByIdCommand : IRequest<Response<int>>
     {

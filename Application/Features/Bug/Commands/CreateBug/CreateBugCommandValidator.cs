@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.Bug.Commands.CreateBug
+namespace Application.Features
 {
     public class CreateBugCommandValidator : AbstractValidator<CreateBugCommand>
     {

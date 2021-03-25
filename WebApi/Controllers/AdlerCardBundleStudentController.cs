@@ -1,8 +1,4 @@
-using Application.Features.AdlerCardBundleStudent.Commands.CreateAdlerCardBundleStudent;
-using Application.Features.AdlerCardBundleStudent.Commands.DeleteAdlerCardBundleStudentById;
-using Application.Features.AdlerCardBundleStudent.Commands.UpdateAdlerCardBundleStudent;
-using Application.Features.AdlerCardBundleStudent.Queries.GetAllAdlerCardBundleStudents;
-using Application.Features.AdlerCardBundleStudent.Queries.GetAdlerCardBundleStudentById;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

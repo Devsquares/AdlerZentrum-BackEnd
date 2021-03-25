@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailTemplate.Queries.GetEmailTemplateById
+namespace Application.Features 
 {
     public class GetEmailTemplateByIdQuery : IRequest<Response<Domain.Entities.EmailTemplate>>
     {

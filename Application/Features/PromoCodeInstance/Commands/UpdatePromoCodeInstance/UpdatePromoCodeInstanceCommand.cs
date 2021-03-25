@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.PromoCodeInstance.Commands.UpdatePromoCodeInstance
+namespace Application.Features
 {
     public class UpdatePromoCodeInstanceCommand : IRequest<Response<int>>
     {

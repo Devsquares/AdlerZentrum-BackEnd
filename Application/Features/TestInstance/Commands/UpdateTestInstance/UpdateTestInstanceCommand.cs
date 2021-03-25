@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.TestInstance.Commands.UpdateTestInstance
+namespace Application.Features
 {
     public class UpdateTestInstanceCommand : IRequest<Response<int>>
     {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.OverPaymentStudent.Commands.UpdateOverPaymentStudent
+namespace Application.Features
 {
     public class UpdateOverPaymentStudentCommandValidator : AbstractValidator<UpdateOverPaymentStudentCommand>
     {

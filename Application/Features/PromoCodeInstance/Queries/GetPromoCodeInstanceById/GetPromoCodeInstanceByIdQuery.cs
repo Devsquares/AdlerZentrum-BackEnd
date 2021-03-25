@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.PromoCodeInstance.Queries.GetPromoCodeInstanceById
+namespace Application.Features
 {
     public class GetPromoCodeInstanceByIdQuery : IRequest<Response<Domain.Entities.PromoCodeInstance>>
     {

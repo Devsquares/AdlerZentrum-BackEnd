@@ -1255,8 +1255,17 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("ExecutionDate")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Failure")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("FinishDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("GroupInstanceId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
@@ -1265,13 +1274,16 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("StudentId")
                         .HasColumnType("text");
 
-                    b.Property<int>("TestInstanceId")
+                    b.Property<int?>("TestInstanceId")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -1294,6 +1306,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
+
+                    b.Property<bool>("LastLesson")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
@@ -1385,6 +1400,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
+
+                    b.Property<bool>("Disqualified")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("Homework")
                         .HasColumnType("bit");
@@ -1736,6 +1754,43 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Setting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<double>("PlacementA1")
+                        .HasColumnType("double");
+
+                    b.Property<double>("PlacementA2")
+                        .HasColumnType("double");
+
+                    b.Property<double>("PlacementB1")
+                        .HasColumnType("double");
+
+                    b.Property<double>("PlacementB2")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Settings");
+                });
+
             modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
                 {
                     b.Property<int>("Id")
@@ -1871,7 +1926,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SublevelId");
 
-                    b.ToTable("studentInfos");
+                    b.ToTable("StudentInfos");
                 });
 
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>

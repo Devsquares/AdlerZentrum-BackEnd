@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailType.Queries.GetEmailTypeById
+namespace Application.Features
 {
     public class GetEmailTypeByIdQuery : IRequest<Response<Domain.Entities.EmailType>>
     {

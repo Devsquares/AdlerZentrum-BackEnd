@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumReply.Commands.CreateForumReply
+namespace Application.Features
 {
     public partial class CreateForumReplyCommand : IRequest<Response<int>>
     {

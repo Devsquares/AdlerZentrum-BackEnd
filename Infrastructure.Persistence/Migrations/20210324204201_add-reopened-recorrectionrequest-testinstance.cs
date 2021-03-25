@@ -6,17 +6,17 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "ReCorrectionRequest",
-                table: "TestInstances",
-                nullable: false,
-                defaultValue: false);
+            // migrationBuilder.AddColumn<bool>(
+            //     name: "ReCorrectionRequest",
+            //     table: "TestInstances",
+            //     nullable: false,
+            //     defaultValue: false);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "Reopened",
-                table: "TestInstances",
-                nullable: false,
-                defaultValue: false);
+            // migrationBuilder.AddColumn<bool>(
+            //     name: "Reopened",
+            //     table: "TestInstances",
+            //     nullable: false,
+            //     defaultValue: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

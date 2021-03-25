@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.GroupConditionDetails.Commands.UpdateGroupConditionDetails
+namespace Application.Features
 {
     public class UpdateGroupConditionDetailsCommandValidator : AbstractValidator<UpdateGroupConditionDetailsCommand>
     {

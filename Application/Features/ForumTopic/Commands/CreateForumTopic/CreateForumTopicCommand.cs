@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumTopic.Commands.CreateForumTopic
+namespace Application.Features
 {
     public partial class CreateForumTopicCommand : IRequest<Response<int>>
     {

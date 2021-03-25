@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.InterestedStudent.Queries.GetAllInterestedStudents
+namespace Application.Features
 {
     public class GetAllInterestedStudentsParameter : FilteredRequestParameter
     {

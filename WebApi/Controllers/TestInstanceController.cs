@@ -1,8 +1,5 @@
 using Application.Enums;
 using Application.Features;
-using Application.Features.TestInstance.Commands.DeleteTestInstanceById;
-using Application.Features.TestInstance.Commands.UpdateTestInstance;
-using Application.Features.TestInstance.Queries.GetAllTestInstances;
 using Application.Wrappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

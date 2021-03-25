@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdlerCardBundleStudent.Commands.CreateAdlerCardBundleStudent
+namespace Application.Features 
 {
     public partial class CreateAdlerCardBundleStudentCommand : IRequest<Response<int>>
     {

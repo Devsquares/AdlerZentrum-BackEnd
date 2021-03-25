@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupInstancesStudents.Commands
+namespace Application.Features
 {
     public class ValidateGroupInstancesStudentsCommand : IRequest<Response<int>>
     {

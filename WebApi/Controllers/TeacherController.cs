@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
-using Application.Features.teacherActions.Commands;
+using Application.DTOs.GroupInstance.Commands;
+using Application.Features;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace WebApi.Controllers
             {
                 TeacherId = teacherId,
                 GroupInstanceId = groupInstanceId
-            })); ;
+            }));
         }
 
         [HttpPut("EditTeacherToGroupInstance")]

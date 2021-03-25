@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdlerCardBundleStudent.Commands.UpdateAdlerCardBundleStudent
+namespace Application.Features 
 {
 	public class UpdateAdlerCardBundleStudentCommand : IRequest<Response<int>>
     {

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.DTOs;
-using Application.Features.InterestedStudent.Queries.GetInterestedStudentByGroupDefinitionId;
-using Application.Features.OverPaymentStudent.Queries.GetOverPaymentStudentByGroupDefinitionId;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers

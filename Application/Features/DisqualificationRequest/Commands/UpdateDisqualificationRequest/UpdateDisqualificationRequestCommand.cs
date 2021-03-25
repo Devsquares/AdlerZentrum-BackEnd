@@ -24,11 +24,14 @@ namespace Application.Features
         {
             private readonly IDisqualificationRequestRepositoryAsync _disqualificationrequestRepository;
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
+            private readonly IJobRepositoryAsync _jobRepository;
             public UpdateDisqualificationRequestCommandHandler(IDisqualificationRequestRepositoryAsync disqualificationrequestRepository,
-               IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync)
+               IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
+               IJobRepositoryAsync jobRepositoryAsync)
             {
                 _disqualificationrequestRepository = disqualificationrequestRepository;
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
+                _jobRepository = jobRepositoryAsync;
             }
             public async Task<Response<int>> Handle(UpdateDisqualificationRequestCommand command, CancellationToken cancellationToken)
             {
@@ -49,8 +52,17 @@ namespace Application.Features
                     if (command.DisqualificationRequestStatus == (int)DisqualificationRequestStatusEnum.Disqualified)
                     {
                         student.Disqualified = true;
+                        student.IsDefault = false;
                         student.DisqualifiedComment = command.Comment;
                         await _groupInstanceStudentRepositoryAsync.UpdateAsync(student);
+
+                        await _jobRepository.AddAsync(new Job
+                        {
+                            Type = (int)JobTypeEnum.Disqualifier,
+                            GroupInstanceId = student.GroupInstanceId,
+                            StudentId = student.StudentId,
+                            Status = (int)JobStatusEnum.New
+                        });
                     }
                 }
                 return new Response<int>(disqualificationrequest.Id);

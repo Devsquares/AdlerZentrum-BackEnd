@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailTemplate.Commands.CreateEmailTemplate
+namespace Application.Features 
 {
     public partial class CreateEmailTemplateCommand : IRequest<Response<int>>
     {

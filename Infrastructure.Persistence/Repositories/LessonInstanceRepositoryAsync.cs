@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -22,6 +23,10 @@ namespace Infrastructure.Persistence.Repositories
             return lessonInstances
                 .Include(x => x.GroupInstance)
                 .Where(x => x.GroupInstanceId == GroupInstanceId).ToList();
+        }
+        public async override Task<LessonInstance> GetByIdAsync(int id)
+        {
+            return await lessonInstances.Include(x => x.LessonDefinition).ThenInclude(x => x.Sublevel).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
     }
 }

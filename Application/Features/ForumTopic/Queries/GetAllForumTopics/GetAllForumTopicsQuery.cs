@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumTopic.Queries.GetAllForumTopics
+namespace Application.Features
 {
     public class GetAllForumTopicsQuery : IRequest<ForumTopicPagedResponse<IEnumerable<GetAllForumTopicsViewModel>>>
     {

@@ -19,7 +19,10 @@ namespace Infrastructure.Persistence.Repositories
         {
             _subLevels = dbContext.Set<Sublevel>();
         }
-
+        public Sublevel GetByOrder(int order)
+        {
+            return _subLevels.Where(x => x.Order == order).FirstOrDefault();
+        }
         public Sublevel GetNextById(int id)
         {
             var current = _subLevels.Where(x => x.Id == id).FirstOrDefault();
@@ -28,7 +31,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public Sublevel GetNextByOrder(int order)
         {
-            return _subLevels.Where(x => x.Order == order + 1).FirstOrDefault();
+            return GetByOrder(order + 1);
         }
 
         public List<Sublevel> GetNotFinalSublevels()
