@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210324031700_removeDis")]
+    partial class removeDis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1209,9 +1211,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupDefinitionId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsEligible")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsPlacementTest")
                         .HasColumnType("bit");
 
@@ -1485,9 +1484,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<int>("GroupDefinitionId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsEligible")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPlacementTest")
                         .HasColumnType("bit");
@@ -1836,44 +1832,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("SingleQuestionSubmissions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.StudentInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("varchar(85)");
-
-                    b.Property<int>("SublevelId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("SublevelSuccess")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.HasIndex("SublevelId");
-
-                    b.ToTable("studentInfos");
-                });
-
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>
                 {
                     b.Property<int>("Id")
@@ -2062,12 +2020,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<double>("Points")
                         .HasColumnType("double");
-
-                    b.Property<bool>("ReCorrectionRequest")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Reopened")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime");
@@ -2754,19 +2706,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.TestInstance", "TestInstance")
                         .WithMany()
                         .HasForeignKey("TestInstanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.StudentInfo", b =>
-                {
-                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
-
-                    b.HasOne("Domain.Entities.Sublevel", "Sublevel")
-                        .WithMany()
-                        .HasForeignKey("SublevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

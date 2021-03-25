@@ -54,10 +54,40 @@ namespace Process
                             var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
                             ScoreCalculator ScoreCalculator = new ScoreCalculator(dbContext, student);
                         }
-                        catch (System.Exception)
+                        catch (System.Exception ex)
                         {
-
-                            throw;
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
+                        }
+                        break;
+                    case (int)JobTypeEnum.Upgrader:
+                        try
+                        {
+                            var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                            Upgrader upgrader = new Upgrader(dbContext, student);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
+                        }
+                        break;
+                    case (int)JobTypeEnum.Downgrader:
+                        try
+                        {
+                            var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                            Downgrader downgrader = new Downgrader(dbContext, student);
+                        }
+                        catch (System.Exception ex)
+                        {
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
                         }
                         break;
                     default:

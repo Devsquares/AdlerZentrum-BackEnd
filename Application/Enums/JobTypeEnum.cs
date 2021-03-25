@@ -7,6 +7,8 @@ namespace Application.Enums
     public enum JobTypeEnum
     {
         TestCorrection = 0,
-        ScoreCalculator = 1
+        ScoreCalculator = 1,
+        Upgrader = 2,
+        Downgrader = 3
     }
 }

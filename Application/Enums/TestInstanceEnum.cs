@@ -10,6 +10,7 @@ namespace Application.Enums
         Pending = 1,
         Solved = 2,
         Missed = 3,
-        Corrected = 4
+        Corrected = 4,
+        Canceled = 5
     }
 }

@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Enums;
+using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using Domain.Entities;
 using MediatR;
@@ -21,11 +22,14 @@ namespace Application.DTOs
         public class CreateLessonInstanceReportCommandHandler : IRequestHandler<CreateLessonInstanceReportCommand, Response<bool>>
         {
             private readonly ILessonInstanceRepositoryAsync _LessonInstanceRepositoryAsync;
+            private readonly IJobRepositoryAsync _jobRepository;
             private readonly IMediator _mediator;
             public CreateLessonInstanceReportCommandHandler(ILessonInstanceRepositoryAsync LessonInstanceRepository,
+            IJobRepositoryAsync jobRepositoryAsync,
                 IMediator mediator)
             {
                 _LessonInstanceRepositoryAsync = LessonInstanceRepository;
+                _jobRepository = jobRepositoryAsync;
                 _mediator = mediator;
             }
             public async Task<Response<bool>> Handle(CreateLessonInstanceReportCommand command, CancellationToken cancellationToken)
@@ -56,6 +60,15 @@ namespace Application.DTOs
                             Text = command.AdditionalHomework.Text,
                             TeacherId = command.TeacherId,
                             LessonInstanceId = lessonInstance.Id
+                        });
+                    }
+                    foreach (var item in lessonInstance.LessonInstanceStudents)
+                    {
+                        await _jobRepository.AddAsync(new Job
+                        {
+                            Type = (int)JobTypeEnum.Upgrader,
+                            StudentId = item.StudentId,
+                            Status = (int)JobStatusEnum.New
                         });
                     }
                 }

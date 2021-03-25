@@ -84,6 +84,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                     IsPlacementTest = false,
                                     PromoCodeInstanceId = student.PromoCodeInstanceId.Value,
                                     RegisterDate = student.CreatedDate.Value,
+                                    IsEligible = student.IsEligible
                                 });
                             }
                             else
@@ -95,6 +96,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                     CreatedDate = DateTime.Now,
                                     IsPlacementTest = student.IsPlacementTest,
                                     RegisterDate = student.CreatedDate.Value,
+                                    IsEligible = student.IsEligible
                                 });
                             }
                         }

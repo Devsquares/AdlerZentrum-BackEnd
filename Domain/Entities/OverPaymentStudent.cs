@@ -13,5 +13,6 @@ namespace Domain.Entities
         public GroupDefinition GroupDefinition { get; set; }
         public bool IsPlacementTest { get; set; }
         public DateTime RegisterDate { get; set; }
+        public bool IsEligible { get; set; }
     }
 }

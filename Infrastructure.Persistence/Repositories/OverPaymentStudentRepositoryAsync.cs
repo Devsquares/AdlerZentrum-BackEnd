@@ -39,7 +39,8 @@ namespace Infrastructure.Persistence.Repositories
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
 
                     ProfilePhoto = x.Student.Profilephoto,
-                    isPlacementTest = x.IsPlacementTest
+                    isPlacementTest = x.IsPlacementTest,
+                    IsEligible = x.IsEligible
                 }).ToList();
             return overpaymentstudents;
         }

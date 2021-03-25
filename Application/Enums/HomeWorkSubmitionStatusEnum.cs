@@ -10,6 +10,7 @@ namespace Application.Enums
         Draft = 1,
         Solved = 2,
         Corrected = 3,
-        Missed = 4
+        Missed = 4,
+        Canceled = 5
     }
 }

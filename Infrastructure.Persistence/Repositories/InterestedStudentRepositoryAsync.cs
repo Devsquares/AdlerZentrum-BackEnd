@@ -42,7 +42,8 @@ namespace Infrastructure.Persistence.Repositories
                     isPlacementTest = x.IsPlacementTest,
                     ProfilePhoto = x.Student.Profilephoto,
                     PromoCodeInstanceId = x.PromoCodeInstanceId,
-                    PromoCodeValue = x.PromoCodeInstance.PromoCode.Value
+                    PromoCodeValue = x.PromoCodeInstance.PromoCode.Value,
+                    IsEligible = x.IsEligible
                 }).ToList();
             return interestedStudents;
         }

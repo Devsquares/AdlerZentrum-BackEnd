@@ -138,6 +138,7 @@ namespace Infrastructure.Persistence.Repositories
                     groupInstanceStudentsobject.CreatedDate = student.CreationDate;
                     groupInstanceStudentsobject.LastModifiedDate = DateTime.Now;
                     groupInstanceStudentsobject.IsDefault = true;
+                    groupInstanceStudentsobject.IsEligible = student.IsEligible;
                     groupInstanceStudentsobjectList.Add(groupInstanceStudentsobject);
                 }
 
@@ -187,6 +188,7 @@ namespace Infrastructure.Persistence.Repositories
                     groupInstanceStudentsobject.CreatedDate = student.CreationDate;
                     groupInstanceStudentsobject.LastModifiedDate = DateTime.Now;
                     groupInstanceStudentsobject.IsDefault = true;
+                    groupInstanceStudentsobject.IsEligible = student.IsEligible;
                     groupInstanceStudentsobjectList.Add(groupInstanceStudentsobject);
                 }
 
@@ -232,5 +234,7 @@ namespace Infrastructure.Persistence.Repositories
             }
             return list;
         }
+
+       
     }
 }

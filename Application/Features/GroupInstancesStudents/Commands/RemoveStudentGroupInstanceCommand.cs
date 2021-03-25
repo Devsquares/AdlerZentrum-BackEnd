@@ -59,6 +59,7 @@ namespace Application.Features.GroupInstancesStudents.Commands
                             IsPlacementTest = false,
                             PromoCodeInstanceId = student.PromoCodeInstanceId.Value,
                             RegisterDate = student.CreatedDate.Value,
+                            IsEligible = student.IsEligible
                         });
                     }
                     else
@@ -70,6 +71,7 @@ namespace Application.Features.GroupInstancesStudents.Commands
                             CreatedDate = DateTime.Now,
                             IsPlacementTest = student.IsPlacementTest,
                             RegisterDate = student.CreatedDate.Value,
+                            IsEligible = student.IsEligible
                         });
                     }
                     student.GroupInstance = null;
