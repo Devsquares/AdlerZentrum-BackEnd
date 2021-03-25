@@ -1,7 +1,6 @@
 ﻿using Application.DTOs.BasicData;
-using Application.Enums;
-using Application.Features.ForumType.Queries.GetAllForumTypes;
-using Application.Interfaces;
+using Application.Enums; 
+using Application.Features;
 using Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

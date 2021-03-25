@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailTemplate.Commands.DeleteEmailTemplateById
+namespace Application.Features 
 {
     public class DeleteEmailTemplateByIdCommand : IRequest<Response<int>>
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailType.Commands.DeleteEmailTypeById
+namespace Application.Features 
 {
     public class DeleteEmailTypeByIdCommand : IRequest<Response<int>>
     {

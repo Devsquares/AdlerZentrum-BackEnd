@@ -1,8 +1,4 @@
-using Application.Features.EmailTemplate.Commands.CreateEmailTemplate;
-using Application.Features.EmailTemplate.Commands.DeleteEmailTemplateById;
-using Application.Features.EmailTemplate.Commands.UpdateEmailTemplate;
-using Application.Features.EmailTemplate.Queries.GetAllEmailTemplates;
-using Application.Features.EmailTemplate.Queries.GetEmailTemplateById;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

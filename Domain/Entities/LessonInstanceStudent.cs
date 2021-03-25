@@ -13,6 +13,7 @@ namespace Domain.Entities
         public virtual ApplicationUser Student { get; set; }
         public bool Attend { get; set; }
         public bool Homework { get; set; }
+        public bool Disqualified { get; set; }
 
         public object Clone()
         {

@@ -22,21 +22,30 @@ namespace Application.Features
             private readonly ISingleQuestionSubmissionRepositoryAsync _singlequestionsubmissionRepository;
             private readonly ITestInstanceRepositoryAsync _testInstanceRepository;
             private readonly IJobRepositoryAsync _jobRepository;
+            private readonly ISettingRepositoryAsync _settings;
+            private readonly ISublevelRepositoryAsync _sublevel;
+            private readonly IUsersRepositoryAsync _usersRepositoryAsync;
             private readonly IMediator _medaitor;
             public UpdateGroupOfSingleQuestionSubmissionHandler(ISingleQuestionSubmissionRepositoryAsync singlequestionsubmissionRepository,
             ITestInstanceRepositoryAsync testInstanceRepositoryAsync,
             IJobRepositoryAsync jobRepositoryAsync,
+            ISettingRepositoryAsync settingRepositoryAsync,
+            ISublevelRepositoryAsync sublevelRepositoryAsync,
+            IUsersRepositoryAsync usersRepositoryAsync,
             IMediator Mediator)
             {
                 _singlequestionsubmissionRepository = singlequestionsubmissionRepository;
                 _testInstanceRepository = testInstanceRepositoryAsync;
                 _jobRepository = jobRepositoryAsync;
+                _settings = settingRepositoryAsync;
+                _sublevel = sublevelRepositoryAsync;
+                _usersRepositoryAsync = usersRepositoryAsync;
                 _medaitor = Mediator;
             }
             public async Task<Response<int>> Handle(UpdateGroupOfSingleQuestionSubmission command, CancellationToken cancellationToken)
             {
                 double points = 0;
-                int PLACEMENTA1 = 60;
+                var settings = _settings.GetAllAsync().Result;
                 var testInstanceId = command.TestInstanceId;
                 foreach (var item in command.SingleQuestionSubmission)
                 {
@@ -60,10 +69,20 @@ namespace Application.Features
                 if (testInstance.Test.TestTypeId == (int)TestTypeEnum.placement)
                 {
                     //TODO: set the sublevel of the student.
-
-                    if (testInstance.Points / testInstance.Test.TotalPoint >= PLACEMENTA1)
+                    if (settings.Count > 0)
                     {
-                        
+                        double precetnge = (testInstance.Points / testInstance.Test.TotalPoint) / 100;
+                        var user = _usersRepositoryAsync.GetUserById(testInstance.StudentId);
+                        Sublevel sublevel = null;
+                        if (precetnge >= settings[0].PlacementB2)
+                        {
+                            // A1 50 % -A2 60 % -B1 70 % -B2 80 %
+                            sublevel = _sublevel.GetByOrder(4);
+                        }
+
+
+                        user.SublevelId = sublevel.Id;
+                        await _usersRepositoryAsync.UpdateAsync(user);
                     }
                 }
                 await _testInstanceRepository.UpdateAsync(testInstance);

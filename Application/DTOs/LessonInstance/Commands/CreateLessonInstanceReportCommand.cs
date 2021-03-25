@@ -70,7 +70,7 @@ namespace Application.DTOs
                             StudentId = item.StudentId,
                             Status = (int)JobStatusEnum.New
                         });
-                    }
+                    } 
                 }
                 return new Response<bool>(true);
             }

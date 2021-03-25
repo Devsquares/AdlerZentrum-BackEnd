@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Application.Filters;
 using Application.DTOs;
 using Domain.Models;
-using Application.Features.TestInstance.Queries;
+using Application.Features;
 using System.Transactions;
 
 namespace WebApi.Controllers
@@ -99,6 +99,18 @@ namespace WebApi.Controllers
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {
             return Ok(await _accountService.ResetPassword(model));
+        }
+
+        [HttpPost("test-email")]
+        public async Task<IActionResult> TestEmail([FromBody] EmailRequest emailRequest)
+        { 
+            await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest()
+            {
+                To = emailRequest.To,
+                Body = emailRequest.Body,
+                Subject = emailRequest.Subject
+            });
+            return Ok();
         }
 
         private string GenerateIPAddress()

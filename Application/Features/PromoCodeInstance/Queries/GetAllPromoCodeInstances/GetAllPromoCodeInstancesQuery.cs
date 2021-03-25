@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.PromoCodeInstance.Queries.GetAllPromoCodeInstances
+namespace Application.Features
 {
     public class GetAllPromoCodeInstancesQuery : IRequest<PagedResponse<List<PromoCodeInstancesViewModel>>>
     {

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionDetails.Queries.GetAllGroupConditionDetailss
+namespace Application.Features
 {
     public class GetAllGroupConditionDetailssQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllGroupConditionDetailssViewModel>>>
     {

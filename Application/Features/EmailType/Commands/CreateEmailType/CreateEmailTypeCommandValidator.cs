@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.EmailType.Commands.CreateEmailType
+namespace Application.Features
 {
     public class CreateEmailTypeCommandValidator : AbstractValidator<CreateEmailTypeCommand>
     {

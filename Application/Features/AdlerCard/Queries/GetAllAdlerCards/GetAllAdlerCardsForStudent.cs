@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdlerCard.Queries.GetAllAdlerCards
+namespace Application.Features
 {
     public class GetAllAdlerCardsForStudent : IRequest<Response<IEnumerable<AdlerCardModel>>>
     {

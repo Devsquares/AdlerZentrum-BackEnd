@@ -13,13 +13,14 @@ public class AutoCorrection
     {
         dbContext = _dbContext;
         testId = _testId;
+        CorrectTheTest();
     }
     private void CorrectTheTest()
     {
         var testInstance = dbContext.TestInstances
                                        .Where(x => x.Status == (int)TestInstanceEnum.Solved && x.Id == testId).FirstOrDefault();
 
-
+        if (testInstance == null) throw new System.Exception("Test is empty or not solved");
         var singleQuestions = dbContext.SingleQuestionSubmissions.Include(x => x.SingleQuestion).ThenInclude(x => x.Choices)
         .Include(x => x.Choices)
                                        .Where(x => x.TestInstanceId == testId).ToListAsync().Result;

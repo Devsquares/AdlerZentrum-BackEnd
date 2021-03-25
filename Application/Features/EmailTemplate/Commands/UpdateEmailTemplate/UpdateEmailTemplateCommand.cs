@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailTemplate.Commands.UpdateEmailTemplate
+namespace Application.Features
 {
 	public class UpdateEmailTemplateCommand : IRequest<Response<int>>
     {

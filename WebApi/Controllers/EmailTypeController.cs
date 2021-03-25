@@ -1,8 +1,4 @@
-using Application.Features.EmailType.Commands.CreateEmailType;
-using Application.Features.EmailType.Commands.DeleteEmailTypeById;
-using Application.Features.EmailType.Commands.UpdateEmailType;
-using Application.Features.EmailType.Queries.GetAllEmailTypes;
-using Application.Features.EmailType.Queries.GetEmailTypeById;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

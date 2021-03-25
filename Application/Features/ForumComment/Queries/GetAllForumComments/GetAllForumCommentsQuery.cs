@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumComment.Queries.GetAllForumComments
+namespace Application.Features
 {
     public class GetAllForumCommentsQuery : IRequest<ForumCommentPagedResponse<IEnumerable<GetAllForumCommentsViewModel>>>
     {

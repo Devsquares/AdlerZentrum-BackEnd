@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumComment.Commands.CreateForumComment
+namespace Application.Features
 {
     public partial class CreateForumCommentCommand : IRequest<Response<int>>
     {

@@ -1,17 +1,12 @@
-using Application.Features.ForumTopic.Commands.CreateForumTopic;
-using Application.Features.ForumTopic.Commands.DeleteForumTopicById;
-using Application.Features.ForumTopic.Commands.UpdateForumTopic;
-using Application.Features.ForumTopic.Queries.GetAllForumTopics;
-using Application.Features.ForumTopic.Queries.GetForumTopicById;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApi.Controllers.v1
-{
-    [ApiVersion("1.0")]
+namespace WebApi.Controllers
+{ 
     public class ForumTopicController : BaseApiController
     {
         // GET: api/<controller>

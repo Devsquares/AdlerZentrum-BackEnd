@@ -1,14 +1,9 @@
-using Application.Features.Bug.Commands.CreateBug;
-using Application.Features.Bug.Commands.DeleteBugById;
-using Application.Features.Bug.Commands.UpdateBug;
-using Application.Features.Bug.Queries.GetAllBugs;
-using Application.Features.Bug.Queries.GetBugById;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Application.Features;
 namespace WebApi.Controllers
 {
     public class BugController : BaseApiController

@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Application.Features.GroupInstancesStudents.Commands
+namespace Application.Features
 {
     public class RemoveStudentGroupInstanceCommand : IRequest<Response<int>>
     {

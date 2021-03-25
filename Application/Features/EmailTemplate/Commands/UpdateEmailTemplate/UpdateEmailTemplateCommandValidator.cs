@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.EmailTemplate.Commands.UpdateEmailTemplate
+namespace Application.Features 
 {
     public class UpdateEmailTemplateCommandValidator : AbstractValidator<UpdateEmailTemplateCommand>
     {

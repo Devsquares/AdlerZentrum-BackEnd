@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Bug.Commands.UpdateBug
+namespace Application.Features 
 {
 	public class UpdateBugCommand : IRequest<Response<int>>
     {

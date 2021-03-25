@@ -20,7 +20,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public IEnumerable<LessonInstanceStudent> GetStudentsByLessonInstance(int LessonInstanceId)
         {
-            return lessonInstanceStudents.Include(x => x.Student).Where(x => x.LessonInstanceId == LessonInstanceId).ToList();
+            return lessonInstanceStudents.Where(x => x.LessonInstanceId == LessonInstanceId && x.Disqualified == false).Include(x => x.Student).ToList();
         }
     }
 }

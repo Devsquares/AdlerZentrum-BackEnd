@@ -10,5 +10,6 @@ namespace Domain.Entities
         public int SublevelId { get; set; }
         public virtual Sublevel Sublevel { get; set; }
         public int Order { get; set; }
+        public bool LastLesson { get; set; }
     }
 }

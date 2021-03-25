@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Claims.Queries
+namespace Application.Features 
 {
     public class GetAllClaimsQuery : IRequest<IEnumerable<object>>
     {

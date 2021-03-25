@@ -1,17 +1,12 @@
-using Application.Features.ForumReply.Commands.CreateForumReply;
-using Application.Features.ForumReply.Commands.DeleteForumReplyById;
-using Application.Features.ForumReply.Commands.UpdateForumReply;
-using Application.Features.ForumReply.Queries.GetAllForumReplys;
-using Application.Features.ForumReply.Queries.GetForumReplyById;
+using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApi.Controllers.v1
-{
-    [ApiVersion("1.0")]
+namespace WebApi.Controllers
+{ 
     public class ForumReplyController : BaseApiController
     {
 

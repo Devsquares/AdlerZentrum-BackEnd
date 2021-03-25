@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.ForumReply.Commands.CreateForumReply
+namespace Application.Features
 {
     public class CreateForumReplyCommandValidator : AbstractValidator<CreateForumReplyCommand>
     {

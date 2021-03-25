@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.EmailType.Queries.GetAllEmailTypes
+namespace Application.Features
 {
     public class GetAllEmailTypesParameter : FilteredRequestParameter
     {

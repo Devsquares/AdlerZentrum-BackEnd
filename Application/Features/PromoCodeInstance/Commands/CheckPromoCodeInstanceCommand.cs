@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.PromoCodeInstance.Commands
+namespace Application.Features
 {
     public class CheckPromoCodeInstanceCommand : IRequest<Response<PromoCodeInstancesViewModel>>
     {

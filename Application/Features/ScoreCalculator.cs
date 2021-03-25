@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Persistence.Helpers.Calculation
+namespace Application.Features
 {
     public class ScoreCalculator
     {
@@ -21,28 +21,34 @@ namespace Infrastructure.Persistence.Helpers.Calculation
 
         private bool isFinal;
         private TestInstance finalTest;
+        private bool isFinishedGroup;
 
         private Dictionary<TestTypeEnum, double> grading;
         private double achievedScore;
+        private double homeworkBouns = 0.0;
 
 
         public ScoreCalculator(DbContext dbContext, ApplicationUser user)
         {
             this.dbContext = dbContext;
             this.user = user;
+            this.isFinishedGroup = false;
         }
         public void CheckAndProcess()
         {
             DoInitializationChecks();
 
-            Initalize(); //1
+            Initalize();
 
             DoExecutionChecks();
 
-            Execute(); //2
+            Execute();
 
-            updateGrading(); //3
+            updateGrading();
+
+            finishedGroup();
         }
+
 
         private void DoInitializationChecks()
         {
@@ -57,8 +63,8 @@ namespace Infrastructure.Persistence.Helpers.Calculation
             //Get the current group for example A1.3
             currentGroup = dbContext.Set<GroupInstanceStudents>()
                 .Include(x => x.GroupInstance.GroupDefinition.Sublevel.Level)
-                .Where(x => x.StudentId == user.Id 
-                && x.IsDefault == true 
+                .Where(x => x.StudentId == user.Id
+                && x.IsDefault == true
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running)
                 .FirstOrDefault();
 
@@ -68,7 +74,7 @@ namespace Infrastructure.Persistence.Helpers.Calculation
             previousGroups = dbContext.Set<GroupInstanceStudents>()
                 .Include(x => x.GroupInstance.GroupDefinition.Sublevel.Level)
                 .Where(x => x.StudentId == user.Id
-                && x.IsDefault == false 
+                && x.IsDefault == false
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Finished
                 && x.GroupInstance.GroupDefinition.Sublevel.Level.Id == currentGroup.GroupInstance.GroupDefinition.Sublevel.Level.Id
                 && x.Succeeded)
@@ -102,6 +108,14 @@ namespace Infrastructure.Persistence.Helpers.Calculation
             grading.Add(TestTypeEnum.subLevel, currentGroup.GroupInstance.GroupDefinition.Sublevel.SublevelTestpercent);
             grading.Add(TestTypeEnum.final, currentGroup.GroupInstance.GroupDefinition.Sublevel.FinalTestpercent);
 
+            isFinishedGroup = dbContext.Set<TestInstance>().Where(x => x.GroupInstanceId == currentGroup.GroupInstanceId)
+            .AllAsync(x => x.Status == (int)TestInstanceEnum.Corrected || x.Status == (int)TestInstanceEnum.Missed).Result;
+
+            homeworkBouns = dbContext.Set<HomeWorkSubmition>()
+            .Include(x => x.Homework)
+            .Where(x => x.StudentId == user.Id && x.Homework.GroupInstanceId == currentGroup.Id)
+            .Sum(x => x.BonusPoints);
+
         }
 
         private void DoExecutionChecks()
@@ -124,32 +138,31 @@ namespace Infrastructure.Persistence.Helpers.Calculation
             //calculate quizzes
             foreach (var quiz in quizzes)
             {
-                quizAchievedScore += quiz.Test.TotalPoint;
-                quizTotalScore += quiz.Points;
+                quizAchievedScore += quiz.Points;
+                quizTotalScore += quiz.Test.TotalPoint;
             }
-
-            //TODO:Add all bonus points of the student in this group to quizAchievedScore
+            quizAchievedScore += homeworkBouns; 
 
             //calculate sublevelTests 
             foreach (var sublevelTest in sublevelTests)
             {
-                sublevelTestAchievedScore += sublevelTest.Test.TotalPoint;
-                sublevelTestTotalScore += sublevelTest.Points;
+                sublevelTestAchievedScore += sublevelTest.Points;
+                sublevelTestTotalScore += sublevelTest.Test.TotalPoint;
             }
 
             //calculate finalTest
             if (finalTest != null)
             {
-                finalTestAchievedScore += finalTest.Test.TotalPoint;
-                finalTestTotalScore += finalTest.Points;
+                finalTestAchievedScore += finalTest.Points;
+                finalTestTotalScore += finalTest.Test.TotalPoint;
             }
-    
+
             if (quizTotalScore != 0)
                 score += grading.GetValueOrDefault(TestTypeEnum.quizz) * (quizAchievedScore / quizTotalScore);
 
             if (sublevelTestTotalScore != 0)
                 score += grading.GetValueOrDefault(TestTypeEnum.subLevel) * (sublevelTestAchievedScore / quizTotalScore);
-            
+
             if (finalTestTotalScore != 0)
                 score += grading.GetValueOrDefault(TestTypeEnum.subLevel) * (sublevelTestAchievedScore / quizTotalScore);
 
@@ -162,14 +175,27 @@ namespace Infrastructure.Persistence.Helpers.Calculation
             dbContext.Update(currentGroup);
 
             // only if the sublevel is final, the upgrading/ downgrading is dependent of the grading
-            if (isFinal && finalTest != null && finalTest.Status == (int) TestInstanceEnum.Corrected)
+            if (isFinal && finalTest != null && finalTest.Status == (int)TestInstanceEnum.Corrected)
             {
                 Upgrader upgrader = new Upgrader(dbContext, user);
                 upgrader.CheckAndProcess();
             }
 
-
             dbContext.SaveChanges();
+        }
+
+        private void finishedGroup()
+        {
+            if (isFinishedGroup)
+            {
+                var job = new Job
+                {
+                    Type = (int)JobTypeEnum.GroupFinish,
+                    GroupInstanceId = currentGroup.GroupInstanceId,
+                    Status = (int)JobStatusEnum.New
+                };
+                dbContext.Add(job);
+            }
         }
     }
 }

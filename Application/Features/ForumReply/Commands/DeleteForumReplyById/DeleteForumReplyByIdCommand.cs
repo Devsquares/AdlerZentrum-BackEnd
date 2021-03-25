@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.ForumReply.Commands.DeleteForumReplyById
+namespace Application.Features
 {
     public class DeleteForumReplyByIdCommand : IRequest<Response<int>>
     {

@@ -88,7 +88,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public IReadOnlyList<GroupInstanceStudents> GetStudents(int groupId)
         {
-            return groupInstances.Include(x => x.Students).Where(x => x.Id == groupId).FirstOrDefault()?.Students.ToList();
+            return groupInstances.Include(x => x.Students).Where(x => x.Id == groupId).FirstOrDefault()?.Students.Where(x => x.IsDefault == true).ToList();
         }
 
         public async void AddStudentToTheGroupInstance(int groupId, string studentId)

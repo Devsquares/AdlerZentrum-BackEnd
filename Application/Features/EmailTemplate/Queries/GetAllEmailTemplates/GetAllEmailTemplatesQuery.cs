@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.EmailTemplate.Queries.GetAllEmailTemplates
+namespace Application.Features 
 {
     public class GetAllEmailTemplatesQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllEmailTemplatesViewModel>>>
     {

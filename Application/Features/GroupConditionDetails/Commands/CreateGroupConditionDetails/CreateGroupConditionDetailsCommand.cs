@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionDetails.Commands.CreateGroupConditionDetails
+namespace Application.Features
 {
     public partial class CreateGroupConditionDetailsCommand : IRequest<Response<int>>
     {

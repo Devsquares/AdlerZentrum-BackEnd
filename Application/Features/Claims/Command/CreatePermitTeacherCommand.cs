@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Claims.Command
+namespace Application.Features 
 {
     public class CreatePermitTeacherCommand : IRequest<Response<bool>>
     {

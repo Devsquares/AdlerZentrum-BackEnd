@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.EmailTemplate.Queries.GetAllEmailTemplates
+namespace Application.Features 
 {
     public class GetAllEmailTemplatesParameter : FilteredRequestParameter
     {

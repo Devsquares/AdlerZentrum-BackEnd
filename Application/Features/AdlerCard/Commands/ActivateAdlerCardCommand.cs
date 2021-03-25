@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdlerCard.Commands
+namespace Application.Features
 {
     public class ActivateAdlerCardCommand : IRequest<Response<int>>
     {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.AdlerCardBundleStudent.Commands.CreateAdlerCardBundleStudent
+namespace Application.Features 
 {
     public class CreateAdlerCardBundleStudentCommandValidator : AbstractValidator<CreateAdlerCardBundleStudentCommand>
     {

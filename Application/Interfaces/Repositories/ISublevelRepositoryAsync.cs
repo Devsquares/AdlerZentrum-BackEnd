@@ -11,5 +11,6 @@ namespace Application.Interfaces.Repositories
         Sublevel GetNextByOrder(int order);
         Sublevel GetNextById(int id);
         Sublevel GetPreviousByOrder(int order);
+         Sublevel GetByOrder(int order);
     }
 }

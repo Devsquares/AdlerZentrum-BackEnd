@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.OverPaymentStudent.Commands.UpdateOverPaymentStudent
+namespace Application.Features
 {
 	public class UpdateOverPaymentStudentCommand : IRequest<Response<int>>
     {

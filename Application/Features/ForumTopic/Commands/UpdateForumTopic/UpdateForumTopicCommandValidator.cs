@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.ForumTopic.Commands.UpdateForumTopic
+namespace Application.Features
 {
     public class UpdateForumTopicCommandValidator : AbstractValidator<UpdateForumTopicCommand>
     {

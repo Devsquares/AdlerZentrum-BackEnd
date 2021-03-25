@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Infrastructure.Persistence.Helpers.Calculation
+namespace Application.Features
 {
    public class Downgrader
     {
@@ -58,7 +58,6 @@ namespace Infrastructure.Persistence.Helpers.Calculation
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Finished)
                 .OrderByDescending(x => x.Id)
                 .FirstOrDefault();
-
         }
 
         private void DoExecutionChecks()
@@ -70,12 +69,8 @@ namespace Infrastructure.Persistence.Helpers.Calculation
         {
             if (!completeExecution)
                 return;
-
             //check the data of the last group and if more than 2 months ago then downgrade
-
             //TODO: set the new sublevel id.
-
-
             dbContext.SaveChanges();
         }
 

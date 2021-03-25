@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.TestInstance.Queries
+namespace Application.Features
 {
     public class GetCurrentProgressForStudent : IRequest<Response<CurrentProgressModel>>
     {

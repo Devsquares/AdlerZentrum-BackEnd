@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.AdlerCardBundleStudent.Queries.GetAllAdlerCardBundleStudents
+namespace Application.Features 
 {
     public class GetAllAdlerCardBundleStudentsQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllAdlerCardBundleStudentsViewModel>>>
     {

@@ -1,5 +1,5 @@
 using Application.Exceptions;
-using Application.Features.TestInstance.Queries.GetAllTestInstances;
+using Application.Features;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using AutoMapper;

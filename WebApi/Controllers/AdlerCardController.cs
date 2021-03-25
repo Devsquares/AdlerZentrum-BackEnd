@@ -1,6 +1,4 @@
 using Application.Features;
-using Application.Features.AdlerCard.Commands;
-using Application.Features.AdlerCard.Queries.GetAllAdlerCards;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

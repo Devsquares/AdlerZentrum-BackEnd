@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Bug.Queries.GetAllBugs
+namespace Application.Features 
 {
     public class GetAllBugsQuery : IRequest<BugPagedResponse<IEnumerable<GetAllBugsViewModel>>>
     {

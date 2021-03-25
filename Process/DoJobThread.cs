@@ -9,7 +9,7 @@ using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Infrastructure.Persistence.Helpers.Calculation;
+using Application.Features;
 
 namespace Process
 {
@@ -29,6 +29,7 @@ namespace Process
                 // update job to running.
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 _job.Status = (int)JobStatusEnum.Running;
+                _job.ExecutionDate = DateTime.Now;
                 dbContext.Update(_job);
                 dbContext.SaveChanges();
 
@@ -38,7 +39,7 @@ namespace Process
                         try
                         {
                             AutoCorrection autoCorrection = new AutoCorrection();
-                            autoCorrection.Run(dbContext, _job.TestInstanceId);
+                            autoCorrection.Run(dbContext, _job.TestInstanceId.Value);
                         }
                         catch (System.Exception ex)
                         {
@@ -53,6 +54,7 @@ namespace Process
                         {
                             var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
                             ScoreCalculator ScoreCalculator = new ScoreCalculator(dbContext, student);
+                            ScoreCalculator.CheckAndProcess();
                         }
                         catch (System.Exception ex)
                         {
@@ -67,6 +69,7 @@ namespace Process
                         {
                             var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
                             Upgrader upgrader = new Upgrader(dbContext, student);
+                            upgrader.CheckAndProcess();
                         }
                         catch (System.Exception ex)
                         {
@@ -90,10 +93,41 @@ namespace Process
                             dbContext.SaveChanges();
                         }
                         break;
+
+                    case (int)JobTypeEnum.GroupFinish:
+                        try
+                        {
+                            FinishedGroup finishedGroup = new FinishedGroup(dbContext, _job.GroupInstanceId.Value);
+                            finishedGroup.CheckAndProcess();
+                        }
+                        catch (System.Exception ex)
+                        {
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
+                        }
+                        break;
+                    case (int)JobTypeEnum.Disqualifier:
+                        try
+                        {
+                            var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                            Disqualifier disqualifier = new Disqualifier(dbContext, student, _job.GroupInstanceId.Value);
+                            disqualifier.CheckAndProcess();
+                        }
+                        catch (System.Exception ex)
+                        {
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
+                        }
+                        break;
                     default:
                         break;
                 }
                 _job.Status = (int)JobStatusEnum.Done;
+                _job.FinishDate = DateTime.Now;
                 dbContext.Update(_job);
                 dbContext.SaveChanges();
             }

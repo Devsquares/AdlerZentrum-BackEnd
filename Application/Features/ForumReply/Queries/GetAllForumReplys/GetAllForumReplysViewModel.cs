@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Domain.Entities;
 
-namespace Application.Features.ForumReply.Queries.GetAllForumReplys
+namespace Application.Features
 {
 	public class GetAllForumReplysViewModel
 	{

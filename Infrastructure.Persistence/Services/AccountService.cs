@@ -238,12 +238,10 @@ namespace Infrastructure.Persistence.Services
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
             {
-                //TODO need to be change
-                user.EmailConfirmed = true;
+                user.EmailConfirmed = false;
                 if (request.GroupDefinitionId.HasValue)
                 {
-                    // TODO: need to be changed.
-                    user.SublevelId = 1;
+                    user.SublevelId = _sublevelRepositoryAsync.GetByOrder(1).Id;
                 }
 
                 var result = await _userManager.CreateAsync(user, request.Password);
@@ -255,10 +253,8 @@ namespace Infrastructure.Persistence.Services
                         return new Response<string>(user.Id, message: $"User Registered.");
                     }
 
-                    //var verificationUri = await SendVerificationEmail(user, origin);
-                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
-
-                    return new Response<string>(user.Id, message: $"User Registered.");
+                    var verificationUri = await SendVerificationEmail(user, origin);
+                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
                 else
                 {
@@ -348,7 +344,6 @@ namespace Infrastructure.Persistence.Services
             var _enpointUri = new Uri(string.Concat($"{origin}/", route));
             var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
-            //TODO: Email Service Call Here
 
             await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest() { To = user.Email, Body = $"Please confirm your ApplicationUser by visiting this URL {verificationUri}", Subject = "Confirm Registration" });
 
@@ -505,9 +500,7 @@ namespace Infrastructure.Persistence.Services
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
-            {
-                user.ChangePassword = true;
-                //TODO need to be change
+            { 
                 user.EmailConfirmed = true;
 
                 var result = await _userManager.CreateAsync(user, request.Password);
@@ -521,11 +514,8 @@ namespace Infrastructure.Persistence.Services
                     }
                     await _userManager.AddToRoleAsync(user, userRole.ToString());
 
-                    //var verificationUri = await SendVerificationEmail(user, origin);
-
-                    //return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
-
-                    return new Response<string>(user.Id, message: $"User Registered.");
+                    var verificationUri = await SendVerificationEmail(user, origin);
+                    return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
                 else
                 {

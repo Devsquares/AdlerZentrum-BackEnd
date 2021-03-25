@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.GroupConditionDetails.Commands.UpdateGroupConditionDetails
+namespace Application.Features
 {
 	public class UpdateGroupConditionDetailsCommand : IRequest<Response<int>>
     {
