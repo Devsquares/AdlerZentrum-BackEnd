@@ -8,70 +8,70 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // migrationBuilder.AddColumn<bool>(
-            //     name: "IsEligible",
-            //     table: "OverPaymentStudents",
-            //     nullable: false,
-            //     defaultValue: false);
+            migrationBuilder.AddColumn<bool>(
+                name: "IsEligible",
+                table: "OverPaymentStudents",
+                nullable: false,
+                defaultValue: false);
 
-            // migrationBuilder.AddColumn<bool>(
-            //     name: "LastLesson",
-            //     table: "LessonDefinition",
-            //     nullable: false,
-            //     defaultValue: false);
+            migrationBuilder.AddColumn<bool>(
+                name: "LastLesson",
+                table: "LessonDefinition",
+                nullable: false,
+                defaultValue: false);
 
-            // migrationBuilder.AlterColumn<int>(
-            //     name: "TestInstanceId",
-            //     table: "Jobs",
-            //     nullable: true,
-            //     oldClrType: typeof(int),
-            //     oldType: "int");
+            migrationBuilder.AlterColumn<int>(
+                name: "TestInstanceId",
+                table: "Jobs",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
 
-            // migrationBuilder.AddColumn<DateTime>(
-            //     name: "ExecutionDate",
-            //     table: "Jobs",
-            //     nullable: true);
+            migrationBuilder.AddColumn<DateTime>(
+                name: "ExecutionDate",
+                table: "Jobs",
+                nullable: true);
 
-            // migrationBuilder.AddColumn<DateTime>(
-            //     name: "FinishDate",
-            //     table: "Jobs",
-            //     nullable: true);
+            migrationBuilder.AddColumn<DateTime>(
+                name: "FinishDate",
+                table: "Jobs",
+                nullable: true);
 
-            // migrationBuilder.AddColumn<int>(
-            //     name: "GroupInstanceId",
-            //     table: "Jobs",
-            //     nullable: true);
+            migrationBuilder.AddColumn<int>(
+                name: "GroupInstanceId",
+                table: "Jobs",
+                nullable: true);
 
-            // migrationBuilder.AddColumn<DateTime>(
-            //     name: "StartDate",
-            //     table: "Jobs",
-            //     nullable: true);
+            migrationBuilder.AddColumn<DateTime>(
+                name: "StartDate",
+                table: "Jobs",
+                nullable: true);
 
-            // // migrationBuilder.AddColumn<bool>(
-            // //     name: "IsEligible",
-            // //     table: "InterestedStudents",
-            // //     nullable: false,
-            // //     defaultValue: false);
+            migrationBuilder.AddColumn<bool>(
+                name: "IsEligible",
+                table: "InterestedStudents",
+                nullable: false,
+                defaultValue: false);
 
-            // migrationBuilder.CreateTable(
-            //     name: "Settings",
-            //     columns: table => new
-            //     {
-            //         Id = table.Column<int>(nullable: false)
-            //             .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-            //         CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
-            //         CreatedDate = table.Column<DateTime>(nullable: true),
-            //         LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
-            //         LastModifiedDate = table.Column<DateTime>(nullable: true),
-            //         PlacementA1 = table.Column<double>(nullable: false),
-            //         PlacementA2 = table.Column<double>(nullable: false),
-            //         PlacementB1 = table.Column<double>(nullable: false),
-            //         PlacementB2 = table.Column<double>(nullable: false)
-            //     },
-            //     constraints: table =>
-            //     {
-            //         table.PrimaryKey("PK_Settings", x => x.Id);
-            //     });
+            migrationBuilder.CreateTable(
+                name: "Settings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: true),
+                    PlacementA1 = table.Column<double>(nullable: false),
+                    PlacementA2 = table.Column<double>(nullable: false),
+                    PlacementB1 = table.Column<double>(nullable: false),
+                    PlacementB2 = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Settings", x => x.Id);
+                });
             migrationBuilder.CreateTable(
                 name: "StudentInfos",
                 columns: table => new
