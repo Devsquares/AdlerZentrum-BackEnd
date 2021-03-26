@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.DTOs;
+using Application.DTOs.GroupInstance.Commands;
 using Application.Features;
 using Microsoft.AspNetCore.Mvc;
 
@@ -111,6 +112,16 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetGroupDefinitionDependcies(int groupDefinitionId)
         {
             return Ok(await Mediator.Send(new GetGroupDefinitionAllDependenciesByIdQuery { GroupDefinitionId = groupDefinitionId }));
+        }
+
+
+        [HttpDelete("CancelGroupInstances")]
+        public async Task<IActionResult> CancelGroupInstances(int groupDefinitionId)
+        {
+            return Ok(await Mediator.Send(new CancelGroupInstanceCommand()
+            {
+                GroupDefinitionId = groupDefinitionId
+            }));
         }
 
     }
