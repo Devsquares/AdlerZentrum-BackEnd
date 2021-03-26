@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs.Account;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,7 @@ namespace Application.Features
     public class TestInstanceViewModel
     {
         public string StudentId { get; set; }
+        public AccountViewModel Student { get; set; }
         public double Points { get; set; }
         public int Status { get; set; }
         public int? LessonInstanceId { get; set; }

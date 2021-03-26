@@ -252,8 +252,17 @@ namespace Infrastructure.Persistence.Services
                     {
                         return new Response<string>(user.Id, message: $"User Registered.");
                     }
-
-                    var verificationUri = await SendVerificationEmail(user, origin);
+                    var verificationUri = string.Empty;
+                    try
+                    {
+                        verificationUri = await SendVerificationEmail(user, origin);
+                    }
+                    catch
+                    {
+                        // TODO: need to be removed.
+                        user.EmailConfirmed = true;
+                        await _userManager.UpdateAsync(user);
+                    }
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
                 else
@@ -500,7 +509,7 @@ namespace Infrastructure.Persistence.Services
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail == null)
-            { 
+            {
                 user.EmailConfirmed = true;
 
                 var result = await _userManager.CreateAsync(user, request.Password);
@@ -513,8 +522,16 @@ namespace Infrastructure.Persistence.Services
                         throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
                     }
                     await _userManager.AddToRoleAsync(user, userRole.ToString());
+                    string verificationUri = string.Empty;
+                    try
+                    {
+                        verificationUri = await SendVerificationEmail(user, origin);
 
-                    var verificationUri = await SendVerificationEmail(user, origin);
+                    }
+                    catch
+                    {
+
+                    }
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
                 else

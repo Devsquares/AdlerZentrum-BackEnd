@@ -143,6 +143,7 @@ namespace Infrastructure.Persistence.Repositories
                     StudentName = $"{x.Student.FirstName} {x.Student.LastName}",
                     PromoCodeId = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCodeId : (int?)null,
                     PromoCodeName = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCode.Name : string.Empty,
+                    PromoCodeValue = x.PromoCodeInstance != null ? x.PromoCodeInstance.PromoCode.Value : 0,
                     isPlacementTest = x.IsPlacementTest,
                     CreationDate = x.CreatedDate,
                     ProfilePhoto = x.Student.Profilephoto,

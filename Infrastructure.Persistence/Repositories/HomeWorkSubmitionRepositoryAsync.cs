@@ -48,7 +48,7 @@ namespace Infrastructure.Persistence.Repositories
         }
         public async Task<HomeWorkSubmition> GetByIdAsync(int id)
         {
-            return await homeWorkSubmitions.Include(x => x.Homework).ThenInclude(x => x.LessonInstance).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await homeWorkSubmitions.Include(x => x.Homework.LessonInstance).Include(x => x.Student).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
     }

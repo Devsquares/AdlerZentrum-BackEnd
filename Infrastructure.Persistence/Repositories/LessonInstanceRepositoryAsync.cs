@@ -26,7 +26,10 @@ namespace Infrastructure.Persistence.Repositories
         }
         public async override Task<LessonInstance> GetByIdAsync(int id)
         {
-            return await lessonInstances.Include(x => x.LessonDefinition).ThenInclude(x => x.Sublevel).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await lessonInstances
+            .Include(x => x.LessonDefinition.Sublevel)
+            .Include(x => x.LessonInstanceStudents)
+            .ThenInclude(x => x.Student).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
     }
 }

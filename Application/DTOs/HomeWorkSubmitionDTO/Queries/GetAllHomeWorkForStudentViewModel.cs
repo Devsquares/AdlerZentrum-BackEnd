@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Application.DTOs.Account;
 
 namespace Application.DTOs
 {
@@ -9,7 +10,7 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public string StudentId { get; set; }
-        public ApplicationUser Student { get; set; }
+        public AccountViewModel Student { get; set; }
         public string URL { get; set; }
         public int HomeworkId { get; set; }
         public Homework Homework { get; set; }
