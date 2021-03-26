@@ -58,7 +58,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
             var origin = Request.Headers["origin"];
-            using (TransactionScope scope = new TransactionScope())
+            using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var student = await _accountService.RegisterAsync(request, origin);
                 await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email });
@@ -103,7 +103,7 @@ namespace WebApi.Controllers
 
         [HttpPost("test-email")]
         public async Task<IActionResult> TestEmail([FromBody] EmailRequest emailRequest)
-        { 
+        {
             await _emailService.SendAsync(new Application.DTOs.Email.EmailRequest()
             {
                 To = emailRequest.To,
@@ -179,6 +179,21 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [HttpPost("GetOurOffers")]
+        public async Task<IActionResult> GetOurOffers([FromQuery] string email)
+        {
+            // TODO: Which admin we will send to him.
+            return Ok();
+        }
+
+        [HttpPost("ContactUs")]
+        public async Task<IActionResult> ContactUs([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
+        {
+            // TODO: fix it.
+            // await _accountService.SendMessageToInstructor(subject, message, studentId);
+            return Ok();
+        }
+
         [HttpPost("SendMessageToInstructor")]
         public async Task<IActionResult> SendMessageToInstructor([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
         {
@@ -186,6 +201,7 @@ namespace WebApi.Controllers
             // await _accountService.SendMessageToInstructor(subject, message, studentId);
             return Ok();
         }
+
         [HttpPut("UpdatePhoto")]
         public async Task<IActionResult> UpdatePhoto([FromBody] UserPhotoModel userPhoto)
         {

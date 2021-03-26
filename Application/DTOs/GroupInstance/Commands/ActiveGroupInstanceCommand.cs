@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class ActiveGroupInstanceCommand : IRequest<Response<int>>
+    public class ActiveGroupInstanceCommand : IRequest<Response<bool>>
     {
         public int GroupInstanceId { get; set; }
 
-        public class ActiveGroupInstanceCommandHandler : IRequestHandler<ActiveGroupInstanceCommand, Response<int>>
+        public class ActiveGroupInstanceCommandHandler : IRequestHandler<ActiveGroupInstanceCommand, Response<bool>>
         {
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
@@ -51,13 +51,12 @@ namespace Application.DTOs
                 _sublevelRepositoryAsync = sublevelRepositoryAsync;
             }
 
-            public async Task<Response<int>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
+            public async Task<Response<bool>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
             {
-
                 var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId).Result;
                 if (groupInstance == null)
                 {
-                    return new Response<int>("This Group instance not found");
+                    throw new Exception("This Group instance not found");
                 }
                 if (groupInstance.Status == (int)GroupInstanceStatusEnum.Pending)
                 {
@@ -67,20 +66,20 @@ namespace Application.DTOs
                     var notIsEligablStudents = groupInstance.Students.Where(x => x.IsEligible == false).ToList();
                     if (notIsEligablStudents != null && notIsEligablStudents.Count() > 0)
                     {
-                        return new Response<int>("This Group instance cannot be activated because some students are not Eligible ");
+                          throw new Exception("This Group instance cannot be activated because some students are not Eligible ");
                     }
                     var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(groupInstance.Id);
                     if (teacher == null)
                     {
-                        return new Response<int>("This Group instance not acctive yet kindly choose the teacher.");
+                          throw new Exception("This Group instance not acctive yet kindly choose the teacher.");
                     }
                     if (groupInstance.GroupDefinition.Sublevel.IsFinal)
                     {
-                        if (finalLevelTest == null) return new Response<int>("Cann't active group please create Final test.");
+                        if (finalLevelTest == null)  throw new Exception("Cann't active group please create Final test.");
                     }
                     else
                     {
-                        if (subLevelTest == null) return new Response<int>("Cann't active group please create sublevel test.");
+                        if (subLevelTest == null)  throw new Exception("Cann't active group please create sublevel test.");
                     }
                     var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions;
                     // TODO: genrate date time for lesson instance.
@@ -95,7 +94,7 @@ namespace Application.DTOs
                             StudentId = item.StudentId
                         });
                         item.IsDefault = true;
-                        var student = _usersRepositoryAsync.GetByIdAsync(item.Id).Result;
+                        var student = _usersRepositoryAsync.GetUserById(item.StudentId);
                         student.SublevelId = groupInstance.GroupDefinition.SubLevelId;
                         await _usersRepositoryAsync.UpdateAsync(student);
                     }
@@ -213,9 +212,9 @@ namespace Application.DTOs
                 }
                 else
                 {
-                    return new Response<int>("Cann't active group please check the status.");
+                     throw new Exception("Cann't active group please check the status.");
                 }
-                return new Response<int>(groupInstance.Id);
+                return new Response<bool>(true);
             }
         }
     }

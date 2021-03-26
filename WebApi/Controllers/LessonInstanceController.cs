@@ -11,7 +11,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetByGroupInstance([FromQuery] LessonsByGroupInstanceIdRequestParameter filter)
         {
             return Ok(await Mediator.Send(new GetLessonInstanceByGroupInstanceIdQuery()
-            { 
+            {
                 GroupInstanceId = filter.GroupInstanceId
             }));
         }
@@ -39,6 +39,16 @@ namespace WebApi.Controllers
             command.TeacherId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
+
+        [HttpGet("GetLessonReport")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> GetLessonReport([FromQuery] int LessonInstanceId)
+        {
+            GetLessonInstanceByIdQuery query = new GetLessonInstanceByIdQuery();
+            query.Id = LessonInstanceId;
+            return Ok(await Mediator.Send(query));
+        }
+
 
         [HttpPut("UpdateLessonInstanceStudent")]
         //[Authorize(Roles = "SuperAdmin")]

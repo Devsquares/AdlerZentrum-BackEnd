@@ -110,6 +110,7 @@ namespace Application.Mappings
             .ForMember(destination => destination.LessonInstanceSerial, opts => opts.MapFrom(source => source.LessonInstance.Serial));
 
             CreateMap<LessonInstance, LessonInstanceViewModel>().ReverseMap();
+            CreateMap<LessonInstanceStudent,LessonInstanceStudentViewModel>().ReverseMap();
             CreateMap<GroupInstance, GroupInstanceViewModel>().ReverseMap();
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>().ReverseMap();
             CreateMap<TeacherGroupInstanceAssignment, TeacherGroupInstanceViewModel>().ReverseMap();
