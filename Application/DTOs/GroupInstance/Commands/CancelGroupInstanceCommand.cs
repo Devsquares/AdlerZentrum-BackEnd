@@ -14,18 +14,17 @@ using System.Transactions;
 
 namespace Application.DTOs.GroupInstance.Commands
 {
-    public class RemoveGroupInstanceCommand : IRequest<Response<int>>
+    public class CancelGroupInstanceCommand : IRequest<Response<int>>
     {
-        public int? GroupDefinitionId { get; set; }
-        public int? GroupInstanceId { get; set; }
-        public class RemoveGroupInstanceCommandHandler : IRequestHandler<RemoveGroupInstanceCommand, Response<int>>
+        public int GroupDefinitionId { get; set; }
+        public class CancelGroupInstanceCommandHandler : IRequestHandler<CancelGroupInstanceCommand, Response<int>>
         {
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
             private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepository;
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             private readonly IOverPaymentStudentRepositoryAsync _overPaymentStudentRepositoryAsync;
             private readonly IInterestedStudentRepositoryAsync _InterestedStudentRepositoryAsync;
-            public RemoveGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
+            public CancelGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
                 IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
                 IGroupDefinitionRepositoryAsync GroupDefinitionRepository,
                 IOverPaymentStudentRepositoryAsync overPaymentStudentRepositoryAsync,
@@ -43,32 +42,12 @@ namespace Application.DTOs.GroupInstance.Commands
             /// <param name="command"></param>
             /// <param name="cancellationToken"></param>
             /// <returns></returns>
-            public async Task<Response<int>> Handle(RemoveGroupInstanceCommand command, CancellationToken cancellationToken)
+            public async Task<Response<int>> Handle(CancelGroupInstanceCommand command, CancellationToken cancellationToken)
             {
-                int groupDefinitionID = 0;
-                int? groupInstanceId = null;
-                if (command.GroupDefinitionId == null && command.GroupInstanceId == null)
-                {
-                    throw new ApiException("GroupDefinitionId and GroupInstanceId cannot be null");
-                }
-                if (command.GroupDefinitionId != null)
-                {
-                    var groupDefinitionInstance = _GroupDefinitionRepository.GetById(command.GroupDefinitionId.Value);
-                    if (groupDefinitionInstance == null) throw new ApiException($"Group definition Not Found.");
-                    groupDefinitionID = groupDefinitionInstance.Id;
-                }
-                if (command.GroupInstanceId != null)
-                {
-                    var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId.Value).Result;
-                    if (groupInstance == null) throw new ApiException($"Group Instance Not Found.");
-                    if (groupInstance.Status == (int)GroupInstanceStatusEnum.Running)
-                    {
-                        throw new ApiException($"Can't remove this group Instance as the status is Running");
-                    }
-                    groupDefinitionID = groupInstance.GroupDefinitionId;
-                    groupInstanceId = groupInstance.Id;
-                }
-                var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId, command.GroupInstanceId);
+                var groupDefinitionInstance = _GroupDefinitionRepository.GetById(command.GroupDefinitionId);
+                if (groupDefinitionInstance == null) throw new ApiException($"Group definition Not Found.");
+
+                var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId, null);
                 List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
                 List<OverPaymentStudent> overPaymentStudent = new List<OverPaymentStudent>();
                 using (TransactionScope scope = new TransactionScope())
@@ -83,7 +62,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                 interestedStudents.Add(new InterestedStudent()
                                 {
                                     StudentId = student.StudentId,
-                                    GroupDefinitionId = groupDefinitionID,
+                                    GroupDefinitionId = groupDefinitionInstance.Id,
                                     CreatedDate = DateTime.Now,
                                     IsPlacementTest = false,
                                     PromoCodeInstanceId = student.PromoCodeInstanceId.Value,
@@ -96,7 +75,7 @@ namespace Application.DTOs.GroupInstance.Commands
                                 overPaymentStudent.Add(new OverPaymentStudent()
                                 {
                                     StudentId = student.StudentId,
-                                    GroupDefinitionId = groupDefinitionID,
+                                    GroupDefinitionId = groupDefinitionInstance.Id,
                                     CreatedDate = DateTime.Now,
                                     IsPlacementTest = student.IsPlacementTest,
                                     RegisterDate = student.CreatedDate.Value,
@@ -107,13 +86,15 @@ namespace Application.DTOs.GroupInstance.Commands
                     }
                     await _InterestedStudentRepositoryAsync.ADDList(interestedStudents);
                     await _overPaymentStudentRepositoryAsync.ADDList(overPaymentStudent);
-                    var groupStudents = _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
+                    var groupStudents = _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionInstance.Id, null);
                     await _groupInstanceStudentRepositoryAsync.DeleteBulkAsync(groupStudents);
-                    var groups = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
+                    var groups = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionInstance.Id, null);
                     await _groupInstanceRepositoryAsync.DeleteBulkAsync(groups);
+                    groupDefinitionInstance.Status = (int)GroupDefinationStatusEnum.Canceld;
+                    await _GroupDefinitionRepository.UpdateAsync(groupDefinitionInstance);
                     scope.Complete();
                 }
-                return new Response<int>(groupDefinitionID);
+                return new Response<int>(groupDefinitionInstance.Id);
 
             }
         }
