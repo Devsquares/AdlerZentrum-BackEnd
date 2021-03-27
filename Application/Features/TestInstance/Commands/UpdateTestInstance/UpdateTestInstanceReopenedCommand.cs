@@ -32,6 +32,10 @@ namespace Application.Features
                 {
                     throw new ApiException($"Test Instance Not Found.");
                 }
+                if (TestInstance.Status != (int)TestInstanceEnum.Corrected)
+                {
+                    throw new ApiException($"The Test status isn't corrected ");
+                }
                 else
                 {
                     TestInstance.Reopened = command.status;
