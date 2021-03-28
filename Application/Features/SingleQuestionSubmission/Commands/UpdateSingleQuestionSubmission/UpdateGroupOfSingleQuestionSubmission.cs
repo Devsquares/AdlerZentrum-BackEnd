@@ -76,10 +76,10 @@ namespace Application.Features
                         Sublevel sublevel = null;
                         if (precetnge >= settings[0].PlacementB2)
                         {
+                            // TODO: fix this
                             // A1 50 % -A2 60 % -B1 70 % -B2 80 %
                             sublevel = _sublevel.GetByOrder(4);
                         }
-
 
                         user.SublevelId = sublevel.Id;
                         await _usersRepositoryAsync.UpdateAsync(user);
