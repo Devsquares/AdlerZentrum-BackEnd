@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Application.Features 
 {
-    public class GetAdlerCardForStudent : IRequest<Response<AdlerCardSubmission>>
+    public class GetAdlerCardForStudent : IRequest<Response<Domain.Entities.AdlerCardSubmission>>
     {
         public int AdlerCardId { get; set; }
         public string StudentId { get; set; }
-        public class GetAdlerCardForStudentHandler : IRequestHandler<GetAdlerCardForStudent, Response<AdlerCardSubmission>>
+        public class GetAdlerCardForStudentHandler : IRequestHandler<GetAdlerCardForStudent, Response<Domain.Entities.AdlerCardSubmission>>
         {
             private readonly IAdlerCardRepositoryAsync _adlercardRepository;
             private readonly IAdlerCardSubmissionRepositoryAsync _adlerCardSubmissionRepositoryAsync;
@@ -25,7 +25,7 @@ namespace Application.Features
                 _adlerCardSubmissionRepositoryAsync = adlerCardSubmissionRepositoryAsync;
             }
 
-            public async Task<Response<AdlerCardSubmission>> Handle(GetAdlerCardForStudent request, CancellationToken cancellationToken)
+            public async Task<Response<Domain.Entities.AdlerCardSubmission>> Handle(GetAdlerCardForStudent request, CancellationToken cancellationToken)
             {
                 var adlercard = _adlercardRepository.GetByIdAsync(request.AdlerCardId).Result;
                 if(adlercard == null)
@@ -33,7 +33,7 @@ namespace Application.Features
                     throw new ApiException("No AdlerCard Found");
                 }
                 var adlerCardSub = _adlerCardSubmissionRepositoryAsync.GetAdlerCardForStudent(request.StudentId, request.AdlerCardId);
-                return new Response<AdlerCardSubmission>(adlerCardSub);
+                return new Response<Domain.Entities.AdlerCardSubmission>(adlerCardSub);
             }
         }
     }

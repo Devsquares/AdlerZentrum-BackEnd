@@ -1,4 +1,6 @@
 using Application.Features;
+using Application.Features.AdlerCardSubmission.Commands;
+using Application.Features.AdlerCardSubmission.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,7 +13,8 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Get([FromQuery] GetAllAdlerCardSubmissionsParameter filter)
         {
 
-            return Ok(await Mediator.Send(new GetAllAdlerCardSubmissionsQuery() {
+            return Ok(await Mediator.Send(new GetAllAdlerCardSubmissionsQuery()
+            {
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
                 FilterArray = filter.FilterArray,
@@ -34,7 +37,7 @@ namespace WebApi.Controllers
         // POST api/<controller>
         [HttpPost("CreateAdlerCardSubmission")]
         //[Authorize(Roles = "SuperAdmin")]
-        
+
         public async Task<IActionResult> Post(CreateAdlerCardSubmissionCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -43,7 +46,7 @@ namespace WebApi.Controllers
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        
+
         public async Task<IActionResult> Put(int id, UpdateAdlerCardSubmissionCommand command)
         {
             if (id != command.Id)
@@ -56,11 +59,45 @@ namespace WebApi.Controllers
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        
+
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteAdlerCardSubmissionByIdCommand { Id = id }));
         }
 
+        [HttpGet("GetAdlerCardsSubmissionsForStaff")]
+        public async Task<IActionResult> GetAdlerCardsSubmissionsForStaff([FromQuery] GetAdlerCardsSubmissionsForStaffQuery request)
+        {
+            if (request.PageNumber == 0)
+            {
+                request.PageNumber = 1;
+            }
+            if (request.PageSize == 0)
+            {
+                request.PageSize = 10;
+            }
+            return Ok(await Mediator.Send(request));
+        }
+
+        [HttpGet("GetAdlerCardsSubmissionsForTeacher")]
+        public async Task<IActionResult> GetAdlerCardsSubmissionsForTeacher([FromQuery] GetAdlerCardsSubmissionsForStaffQuery request)
+        {
+            if (request.PageNumber == 0)
+            {
+                request.PageNumber = 1;
+            }
+            if (request.PageSize == 0)
+            {
+                request.PageSize = 10;
+            }
+            return Ok(await Mediator.Send(request));
+        }
+
+        [HttpPut("AssignTeacherToSubmission")]
+        //[Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> AssignTeacherToSubmission(AssignTeacherToSubmissionCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
     }
 }

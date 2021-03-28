@@ -12,7 +12,7 @@ namespace Domain.Entities
         public ApplicationUser Student { get; set; }
         public string StudentId { get; set; }
         public ApplicationUser Teacher { get; set; }
-        public int? TeacherId { get; set; }
+        public string TeacherId { get; set; }
         public int Status { get; set; }
         public double AchievedScore { get; set; }
     }

@@ -271,7 +271,7 @@ namespace WebApi.Controller
                 GroupDefinitionId = query.GroupDefinitionId,
                 GroupInstanceId = query.GroupInstanceId,
                 TestTypeId = query.TestTypeId,
-                Status = query.Status,
+                Status = query.Status == null?(int)TestInstanceEnum.Corrected: query.Status,
                 reCorrectionRequest = query.reCorrectionRequest == null?true: query.reCorrectionRequest,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
