@@ -6,7 +6,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface IGroupDefinitionRepositoryAsync : IGenericRepositoryAsync<GroupDefinition>
     {
-        List<GroupDefinition> GetAll(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null);
+        List<GroupDefinition> GetAll(int pageNumber, int pageSize, string subLevelName, List<int> status, out int totalCount, int? sublevelId = null);
         List<GroupDefinition> GetAvailableForRegisteration(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null, int? promoCodeInstanceId = null);
         GroupDefinition GetById(int groupDefinitionId);
     }

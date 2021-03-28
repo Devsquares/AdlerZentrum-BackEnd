@@ -5,6 +5,7 @@ namespace Application.Enums
         GroupOfSingle = 0,
         Reading = 1,
         Writing = 2,
-        Listening = 3
+        Listening = 3,
+        Speaking
     }
 }

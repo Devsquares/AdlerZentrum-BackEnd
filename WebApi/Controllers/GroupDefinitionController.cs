@@ -17,7 +17,8 @@ namespace WebApi.Controllers
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
                 SubLevel = sublevelName,
-                SubLevelId = sublevelID
+                SubLevelId = sublevelID,
+                Status = filter.Status
             }));
         }
 

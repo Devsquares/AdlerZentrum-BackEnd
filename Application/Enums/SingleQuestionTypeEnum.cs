@@ -6,6 +6,7 @@ namespace Application.Enums
         TrueAndfalse = 1,
         SingleChoice = 2,
         Complete = 3,
-        Writing = 4
+        Writing = 4,
+        Speaking = 5
     }
 }
