@@ -2,6 +2,7 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Domain.Settings;
+using FormatWith;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
@@ -45,6 +46,11 @@ namespace Infrastructure.Shared.Services
                 _logger.LogError(ex.Message, ex);
                 throw new ApiException(ex.Message);
             }
+        }
+
+        private string Replace(string str, object data)
+        {
+            return str.FormatWith(data);
         }
     }
 }
