@@ -42,17 +42,9 @@ namespace Process
                 }
                 try
                 {
-                    switch (_job.Type)
-                    {
-                        case (int)MailJobTypeEnum.Registeration:
-                            var user = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
-                            template.Body = template.Body.FormatWith(user);
-                            break;
-                        default:
-                            break;
-                    }
+                    FormatMail(_job, dbContext, template);
 
-                    _emailService.SendAsync(new Application.DTOs.Email.EmailRequest()
+                    var task = _emailService.SendAsync(new Application.DTOs.Email.EmailRequest()
                     {
                         To = _job.To,
                         Body = template.Body,
@@ -74,6 +66,38 @@ namespace Process
                 dbContext.SaveChanges();
             }
         }
+
+        private static EmailTemplate FormatMail(MailJob _job, ApplicationDbContext dbContext, EmailTemplate template)
+        {
+            switch ((MailJobTypeEnum)_job.Type)
+            {
+                case MailJobTypeEnum.Banning:
+                case MailJobTypeEnum.Registeration:
+                case MailJobTypeEnum.Disqualification:
+                case MailJobTypeEnum.DownGrading:
+                case MailJobTypeEnum.SendMessageToInstructor:
+                case MailJobTypeEnum.SendMessageToAdmin:
+                    var user = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    template.Body = template.Body.FormatWith(user);
+                    break;
+                case MailJobTypeEnum.GroupActivation:
+                    break;
+                case MailJobTypeEnum.HomeworkAssignment:
+                    break;
+                case MailJobTypeEnum.TestCorrected:
+                    break;
+                case MailJobTypeEnum.HomeworkCorrected:
+                    break;
+                case MailJobTypeEnum.HomeworkSubmitted:
+                    break;
+                case MailJobTypeEnum.TestSubmitted:
+                    break;
+                default:
+                    break;
+            }
+            return template;
+        }
+
         public static SendMailThread Create(IServiceProvider serviceProvider, ILogger<MailWorker> logger)
         {
             return new SendMailThread(serviceProvider, logger);
