@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Filters;
+using Domain.Entities;
 using Domain.Models;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,5 +18,6 @@ namespace Application.Interfaces.Repositories
         int GetCountByGroupDefinitionId(int groupDefinitionId);
         Task<GroupInstance> GetByIdPendingorCompleteAsync(int id);
         List<GroupInstance> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null);
+        public IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter, List<int> status, out int count);
     }
 }

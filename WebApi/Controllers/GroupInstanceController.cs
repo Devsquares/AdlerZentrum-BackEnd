@@ -30,7 +30,8 @@ namespace WebApi.Controllers
                 FilterValue = filter.FilterValue,
                 SortBy = filter.SortBy,
                 SortType = filter.SortType,
-                NoPaging = filter.NoPaging
+                NoPaging = filter.NoPaging,
+                Status = filter.Status
             }));
         }
 

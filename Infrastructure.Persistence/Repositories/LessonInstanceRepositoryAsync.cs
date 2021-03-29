@@ -22,7 +22,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return lessonInstances
                 .Include(x => x.GroupInstance)
-                .Where(x => x.GroupInstanceId == GroupInstanceId).ToList();
+                .Where(x => x.GroupInstanceId == GroupInstanceId).OrderBy(x=>x.LessonDefinitionId).ToList();
         }
         public async override Task<LessonInstance> GetByIdAsync(int id)
         {
