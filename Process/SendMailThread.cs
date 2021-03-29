@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using FormatWith;
 using Infrastructure.Shared.Services;
 using Microsoft.EntityFrameworkCore;
+using Application.Interfaces;
 
 namespace Process
 {
@@ -16,11 +17,12 @@ namespace Process
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<MailWorker> _logger;
-        private readonly EmailService _emailService;
+        private readonly IEmailService _emailService;
 
-        public SendMailThread(IServiceProvider serviceProvider, ILogger<MailWorker> logger)
+        public SendMailThread(IServiceProvider serviceProvider, ILogger<MailWorker> logger, IEmailService mailservice)
         {
             _serviceProvider = serviceProvider;
+            _emailService = mailservice;
             _logger = logger;
         }
         public void Run(object job)
@@ -35,7 +37,7 @@ namespace Process
                 dbContext.Update(_job);
                 dbContext.SaveChanges();
 
-                var template = dbContext.Set<EmailTemplate>().Where(x => x.EmailTypeId == _job.Type).FirstOrDefault();
+                var template = dbContext.Set<EmailTemplate>().Where(x => x.EmailTypeId == _job.Type).AsNoTracking().FirstOrDefault();
                 if (template == null)
                 {
                     _logger.LogError("Email Template is empty");
@@ -43,11 +45,11 @@ namespace Process
                 }
                 try
                 {
-                    FormatMail(_job, dbContext, template);
+                    string to = FormatMail(_job, dbContext, template);
 
                     var task = _emailService.SendAsync(new Application.DTOs.Email.EmailRequest()
                     {
-                        To = _job.To,
+                        To = to,
                         Body = template.Body,
                         Subject = template.Subject
                     });
@@ -68,16 +70,22 @@ namespace Process
             }
         }
 
-        private static EmailTemplate FormatMail(MailJob _job, ApplicationDbContext dbContext, EmailTemplate template)
+        private static string FormatMail(MailJob _job, ApplicationDbContext dbContext, EmailTemplate template)
         {
+            string to = "";
             switch ((MailJobTypeEnum)_job.Type)
             {
                 case MailJobTypeEnum.Banning:
                 case MailJobTypeEnum.Registeration:
                 case MailJobTypeEnum.Disqualification:
                 case MailJobTypeEnum.DownGrading:
+                    var user1 = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    template.Body = template.Body.FormatWith(user1);
+                    to = user1.Email;
+                    break;
                 case MailJobTypeEnum.SendMessageToInstructor:
                 case MailJobTypeEnum.SendMessageToAdmin:
+                    // TODO: need to defne.
                     var user = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
                     template.Body = template.Body.FormatWith(user);
                     break;
@@ -91,17 +99,19 @@ namespace Process
                         Serial = groupActivationStudent.Serial
                     };
                     template.Body = template.Body.FormatWith(input);
+                    to = studentGroupActivetion.Email;
                     break;
                 case MailJobTypeEnum.GroupActivationTeacher:
-                    var student = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    var teacher = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.TeacherId).FirstOrDefault();
                     var groupActivationTeacher = dbContext.Set<GroupInstance>().Where(x => x.Id == _job.GroupInstanceId).FirstOrDefault();
                     var inputGroupActivationTeacher = new
                     {
-                        FirstName = student.FirstName,
-                        LastName = student.LastName,
+                        FirstName = teacher.FirstName,
+                        LastName = teacher.LastName,
                         Serial = groupActivationTeacher.Serial
                     };
                     template.Body = template.Body.FormatWith(inputGroupActivationTeacher);
+                    to = teacher.Email;
                     break;
                 case MailJobTypeEnum.HomeworkAssignment:
                     break;
@@ -116,9 +126,9 @@ namespace Process
                         Name = test.Test.Name
                     };
                     template.Body = template.Body.FormatWith(inputTestCorrected);
+                    to = TestCorrectedUser.Email;
                     break;
                 case MailJobTypeEnum.HomeworkCorrected:
-                case MailJobTypeEnum.HomeworkSubmitted:
                     var HomeworkUser = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
 
                     var inputHomework = new
@@ -128,16 +138,31 @@ namespace Process
                         Id = _job.HomeworkId
                     };
                     template.Body = template.Body.FormatWith(inputHomework);
+                    to = HomeworkUser.Email;
+                    break;
+                case MailJobTypeEnum.HomeworkSubmitted:
+                    var HomeworkSubmittedUser = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    var HomeworkSubmittedTeacher = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.TeacherId).FirstOrDefault();
+
+
+                    var inputHomeworkSubmitted = new
+                    {
+                        FirstName = HomeworkSubmittedUser.FirstName,
+                        LastName = HomeworkSubmittedUser.LastName,
+                        Id = _job.HomeworkId
+                    };
+                    template.Body = template.Body.FormatWith(inputHomeworkSubmitted);
+                    to = HomeworkSubmittedTeacher?.Email;
                     break;
                 default:
                     break;
             }
-            return template;
+            return to;
         }
 
-        public static SendMailThread Create(IServiceProvider serviceProvider, ILogger<MailWorker> logger)
+        public static SendMailThread Create(IServiceProvider serviceProvider, ILogger<MailWorker> logger, IEmailService emailService)
         {
-            return new SendMailThread(serviceProvider, logger);
+            return new SendMailThread(serviceProvider, logger, emailService);
         }
     }
 }

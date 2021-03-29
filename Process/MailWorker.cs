@@ -3,9 +3,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Enums;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,15 +19,18 @@ namespace Process
     {
         private readonly ILogger<MailWorker> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IEmailService _emailService;
         private Thread _doJob;
         private SendMailThread _doJobThread;
 
         public MailWorker(ILogger<MailWorker> logger,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IEmailService emailService)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
-            _doJobThread = SendMailThread.Create(_serviceProvider, logger);
+            _emailService = emailService;
+            _doJobThread = SendMailThread.Create(_serviceProvider, _logger, _emailService);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
