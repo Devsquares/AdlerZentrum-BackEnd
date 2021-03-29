@@ -27,5 +27,9 @@ namespace Infrastructure.Persistence.Repositories
             .Include(x => x.GroupInstance.GroupDefinition.Sublevel)
             .Where(x => x.BonusPointsStatus == (int)BonusPointsStatusEnum.New && x.BonusPoints > 0).ToList();
         }
+        public Homework GetByLessonInstance(int LessonInstanceId)
+        {
+            return homework.Where(x => x.LessonInstanceId == LessonInstanceId).FirstOrDefault();
+        }
     }
 }
