@@ -32,6 +32,13 @@ public class AutoCorrection
         if (autoCorrected)
         {
             testInstance.Status = (int)TestInstanceEnum.Corrected;
+            dbContext.Set<MailJob>().Add(new MailJob
+            {
+                Type = (int)MailJobTypeEnum.TestCorrected,
+                StudentId = testInstance.StudentId,
+                TestInstanceId = testInstance.Id,
+                Status = (int)JobStatusEnum.New
+            });
         }
         else
         {

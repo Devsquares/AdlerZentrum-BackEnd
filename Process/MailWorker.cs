@@ -36,7 +36,7 @@ namespace Process
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    var Jobs = dbContext.Jobs
+                    var Jobs = dbContext.MailJobs
                        .Where(x => x.Status == (int)JobStatusEnum.New
                        && (x.StartDate > DateTime.Now || x.StartDate == null)
                        ).ToList();

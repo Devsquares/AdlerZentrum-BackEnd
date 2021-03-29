@@ -23,13 +23,16 @@ namespace Application.DTOs
         {
             private readonly ILessonInstanceRepositoryAsync _LessonInstanceRepositoryAsync;
             private readonly IJobRepositoryAsync _jobRepository;
+            private readonly IMailJobRepositoryAsync _mailJobRepository;
             private readonly IMediator _mediator;
             public CreateLessonInstanceReportCommandHandler(ILessonInstanceRepositoryAsync LessonInstanceRepository,
             IJobRepositoryAsync jobRepositoryAsync,
+            IMailJobRepositoryAsync mailJobRepositoryAsync,
                 IMediator mediator)
             {
                 _LessonInstanceRepositoryAsync = LessonInstanceRepository;
                 _jobRepository = jobRepositoryAsync;
+                _mailJobRepository = mailJobRepositoryAsync;
                 _mediator = mediator;
             }
             public async Task<Response<bool>> Handle(CreateLessonInstanceReportCommand command, CancellationToken cancellationToken)
@@ -61,7 +64,16 @@ namespace Application.DTOs
                             TeacherId = command.TeacherId,
                             LessonInstanceId = lessonInstance.Id
                         });
-
+                        foreach (var item in lessonInstance.LessonInstanceStudents)
+                        {
+                            await _mailJobRepository.AddAsync(new MailJob
+                            {
+                                Type = (int)MailJobTypeEnum.HomeworkAssignment,
+                                StudentId = item.StudentId,
+                                HomeworkId = res.data.Id,
+                                Status = (int)JobStatusEnum.New
+                            });
+                        }
                         // lessonInstance.Homework = res.data;
                         await _LessonInstanceRepositoryAsync.UpdateAsync(lessonInstance);
                     }

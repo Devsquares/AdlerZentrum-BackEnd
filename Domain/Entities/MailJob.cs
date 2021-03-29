@@ -15,8 +15,9 @@ namespace Domain.Entities
         public DateTime? StartDate { get; set; }
         public DateTime? ExecutionDate { get; set; }
         public DateTime? FinishDate { get; set; }
-
+        public string TeacherId { get; set; }
         public int? HomeworkId { get; set; }
-
+        public string Text { get; set; }
+        public string Subject { get; set; }
     }
 }

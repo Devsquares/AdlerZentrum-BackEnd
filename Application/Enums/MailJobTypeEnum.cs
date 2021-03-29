@@ -7,7 +7,8 @@ namespace Application.Enums
     public enum MailJobTypeEnum
     {
         Registeration,
-        GroupActivation,
+        GroupActivationStudent,
+        GroupActivationTeacher,
         Banning,
         Disqualification,
         DownGrading,

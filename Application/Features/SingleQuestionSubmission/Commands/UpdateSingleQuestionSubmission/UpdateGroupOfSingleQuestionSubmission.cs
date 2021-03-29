@@ -25,6 +25,7 @@ namespace Application.Features
             private readonly ISettingRepositoryAsync _settings;
             private readonly ISublevelRepositoryAsync _sublevel;
             private readonly IUsersRepositoryAsync _usersRepositoryAsync;
+            private readonly IMailJobRepositoryAsync _jobMailRepository;
             private readonly IMediator _medaitor;
             public UpdateGroupOfSingleQuestionSubmissionHandler(ISingleQuestionSubmissionRepositoryAsync singlequestionsubmissionRepository,
             ITestInstanceRepositoryAsync testInstanceRepositoryAsync,
@@ -32,6 +33,7 @@ namespace Application.Features
             ISettingRepositoryAsync settingRepositoryAsync,
             ISublevelRepositoryAsync sublevelRepositoryAsync,
             IUsersRepositoryAsync usersRepositoryAsync,
+            IMailJobRepositoryAsync mailJobRepositoryAsync,
             IMediator Mediator)
             {
                 _singlequestionsubmissionRepository = singlequestionsubmissionRepository;
@@ -40,6 +42,7 @@ namespace Application.Features
                 _settings = settingRepositoryAsync;
                 _sublevel = sublevelRepositoryAsync;
                 _usersRepositoryAsync = usersRepositoryAsync;
+                _jobMailRepository = mailJobRepositoryAsync;
                 _medaitor = Mediator;
             }
             public async Task<Response<int>> Handle(UpdateGroupOfSingleQuestionSubmission command, CancellationToken cancellationToken)
@@ -62,6 +65,13 @@ namespace Application.Features
                 await _jobRepository.AddAsync(new Job
                 {
                     Type = (int)JobTypeEnum.ScoreCalculator,
+                    StudentId = testInstance.StudentId,
+                    Status = (int)JobStatusEnum.New
+                });
+                await _jobMailRepository.AddAsync(new MailJob
+                {
+                    Type = (int)MailJobTypeEnum.TestCorrected,
+                    TestInstanceId = testInstance.Id,
                     StudentId = testInstance.StudentId,
                     Status = (int)JobStatusEnum.New
                 });

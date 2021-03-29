@@ -23,7 +23,7 @@ namespace Process
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
-        public  void Run(object job)
+        public void Run(object job)
         {
             MailJob _job = (MailJob)job;
             using (var scope = _serviceProvider.CreateScope())
@@ -81,16 +81,27 @@ namespace Process
                     var user = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
                     template.Body = template.Body.FormatWith(user);
                     break;
-                case MailJobTypeEnum.GroupActivation:
-                    var student = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
-                    var group = dbContext.Set<GroupInstance>().Where(x => x.Id == _job.GroupInstanceId).FirstOrDefault();
+                case MailJobTypeEnum.GroupActivationStudent:
+                    var studentGroupActivetion = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    var groupActivationStudent = dbContext.Set<GroupInstance>().Where(x => x.Id == _job.GroupInstanceId).FirstOrDefault();
                     var input = new
+                    {
+                        FirstName = studentGroupActivetion.FirstName,
+                        LastName = studentGroupActivetion.LastName,
+                        Serial = groupActivationStudent.Serial
+                    };
+                    template.Body = template.Body.FormatWith(input);
+                    break;
+                case MailJobTypeEnum.GroupActivationTeacher:
+                    var student = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    var groupActivationTeacher = dbContext.Set<GroupInstance>().Where(x => x.Id == _job.GroupInstanceId).FirstOrDefault();
+                    var inputGroupActivationTeacher = new
                     {
                         FirstName = student.FirstName,
                         LastName = student.LastName,
-                        Serial = group.Serial
+                        Serial = groupActivationTeacher.Serial
                     };
-                    template.Body = template.Body.FormatWith(input);
+                    template.Body = template.Body.FormatWith(inputGroupActivationTeacher);
                     break;
                 case MailJobTypeEnum.HomeworkAssignment:
                     break;
@@ -109,7 +120,7 @@ namespace Process
                 case MailJobTypeEnum.HomeworkCorrected:
                 case MailJobTypeEnum.HomeworkSubmitted:
                     var HomeworkUser = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
-                    
+
                     var inputHomework = new
                     {
                         FirstName = HomeworkUser.FirstName,

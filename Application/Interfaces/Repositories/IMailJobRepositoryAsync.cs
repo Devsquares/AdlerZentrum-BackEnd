@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IEmailTypeRepositoryAsync : IGenericRepositoryAsync<EmailType>
+    public interface IMailJobRepositoryAsync : IGenericRepositoryAsync<MailJob>
     {
     }
 }
