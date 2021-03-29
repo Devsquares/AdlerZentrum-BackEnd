@@ -48,7 +48,7 @@ namespace Infrastructure.Persistence.Repositories
             return groupInstanceStudents.Where(x => x.StudentId == userId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDefault == true).FirstOrDefault()?.GroupInstanceId;
         }
 
-        public override async Task<IReadOnlyList<GroupInstance>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
+        public IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter,List<int>status,out int count)
         {
             bool noPaging = filteredRequestParameter.NoPaging;
             if (noPaging)
@@ -71,18 +71,27 @@ namespace Infrastructure.Persistence.Repositories
             {
                 sortASC = false;
             }
-            return await groupInstances
+            count = groupInstances
                 .Include(x => x.GroupDefinition)
                 .Include(x => x.GroupDefinition.GroupCondition)
                 .Include(x => x.GroupDefinition.TimeSlot)
                 .Include(x => x.GroupDefinition.Sublevel)
                 .Include(x => x.GroupDefinition.TimeSlot.TimeSlotDetails)
                 .Where(IsMatchedExpression(filteredRequestParameter))
+                .Where(x => (status != null && status.Count > 0 ? status.Contains(x.Status.Value) : true)).Count();
+            return groupInstances
+                .Include(x => x.GroupDefinition)
+                .Include(x => x.GroupDefinition.GroupCondition)
+                .Include(x => x.GroupDefinition.TimeSlot)
+                .Include(x => x.GroupDefinition.Sublevel)
+                .Include(x => x.GroupDefinition.TimeSlot.TimeSlotDetails)
+                .Where(IsMatchedExpression(filteredRequestParameter))
+                .Where(x=>(status != null && status.Count>0 ? status.Contains(x.Status.Value):true))
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     //.OrderBy(sortBy, sortASC)
                     .AsNoTracking()
-                    .ToListAsync();
+                    .ToList();
 
         }
 

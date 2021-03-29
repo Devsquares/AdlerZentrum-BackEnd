@@ -7,5 +7,6 @@ namespace Application.DTOs.GroupInstance.Queries.GetAll
 {
     public class GroupInstanceRequestParameter : FilteredRequestParameter
     {
+        public List<int> Status { get; set; }
     }
 }
