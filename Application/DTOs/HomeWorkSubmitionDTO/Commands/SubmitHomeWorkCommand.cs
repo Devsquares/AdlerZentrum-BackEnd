@@ -44,6 +44,7 @@ namespace Application.DTOs
                     {
                         Type = (int)MailJobTypeEnum.HomeworkSubmitted,
                         StudentId = homeWorkSubmition.StudentId,
+                        TeacherId = homeWorkSubmition.Homework.TeacherId,
                         HomeworkId = homeWorkSubmition.Id,
                         Status = (int)JobStatusEnum.New
                     });
