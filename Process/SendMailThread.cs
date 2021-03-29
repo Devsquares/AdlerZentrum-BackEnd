@@ -8,6 +8,7 @@ using Application.Features;
 using Microsoft.Extensions.Logging;
 using FormatWith;
 using Infrastructure.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Process
 {
@@ -81,16 +82,41 @@ namespace Process
                     template.Body = template.Body.FormatWith(user);
                     break;
                 case MailJobTypeEnum.GroupActivation:
+                    var student = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    var group = dbContext.Set<GroupInstance>().Where(x => x.Id == _job.GroupInstanceId).FirstOrDefault();
+                    var input = new
+                    {
+                        FirstName = student.FirstName,
+                        LastName = student.LastName,
+                        Serial = group.Serial
+                    };
+                    template.Body = template.Body.FormatWith(input);
                     break;
                 case MailJobTypeEnum.HomeworkAssignment:
                     break;
                 case MailJobTypeEnum.TestCorrected:
+                case MailJobTypeEnum.TestSubmitted:
+                    var TestCorrectedUser = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    var test = dbContext.Set<TestInstance>().Include(x => x.Test).Where(x => x.Id == _job.TestInstanceId).FirstOrDefault();
+                    var inputTestCorrected = new
+                    {
+                        FirstName = TestCorrectedUser.FirstName,
+                        LastName = TestCorrectedUser.LastName,
+                        Name = test.Test.Name
+                    };
+                    template.Body = template.Body.FormatWith(inputTestCorrected);
                     break;
                 case MailJobTypeEnum.HomeworkCorrected:
-                    break;
                 case MailJobTypeEnum.HomeworkSubmitted:
-                    break;
-                case MailJobTypeEnum.TestSubmitted:
+                    var HomeworkUser = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.StudentId).FirstOrDefault();
+                    
+                    var inputHomework = new
+                    {
+                        FirstName = HomeworkUser.FirstName,
+                        LastName = HomeworkUser.LastName,
+                        Id = _job.HomeworkId
+                    };
+                    template.Body = template.Body.FormatWith(inputHomework);
                     break;
                 default:
                     break;
