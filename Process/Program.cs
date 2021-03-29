@@ -1,10 +1,14 @@
 using System.IO;
-using AutoMapper.Configuration;
+using Application.Interfaces;
+using Domain.Settings;
 using Infrastructure.Persistence.Contexts;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.Shared.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
+using Serilog;
 
 namespace Process
 {
@@ -12,6 +16,13 @@ namespace Process
     {
         public static void Main(string[] args)
         {
+            // var config = new ConfigurationBuilder()
+            // .AddJsonFile("appsettings.json")
+            // .Build();
+
+            // Log.Logger = new LoggerConfiguration()
+            // .ReadFrom.Configuration(config)
+            // .CreateLogger();
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -22,7 +33,10 @@ namespace Process
                     var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                     var site = hostContext.Configuration.GetConnectionString("DefaultConnection");
                     optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
+                    services.Configure<MailSettings>(hostContext.Configuration.GetSection("MailSettings"));
+                    services.AddTransient<IEmailService, EmailService>();
                     services.AddScoped<ApplicationDbContext>(s => new ApplicationDbContext(optionsBuilder.Options));
+                    services.AddHostedService<MailWorker>();
                     services.AddHostedService<JobsWorker>();
                 });
     }

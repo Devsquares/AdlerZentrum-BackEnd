@@ -4,13 +4,11 @@ using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.Entities;
 
-namespace Application.Features 
+namespace Application.Features
 {
     public class UpdateBanRequestCommand : IRequest<Response<int>>
     {
@@ -22,11 +20,14 @@ namespace Application.Features
         {
             private readonly IAccountService _accountService;
             private readonly IBanRequestRepositoryAsync _banrequestRepository;
+            private readonly IMailJobRepositoryAsync _jobRepository;
             public UpdateBanRequestCommandHandler(IBanRequestRepositoryAsync banrequestRepository,
-                IAccountService accountService)
+                IAccountService accountService,
+                 IMailJobRepositoryAsync mailJobRepositoryAsync)
             {
                 _banrequestRepository = banrequestRepository;
                 _accountService = accountService;
+                _jobRepository = mailJobRepositoryAsync;
             }
             public async Task<Response<int>> Handle(UpdateBanRequestCommand command, CancellationToken cancellationToken)
             {
@@ -43,6 +44,12 @@ namespace Application.Features
                     if (banrequest.BanRequestStatus == (int)BanRequestStatusEnum.Approved)
                     {
                         await _accountService.BanAsync(banrequest.StudentId, command.Comment);
+                        await _jobRepository.AddAsync(new MailJob
+                        {
+                            Type = (int)MailJobTypeEnum.Banning,
+                            StudentId = banrequest.StudentId,
+                            Status = (int)JobStatusEnum.New
+                        });
                     }
                     await _banrequestRepository.UpdateAsync(banrequest);
                     return new Response<int>(banrequest.Id);

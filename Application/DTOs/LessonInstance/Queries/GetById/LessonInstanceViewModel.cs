@@ -16,6 +16,8 @@ namespace Application.DTOs
         public string MaterialToDo { get; set; }
         public string Serial { get; set; }
         public bool SubmittedReport { get; set; }
+        public int? HomeWorkId { get; set; }
+        public Homework Homework { get; set; }
         public virtual IList<LessonInstanceStudentViewModel> LessonInstanceStudents { get; set; }
     }
     public class GroupInstanceViewModel
@@ -26,7 +28,8 @@ namespace Application.DTOs
     }
     public class LessonInstanceStudentViewModel
     {
-        public int LessonInstanceId { get; set; }        public string StudentId { get; set; }
+        public int LessonInstanceId { get; set; }
+        public string StudentId { get; set; }
         public virtual AccountViewModel Student { get; set; }
         public bool Attend { get; set; }
         public bool Homework { get; set; }

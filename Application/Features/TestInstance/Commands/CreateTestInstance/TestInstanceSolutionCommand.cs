@@ -37,11 +37,13 @@ namespace Application.Features
         private readonly ISingleQuestionSubmissionRepositoryAsync _singleQuestionSubmission;
         private readonly IChoiceSubmissionRepositoryAsync _choiceSubmissionRepository;
         private readonly IJobRepositoryAsync _jobRepository;
+        private readonly IMailJobRepositoryAsync _mailJobRepository;
         private readonly IMapper _mapper;
         public CreateTestInstanceCommandHandler(ITestInstanceRepositoryAsync testinstanceRepository,
         ISingleQuestionSubmissionRepositoryAsync singleQuestionSubmissionRepositoryAsync,
         IChoiceSubmissionRepositoryAsync choiceSubmissionRepositoryAsync,
         IJobRepositoryAsync jobRepositoryAsync,
+        IMailJobRepositoryAsync mailJobRepositoryAsync,
          IMapper mapper)
         {
             _testinstanceRepository = testinstanceRepository;
@@ -49,6 +51,7 @@ namespace Application.Features
             _choiceSubmissionRepository = choiceSubmissionRepositoryAsync;
             _mapper = mapper;
             _jobRepository = jobRepositoryAsync;
+            _mailJobRepository = mailJobRepositoryAsync;
         }
 
         public async Task<Response<int>> Handle(TestInstanceSolutionCommand request, CancellationToken cancellationToken)
@@ -82,6 +85,13 @@ namespace Application.Features
             await _jobRepository.AddAsync(new Job
             {
                 Type = (int)JobTypeEnum.TestCorrection,
+                TestInstanceId = testInstance.Id,
+                Status = (int)JobStatusEnum.New
+            });
+            await _mailJobRepository.AddAsync(new MailJob
+            {
+                Type = (int)MailJobTypeEnum.TestSubmitted,
+                StudentId = testInstance.StudentId,
                 TestInstanceId = testInstance.Id,
                 Status = (int)JobStatusEnum.New
             });

@@ -7,6 +7,5 @@ namespace Application.DTOs
 {
     public class GroupDefinitionRequestParameter : RequestParameter
     {
-        public List<int> Status { get; set; }
     }
 }

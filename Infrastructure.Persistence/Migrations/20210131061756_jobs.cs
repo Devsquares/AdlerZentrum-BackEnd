@@ -8,21 +8,17 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_SingleQuestionSubmissions_Questions_QuestionId",
-                table: "SingleQuestionSubmissions");
+            // migrationBuilder.DropForeignKey(
+            //     name: "FK_SingleQuestionSubmissions_Questions_QuestionId",
+            //     table: "SingleQuestionSubmissions");
 
-            migrationBuilder.DropIndex(
-                name: "IX_SingleQuestionSubmissions_QuestionId",
-                table: "SingleQuestionSubmissions");
+            // migrationBuilder.DropIndex(
+            //     name: "IX_SingleQuestionSubmissions_QuestionId",
+            //     table: "SingleQuestionSubmissions");
 
-            migrationBuilder.DropColumn(
-                name: "QuestionId",
-                table: "SingleQuestionSubmissions");
-
-            migrationBuilder.DropColumn(
-                name: "Photo",
-                table: "ApplicationUsers");
+            // migrationBuilder.DropColumn(
+            //     name: "QuestionId",
+            //     table: "SingleQuestionSubmissions");
 
             migrationBuilder.AddColumn<bool>(
                 name: "ManualCorrection",

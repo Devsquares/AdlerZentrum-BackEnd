@@ -6,17 +6,17 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_AdlerCardSubmissions_ApplicationUsers_TeacherId1",
-                table: "AdlerCardSubmissions");
+            // migrationBuilder.DropForeignKey(
+            //     name: "FK_AdlerCardSubmissions_ApplicationUsers_TeacherId1",
+            //     table: "AdlerCardSubmissions");
 
-            migrationBuilder.DropIndex(
-                name: "IX_AdlerCardSubmissions_TeacherId1",
-                table: "AdlerCardSubmissions");
+            // migrationBuilder.DropIndex(
+            //     name: "IX_AdlerCardSubmissions_TeacherId1",
+            //     table: "AdlerCardSubmissions");
 
-            migrationBuilder.DropColumn(
-                name: "TeacherId1",
-                table: "AdlerCardSubmissions");
+            // migrationBuilder.DropColumn(
+            //     name: "TeacherId1",
+            //     table: "AdlerCardSubmissions");
 
             migrationBuilder.AlterColumn<string>(
                 name: "TeacherId",

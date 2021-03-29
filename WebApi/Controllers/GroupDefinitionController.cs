@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Application.DTOs;
 using Application.DTOs.GroupInstance.Commands;
 using Application.Features;
@@ -10,20 +11,20 @@ namespace WebApi.Controllers
     {
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] GroupDefinitionRequestParameter filter, string sublevelName, int? sublevelID)
+        public async Task<IActionResult> GetAll([FromQuery] List<int> Status, int PageSize, int PageNumber, [FromQuery] string sublevelName, [FromQuery] int? sublevelID)
         {
             return Ok(await Mediator.Send(new GetAllGroupDefinitionsQuery()
             {
-                PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber,
+                PageSize = PageSize,
+                PageNumber = PageNumber,
                 SubLevel = sublevelName,
                 SubLevelId = sublevelID,
-                Status = filter.Status
+                Status = Status
             }));
         }
 
         [HttpGet("GetAvailableForRegisteration")]
-        public async Task<IActionResult> GetAvailableForRegisteration([FromQuery] GroupDefinitionRequestParameter filter, string sublevelName, int? sublevelID,int? PromoCodeInstanceId)
+        public async Task<IActionResult> GetAvailableForRegisteration([FromQuery] GroupDefinitionRequestParameter filter, string sublevelName, int? sublevelID, int? PromoCodeInstanceId)
         {
             return Ok(await Mediator.Send(new GetAvailableForRegisterationGroupDefinitionsQuery()
             {
@@ -92,9 +93,9 @@ namespace WebApi.Controllers
 
         [HttpPut("StudentRegister")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> StudentRegister(int groupDefinitionId, int? promoCodeInstanceId, int? placmentTest,string email)
+        public async Task<IActionResult> StudentRegister(int groupDefinitionId, int? promoCodeInstanceId, int? placmentTest, string email)
         {
-            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeInstanceId = promoCodeInstanceId, PlacmentTestId = placmentTest,Email = email }));
+            return Ok(await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = groupDefinitionId, StudentId = AuthenticatedUserService.UserId, PromoCodeInstanceId = promoCodeInstanceId, PlacmentTestId = placmentTest, Email = email }));
         }
 
         [HttpGet("GetInterestedStudent")]

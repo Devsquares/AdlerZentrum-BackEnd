@@ -22,9 +22,12 @@ namespace Application.DTOs
         public class SubmitHomeWorkCommandHandler : IRequestHandler<SubmitHomeWorkCommand, Response<int>>
         {
             private readonly IHomeWorkSubmitionRepositoryAsync _HomeWorkSubmitionRepository;
-            public SubmitHomeWorkCommandHandler(IHomeWorkSubmitionRepositoryAsync HomeWorkSubmitionRepository)
+            private readonly IMailJobRepositoryAsync _mailJobRepository;
+            public SubmitHomeWorkCommandHandler(IHomeWorkSubmitionRepositoryAsync HomeWorkSubmitionRepository,
+            IMailJobRepositoryAsync mailJobRepositoryAsync)
             {
                 _HomeWorkSubmitionRepository = HomeWorkSubmitionRepository;
+                _mailJobRepository = mailJobRepositoryAsync;
             }
             public async Task<Response<int>> Handle(SubmitHomeWorkCommand command, CancellationToken cancellationToken)
             {
@@ -37,6 +40,13 @@ namespace Application.DTOs
                     homeWorkSubmition.SubmitionDate = DateTime.Now;
 
                     await _HomeWorkSubmitionRepository.UpdateAsync(homeWorkSubmition);
+                    await _mailJobRepository.AddAsync(new MailJob
+                    {
+                        Type = (int)MailJobTypeEnum.HomeworkSubmitted,
+                        StudentId = homeWorkSubmition.StudentId,
+                        HomeworkId = homeWorkSubmition.Id,
+                        Status = (int)JobStatusEnum.New
+                    });
                     return new Response<int>(homeWorkSubmition.Id);
                 }
                 else

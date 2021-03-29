@@ -44,7 +44,7 @@ namespace Infrastructure.Shared.Services
             catch (System.Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
-                throw new ApiException(ex.Message);
+                // throw new ApiException(ex.Message);
             }
         }
 
