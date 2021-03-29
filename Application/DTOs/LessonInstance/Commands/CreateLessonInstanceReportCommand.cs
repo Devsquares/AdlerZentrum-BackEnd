@@ -51,7 +51,7 @@ namespace Application.DTOs
 
                     if (command.isAdditionalHomework)
                     {
-                        await _mediator.Send(new CreateHomeWorkCommand
+                        var res = await _mediator.Send(new CreateHomeWorkCommand
                         {
                             BonusPoints = command.AdditionalHomework.BonusPoints,
                             GroupInstanceId = lessonInstance.GroupInstanceId,
@@ -61,6 +61,9 @@ namespace Application.DTOs
                             TeacherId = command.TeacherId,
                             LessonInstanceId = lessonInstance.Id
                         });
+
+                        // lessonInstance.Homework = res.data;
+                        await _LessonInstanceRepositoryAsync.UpdateAsync(lessonInstance);
                     }
                     foreach (var item in lessonInstance.LessonInstanceStudents)
                     {
@@ -70,7 +73,7 @@ namespace Application.DTOs
                             StudentId = item.StudentId,
                             Status = (int)JobStatusEnum.New
                         });
-                    } 
+                    }
                 }
                 return new Response<bool>(true);
             }

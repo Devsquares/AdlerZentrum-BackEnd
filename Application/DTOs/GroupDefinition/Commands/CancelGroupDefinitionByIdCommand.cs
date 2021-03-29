@@ -47,7 +47,7 @@ namespace Application.DTOs
                 var studentEmails = _GroupInstanceStudentRepository.GetEmailsByGroupDefinationId(command.Id);
                 var user = _UsersRepository.GetUserById(command.UserId);
                 EmailRequest emailRequest = new EmailRequest();
-                emailRequest.Body = emailTemplates[0].TemplateBody;
+                emailRequest.Body = emailTemplates[0].Body;
                 emailRequest.Subject = "Cancel Group defination";
                 emailRequest.From = user.Email;
                 for (int i = 0; i < studentEmails.Count; i++)

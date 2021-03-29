@@ -9,7 +9,8 @@ namespace Domain.Entities
     {
         public int EmailTypeId { get; set; }
         public virtual EmailType EmailType { get; set; }
-        public string TemplateName { get; set; }
-        public string TemplateBody { get; set; }
+        public string Name { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
     }
 }

@@ -67,7 +67,6 @@ namespace Infrastructure.Persistence.Repositories
                         && (x.GroupDefinition.Status == (int)GroupDefinationStatusEnum.New || x.GroupDefinition.Status == (int)GroupDefinationStatusEnum.Pending)).ToList();
                     totalCount = newgroupDefinitionsList.Count();
                     return newgroupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x => x.GroupDefinition).ToList();
-
                 }
             }
             var query = groupDefinitions

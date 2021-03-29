@@ -13,26 +13,25 @@ using Microsoft.Extensions.Logging;
 
 namespace Process
 {
-    public class JobsWorker : BackgroundService
+    public class MailWorker : BackgroundService
     {
-        private readonly ILogger<JobsWorker> _logger;
+        private readonly ILogger<MailWorker> _logger;
         private readonly IServiceProvider _serviceProvider;
         private Thread _doJob;
-        private DoJobThread _doJobThread;
+        private SendMailThread _doJobThread;
 
-        public JobsWorker(ILogger<JobsWorker> logger,
+        public MailWorker(ILogger<MailWorker> logger,
             IServiceProvider serviceProvider)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
-            _doJobThread = DoJobThread.Create(_serviceProvider, _logger);
+            _doJobThread = SendMailThread.Create(_serviceProvider, logger);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Job Task stared");
                 TimeSpan interval = new TimeSpan(0, 0, 0, 10);
                 using (var scope = _serviceProvider.CreateScope())
                 {
@@ -40,12 +39,11 @@ namespace Process
                     var Jobs = dbContext.Jobs
                        .Where(x => x.Status == (int)JobStatusEnum.New
                        && (x.StartDate > DateTime.Now || x.StartDate == null)
-                       ).FirstOrDefault();
-                    if (Jobs != null)
+                       ).ToList();
+                    if (Jobs.Count > 0)
                     {
-                        _logger.LogInformation($"Job Task excute job with id {Jobs.Id.ToString()}");
                         _doJob = new Thread(new ParameterizedThreadStart(_doJobThread.Run));
-                        _doJob.Start(Jobs);
+                        _doJob.Start(Jobs[0]);
                         await Task.Delay(interval, stoppingToken);
                     }
                 }
