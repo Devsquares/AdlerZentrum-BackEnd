@@ -35,7 +35,8 @@ namespace Infrastructure.Persistence.Repositories
                             AdlerCardUnitImage = acu.Image,
                             AdlerCardUnitDescription = acu.Description,
                             AdlerCardUnitCount = acu.AdlerCards.Where(x=>x.Status == (int)AdlerCardEnum.Open).Count(),
-                            AdlerCardUnitAchievedCount =x != null? _context.AdlerCardSubmissions.Where(x=>x.StudentId == studentId).Count():0
+                            AdlerCardUnitAchievedCount =x != null? _context.AdlerCardSubmissions.Where(x=>x.StudentId == studentId).Count():0,
+                            Levels = x.AdlerCard.Level
                         }).ToList();
 
             //var units = _adlercardsunits.Include(x => x.AdlerCards).Where(x => x.LevelId == levelId && x.AdlerCardsTypeId == adlerCardTypeId)
@@ -55,6 +56,10 @@ namespace Infrastructure.Persistence.Repositories
             return units;
         }
 
+        public AdlerCardsUnit GetAdlerCardsUnitById(int id)
+        {
+            return _adlercardsunits.Include(x=>x.Level).Where(x => x.Id == id).FirstOrDefault();
+        }
 
     }
 
