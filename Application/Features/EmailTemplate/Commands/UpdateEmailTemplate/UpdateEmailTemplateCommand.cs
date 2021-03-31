@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-	public class UpdateEmailTemplateCommand : IRequest<Response<int>>
+    public class UpdateEmailTemplateCommand : IRequest<Response<int>>
     {
-		public int Id { get; set; }
-		public int EmailTypeId { get; set; }
-		public string TemplateName { get; set; }
-		public string TemplateBody { get; set; }
+        public int Id { get; set; }
+        public int EmailTypeId { get; set; }
+        public string Name { get; set; }
+        public string Body { get; set; }
+        public string Subject { get; set; }
 
         public class UpdateEmailTemplateCommandHandler : IRequestHandler<UpdateEmailTemplateCommand, Response<int>>
         {
@@ -34,9 +35,10 @@ namespace Application.Features
                 }
                 else
                 {
-				emailtemplate.EmailTypeId = command.EmailTypeId;
-				emailtemplate.TemplateName = command.TemplateName;
-				emailtemplate.TemplateBody = command.TemplateBody; 
+                    emailtemplate.EmailTypeId = command.EmailTypeId;
+                    emailtemplate.Name = command.Name;
+                    emailtemplate.Body = command.Body;
+                    emailtemplate.Subject = command.Subject;
 
                     await _emailtemplateRepository.UpdateAsync(emailtemplate);
                     return new Response<int>(emailtemplate.Id);

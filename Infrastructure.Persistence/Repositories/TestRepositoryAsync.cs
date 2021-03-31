@@ -85,6 +85,8 @@ namespace Infrastructure.Persistence.Repositories
                       TestTypeId = x.Test.TestTypeId,
                       LessonDefinition = x.Test.LessonDefinition,
                       Status = x.Test.Status,
+                      Date = x.RelaeseDate,
+                      Duration = x.Test.TestDuration,
                       StatusName = (Enum.Parse<TestStatusEnum>(x.Test.Status.ToString())).ToString()
                   })
                   .Skip((pageNumber - 1) * pageSize)

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class CreateHomeWorkCommand : IRequest<Response<int>>
+    public class CreateHomeWorkCommand : IRequest<Response<Homework>>
     {
         public string Text { get; set; }
         public int MinCharacters { get; set; }
@@ -24,7 +24,7 @@ namespace Application.DTOs
         public int LessonInstanceId { get; set; }
         public string TeacherId { get; set; }
 
-        public class CreateHomeWorkCommandHandler : IRequestHandler<CreateHomeWorkCommand, Response<int>>
+        public class CreateHomeWorkCommandHandler : IRequestHandler<CreateHomeWorkCommand, Response<Homework>>
         {
             private readonly IHomeWorkRepositoryAsync _HomeWorkRepository;
             private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
@@ -35,7 +35,7 @@ namespace Application.DTOs
                 _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
                 _mediator = Mediator;
             }
-            public async Task<Response<int>> Handle(CreateHomeWorkCommand command, CancellationToken cancellationToken)
+            public async Task<Response<Homework>> Handle(CreateHomeWorkCommand command, CancellationToken cancellationToken)
             {
                 var HomeWork = new Homework();
 
@@ -47,7 +47,7 @@ namespace Application.DTOs
                 var students = _groupInstanceRepositoryAsync.GetStudents(HomeWork.GroupInstanceId);
 
                 await _mediator.Send(new CreateHomeWorkSubmitionCommand { HomeWorkId = HomeWork.Id, Students = students });
-                return new Response<int>(HomeWork.Id);
+                return new Response<Homework>(HomeWork);
 
             }
         }

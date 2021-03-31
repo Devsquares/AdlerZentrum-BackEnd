@@ -145,7 +145,8 @@ namespace WebApi.Controller
             {
                 Status = command.Status,
                 TestType = command.TestType,
-                TeacherId = AuthenticatedUserService.UserId
+                TeacherId = AuthenticatedUserService.UserId,
+                GroupInstanceId = command.GroupInstanceId
             }));
         }
 

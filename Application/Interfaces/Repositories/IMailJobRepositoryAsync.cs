@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.Interfaces.Repositories
 {
-    public interface IListeningAudioFileRepositoryAsync : IGenericRepositoryAsync<ListeningAudioFile>
+    public interface IMailJobRepositoryAsync : IGenericRepositoryAsync<MailJob>
     {
     }
 }

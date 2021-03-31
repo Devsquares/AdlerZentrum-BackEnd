@@ -24,12 +24,15 @@ namespace Application.DTOs
             private readonly IHomeWorkSubmitionRepositoryAsync _HomeWorkSubmitionRepository;
             private readonly IHomeWorkRepositoryAsync _homework;
             private readonly IJobRepositoryAsync _jobRepository;
+            private readonly IMailJobRepositoryAsync _mailJobRepository;
             public HomeworkCorrectionCommandHandler(IHomeWorkSubmitionRepositoryAsync HomeWorkSubmitionRepository,
             IHomeWorkRepositoryAsync homeWorkRepositoryAsync,
+            IMailJobRepositoryAsync mailJobRepositoryAsync,
             IJobRepositoryAsync jobRepository)
             {
                 _HomeWorkSubmitionRepository = HomeWorkSubmitionRepository;
                 _homework = homeWorkRepositoryAsync;
+                _mailJobRepository = mailJobRepositoryAsync;
                 _jobRepository = jobRepository;
             }
             public async Task<Response<int>> Handle(HomeworkCorrectionCommand command, CancellationToken cancellationToken)
@@ -58,7 +61,13 @@ namespace Application.DTOs
                     }
                 }
                 HomeWorkSubmition.BonusPoints = bouns;
-
+                await _mailJobRepository.AddAsync(new MailJob
+                {
+                    Type = (int)MailJobTypeEnum.HomeworkCorrected,
+                    StudentId = HomeWorkSubmition.StudentId,
+                    HomeworkId = HomeWorkSubmition.Id,
+                    Status = (int)JobStatusEnum.New
+                });
                 await _HomeWorkSubmitionRepository.UpdateAsync(HomeWorkSubmition);
                 return new Response<int>(HomeWorkSubmition.Id);
             }

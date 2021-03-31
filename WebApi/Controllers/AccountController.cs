@@ -18,6 +18,9 @@ using Application.DTOs;
 using Domain.Models;
 using Application.Features;
 using System.Transactions;
+using Domain.Entities;
+using Application.Interfaces.Repositories;
+using Application.Enums;
 
 namespace WebApi.Controllers
 {
@@ -27,14 +30,16 @@ namespace WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly Application.Interfaces.Repositories.IMailJobRepositoryAsync _mailJobRepository;
         private IMediator _mediator;
         protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
         private readonly IEmailService _emailService;
 
-        public AccountController(IAccountService accountService, IEmailService emailService)
+        public AccountController(IAccountService accountService, IEmailService emailService, IMailJobRepositoryAsync mailJobRepository)
         {
             _accountService = accountService;
             _emailService = emailService;
+            _mailJobRepository = mailJobRepository;
         }
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
@@ -61,6 +66,11 @@ namespace WebApi.Controllers
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var student = await _accountService.RegisterAsync(request, origin);
+                if(request.AdlerCardsBundleId.HasValue)
+                {
+                    var addstudentBundel = new CreateAdlerCardBundleStudentCommand() { AdlerCardsBundleId = request.AdlerCardsBundleId.Value, StudentId = student.data };
+                }
+               
                 await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email });
                 scope.Complete();
                 return Ok();
@@ -176,6 +186,14 @@ namespace WebApi.Controllers
         public async Task<IActionResult> SendMessageToAdmin([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
         {
             // TODO: Which admin we will send to him.
+            await _mailJobRepository.AddAsync(new MailJob
+            {
+                Type = (int)MailJobTypeEnum.SendMessageToAdmin,
+                StudentId = studentId,
+                Text = message,
+                Subject = subject,
+                Status = (int)JobStatusEnum.New
+            });
             return Ok();
         }
 
@@ -199,6 +217,13 @@ namespace WebApi.Controllers
         {
             // TODO: fix it.
             // await _accountService.SendMessageToInstructor(subject, message, studentId);
+            await _mailJobRepository.AddAsync(new MailJob
+            {
+                Type = (int)MailJobTypeEnum.SendMessageToInstructor,
+                StudentId = studentId,
+                Subject = subject,
+                Status = (int)JobStatusEnum.New
+            });
             return Ok();
         }
 

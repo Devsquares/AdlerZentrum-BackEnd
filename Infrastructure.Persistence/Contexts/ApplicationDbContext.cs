@@ -53,7 +53,6 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<ChoiceSubmission> ChoiceSubmissions { get; set; }
         public DbSet<BanRequest> BanRequests { get; set; }
         public DbSet<LessonInstanceStudent> LessonInstanceStudents { get; set; }
-        public DbSet<EmailType> EmailTypes { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<GroupConditionDetail> GroupConditionDetails { get; set; }
         public DbSet<GroupConditionPromoCode> GroupConditionPromoCodes { get; set; }
@@ -74,6 +73,7 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<PlacementRelease> PlacementReleases { get; set; }
         public DbSet<StudentInfo> StudentInfos { get; set; }
         public DbSet<Setting> Settings { get; set; }
+        public DbSet<MailJob> MailJobs { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -133,6 +133,7 @@ namespace Infrastructure.Persistence.Contexts
 
             });
 
+            // builder.Entity<LessonInstance>().HasOne(p => p.Homework).WithOne(a => a.LessonInstance).HasForeignKey<Homework>(c => c.LessonInstanceId);
 
             builder.Entity<ApplicationUser>(entity => entity.Property(m => m.Id).HasMaxLength(85));
             builder.Entity<ApplicationUser>(entity => entity.Property(m => m.NormalizedEmail).HasMaxLength(85));

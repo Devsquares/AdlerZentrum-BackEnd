@@ -24,6 +24,7 @@ namespace Application.DTOs.GroupInstance.Queries
         public string SortBy { get; set; }
         public string SortType { get; set; }
         public bool NoPaging { get; set; }
+        public List<int> Status { get; set; }
     }
     public class GetAllGroupInstancesQueryHandler : IRequestHandler<GetAllGroupInstancesQuery, FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>>
     {
@@ -39,9 +40,10 @@ namespace Application.DTOs.GroupInstance.Queries
         {
             var validFilter = _mapper.Map<FilteredRequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupInstance> groupInstances;
-            groupInstances = await _groupInstanceRepositoryAsync.GetPagedReponseAsync(validFilter);
+            int count = 0;
+            groupInstances =  _groupInstanceRepositoryAsync.GetPagedGroupInstanceReponseAsync(validFilter,request.Status,out count);
             var userViewModel = _mapper.Map<IEnumerable<GetAllGroupInstancesViewModel>>(groupInstances);
-            return new FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>(userViewModel, validFilter, userViewModel.ToList().Count);
+            return new FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>(userViewModel, validFilter, count);
         }
     }
 }

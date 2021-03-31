@@ -6,6 +6,6 @@ using System.Text;
 namespace Application.DTOs
 {
     public class GroupDefinitionRequestParameter : RequestParameter
-    { 
+    {
     }
 }

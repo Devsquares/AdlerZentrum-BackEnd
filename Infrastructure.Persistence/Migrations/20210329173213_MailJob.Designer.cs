@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210329173213_MailJob")]
+    partial class MailJob
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -627,7 +629,40 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmailTypeId");
+
                     b.ToTable("EmailTemplates");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EmailType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumComment", b =>
@@ -1310,9 +1345,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime");
-
                     b.Property<int>("GroupInstanceId")
                         .HasColumnType("int");
 
@@ -1334,9 +1366,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Serial")
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime");
 
                     b.Property<bool>("SubmittedReport")
                         .HasColumnType("bit");
@@ -1428,6 +1457,37 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Levels");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ListeningAudioFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ListeningAudioFile");
                 });
 
             modelBuilder.Entity("Domain.Entities.MailJob", b =>
@@ -1710,8 +1770,8 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AudioPath")
-                        .HasColumnType("text");
+                    b.Property<int?>("AudioPathId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
@@ -1755,6 +1815,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AudioPathId");
 
                     b.HasIndex("TestId");
 
@@ -2517,6 +2579,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("StudentId");
                 });
 
+            modelBuilder.Entity("Domain.Entities.EmailTemplate", b =>
+                {
+                    b.HasOne("Domain.Entities.EmailType", "EmailType")
+                        .WithMany()
+                        .HasForeignKey("EmailTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.ForumComment", b =>
                 {
                     b.HasOne("Domain.Entities.ForumTopic", "ForumTopic")
@@ -2776,6 +2847,10 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
+                    b.HasOne("Domain.Entities.ListeningAudioFile", "AudioPath")
+                        .WithMany()
+                        .HasForeignKey("AudioPathId");
+
                     b.HasOne("Domain.Entities.Test", null)
                         .WithMany("Questions")
                         .HasForeignKey("TestId");

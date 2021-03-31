@@ -30,6 +30,7 @@ namespace Application.DTOs
             private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignment;
             private readonly IUsersRepositoryAsync _usersRepositoryAsync;
             private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
+            private readonly IMailJobRepositoryAsync _jobRepository;
 
             public ActiveGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
                 ILessonInstanceRepositoryAsync lessonInstanceRepository,
@@ -39,7 +40,8 @@ namespace Application.DTOs
                 ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignment,
                 IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
                 IUsersRepositoryAsync usersRepositoryAsync,
-                ISublevelRepositoryAsync sublevelRepositoryAsync)
+                ISublevelRepositoryAsync sublevelRepositoryAsync,
+                IMailJobRepositoryAsync jobRepositoryAsync)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
                 _lessonInstanceRepositoryAsync = lessonInstanceRepository;
@@ -50,6 +52,7 @@ namespace Application.DTOs
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
                 _usersRepositoryAsync = usersRepositoryAsync;
                 _sublevelRepositoryAsync = sublevelRepositoryAsync;
+                _jobRepository = jobRepositoryAsync;
             }
 
             public async Task<Response<bool>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
@@ -67,20 +70,30 @@ namespace Application.DTOs
                     var notIsEligablStudents = groupInstance.Students.Where(x => x.IsEligible == false).ToList();
                     if (notIsEligablStudents != null && notIsEligablStudents.Count() > 0)
                     {
-                          throw new Exception("This Group instance cannot be activated because some students are not Eligible ");
+                        throw new Exception("This Group instance cannot be activated because some students are not Eligible ");
                     }
                     var teacher = _teacherGroupInstanceAssignment.GetByGroupInstanceId(groupInstance.Id);
                     if (teacher == null)
                     {
-                          throw new Exception("This Group instance not acctive yet kindly choose the teacher.");
-                    }
-                    if (groupInstance.GroupDefinition.Sublevel.IsFinal)
-                    {
-                        if (finalLevelTest == null)  throw new Exception("Cann't active group please create Final test.");
+                        throw new Exception("This Group instance not acctive yet kindly choose the teacher.");
                     }
                     else
                     {
-                        if (subLevelTest == null)  throw new Exception("Cann't active group please create sublevel test.");
+                        await _jobRepository.AddAsync(new MailJob
+                        {
+                            Type = (int)MailJobTypeEnum.GroupActivationTeacher,
+                            GroupInstanceId = groupInstance.Id,
+                            TeacherId = teacher.TeacherId,
+                            Status = (int)JobStatusEnum.New
+                        });
+                    }
+                    if (groupInstance.GroupDefinition.Sublevel.IsFinal)
+                    {
+                        if (finalLevelTest == null) throw new Exception("Cann't active group please create Final test.");
+                    }
+                    else
+                    {
+                        if (subLevelTest == null) throw new Exception("Cann't active group please create sublevel test.");
                     }
                     var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions.OrderBy(x=>x.Order);
                     // TODO: genrate date time for lesson instance.
@@ -98,6 +111,13 @@ namespace Application.DTOs
                         var student = _usersRepositoryAsync.GetUserById(item.StudentId);
                         student.SublevelId = groupInstance.GroupDefinition.SubLevelId;
                         await _usersRepositoryAsync.UpdateAsync(student);
+                        await _jobRepository.AddAsync(new MailJob
+                        {
+                            Type = (int)MailJobTypeEnum.GroupActivationStudent,
+                            StudentId = student.Id,
+                            GroupInstanceId = groupInstance.Id,
+                            Status = (int)JobStatusEnum.New
+                        });
                     }
                     await _groupInstanceStudentRepositoryAsync.UpdateBulkAsync(groupInstance.Students.ToList());
 
@@ -216,7 +236,7 @@ namespace Application.DTOs
                 }
                 else
                 {
-                     throw new Exception("Cann't active group please check the status.");
+                    throw new Exception("Cann't active group please check the status.");
                 }
                 return new Response<bool>(true);
             }

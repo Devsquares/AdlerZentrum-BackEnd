@@ -25,13 +25,16 @@ namespace Application.Features
             private readonly IDisqualificationRequestRepositoryAsync _disqualificationrequestRepository;
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             private readonly IJobRepositoryAsync _jobRepository;
+            private readonly IMailJobRepositoryAsync _mailJobRepository;
             public UpdateDisqualificationRequestCommandHandler(IDisqualificationRequestRepositoryAsync disqualificationrequestRepository,
                IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
-               IJobRepositoryAsync jobRepositoryAsync)
+               IJobRepositoryAsync jobRepositoryAsync,
+                IMailJobRepositoryAsync mailJobRepositoryAsync)
             {
                 _disqualificationrequestRepository = disqualificationrequestRepository;
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
                 _jobRepository = jobRepositoryAsync;
+                _mailJobRepository = mailJobRepositoryAsync;
             }
             public async Task<Response<int>> Handle(UpdateDisqualificationRequestCommand command, CancellationToken cancellationToken)
             {
@@ -60,6 +63,12 @@ namespace Application.Features
                         {
                             Type = (int)JobTypeEnum.Disqualifier,
                             GroupInstanceId = student.GroupInstanceId,
+                            StudentId = student.StudentId,
+                            Status = (int)JobStatusEnum.New
+                        });
+                        await _mailJobRepository.AddAsync(new MailJob
+                        {
+                            Type = (int)MailJobTypeEnum.Disqualification,
                             StudentId = student.StudentId,
                             Status = (int)JobStatusEnum.New
                         });

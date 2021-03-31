@@ -9,15 +9,14 @@ using System.Text;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class EmailTypeRepositoryAsync : GenericRepositoryAsync<EmailType>, IEmailTypeRepositoryAsync
+    public class MailJobRepositoryAsync : GenericRepositoryAsync<MailJob>, IMailJobRepositoryAsync
     {
-        private readonly DbSet<EmailType> _emailtypes;
+        private readonly DbSet<MailJob> _jobs;
 
 
-        public EmailTypeRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
+        public MailJobRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _emailtypes = dbContext.Set<EmailType>();
-
+            _jobs = dbContext.Set<MailJob>();
         }
     }
 

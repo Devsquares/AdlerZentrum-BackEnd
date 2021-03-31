@@ -15,7 +15,7 @@ namespace Domain.Entities
         public int GroupInstanceId { get; set; }
         public GroupInstance GroupInstance { get; set; }
         public int LessonInstanceId { get; set; }
-        public virtual LessonInstance LessonInstance { get; set; }
+        public LessonInstance LessonInstance { get; set; }
         public string TeacherId { get; set; }
         public ApplicationUser Teacher { get; set; }
     }

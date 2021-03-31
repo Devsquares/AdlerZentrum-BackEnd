@@ -31,6 +31,7 @@ namespace Application.DTOs
             private readonly IPromoCodeInstanceRepositoryAsync _promoCodeInstanceRepositoryAsync;
             private readonly IStudentInfoRepositoryAsync _studentInfoRepositoryAsync;
             private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
+            private readonly IPlacementReleaseReopsitoryAsync _placementRelease;
             public RegisterStudentGroupDefinitionCommandHandler(IGroupDefinitionRepositoryAsync GroupDefinitionRepository,
                 IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
                 IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync,
@@ -39,7 +40,8 @@ namespace Application.DTOs
                 IOverPaymentStudentRepositoryAsync overPaymentStudentRepositoryAsync,
                 IPromoCodeInstanceRepositoryAsync promoCodeInstanceRepositoryAsync,
                 IStudentInfoRepositoryAsync studentInfoRepositoryAsync,
-                ISublevelRepositoryAsync sublevelRepositoryAsync)
+                ISublevelRepositoryAsync sublevelRepositoryAsync,
+                IPlacementReleaseReopsitoryAsync placementReleaseReopsitoryAsyncs)
             {
                 _GroupDefinitionRepositoryAsync = GroupDefinitionRepository;
                 _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
@@ -50,10 +52,19 @@ namespace Application.DTOs
                 _promoCodeInstanceRepositoryAsync = promoCodeInstanceRepositoryAsync;
                 _studentInfoRepositoryAsync = studentInfoRepositoryAsync;
                 _sublevelRepositoryAsync = sublevelRepositoryAsync;
+                _placementRelease = placementReleaseReopsitoryAsyncs;
             }
             public async Task<Response<int>> Handle(RegisterStudentGroupDefinitionCommand command, CancellationToken cancellationToken)
             {
-                var GroupDefinition =  _GroupDefinitionRepositoryAsync.GetById(command.groupDefinitionId);
+                var GroupDefinition = _GroupDefinitionRepositoryAsync.GetById(command.groupDefinitionId);
+                if (command.PlacmentTestId.HasValue)
+                {
+                    var placementRelease = await _placementRelease.GetByIdAsync(command.PlacmentTestId.Value);
+                    if (placementRelease != null)
+                    {
+                        command.PlacmentTestId = placementRelease.TestId;
+                    }
+                }
                 if (GroupDefinition == null)
                 {
                     throw new ApiException($"Group definition Not Found");
@@ -94,8 +105,8 @@ namespace Application.DTOs
                 int studentCount = _groupInstanceStudentRepositoryAsync.GetCountOfStudents(groupInstans.Id);
                 if (command.PromoCodeInstanceId.HasValue)
                 {
-                    var isPromoCodeInstanceStudent = _groupConditionPromoCodeRepositoryAsync.CheckStudentPromoCodeInstance(command.Email,command.StudentId,command.PromoCodeInstanceId.Value);
-                    if(!isPromoCodeInstanceStudent)
+                    var isPromoCodeInstanceStudent = _groupConditionPromoCodeRepositoryAsync.CheckStudentPromoCodeInstance(command.Email, command.StudentId, command.PromoCodeInstanceId.Value);
+                    if (!isPromoCodeInstanceStudent)
                     {
                         throw new Exception("this promocode is not for this student");
                     }
@@ -214,7 +225,7 @@ namespace Application.DTOs
                             RegisterDate = DateTime.Now,
                             IsEligible = isEligible
 
-                        }) ;
+                        });
                         var promocodeinstance = _promoCodeInstanceRepositoryAsync.GetById(command.PromoCodeInstanceId.Value);
                         promocodeinstance.IsUsed = true;
                         await _promoCodeInstanceRepositoryAsync.UpdateAsync(promocodeinstance);
@@ -228,9 +239,9 @@ namespace Application.DTOs
                                 StudentId = command.StudentId,
                                 GroupDefinitionId = command.groupDefinitionId,
                                 IsPlacementTest = true,
-                                 CreatedDate = DateTime.Now,
-                                 RegisterDate = DateTime.Now,
-                                 IsEligible = isEligible
+                                CreatedDate = DateTime.Now,
+                                RegisterDate = DateTime.Now,
+                                IsEligible = isEligible
                             });
                         }
                         else
@@ -243,7 +254,7 @@ namespace Application.DTOs
                                 CreatedDate = DateTime.Now,
                                 RegisterDate = DateTime.Now,
                                 IsEligible = isEligible
-                            }) ;
+                            });
                         }
 
                     }

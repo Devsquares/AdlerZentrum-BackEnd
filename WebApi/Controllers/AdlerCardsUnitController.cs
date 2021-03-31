@@ -8,21 +8,10 @@ namespace WebApi.Controllers
     {
         // GET: api/<controller>
         [HttpGet("GetALLAdlerCardUnits")]
-        public async Task<IActionResult> Get([FromQuery] GetAllAdlerCardsUnitsParameter filter)
+        public async Task<IActionResult> Get([FromQuery] GetAllAdlerCardsUnitsQuery filter)
         {
 
-            return Ok(await Mediator.Send(new GetAllAdlerCardsUnitsQuery()
-            {
-                PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber,
-                FilterArray = filter.FilterArray,
-                FilterRange = filter.FilterRange,
-                FilterSearch = filter.FilterSearch,
-                FilterValue = filter.FilterValue,
-                SortBy = filter.SortBy,
-                SortType = filter.SortType,
-                NoPaging = filter.NoPaging
-            }));
+            return Ok(await Mediator.Send(filter));
         }
 
         [HttpGet("GetAdlerCardUnitsForStudent")]

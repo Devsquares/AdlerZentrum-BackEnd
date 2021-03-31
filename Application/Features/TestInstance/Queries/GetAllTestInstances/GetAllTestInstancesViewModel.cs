@@ -16,5 +16,7 @@ namespace Application.Features
         public DateTime StartDate { get; set; }
         public int TestId { get; set; }
         public virtual Test Test { get; set; }
+        public bool ReCorrectionRequest { get; set; }
+        public bool Reopened { get; set; }
     }
 }

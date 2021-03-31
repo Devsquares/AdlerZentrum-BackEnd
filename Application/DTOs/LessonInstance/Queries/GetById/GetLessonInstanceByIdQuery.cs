@@ -17,10 +17,14 @@ namespace Application.DTOs
         public class GetLessonInstanceByIdQueryHandler : IRequestHandler<GetLessonInstanceByIdQuery, Response<LessonInstanceViewModel>>
         {
             private readonly ILessonInstanceRepositoryAsync _LessonInstanceRepository;
+            private readonly IHomeWorkRepositoryAsync _homeworkRepository;
             private readonly IMapper _mapper;
-            public GetLessonInstanceByIdQueryHandler(ILessonInstanceRepositoryAsync LessonInstanceRepository, IMapper mapper)
+            public GetLessonInstanceByIdQueryHandler(ILessonInstanceRepositoryAsync LessonInstanceRepository,
+            IHomeWorkRepositoryAsync homeWorkRepositoryAsync,
+             IMapper mapper)
             {
                 _LessonInstanceRepository = LessonInstanceRepository;
+                _homeworkRepository = homeWorkRepositoryAsync;
                 _mapper = mapper;
             }
             public async Task<Response<LessonInstanceViewModel>> Handle(GetLessonInstanceByIdQuery query, CancellationToken cancellationToken)
@@ -28,6 +32,7 @@ namespace Application.DTOs
                 var LessonInstance = await _LessonInstanceRepository.GetByIdAsync(query.Id);
                 if (LessonInstance == null) throw new ApiException($"Group Not Found.");
                 var LessonInstanceViewModel = _mapper.Map<LessonInstanceViewModel>(LessonInstance);
+                LessonInstanceViewModel.Homework = _homeworkRepository.GetByLessonInstance(LessonInstance.Id);
                 return new Response<LessonInstanceViewModel>(LessonInstanceViewModel);
             }
         }

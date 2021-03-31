@@ -14,6 +14,6 @@ namespace Application.DTOs
         public string PhoneNumber { get; set; }
         public string Role { get; set; }
         public string Profilephoto { get; set; }
-
+        public string Country { get; set; }
     }
 }

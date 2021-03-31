@@ -35,7 +35,8 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.Student)
                 .Include(x => x.Homework.GroupInstance)
                 .Include(x => x.Homework.LessonInstance)
-                .Where(x => x.Homework.TeacherId == TeacherId && Status != null ? x.Status == Status : true)
+                .Where(x => TeacherId != null ? x.Homework.TeacherId == TeacherId : true
+                 && Status != null ? x.Status == Status : true)
                 .ToListAsync();
         }
 

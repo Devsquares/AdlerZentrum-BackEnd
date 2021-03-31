@@ -20,6 +20,7 @@ namespace Application.DTOs
         public int PageSize { get; set; }
         public string SubLevel { get; set; }
         public int? SubLevelId { get; set; }
+        public List<int> Status { get; set; }
     }
     public class GetAllGroupDefinitionsQueryHandler : IRequestHandler<GetAllGroupDefinitionsQuery, PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>>
     {
@@ -49,10 +50,11 @@ namespace Application.DTOs
 
         public async Task<PagedResponse<IEnumerable<GetAllGroupDefinitionViewModel>>> Handle(GetAllGroupDefinitionsQuery request, CancellationToken cancellationToken)
         {
+            // TODO: need to remove this nested loop.
             int totalCount = 0;
             var validFilter = _mapper.Map<RequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
-            GroupDefinitions = _GroupDefinitionRepositoryAsync.GetAll(request.PageNumber, request.PageSize, request.SubLevel, out totalCount,request.SubLevelId);
+            GroupDefinitions = _GroupDefinitionRepositoryAsync.GetAll(request.PageNumber, request.PageSize, request.SubLevel, request.Status, out totalCount, request.SubLevelId);
             var groupDefinitionsModel = _mapper.Map<IEnumerable<GetAllGroupDefinitionViewModel>>(GroupDefinitions);
             foreach (var groupDefinition in groupDefinitionsModel)
             {

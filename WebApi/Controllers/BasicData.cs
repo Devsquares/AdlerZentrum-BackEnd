@@ -1,16 +1,13 @@
 ﻿using Application.DTOs.BasicData;
-using Application.Enums; 
 using Application.Features;
-using Application.Interfaces.Repositories;
-using Microsoft.AspNetCore.Http;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
+using FormatWith;
 
 namespace WebApi.Controllers
 {
@@ -53,7 +50,7 @@ namespace WebApi.Controllers
                    .ToList();
 
             foreach (RegionInfo item in AllRegionInfo)
-            { 
+            {
                 if (!(culuterList.Contains(item.EnglishName)))
                 {
                     culuterList.Add(item.EnglishName);
@@ -67,6 +64,19 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetForumTypes()
         {
             return Ok(await Mediator.Send(new GetAllForumTypesQuery()));
+        }
+
+
+        [HttpGet("TestPlaceHolder")]
+        public IActionResult TestPlaceHolder()
+        {
+            var user = new ApplicationUser()
+            {
+                FirstName = "Olle Wobbla",
+                AdlerCardBalance = 25
+            };
+            var res = "Your name is {FirstName} and your age is {AdlerCardBalance}".FormatWith(user);
+            return Ok();
         }
     }
 }

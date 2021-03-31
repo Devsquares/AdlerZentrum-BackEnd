@@ -33,23 +33,25 @@ namespace Infrastructure.Persistence.Repositories
             return await base.AddAsync(entity);
         }
 
-        public List<GroupDefinition> GetAll(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null)
+        public List<GroupDefinition> GetAll(int pageNumber, int pageSize, string subLevelName, List<int> status, out int totalCount, int? sublevelId = null)
         {
-            var groupDefinitionsList = groupDefinitions
+            var query = groupDefinitions
             .Include(x => x.GroupCondition)
             .Include(x => x.Sublevel)
             .Include(x => x.Pricing)
             .Include(x => x.TimeSlot)
                 .Where(x => (!string.IsNullOrEmpty(subLevelName) ? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()) : true)
-                        && (sublevelId != null ? x.SubLevelId == sublevelId.Value : true)).ToList();
-            totalCount = groupDefinitionsList.Count();
-            groupDefinitionsList = groupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+                        && (sublevelId != null ? x.SubLevelId == sublevelId.Value : true)
+                        && status != null && status.Count > 0 ? status.Contains(x.Status.Value) : true)
+                        .AsQueryable();
+            totalCount = query.Count();
+            var groupDefinitionsList = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return groupDefinitionsList;
         }
 
-        public List<GroupDefinition> GetAvailableForRegisteration(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null,int? promoCodeInstanceId = null )
+        public List<GroupDefinition> GetAvailableForRegisteration(int pageNumber, int pageSize, string subLevelName, out int totalCount, int? sublevelId = null, int? promoCodeInstanceId = null)
         {
-            if(promoCodeInstanceId != null)
+            if (promoCodeInstanceId != null)
             {
                 var groupDefinitionobject = promoCodeInstance
                     .Include(x => x.GroupDefinition)
@@ -57,18 +59,17 @@ namespace Infrastructure.Persistence.Repositories
                     .Include(x => x.GroupDefinition.Pricing)
                     .Include(x => x.GroupDefinition.TimeSlot)
                     .Where(x => x.Id == promoCodeInstanceId).ToList();
-                if(groupDefinitionobject !=null && groupDefinitionobject.Count > 0 && groupDefinitionobject[0].GroupDefinition != null)
+                if (groupDefinitionobject != null && groupDefinitionobject.Count > 0 && groupDefinitionobject[0].GroupDefinition != null)
                 {
                     var newgroupDefinitionsList = groupDefinitionobject
                         .Where(x => (!string.IsNullOrEmpty(subLevelName) ? (x.GroupDefinition.Sublevel.Name.ToLower() == subLevelName.ToLower()) : true)
                         && (sublevelId != null ? x.GroupDefinition.SubLevelId == sublevelId.Value : true)
                         && (x.GroupDefinition.Status == (int)GroupDefinationStatusEnum.New || x.GroupDefinition.Status == (int)GroupDefinationStatusEnum.Pending)).ToList();
                     totalCount = newgroupDefinitionsList.Count();
-                    return newgroupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x=>x.GroupDefinition).ToList();
-                   
+                    return newgroupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x => x.GroupDefinition).ToList();
                 }
             }
-            var groupDefinitionsList = groupDefinitions
+            var query = groupDefinitions
             .Include(x => x.GroupCondition)
             .Include(x => x.Sublevel)
             .Include(x => x.Pricing)
@@ -76,8 +77,8 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => (!string.IsNullOrEmpty(subLevelName) ? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()) : true)
                         && (sublevelId != null ? x.SubLevelId == sublevelId.Value : true)
                         && (x.Status == (int)GroupDefinationStatusEnum.New || x.Status == (int)GroupDefinationStatusEnum.Pending)).ToList();
-            totalCount = groupDefinitionsList.Count();
-            groupDefinitionsList = groupDefinitionsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            totalCount = query.Count();
+            var groupDefinitionsList = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             return groupDefinitionsList;
         }
 

@@ -17,5 +17,7 @@ namespace Domain.Models
         public string SubLevelName { get; set; }
         public int Status { get; set; }
         public string StatusName { get; set; }
+        public DateTime Date { get; set; }
+        public int Duration { get; set; }
     }
 }

@@ -63,14 +63,12 @@ namespace Infrastructure.Persistence
             services.AddTransient<ISingleQuestionSubmissionRepositoryAsync, SingleQuestionSubmissionRepositoryAsync>();
             services.AddTransient<IChoiceSubmissionRepositoryAsync, ChoiceSubmissionRepositoryAsync>();
             services.AddTransient<IBanRequestRepositoryAsync, BanRequestRepositoryAsync>();
-            services.AddTransient<IEmailTypeRepositoryAsync, EmailTypeRepositoryAsync>();
             services.AddTransient<IEmailTemplateRepositoryAsync, EmailTemplateRepositoryAsync>();
             services.AddTransient<IUsersRepositoryAsync, UsersRepositoryAsync>();
             services.AddTransient<IGroupConditionDetailsRepositoryAsync, GroupConditionDetailsRepositoryAsync>();
             services.AddTransient<IGroupConditionPromoCodeRepositoryAsync, GroupConditionPromoCodeRepositoryAsync>();
             services.AddTransient<IInterestedStudentRepositoryAsync, InterestedStudentRepositoryAsync>();
             services.AddTransient<IOverPaymentStudentRepositoryAsync, OverPaymentStudentRepositoryAsync>();
-            services.AddTransient<IListeningAudioFileRepositoryAsync, ListeningAudioFileRepositoryAsync>();
             services.AddTransient<IDisqualificationRequestRepositoryAsync, DisqualificationRequestRepositoryAsync>();
             services.AddTransient<IJobRepositoryAsync, JobRepositoryAsync>();
             services.AddTransient<IPromoCodeInstanceRepositoryAsync, PromoCodeInstanceRepositoryAsync>();
@@ -85,6 +83,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IPlacementReleaseReopsitoryAsync, PlacementReleaseReopsitoryAsync>();
             services.AddTransient<IStudentInfoRepositoryAsync, StudentInfoRepositoryAsync>();
             services.AddTransient<ISettingRepositoryAsync, SettingRepositoryAsync>();
+            services.AddTransient<IMailJobRepositoryAsync, MailJobRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
