@@ -66,6 +66,11 @@ namespace WebApi.Controllers
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var student = await _accountService.RegisterAsync(request, origin);
+                if(request.AdlerCardsBundleId.HasValue)
+                {
+                    var addstudentBundel = new CreateAdlerCardBundleStudentCommand() { AdlerCardsBundleId = request.AdlerCardsBundleId.Value, StudentId = student.data };
+                }
+               
                 await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email });
                 scope.Complete();
                 return Ok();
