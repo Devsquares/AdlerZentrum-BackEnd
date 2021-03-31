@@ -55,7 +55,7 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.Status == (int)TestInstanceEnum.Closed).ToListAsync();
         }
 
-        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status,bool? reCorrectionRequest, int pageNumber, int pageSize)
+        public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestsToManage(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, bool? reCorrectionRequest, int pageNumber, int pageSize)
         {
             var query = _testInstances.AsQueryable();
             if (GroupDefinitionId != null)
@@ -159,6 +159,9 @@ namespace Infrastructure.Persistence.Repositories
         public override Task<TestInstance> GetByIdAsync(int id)
         {
             return _testInstances
+                   .Include(x => x.Test)
+                   .ThenInclude(x => x.Questions)
+                   .ThenInclude(x => x.AudioPath)
                    .Include(x => x.Test)
                    .ThenInclude(x => x.Questions)
                    .ThenInclude(x => x.SingleQuestions)

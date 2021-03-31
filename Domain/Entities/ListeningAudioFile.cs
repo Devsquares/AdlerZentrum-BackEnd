@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class ListeningAudioFile: AuditableBaseEntity
+    public class ListeningAudioFile : AuditableBaseEntity
     {
-	public string FileName { get; set; }
-	public string FilePath { get; set; }
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
     }
 }
