@@ -1,5 +1,6 @@
 using Application.Enums;
 using Application.Exceptions;
+using Application.Helpers;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -81,7 +82,7 @@ namespace Application.DTOs
                     {
                         if (subLevelTest == null)  throw new Exception("Cann't active group please create sublevel test.");
                     }
-                    var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions;
+                    var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions.OrderBy(x=>x.Order);
                     // TODO: genrate date time for lesson instance.
                     List<LessonInstanceStudent> lessonInstanceStudents = new List<LessonInstanceStudent>();
                     foreach (var item in groupInstance.Students)
@@ -101,12 +102,15 @@ namespace Application.DTOs
                     await _groupInstanceStudentRepositoryAsync.UpdateBulkAsync(groupInstance.Students.ToList());
 
                     List<LessonInstance> lessonInstances = new List<LessonInstance>();
+                    Dictionary<int, TimeFrame> timeslotsDetailed = await _lessonInstanceRepositoryAsync.GetTimeSlotInstancesSorted(groupInstance);
                     foreach (var item in LessonDefinitions)
                     {
                         lessonInstances.Add(new LessonInstance
                         {
                             GroupInstanceId = groupInstance.Id,
                             LessonDefinitionId = item.Id,
+                            StartDate = timeslotsDetailed.GetValueOrDefault(item.Order).Start,
+                            EndDate = timeslotsDetailed.GetValueOrDefault(item.Order).End,
                             MaterialDone = string.Empty,
                             MaterialToDo = string.Empty,
                             Serial = item.Order.ToString()
