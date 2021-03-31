@@ -42,7 +42,6 @@ namespace Application.Mappings
             CreateMap<LessonDefinition, LessonDefinitionViewModel>().ReverseMap();
             CreateMap<CreateLevelCommand, Level>();
             CreateMap<GetAllLevelsQuery, PagedResponse<Level>>();
-            CreateMap<ListeningAudioFile, CreateListeningAudioFileCommand>().ReverseMap();
 
             CreateMap<ApplicationUser, GetAllUsersViewModel>().ReverseMap();
             CreateMap<ApplicationUser, AccountViewModel>().ReverseMap();
