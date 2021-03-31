@@ -15,13 +15,13 @@ namespace Application.Features
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public Dictionary<string, string> FilterValue { get; set; }
-        public Dictionary<string, string> FilterRange { get; set; }
-        public Dictionary<string, List<string>> FilterArray { get; set; }
-        public Dictionary<string, string> FilterSearch { get; set; }
-        public string SortBy { get; set; }
-        public string SortType { get; set; }
-        public bool NoPaging { get; set; }
+        //public Dictionary<string, string> FilterValue { get; set; }
+        //public Dictionary<string, string> FilterRange { get; set; }
+        //public Dictionary<string, List<string>> FilterArray { get; set; }
+        //public Dictionary<string, string> FilterSearch { get; set; }
+        //public string SortBy { get; set; }
+        //public string SortType { get; set; }
+        //public bool NoPaging { get; set; }
     }
     public class GetAllAdlerCardsUnitsQueryHandler : IRequestHandler<GetAllAdlerCardsUnitsQuery, FilteredPagedResponse<IEnumerable<GetAllAdlerCardsUnitsViewModel>>>
     {
@@ -39,8 +39,9 @@ namespace Application.Features
             FilteredRequestParameter filteredRequestParameter = new FilteredRequestParameter();
             Reflection.CopyProperties(validFilter, filteredRequestParameter);
             int count = _adlercardsunitRepository.GetCount(validFilter);
-
-            var adlercardsunit = await _adlercardsunitRepository.GetPagedReponseAsync(validFilter);
+            if (validFilter.PageNumber == 0) validFilter.PageNumber = 1;
+            if (validFilter.PageSize == 0) validFilter.PageSize = 10;
+            var adlercardsunit = await _adlercardsunitRepository.GetPagedReponseAsync(validFilter.PageNumber,validFilter.PageSize,"Level");
             var adlercardsunitViewModel = _mapper.Map<IEnumerable<GetAllAdlerCardsUnitsViewModel>>(adlercardsunit);
             return new Wrappers.FilteredPagedResponse<IEnumerable<GetAllAdlerCardsUnitsViewModel>>(adlercardsunitViewModel, validFilter, count);
         }

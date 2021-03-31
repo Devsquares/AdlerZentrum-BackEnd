@@ -22,7 +22,7 @@ namespace Application.Features
             }
             public async Task<Response<Domain.Entities.AdlerCardsUnit>> Handle(GetAdlerCardsUnitByIdQuery query, CancellationToken cancellationToken)
             {
-                var adlercardsunit = await _adlercardsunitRepository.GetByIdAsync(query.Id);
+                var adlercardsunit = _adlercardsunitRepository.GetAdlerCardsUnitById(query.Id);
                 if (adlercardsunit == null) throw new ApiException($"AdlerCardsUnit Not Found.");
                 return new Response<Domain.Entities.AdlerCardsUnit>(adlercardsunit);
             }

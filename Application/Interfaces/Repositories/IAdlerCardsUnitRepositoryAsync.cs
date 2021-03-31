@@ -9,5 +9,6 @@ namespace Application.Interfaces.Repositories
     {
         List<GetAdlerCardUnitsForStudentViewModel> GetAdlerCardUnitsForStudent(string StudentId,int LevelId,int AdlerCardTypeId);
         List<AdlerCardsUnit> GetAdlerCardUnitsByLevelAndType(int levelId, int adlerCardTypeId);
+        public AdlerCardsUnit GetAdlerCardsUnitById(int id);
     }
 }
