@@ -69,7 +69,6 @@ namespace Infrastructure.Persistence
             services.AddTransient<IGroupConditionPromoCodeRepositoryAsync, GroupConditionPromoCodeRepositoryAsync>();
             services.AddTransient<IInterestedStudentRepositoryAsync, InterestedStudentRepositoryAsync>();
             services.AddTransient<IOverPaymentStudentRepositoryAsync, OverPaymentStudentRepositoryAsync>();
-            services.AddTransient<IListeningAudioFileRepositoryAsync, ListeningAudioFileRepositoryAsync>();
             services.AddTransient<IDisqualificationRequestRepositoryAsync, DisqualificationRequestRepositoryAsync>();
             services.AddTransient<IJobRepositoryAsync, JobRepositoryAsync>();
             services.AddTransient<IPromoCodeInstanceRepositoryAsync, PromoCodeInstanceRepositoryAsync>();
