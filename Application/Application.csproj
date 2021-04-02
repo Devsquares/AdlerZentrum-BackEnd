@@ -33,6 +33,5 @@
     <Folder Include="Features\Generic\" />
     <Folder Include="Features\GroupInstancesStudents\Queries\" />
     <Folder Include="Features\TeacherActions\Queries\" />
-    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>

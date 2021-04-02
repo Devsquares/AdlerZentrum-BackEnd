@@ -23,5 +23,7 @@ namespace Domain.Entities
         public int? TestId { get; set; }
         public Test Test { get; set; }
         public int? TestStatus { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }
