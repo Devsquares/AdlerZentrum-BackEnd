@@ -161,9 +161,6 @@ namespace Infrastructure.Persistence.Repositories
             return _testInstances
                    .Include(x => x.Test)
                    .ThenInclude(x => x.Questions)
-                   .ThenInclude(x => x.AudioPath)
-                   .Include(x => x.Test)
-                   .ThenInclude(x => x.Questions)
                    .ThenInclude(x => x.SingleQuestions)
                    .ThenInclude(x => x.Choices)
                    .Include(x => x.Student)

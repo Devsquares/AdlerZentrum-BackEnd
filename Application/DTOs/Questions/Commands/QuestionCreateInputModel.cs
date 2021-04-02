@@ -7,7 +7,7 @@ public class QuestionCreateInputModel
     public int Order { get; set; }
     public string Text { get; set; }
     public int MinCharacters { get; set; }
-    public string AudioPathId { get; set; }
+    public string AudioPath { get; set; }
     public int NoOfRepeats { get; set; }
     public virtual ICollection<SingleQuestionCreateInputModel> SingleQuestions { get; set; }
 }

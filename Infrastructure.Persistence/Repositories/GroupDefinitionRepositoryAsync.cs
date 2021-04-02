@@ -42,7 +42,7 @@ namespace Infrastructure.Persistence.Repositories
             .Include(x => x.TimeSlot)
                 .Where(x => (!string.IsNullOrEmpty(subLevelName) ? (x.Sublevel.Name.ToLower() == subLevelName.ToLower()) : true)
                         && (sublevelId != null ? x.SubLevelId == sublevelId.Value : true)
-                        && status != null && status.Count > 0 ? status.Contains(x.Status.Value) : true)
+                        && (status.Count > 0 ? status.Contains(x.Status.Value) : true))
                         .AsQueryable();
             totalCount = query.Count();
             var groupDefinitionsList = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();

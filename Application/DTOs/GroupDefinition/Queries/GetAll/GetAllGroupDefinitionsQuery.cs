@@ -52,6 +52,8 @@ namespace Application.DTOs
         {
             // TODO: need to remove this nested loop.
             int totalCount = 0;
+            if(request.PageNumber == 0) request.PageNumber = 1;
+            if(request.PageSize == 0) request.PageSize = 10;
             var validFilter = _mapper.Map<RequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupDefinition> GroupDefinitions;
             GroupDefinitions = _GroupDefinitionRepositoryAsync.GetAll(request.PageNumber, request.PageSize, request.SubLevel, request.Status, out totalCount, request.SubLevelId);
