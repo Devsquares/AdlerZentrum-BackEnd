@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Features;
 
 namespace Application.Interfaces.Repositories
 {
@@ -23,5 +24,7 @@ namespace Application.Interfaces.Repositories
         Task<List<TestInstance>> GetProgressByStudentId(string studentID, List<int> groupInstanceIds);
         Task<List<TestInstance>> GetAllTestInstancesByGroupAndTest(int groupInstance, int testId);
         Task<List<TestInstance>> GetAllPlacementTestsByStudent(string studentId);
+        Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName);
+        int GetLateSubmissionsCount(string TeacherName);
     }
 }

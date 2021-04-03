@@ -6,6 +6,7 @@ using MediatR;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System;
 
 namespace Application.DTOs
 {
@@ -44,6 +45,8 @@ namespace Application.DTOs
                     lessonInstance.MaterialDone = command.MaterialDone;
                     lessonInstance.MaterialToDo = command.MaterialToDo;
                     lessonInstance.SubmittedReport = true;
+                    lessonInstance.SubmittedReportTeacherId = command.TeacherId;
+                    lessonInstance.SubmissionDate = DateTime.Now;
 
                     await _LessonInstanceRepositoryAsync.UpdateAsync(lessonInstance);
                     foreach (var item in command.LessonInstanceStudent)

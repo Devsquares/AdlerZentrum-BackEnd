@@ -4,10 +4,12 @@ using Application.Enums;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 public class AutoCorrection
 {
     private ApplicationDbContext dbContext;
+    private const int DUEDATE = 1;
     private int testId;
     public void Run(ApplicationDbContext _dbContext, int _testId)
     {
@@ -43,8 +45,8 @@ public class AutoCorrection
         else
         {
             testInstance.ManualCorrection = true;
+            testInstance.CorrectionDueDate = DateTime.Now.AddDays(DUEDATE);
         }
-        //TODO add required submtion date.
         dbContext.TestInstances.Update(testInstance);
         dbContext.SaveChanges();
     }

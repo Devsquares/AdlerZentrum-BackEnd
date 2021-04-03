@@ -18,6 +18,7 @@ namespace Domain.Entities
         public int? Status { get; set; }
         public ICollection<GroupInstanceStudents> Students { get; set; }
         public ICollection<LessonInstance> LessonInstances { get; set; } 
+        // TODO: change it to list.
         public TeacherGroupInstanceAssignment TeacherAssignment { get; set; }
     }
 }

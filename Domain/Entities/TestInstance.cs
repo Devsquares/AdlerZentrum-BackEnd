@@ -26,6 +26,7 @@ namespace Domain.Entities
         public GroupInstance GroupInstance { get; set; }
         public bool ReCorrectionRequest { get; set; }
         public bool Reopened { get; set; }
-        //TODO add required submtion date
+        public DateTime CorrectionDueDate { get; set; }
+        public DateTime CorrectionDate { get; set; }
     }
 }
