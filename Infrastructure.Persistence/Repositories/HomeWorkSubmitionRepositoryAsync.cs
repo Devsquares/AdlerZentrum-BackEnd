@@ -1,4 +1,5 @@
 ﻿using Application.Enums;
+using Application.Features;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -52,5 +54,27 @@ namespace Infrastructure.Persistence.Repositories
             return await homeWorkSubmitions.Include(x => x.Homework.LessonInstance).Include(x => x.Student).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
+        public int GetLateSubmissionsCount(string TeacherName)
+        {
+            return homeWorkSubmitions.Where(x => x.CorrectionDate == null || x.CorrectionDate > x.CorrectionDueDate
+               && String.IsNullOrEmpty(TeacherName) ? true :
+       (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
+        }
+
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName)
+        {
+            return await homeWorkSubmitions.Where(x => x.CorrectionDate == null || x.CorrectionDate > x.CorrectionDueDate
+                   && String.IsNullOrEmpty(TeacherName) ? true :
+           (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName)))
+              .Select(x => new LateSubmissionsViewModel()
+              {
+                  Id = x.Id,
+                  Teacher = x.CorrectionTeacher,
+                  SubmissionDate = x.CorrectionDate,
+                  ExpectedDate = x.CorrectionDueDate.Value,
+                  DelayDuration = (x.CorrectionDate.Value - x.CorrectionDueDate.Value).Hours
+              })
+              .ToListAsync();
+        }
     }
 }

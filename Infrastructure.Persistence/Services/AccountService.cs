@@ -461,7 +461,7 @@ namespace Infrastructure.Persistence.Services
 
                          into gj
                          from x in gj.DefaultIfEmpty()
-                         where string.IsNullOrEmpty(role) || role == "Guest" ? true : roles.NormalizedName.ToLower() == role.ToLower()
+                         where (string.IsNullOrEmpty(role) || role == "Guest" || role == "Student") ? true : roles.NormalizedName.ToLower() == role.ToLower()
                          select new GetAllUsersViewModel
                          {
                              Id = user.Id,
@@ -511,6 +511,7 @@ namespace Infrastructure.Persistence.Services
             if (userWithSameEmail == null)
             {
                 user.EmailConfirmed = true;
+                user.UserName = request.Email;
 
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (result.Succeeded)

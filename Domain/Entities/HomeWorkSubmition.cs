@@ -12,6 +12,7 @@ namespace Domain.Entities
         public int HomeworkId { get; set; }
         public Homework Homework { get; set; }
         public DateTime? DueDate { get; set; }
+        public DateTime? CorrectionDueDate { get; set; }
         public string Text { get; set; }
         public string Solution { get; set; }
         public DateTime? CorrectionDate { get; set; }

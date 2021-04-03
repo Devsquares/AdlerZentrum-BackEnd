@@ -1,4 +1,5 @@
 using Application.Enums;
+using Application.Features;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
@@ -250,6 +251,31 @@ namespace Infrastructure.Persistence.Repositories
                  .ThenInclude(x => x.Choices)
                  .Where(x => x.StudentId == studentId &&
                  x.Test.TestTypeId == (int)TestTypeEnum.placement).ToListAsync();
+        }
+
+        public int GetLateSubmissionsCount(string TeacherName)
+        {
+            return _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
+                 && String.IsNullOrEmpty(TeacherName) ? true :
+         (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
+        }
+
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName)
+        {
+            return await _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
+                   && x.ManualCorrection
+                   && String.IsNullOrEmpty(TeacherName) ? true :
+           (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName)))
+             .Select(x => new LateSubmissionsViewModel()
+             {
+                 Id = x.Id,
+                 TestInstance = x,
+                 Teacher = x.CorrectionTeacher,
+                 SubmissionDate = x.SubmissionDate,
+                 ExpectedDate = x.CorrectionDueDate,
+                 DelayDuration = (x.SubmissionDate - x.CorrectionDueDate).Hours
+             })
+             .ToListAsync();
         }
     }
 }

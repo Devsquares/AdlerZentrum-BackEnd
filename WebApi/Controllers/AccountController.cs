@@ -66,11 +66,11 @@ namespace WebApi.Controllers
             using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var student = await _accountService.RegisterAsync(request, origin);
-                if(request.AdlerCardsBundleId.HasValue)
+                if (request.AdlerCardsBundleId.HasValue)
                 {
                     var addstudentBundel = new CreateAdlerCardBundleStudentCommand() { AdlerCardsBundleId = request.AdlerCardsBundleId.Value, StudentId = student.data };
                 }
-               
+
                 await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email });
                 scope.Complete();
                 return Ok();
@@ -245,6 +245,12 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetCurrentProgress(string studentId)
         {
             return Ok(await Mediator.Send(new GetCurrentProgressForStudent() { StudentId = studentId }));
+        }
+
+        [HttpGet("GetLateTeacherSubmissions")]
+        public async Task<IActionResult> GetLateTeacherSubmissions(int SubmissionType, string teacherName)
+        {
+            return Ok();
         }
 
         [HttpPost("TestRegister")]

@@ -62,6 +62,8 @@ namespace Application.Features
 
                 var testInstance = _testInstanceRepository.GetByIdAsync(testInstanceId).Result;
                 testInstance.Status = (int)TestInstanceEnum.Corrected;
+                testInstance.CorrectionDate = DateTime.Now;
+
                 await _jobRepository.AddAsync(new Job
                 {
                     Type = (int)JobTypeEnum.ScoreCalculator,
@@ -84,11 +86,24 @@ namespace Application.Features
                         double precetnge = (testInstance.Points / testInstance.Test.TotalPoint) / 100;
                         var user = _usersRepositoryAsync.GetUserById(testInstance.StudentId);
                         Sublevel sublevel = null;
+                        // TODO: set the right order.
+
+                        //(x >= 1 && x <= 100)
                         if (precetnge >= settings[0].PlacementB2)
                         {
-                            // TODO: fix this
-                            // A1 50 % -A2 60 % -B1 70 % -B2 80 %
                             sublevel = _sublevel.GetByOrder(4);
+                        }
+                        else if (precetnge >= settings[0].PlacementB1 && precetnge <= settings[0].PlacementB2)
+                        {
+                            sublevel = _sublevel.GetByOrder(3);
+                        }
+                        else if (precetnge >= settings[0].PlacementA2 && precetnge <= settings[0].PlacementB1)
+                        {
+                            sublevel = _sublevel.GetByOrder(2);
+                        }
+                        else
+                        {
+                            sublevel = _sublevel.GetByOrder(1);
                         }
 
                         user.SublevelId = sublevel.Id;

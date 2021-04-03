@@ -38,6 +38,7 @@ namespace Application.DTOs
                     homeWorkSubmition.Text = command.Text;
                     homeWorkSubmition.Status = command.Status;
                     homeWorkSubmition.SubmitionDate = DateTime.Now;
+                    homeWorkSubmition.CorrectionDueDate = DateTime.Now.AddDays(1);
 
                     await _HomeWorkSubmitionRepository.UpdateAsync(homeWorkSubmition);
                     await _mailJobRepository.AddAsync(new MailJob

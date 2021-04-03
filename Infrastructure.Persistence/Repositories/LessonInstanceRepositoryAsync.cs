@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions;
+using Application.Features;
 using Application.Helpers;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
@@ -26,7 +27,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return lessonInstances
                 .Include(x => x.GroupInstance)
-                .Where(x => x.GroupInstanceId == GroupInstanceId).OrderBy(x=>x.LessonDefinitionId).ToList();
+                .Where(x => x.GroupInstanceId == GroupInstanceId).OrderBy(x => x.LessonDefinitionId).ToList();
         }
         public async override Task<LessonInstance> GetByIdAsync(int id)
         {
@@ -38,7 +39,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<Dictionary<int, TimeFrame>> GetTimeSlotInstancesSorted(GroupInstance groupInstance)
         {
-            Dictionary <int, TimeFrame> lessonDates = new Dictionary<int, TimeFrame>();
+            Dictionary<int, TimeFrame> lessonDates = new Dictionary<int, TimeFrame>();
             DateTime LessonStartDate, LessonEndDate;
 
             DateTime iterationDay; int iterationDayWeekDay;
@@ -74,13 +75,13 @@ namespace Infrastructure.Persistence.Repositories
 
                 //find the suitable time slot
                 singleTimeSlotDetails = await timeSlotDetails.Where(x => x.WeekDay == iterationDayWeekDay).FirstOrDefaultAsync();
-                
+
                 //find the start and the end of the suitable time slot
                 singleTimeSlotDetailsStart = singleTimeSlotDetails.TimeFrom;
                 singleTimeSlotDetailsEnd = singleTimeSlotDetails.TimeTo;
 
                 //calculate the lesson start and end date
-                LessonStartDate = new DateTime(iterationDay.Year, iterationDay.Month, iterationDay.Day, 
+                LessonStartDate = new DateTime(iterationDay.Year, iterationDay.Month, iterationDay.Day,
                     singleTimeSlotDetailsStart.Hour, singleTimeSlotDetailsStart.Minute, singleTimeSlotDetailsStart.Second);
                 LessonEndDate = new DateTime(iterationDay.Year, iterationDay.Month, iterationDay.Day,
                     singleTimeSlotDetailsEnd.Hour, singleTimeSlotDetailsEnd.Minute, singleTimeSlotDetailsEnd.Second);
@@ -95,5 +96,30 @@ namespace Infrastructure.Persistence.Repositories
 
             return lessonDates;
         }
+
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName)
+        {
+            return await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
+            && String.IsNullOrEmpty(TeacherName) ? true :
+           (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))
+            )
+              .Select(x => new LateSubmissionsViewModel()
+              {
+                  Id = x.Id,
+                  Teacher = x.SubmittedReportTeacher,
+                  SubmissionDate = x.SubmissionDate.Value,
+                  ExpectedDate = x.EndDate.AddDays(1),
+                  DelayDuration = (x.SubmissionDate.Value - x.EndDate.AddDays(1)).Hours
+              })
+              .ToListAsync();
+        }
+
+        public int GetLateSubmissionsCount(string TeacherName)
+        {
+            return lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
+            && String.IsNullOrEmpty(TeacherName) ? true :
+           (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))).Count();
+        }
+
     }
 }

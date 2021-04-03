@@ -68,12 +68,13 @@ namespace Application.DTOs
                     var homeWork = new HomeWorkSubmition();
                     foreach (var item in command.Students)
                     {
-                        if (item.Disqualified)
+                        if (!item.Disqualified)
                         {
                             homeWork = new HomeWorkSubmition();
                             homeWork.Status = (int)HomeWorkSubmitionStatusEnum.Pending;
                             homeWork.HomeworkId = command.HomeWorkId;
                             homeWork.StudentId = item.StudentId;
+                            // TODO: check with business.
                             homeWork.DueDate = DateTime.Now.AddDays(2);
                             await _HomeWorkSubmitionRepository.AddAsync(homeWork);
                         }

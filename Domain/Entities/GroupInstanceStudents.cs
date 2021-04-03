@@ -15,7 +15,6 @@ namespace Domain.Entities
         public double AchievedScore { get; set; }
         public bool Succeeded { get; set; }
         public bool IsEligible { get; set; }
-        
         public bool Disqualified { get; set; }
         public string DisqualifiedComment { get; set; }
         public string DisqualifiedUserId {get;set;}
