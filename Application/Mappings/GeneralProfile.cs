@@ -45,7 +45,7 @@ namespace Application.Mappings
 
             CreateMap<ApplicationUser, GetAllUsersViewModel>().ReverseMap();
             CreateMap<ApplicationUser, AccountViewModel>().ReverseMap();
-            CreateMap<GetAllUsersQuery, GetAllUsersParameter>();
+            CreateMap<GetAllStaffQuery, GetAllUsersParameter>();
 
             CreateMap<GroupInstance, GetAllGroupInstancesViewModel>().ReverseMap();
             CreateMap<GroupCondition, GetAllGroupConditionViewModel>().ReverseMap();
