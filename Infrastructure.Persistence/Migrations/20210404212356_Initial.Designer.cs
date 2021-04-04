@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210331153100_lessonInstanceDates")]
-    partial class lessonInstanceDates
+    [Migration("20210404212356_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -601,6 +601,9 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Body")
+                        .HasColumnType("text");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
                         .HasMaxLength(256);
@@ -618,48 +621,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("TemplateBody")
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("TemplateName")
+                    b.Property<string>("Subject")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmailTypeId");
 
                     b.ToTable("EmailTemplates");
-                });
-
-            modelBuilder.Entity("Domain.Entities.EmailType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("TypeName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumComment", b =>
@@ -1082,6 +1052,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CorrectionDate")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("CorrectionDueDate")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("CorrectionTeacherId")
                         .HasColumnType("varchar(85)");
 
@@ -1370,8 +1343,14 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("SubmissionDate")
+                        .HasColumnType("datetime");
+
                     b.Property<bool>("SubmittedReport")
                         .HasColumnType("bit");
+
+                    b.Property<string>("SubmittedReportTeacherId")
+                        .HasColumnType("varchar(85)");
 
                     b.Property<int?>("TestId")
                         .HasColumnType("int");
@@ -1384,6 +1363,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("GroupInstanceId");
 
                     b.HasIndex("LessonDefinitionId");
+
+                    b.HasIndex("SubmittedReportTeacherId");
 
                     b.HasIndex("TestId");
 
@@ -1462,7 +1443,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Levels");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ListeningAudioFile", b =>
+            modelBuilder.Entity("Domain.Entities.MailJob", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1475,11 +1456,23 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("FilePath")
+                    b.Property<DateTime?>("ExecutionDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Failure")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("FinishDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("GroupInstanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeworkId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
@@ -1488,9 +1481,39 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("TestInstanceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<string>("To")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("ListeningAudioFile");
+                    b.ToTable("MailJobs");
                 });
 
             modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
@@ -1706,8 +1729,8 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("AudioPathId")
-                        .HasColumnType("int");
+                    b.Property<string>("AudioPath")
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(256)")
@@ -1751,8 +1774,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AudioPathId");
 
                     b.HasIndex("TestId");
 
@@ -2093,6 +2114,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CorrectionDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("CorrectionDueDate")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("CorrectionTeacherId")
                         .HasColumnType("varchar(85)");
@@ -2515,15 +2542,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("StudentId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.EmailTemplate", b =>
-                {
-                    b.HasOne("Domain.Entities.EmailType", "EmailType")
-                        .WithMany()
-                        .HasForeignKey("EmailTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.ForumComment", b =>
                 {
                     b.HasOne("Domain.Entities.ForumTopic", "ForumTopic")
@@ -2724,6 +2742,10 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.ApplicationUser", "SubmittedReportTeacher")
+                        .WithMany()
+                        .HasForeignKey("SubmittedReportTeacherId");
+
                     b.HasOne("Domain.Entities.Test", "Test")
                         .WithMany()
                         .HasForeignKey("TestId");
@@ -2783,10 +2805,6 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
                 {
-                    b.HasOne("Domain.Entities.ListeningAudioFile", "AudioPath")
-                        .WithMany()
-                        .HasForeignKey("AudioPathId");
-
                     b.HasOne("Domain.Entities.Test", null)
                         .WithMany("Questions")
                         .HasForeignKey("TestId");
