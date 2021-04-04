@@ -32,7 +32,7 @@ namespace Infrastructure.Persistence.Seeds
                 {
 
                     await userManager.CreateAsync(defaultUser, "123P@$$word!");
-                    await userManager.AddToRoleAsync(defaultUser, RolesEnum.SuperAdmin.ToString());
+                    await userManager.AddToRoleAsync(defaultUser, RolesEnum.Supervisor.ToString());
                 }
 
             }
