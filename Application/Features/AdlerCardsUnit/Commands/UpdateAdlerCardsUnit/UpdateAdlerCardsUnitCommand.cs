@@ -15,9 +15,9 @@ namespace Application.Features
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Level Level { get; set; }
+       // public Level Level { get; set; }
         public int LevelId { get; set; }
-       // public int AdlerCardsTypeId { get; set; }
+        public int AdlerCardsTypeId { get; set; }
         public int Order { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
@@ -40,9 +40,9 @@ namespace Application.Features
                 else
                 {
                     adlercardsunit.Name = command.Name;
-                    adlercardsunit.Level = command.Level;
+                    //adlercardsunit.Level = command.Level;
                     adlercardsunit.LevelId = command.LevelId;
-                   // adlercardsunit.AdlerCardsTypeId = command.AdlerCardsTypeId;
+                    adlercardsunit.AdlerCardsTypeId = command.AdlerCardsTypeId;
                     adlercardsunit.Order = command.Order;
                     adlercardsunit.Image = command.Image;
                     adlercardsunit.Description = command.Description;

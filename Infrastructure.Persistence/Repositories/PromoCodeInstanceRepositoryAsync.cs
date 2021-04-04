@@ -71,9 +71,9 @@ namespace Infrastructure.Persistence.Repositories
             return promocodesInstancesList;
         }
 
-        public PromoCodeInstancesViewModel GetByPromoCodeKey(string promoKey)
+        public PromoCodeInstancesViewModel GetByPromoCodeKey(string promoKey,string studentId, string studentEmail)
         {
-            return _promocodeinstances
+            var query =  _promocodeinstances
                 .Include(x => x.PromoCode)
                 .Include(x => x.Student)
                  .Include(x => x.GroupDefinition)
@@ -93,6 +93,24 @@ namespace Infrastructure.Persistence.Repositories
                     PromoCodeValue = x.PromoCode.Value,
                     GroupDefinitionSerial = x.GroupDefinition != null? x.GroupDefinition.Serial:null
                 }).FirstOrDefault();
+
+            if(string.IsNullOrEmpty(query.StudentId)&& string.IsNullOrEmpty(query.StudentEmail))
+            {
+                return query;
+            }
+            else if (!string.IsNullOrEmpty(studentId) && !string.IsNullOrEmpty(studentEmail) && query.StudentEmail.ToLower() != studentEmail.ToLower() && query.StudentId != studentId)
+            {
+                throw new Exception("This PromoCode Key not for this student");
+            }
+            else if(!string.IsNullOrEmpty(studentId) && query.StudentId!= studentId)
+            {
+                throw new Exception("This PromoCode Key not for this student");
+            }
+            else if (!string.IsNullOrEmpty(studentEmail) && query.StudentEmail.ToLower() != studentEmail.ToLower())
+            {
+                throw new Exception("This PromoCode Key not for this student");
+            }
+            return query;
         }
         public PromoCodeInstance GetById(int id)
         {

@@ -14,6 +14,8 @@ namespace Application.Features
     public class CheckPromoCodeInstanceCommand : IRequest<Response<PromoCodeInstancesViewModel>>
     {
         public string PromoCodeKey { get; set; }
+        public string StudentId { get; set; }
+        public string StudentEmail { get; set; }
         public class CheckPromoCodeInstanceCommandHandler : IRequestHandler<CheckPromoCodeInstanceCommand, Response<PromoCodeInstancesViewModel>>
         {
             private readonly IPromoCodeInstanceRepositoryAsync _promoCodeInstanceRepository;
@@ -23,7 +25,7 @@ namespace Application.Features
             }
             public async Task<Response<PromoCodeInstancesViewModel>> Handle(CheckPromoCodeInstanceCommand query, CancellationToken cancellationToken)
             {
-                var promoCodeInstance = _promoCodeInstanceRepository.GetByPromoCodeKey(query.PromoCodeKey);
+                var promoCodeInstance = _promoCodeInstanceRepository.GetByPromoCodeKey(query.PromoCodeKey,query.StudentId,query.StudentEmail);
                 if (promoCodeInstance == null) return new Response<PromoCodeInstancesViewModel>("Promo Code Instance Not Found.)");
                 if (promoCodeInstance.Id == 0) return new Response<PromoCodeInstancesViewModel>("Promo Code Instance Not Found.");
                 if (promoCodeInstance.IsUsed)
