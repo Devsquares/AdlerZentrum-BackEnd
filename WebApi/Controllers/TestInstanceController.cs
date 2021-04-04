@@ -53,6 +53,23 @@ namespace WebApi.Controller
             }));
         }
 
+        [HttpGet("GetQuizzesForStudentByGroupInstanceId")]
+        //[Authorize(Roles = "SuperAdmin,Supervisor,Secretary,Student")]
+        public async Task<IActionResult> GetQuizzesForStudentByGroupInstanceId([FromQuery] int GroupInstanceId)
+        {
+            if (AuthenticatedUserService.GroupInstanceId == null)
+            {
+                return Ok(new Response<object>("Not registerd in any group."));
+            }
+
+            return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
+            {
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = GroupInstanceId,
+                TestType = Application.Enums.TestTypeEnum.quizz
+            }));
+        }
+
 
         [HttpGet("GetFinalLevelTestsForStudent")]
         [Authorize(Roles = "Student")]
@@ -70,6 +87,22 @@ namespace WebApi.Controller
             }));
         }
 
+        [HttpGet("GetFinalLevelTestsForStudentByGroupInstanceId")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetFinalLevelTestsForStudentByGroupInstanceId([FromQuery] int GroupInstanceId)
+        {
+            if (AuthenticatedUserService.GroupInstanceId == null)
+            {
+                return Ok(new Response<object>("Not registerd in any group."));
+            }
+            return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
+            {
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = GroupInstanceId,
+                TestType = Application.Enums.TestTypeEnum.final
+            }));
+        }
+
         [HttpGet("GetSubLevelTestsForStudent")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetSubLevelTestsForStudent()
@@ -78,6 +111,18 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
+                TestType = Application.Enums.TestTypeEnum.subLevel
+            }));
+        }
+
+        [HttpGet("GetSubLevelTestsForStudentByGroupInstanceId")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetSubLevelTestsForStudentByGroupInstanceId([FromQuery] int GroupInstanceId)
+        {
+            return Ok(await Mediator.Send(new GetAllTestInstancesByStudentQuery
+            {
+                StudentId = AuthenticatedUserService.UserId,
+                GroupInstanceId = GroupInstanceId,
                 TestType = Application.Enums.TestTypeEnum.subLevel
             }));
         }
@@ -250,7 +295,7 @@ namespace WebApi.Controller
         [HttpPut("RequestRecorrection")]
         public async Task<IActionResult> RequestRecorrection(int TestInstanceId)
         {
-            return Ok(await Mediator.Send(new UpdateTestInstanceReCorrectionRequestCommand() {TestInstanceId = TestInstanceId,status = true }));
+            return Ok(await Mediator.Send(new UpdateTestInstanceReCorrectionRequestCommand() { TestInstanceId = TestInstanceId, status = true }));
         }
         [HttpPut("OpenTestToReview")]
         public async Task<IActionResult> OpenTestToReview(int TestInstanceId)
@@ -272,8 +317,8 @@ namespace WebApi.Controller
                 GroupDefinitionId = query.GroupDefinitionId,
                 GroupInstanceId = query.GroupInstanceId,
                 TestTypeId = query.TestTypeId,
-                Status = query.Status == null?(int)TestInstanceEnum.Corrected: query.Status,
-                reCorrectionRequest = query.reCorrectionRequest == null?true: query.reCorrectionRequest,
+                Status = query.Status == null ? (int)TestInstanceEnum.Corrected : query.Status,
+                reCorrectionRequest = query.reCorrectionRequest == null ? true : query.reCorrectionRequest,
                 PageNumber = query.PageNumber,
                 PageSize = query.PageSize
             }
