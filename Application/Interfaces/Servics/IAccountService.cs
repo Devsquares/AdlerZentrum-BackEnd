@@ -35,5 +35,6 @@ namespace Application.Interfaces
         Task<PagedResponse<List<TeachersModel>>> GetAllTeachers(int pageNumber, int pageSize, string teacherName);
         Task UpdateAdlerCardBalance(string studentId, int balance);
         Task<PagedResponse<IEnumerable<UserClaimsModel>>> GetNonAllUserClaims(int pageNumber, int pageSize, string email, string name, string claimtype);
+        IList<GetAllUsersViewModel> GetPagedReponseStaffAsync(int pageNumber, int pageSize, string role, out int count);
     }
 }

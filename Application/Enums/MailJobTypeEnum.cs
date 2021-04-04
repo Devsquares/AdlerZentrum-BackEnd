@@ -18,6 +18,7 @@ namespace Application.Enums
         TestCorrected,
         HomeworkCorrected,
         HomeworkSubmitted,
-        TestSubmitted 
+        TestSubmitted,
+        ContactUs
     }
 }

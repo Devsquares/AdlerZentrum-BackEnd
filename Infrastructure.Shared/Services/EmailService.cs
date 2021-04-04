@@ -52,5 +52,9 @@ namespace Infrastructure.Shared.Services
         {
             return str.FormatWith(data);
         }
+        public string GetMail()
+        {
+            return _mailSettings.EmailFrom;
+        }
     }
 }

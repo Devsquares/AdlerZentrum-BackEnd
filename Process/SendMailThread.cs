@@ -70,7 +70,7 @@ namespace Process
             }
         }
 
-        private static string FormatMail(MailJob _job, ApplicationDbContext dbContext, EmailTemplate template)
+        private  string FormatMail(MailJob _job, ApplicationDbContext dbContext, EmailTemplate template)
         {
             string to = "";
             switch ((MailJobTypeEnum)_job.Type)
@@ -153,6 +153,17 @@ namespace Process
                     };
                     template.Body = template.Body.FormatWith(inputHomeworkSubmitted);
                     to = HomeworkSubmittedTeacher?.Email;
+                    break;
+                case MailJobTypeEnum.ContactUs:
+
+                    var ContactUs = new
+                    {
+                        Email = _job.Email,
+                        Subject = _job.Subject,
+                        Message = _job.Message
+                    };
+                    template.Body = template.Body.FormatWith(ContactUs);
+                    to = _emailService.GetMail();
                     break;
                 default:
                     break;

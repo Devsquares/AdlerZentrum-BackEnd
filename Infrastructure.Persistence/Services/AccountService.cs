@@ -462,6 +462,34 @@ namespace Infrastructure.Persistence.Services
                          into gj
                          from x in gj.DefaultIfEmpty()
                          where (string.IsNullOrEmpty(role) || role == "Guest" || role == "Student") ? true : roles.NormalizedName.ToLower() == role.ToLower()
+                         && roles.Name != "Student"
+                         select new GetAllUsersViewModel
+                         {
+                             Id = user.Id,
+                             FirstName = user.FirstName,
+                             LastName = user.LastName,
+                             Email = user.Email,
+                             PhoneNumber = user.PhoneNumber,
+                             Role = roles.Name,
+                             UserName = user.UserName,
+                             Profilephoto = user.Profilephoto
+                         }).AsQueryable();
+            count = staff.Count();
+            return staff.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public IList<GetAllUsersViewModel> GetPagedReponseStaffAsync(int pageNumber, int pageSize, string role, out int count)
+        {
+
+            count = 0;
+            if (role == "Student") return null;
+
+            var staff = (from user in _userManager.Users
+                         join userrole in _context.UserRoles on user.Id equals userrole.UserId
+                         join roles in _context.Roles on userrole.RoleId equals roles.Id 
+ 
+                         where ((string.IsNullOrEmpty(role) || role == "Guest" || role == "Student") ? true : roles.NormalizedName.ToLower() == role.ToLower())
+                         && roles.Name != "Student"
                          select new GetAllUsersViewModel
                          {
                              Id = user.Id,

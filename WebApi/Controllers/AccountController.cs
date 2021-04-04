@@ -134,7 +134,7 @@ namespace WebApi.Controllers
         [HttpGet("GetAllStaffByRole")]
         public async Task<IActionResult> GetAllStaffByRole([FromQuery] GetAllUsersParameter filter)
         {
-            return Ok(await Mediator.Send(new GetAllUsersQuery() { Role = filter.Role, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
+            return Ok(await Mediator.Send(new GetAllStaffQuery() { Role = filter.Role, PageSize = filter.PageSize, PageNumber = filter.PageNumber }));
         }
 
         [HttpGet("GetAllUsers")]
@@ -183,15 +183,15 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("SendMessageToAdmin")]
-        public async Task<IActionResult> SendMessageToAdmin([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
+        public async Task<IActionResult> SendMessageToAdmin([FromBody] SendMessageInputModel inputModel)
         {
             // TODO: Which admin we will send to him.
             await _mailJobRepository.AddAsync(new MailJob
             {
                 Type = (int)MailJobTypeEnum.SendMessageToAdmin,
-                StudentId = studentId,
-                Text = message,
-                Subject = subject,
+                StudentId = inputModel.StudentId,
+                Text = inputModel.Message,
+                Subject = inputModel.Subject,
                 Status = (int)JobStatusEnum.New
             });
             return Ok();
@@ -205,23 +205,28 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("ContactUs")]
-        public async Task<IActionResult> ContactUs([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
+        public async Task<IActionResult> ContactUs([FromBody] ContactUsInputModel inputModel)
         {
-            // TODO: fix it.
-            // await _accountService.SendMessageToInstructor(subject, message, studentId);
+            await _mailJobRepository.AddAsync(new MailJob
+            {
+                Type = (int)MailJobTypeEnum.ContactUs,
+                Subject = inputModel.Subject,
+                Email = inputModel.Email,
+                Message = inputModel.Message,
+                Status = (int)JobStatusEnum.New
+            });
             return Ok();
         }
 
         [HttpPost("SendMessageToInstructor")]
-        public async Task<IActionResult> SendMessageToInstructor([FromQuery] string subject, [FromQuery] string message, [FromQuery] string studentId)
+        public async Task<IActionResult> SendMessageToInstructor([FromBody] SendMessageInputModel inputModel)
         {
-            // TODO: fix it.
-            // await _accountService.SendMessageToInstructor(subject, message, studentId);
+            // TODO: fix it. 
             await _mailJobRepository.AddAsync(new MailJob
             {
                 Type = (int)MailJobTypeEnum.SendMessageToInstructor,
-                StudentId = studentId,
-                Subject = subject,
+                StudentId = inputModel.StudentId,
+                Subject = inputModel.Subject,
                 Status = (int)JobStatusEnum.New
             });
             return Ok();
