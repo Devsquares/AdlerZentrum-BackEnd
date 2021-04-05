@@ -61,7 +61,7 @@ namespace Infrastructure.Persistence.Repositories
        (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
         }
 
-        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName)
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize)
         {
             return await homeWorkSubmitions.Where(x => x.CorrectionDate == null || x.CorrectionDate > x.CorrectionDueDate
                    && String.IsNullOrEmpty(TeacherName) ? true :
@@ -74,7 +74,7 @@ namespace Infrastructure.Persistence.Repositories
                   ExpectedDate = x.CorrectionDueDate.Value,
                   DelayDuration = (x.CorrectionDate.Value - x.CorrectionDueDate.Value).Hours
               })
-              .ToListAsync();
+              .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(); 
         }
     }
 }

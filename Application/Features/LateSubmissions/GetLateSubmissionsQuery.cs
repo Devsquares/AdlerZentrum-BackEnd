@@ -38,19 +38,22 @@ namespace Application.Features
         public async Task<PagedResponse<List<LateSubmissionsViewModel>>> Handle(GetLateSubmissionsQuery request, CancellationToken cancellationToken)
         {
             int count = 0;
+            if (request.PageSize <= 0) request.PageSize = 10;
+            if (request.PageNumber <= 0) request.PageNumber = 1;
+
             List<LateSubmissionsViewModel> output = new List<LateSubmissionsViewModel>();
             switch (request.SubmissionType)
             {
                 case 1:
-                    output = await _lessonInstanceRepository.GetLateSubmissions(request.TeacherName);
+                    output = await _lessonInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize);
                     count = _lessonInstanceRepository.GetLateSubmissionsCount(request.TeacherName);
                     break;
                 case 2:
-                    output = await _homeWorkSubmitionRepository.GetLateSubmissions(request.TeacherName);
+                    output = await _homeWorkSubmitionRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize);
                     count = _homeWorkSubmitionRepository.GetLateSubmissionsCount(request.TeacherName);
                     break;
                 case 3:
-                    output = await _testInstanceRepository.GetLateSubmissions(request.TeacherName);
+                    output = await _testInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize);
                     count = _testInstanceRepository.GetLateSubmissionsCount(request.TeacherName);
                     break;
 

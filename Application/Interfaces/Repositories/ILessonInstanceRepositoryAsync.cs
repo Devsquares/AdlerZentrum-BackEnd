@@ -11,7 +11,7 @@ namespace Application.Interfaces.Repositories
     {
         IEnumerable<LessonInstance> GetByGroupInstanceId(int GroupInstanceId);
         Task<Dictionary<int, TimeFrame>> GetTimeSlotInstancesSorted(GroupInstance groupInstance);
-        Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName);
+        Task<List<LateSubmissionsViewModel>>  GetLateSubmissions(string TeacherName, int pageNumber, int pageSize);
         int GetLateSubmissionsCount(string TeacherName);
     }
 }

@@ -253,9 +253,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("GetLateTeacherSubmissions")]
-        public async Task<IActionResult> GetLateTeacherSubmissions(int SubmissionType, string teacherName)
+        public async Task<IActionResult> GetLateTeacherSubmissions([FromBody] GetLateSubmissionsQuery query)
         {
-            return Ok();
+            return Ok(await Mediator.Send(query));
         }
 
         [HttpPost("TestRegister")]

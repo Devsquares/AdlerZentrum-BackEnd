@@ -221,6 +221,7 @@ namespace Application.DTOs
                                     StudentId = student.StudentId,
                                     Status = (int)TestInstanceEnum.Closed,
                                     TestId = subLevelTest.Id,
+                                    CorrectionTeacherId = teacher?.TeacherId,
                                     GroupInstanceId = groupInstance.Id
                                 };
                                 testInstance.Add(obj);

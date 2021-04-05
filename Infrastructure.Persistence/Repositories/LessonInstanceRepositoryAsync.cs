@@ -97,7 +97,7 @@ namespace Infrastructure.Persistence.Repositories
             return lessonDates;
         }
 
-        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName)
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize)
         {
             return await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
             && String.IsNullOrEmpty(TeacherName) ? true :
@@ -110,8 +110,7 @@ namespace Infrastructure.Persistence.Repositories
                   SubmissionDate = x.SubmissionDate.Value,
                   ExpectedDate = x.EndDate.AddDays(1),
                   DelayDuration = (x.SubmissionDate.Value - x.EndDate.AddDays(1)).Hours
-              })
-              .ToListAsync();
+              }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
         public int GetLateSubmissionsCount(string TeacherName)
