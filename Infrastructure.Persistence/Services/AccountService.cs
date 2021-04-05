@@ -526,12 +526,7 @@ namespace Infrastructure.Persistence.Services
         }
 
         public async Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, int role)
-        {
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-            if (userWithSameUserName != null)
-            {
-                throw new ApiException($"Username '{request.UserName}' is already taken.");
-            }
+        { 
             ApplicationUser user = new ApplicationUser();
             Reflection.CopyProperties(request, user);
 

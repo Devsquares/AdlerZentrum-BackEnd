@@ -20,9 +20,6 @@ namespace Application.DTOs.Account
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        [MinLength(6)]
-        public string UserName { get; set; } 
-        [Required]
         public int Role { get; set; }
         [Required]
         [MinLength(6)]
