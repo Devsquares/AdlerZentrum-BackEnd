@@ -111,7 +111,8 @@ namespace Application.Features
                 .Include(x => x.LessonInstance.GroupInstance.GroupDefinition.Sublevel)
                 .Where(x => x.StudentId == user.Id
                 && x.LessonInstance.GroupInstanceId == currentGroup.Id
-                && x.Attend)
+                && x.Attend
+                && x.LessonInstance.SubmittedReport)
                 .Count();
 
 
