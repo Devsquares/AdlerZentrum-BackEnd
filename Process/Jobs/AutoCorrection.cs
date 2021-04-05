@@ -29,7 +29,6 @@ public class AutoCorrection
 
         bool autoCorrected = correctTheQuestions(dbContext, singleQuestions, out double points);
 
-        testInstance.Points += points;
         // check if all single quesition not corrected, if so then add task to the teacher to correct it.
         if (autoCorrected)
         {
@@ -41,6 +40,7 @@ public class AutoCorrection
                 TestInstanceId = testInstance.Id,
                 Status = (int)JobStatusEnum.New
             });
+            testInstance.Points += points;
         }
         else
         {

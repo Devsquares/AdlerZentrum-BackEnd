@@ -54,13 +54,18 @@ namespace Application.Features
                 {
                     var d = await _medaitor.Send(item);
                     testInstanceId = d.data;
+                }
+
+                var testInstance = await _testInstanceRepository.GetByIdAsync(testInstanceId);
+                var singleQuestions = await _singlequestionsubmissionRepository.GetByTestInstanceIdAsync(testInstance.Id);
+
+                foreach (var item in singleQuestions)
+                {
                     if (item.RightAnswer)
                     {
                         points = points + item.Points;
                     }
                 }
-
-                var testInstance = _testInstanceRepository.GetByIdAsync(testInstanceId).Result;
                 testInstance.Status = (int)TestInstanceEnum.Corrected;
                 testInstance.CorrectionDate = DateTime.Now;
 
@@ -77,7 +82,7 @@ namespace Application.Features
                     StudentId = testInstance.StudentId,
                     Status = (int)JobStatusEnum.New
                 });
-                testInstance.Points = testInstance.Points + points;
+                testInstance.Points = points;
                 if (testInstance.Test.TestTypeId == (int)TestTypeEnum.placement)
                 {
                     //TODO: set the sublevel of the student.
