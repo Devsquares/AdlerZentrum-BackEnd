@@ -342,3 +342,4 @@ healthchecksdb
 WebApi/appsettings.Development.json
 VSIXCore/
 *.json
+!Process/appsettings.json
