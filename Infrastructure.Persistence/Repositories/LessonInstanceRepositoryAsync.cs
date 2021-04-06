@@ -74,6 +74,7 @@ namespace Infrastructure.Persistence.Repositories
                 LessonOrder++;
 
                 //find the suitable time slot
+                // TODO: we can remove select.
                 singleTimeSlotDetails = await timeSlotDetails.Where(x => x.WeekDay == iterationDayWeekDay).FirstOrDefaultAsync();
 
                 //find the start and the end of the suitable time slot
@@ -93,6 +94,7 @@ namespace Infrastructure.Persistence.Repositories
                 if (lessonDates.Count == noOfLessons) break;
             }
 
+            if (lessonDates.Count < noOfLessons) throw new ApiException("The system can't find " + noOfLessons + " time slots between the start and the end date.");
 
             return lessonDates;
         }

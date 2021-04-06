@@ -26,6 +26,9 @@ namespace Application.Interfaces.Repositories
         Task<List<TestInstance>> GetAllPlacementTestsByStudent(string studentId);
         Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize);
         int GetLateSubmissionsCount(string TeacherName);
+        Test GetSubLevelTestByGroupInstance(int groupinstanceId);
+        Test GetFinalLevelTestByGroupInstance(int groupinstanceId);
+        Test GetQuizTestByGroupInstanceByLessonDef(int groupinstanceId, int lessonDefinationdId);
         Task<List<TestInstance>> GetAllTestInstancesByListGroup(List<int> groupInstanceIds);
     }
 }

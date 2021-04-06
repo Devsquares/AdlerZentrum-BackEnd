@@ -42,7 +42,7 @@ namespace Application.Features
                     testinstance.StudentId = command.StudentId;
                     testinstance.Points = command.Points;
                     testinstance.Status = command.Status;
-                    testinstance.StartDate = command.StartDate;
+                    testinstance.OpenDate = command.StartDate;
 
                     await _testinstanceRepository.UpdateAsync(testinstance);
                     return new Response<int>(testinstance.Id);

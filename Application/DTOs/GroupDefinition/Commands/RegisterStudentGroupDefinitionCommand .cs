@@ -63,6 +63,13 @@ namespace Application.DTOs
                     if (placementRelease != null)
                     {
                         command.PlacmentTestId = placementRelease.TestId;
+                        TestInstance obj = new TestInstance
+                        {
+                            StudentId = command.StudentId,
+                            Status = (int)TestInstanceEnum.Closed,
+                            TestId = placementRelease.TestId,
+                            StartDate = placementRelease.RelaeseDate
+                        };
                     }
                 }
                 if (GroupDefinition == null)

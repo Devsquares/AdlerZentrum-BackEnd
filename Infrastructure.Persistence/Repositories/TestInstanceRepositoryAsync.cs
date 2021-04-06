@@ -46,6 +46,27 @@ namespace Infrastructure.Persistence.Repositories
              .Where(x => x.CorrectionTeacherId == null).ToListAsync();
         }
 
+        public Test GetSubLevelTestByGroupInstance(int groupinstanceId)
+        {
+            return _testInstances.Include(x => x.Test).Where(x => x.GroupInstanceId == groupinstanceId && x.Test.TestTypeId == (int)TestTypeEnum.subLevel).FirstOrDefault()?.Test;
+        }
+
+        public Test GetFinalLevelTestByGroupInstance(int groupinstanceId)
+        {
+            return _testInstances.Include(x => x.Test).Where(x => x.GroupInstanceId == groupinstanceId && x.Test.TestTypeId == (int)TestTypeEnum.final).FirstOrDefault()?.Test;
+        }
+
+        public Test GetQuizTestByGroupInstanceByLessonDef(int groupinstanceId, int lessonDefinationdId)
+        {
+            return _testInstances
+            .Include(x => x.Test)
+            .Include(x => x.LessonInstance)
+            .Where(x => x.GroupInstanceId == groupinstanceId
+             && x.Test.TestTypeId == (int)TestTypeEnum.final
+             && x.LessonInstance.LessonDefinitionId == lessonDefinationdId)
+            .FirstOrDefault()?.Test;
+        }
+
         public virtual async Task<IReadOnlyList<TestInstance>> GetTestInstanceToActive()
         {
             return await _testInstances
@@ -274,7 +295,7 @@ namespace Infrastructure.Persistence.Repositories
                  SubmissionDate = x.SubmissionDate,
                  ExpectedDate = x.CorrectionDueDate,
                  DelayDuration = (x.SubmissionDate - x.CorrectionDueDate).Hours
-             }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(); 
+             }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
         public async Task<List<TestInstance>> GetAllTestInstancesByListGroup(List<int> groupInstanceIds)
