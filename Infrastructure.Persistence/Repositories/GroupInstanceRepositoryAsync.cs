@@ -121,6 +121,13 @@ namespace Infrastructure.Persistence.Repositories
                   .Where(x => x.Id == id).FirstOrDefault();
         }
 
+        public int? IsOtherActiveGroupInTheGroupDef(int groupDefinitionId)
+        {
+            var group = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId && x.Status == (int)GroupInstanceStatusEnum.Running).FirstOrDefault();
+            if (group == null) return null;
+            else return group.Id;
+        }
+
         public GroupInstance GetByGroupDefinitionId(int groupDefinitionId)
         {
             return groupInstances

@@ -17,10 +17,7 @@ namespace Application.DTOs
 {
     public class ActiveGroupInstanceCommand : IRequest<Response<bool>>
     {
-        public int GroupInstanceId { get; set; }
-        public List<Test> Quizzes { get; set; }
-        public Test SubLevelTest { get; set; }
-        public Test FinalTest { get; set; }
+        public int GroupInstanceId { get; set; } 
 
         public class ActiveGroupInstanceCommandHandler : IRequestHandler<ActiveGroupInstanceCommand, Response<bool>>
         {
@@ -68,8 +65,23 @@ namespace Application.DTOs
                 if (groupInstance.Status == (int)GroupInstanceStatusEnum.Pending)
                 {
                     // check if there another active group 
-                    var subLevelTest = _testRepository.GetSubLevelTestBySublevelAsync(groupInstance.GroupDefinition.SubLevelId).Result;
-                    var finalLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
+                    Test subLevelTest = new Test();
+                    Test finalLevelTest = new Test();
+
+                    int? IsOtherActiveGroupInTheGroupDef = _groupInstanceRepositoryAsync.IsOtherActiveGroupInTheGroupDef(groupInstance.GroupDefinitionId);
+                    if (IsOtherActiveGroupInTheGroupDef != null)
+                    {
+                        // get tests from other group.
+                        subLevelTest = _testInstanceRepository.GetSubLevelTestByGroupInstance(IsOtherActiveGroupInTheGroupDef.Value);
+                        finalLevelTest = _testInstanceRepository.GetFinalLevelTestByGroupInstance(IsOtherActiveGroupInTheGroupDef.Value);
+                    }
+                    else
+                    {
+                        // random select tests.    
+                        subLevelTest = _testRepository.GetSubLevelTestBySublevelAsync(groupInstance.GroupDefinition.SubLevelId).Result;
+                        finalLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
+                    }
+
 
                     var notIsEligablStudents = groupInstance.Students.Where(x => x.IsEligible == false).ToList();
                     if (notIsEligablStudents != null && notIsEligablStudents.Count() > 0)
@@ -160,28 +172,35 @@ namespace Application.DTOs
                     List<TestInstance> testInstance = new List<TestInstance>();
                     foreach (var item in lessonInstances)
                     {
-                        var quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
-                        if (quiz != null)
+                        Test quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
+                        if (IsOtherActiveGroupInTheGroupDef != null)
                         {
-                            foreach (var student in lessonInstanceStudents)
+                            // get tests from other group.
+                            quiz = _testInstanceRepository.GetQuizTestByGroupInstanceByLessonDef(IsOtherActiveGroupInTheGroupDef.Value, item.LessonDefinitionId);
+                        }
+                        else
+                        {
+                            // random select tests.    
+                            quiz = _testRepository.GetQuizzByLessonDefinationAsync(item.LessonDefinitionId).Result;
+                        }
+                        if (quiz == null) continue;
+                        foreach (var student in lessonInstanceStudents)
+                        {
+                            TestInstance obj = new TestInstance
                             {
-                                TestInstance obj = new TestInstance
-                                {
-                                    LessonInstanceId = item.Id,
-                                    StudentId = student.StudentId,
-                                    Status = (int)TestInstanceEnum.Closed,
-                                    TestId = quiz.Id,
-                                    CorrectionTeacherId = teacher?.TeacherId,
-                                    GroupInstanceId = groupInstance.Id
-                                };
-                                testInstance.Add(obj);
-                            }
-                            if (quiz.Status == (int)TestStatusEnum.Draft)
-                            {
-                                quiz.Status = (int)TestStatusEnum.Final;
-                                await _testRepository.UpdateAsync(quiz);
-                            }
-
+                                LessonInstanceId = item.Id,
+                                StudentId = student.StudentId,
+                                Status = (int)TestInstanceEnum.Closed,
+                                TestId = quiz.Id,
+                                CorrectionTeacherId = teacher?.TeacherId,
+                                GroupInstanceId = groupInstance.Id
+                            };
+                            testInstance.Add(obj);
+                        }
+                        if (quiz.Status == (int)TestStatusEnum.Draft)
+                        {
+                            quiz.Status = (int)TestStatusEnum.Final;
+                            await _testRepository.UpdateAsync(quiz);
                         }
                     }
 
