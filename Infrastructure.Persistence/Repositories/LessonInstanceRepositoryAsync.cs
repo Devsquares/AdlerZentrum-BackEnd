@@ -93,6 +93,7 @@ namespace Infrastructure.Persistence.Repositories
                 if (lessonDates.Count == noOfLessons) break;
             }
 
+            if (lessonDates.Count < noOfLessons) throw new ApiException("The system can't find " + noOfLessons + " time slots between the start and the end date.");
 
             return lessonDates;
         }
