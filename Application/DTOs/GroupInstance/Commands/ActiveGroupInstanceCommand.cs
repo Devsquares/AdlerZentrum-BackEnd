@@ -18,6 +18,9 @@ namespace Application.DTOs
     public class ActiveGroupInstanceCommand : IRequest<Response<bool>>
     {
         public int GroupInstanceId { get; set; }
+        public List<Test> Quizzes { get; set; }
+        public Test SubLevelTest { get; set; }
+        public Test FinalTest { get; set; }
 
         public class ActiveGroupInstanceCommandHandler : IRequestHandler<ActiveGroupInstanceCommand, Response<bool>>
         {
@@ -64,6 +67,7 @@ namespace Application.DTOs
                 }
                 if (groupInstance.Status == (int)GroupInstanceStatusEnum.Pending)
                 {
+                    // check if there another active group 
                     var subLevelTest = _testRepository.GetSubLevelTestBySublevelAsync(groupInstance.GroupDefinition.SubLevelId).Result;
                     var finalLevelTest = _testRepository.GetFinalLevelTestBySublevelAsync(groupInstance.GroupDefinition.Sublevel.LevelId).Result;
 
@@ -95,7 +99,7 @@ namespace Application.DTOs
                     {
                         if (subLevelTest == null) throw new Exception("Cann't active group please create sublevel test.");
                     }
-                    var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions.OrderBy(x=>x.Order);
+                    var LessonDefinitions = groupInstance.GroupDefinition.Sublevel.LessonDefinitions.OrderBy(x => x.Order);
                     // TODO: genrate date time for lesson instance.
                     List<LessonInstanceStudent> lessonInstanceStudents = new List<LessonInstanceStudent>();
                     foreach (var item in groupInstance.Students)
