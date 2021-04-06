@@ -169,5 +169,12 @@ namespace WebApi.Controllers
             }));
         }
 
+        [HttpPut("CancelGroupInstance")]
+        public async Task<IActionResult> CancelGroupInstance(CancelSingleGroupInstanceCommand request)
+        {
+            return Ok(await Mediator.Send(request));
+        }
+
+
     }
 }

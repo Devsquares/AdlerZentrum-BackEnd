@@ -84,6 +84,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IStudentInfoRepositoryAsync, StudentInfoRepositoryAsync>();
             services.AddTransient<ISettingRepositoryAsync, SettingRepositoryAsync>();
             services.AddTransient<IMailJobRepositoryAsync, MailJobRepositoryAsync>();
+            services.AddTransient<IClaimRepositoryAsync, ClaimRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>(o => {
