@@ -38,6 +38,8 @@ namespace Process
                     services.AddScoped<ApplicationDbContext>(s => new ApplicationDbContext(optionsBuilder.Options));
                     services.AddHostedService<MailWorker>();
                     services.AddHostedService<JobsWorker>();
+                    services.AddHostedService<BanWorker>();
+                    services.AddHostedService<TestStatusWorker>();
                 });
     }
 }

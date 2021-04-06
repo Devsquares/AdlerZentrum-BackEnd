@@ -193,7 +193,8 @@ namespace Application.DTOs
                                 Status = (int)TestInstanceEnum.Closed,
                                 TestId = quiz.Id,
                                 CorrectionTeacherId = teacher?.TeacherId,
-                                GroupInstanceId = groupInstance.Id
+                                GroupInstanceId = groupInstance.Id,
+                                StartDate = item.StartDate
                             };
                             testInstance.Add(obj);
                         }
@@ -218,7 +219,8 @@ namespace Application.DTOs
                                     StudentId = student.StudentId,
                                     Status = (int)TestInstanceEnum.Closed,
                                     TestId = finalLevelTest.Id,
-                                    GroupInstanceId = groupInstance.Id
+                                    GroupInstanceId = groupInstance.Id,
+                                    StartDate = groupInstance.GroupDefinition.FinalTestDate.Value
                                 };
                                 testInstance.Add(obj);
                             }
@@ -245,7 +247,8 @@ namespace Application.DTOs
                                     Status = (int)TestInstanceEnum.Closed,
                                     TestId = subLevelTest.Id,
                                     CorrectionTeacherId = teacher?.TeacherId,
-                                    GroupInstanceId = groupInstance.Id
+                                    GroupInstanceId = groupInstance.Id,
+                                    StartDate = lastLesson.StartDate
                                 };
                                 testInstance.Add(obj);
                             }

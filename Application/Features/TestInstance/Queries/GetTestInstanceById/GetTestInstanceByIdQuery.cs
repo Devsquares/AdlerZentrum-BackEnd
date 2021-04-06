@@ -31,7 +31,7 @@ namespace Application.Features
                 var viewModel = _mapper.Map<TestInstanceViewModel>(testinstance);
                 if (testinstance.Status == (int)TestInstanceEnum.Pending)
                 {
-                    viewModel.Timer = testinstance.Test.TestDuration - (DateTime.Now - testinstance.StartDate).TotalMinutes;
+                    viewModel.Timer = testinstance.Test.TestDuration - (DateTime.Now - testinstance.OpenDate.Value).TotalMinutes;
                 }
                 return new Response<TestInstanceViewModel>(viewModel);
             }
