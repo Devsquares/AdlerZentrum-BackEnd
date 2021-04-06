@@ -139,14 +139,13 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<Test> GetSubLevelTestBySublevelAsync(int Sublevel)
         {
-            return await tests 
-            .Where(x => x.SublevelId == Sublevel && x.TestTypeId == (int)TestTypeEnum.subLevel).FirstOrDefaultAsync();
+             return await tests.Where(x => x.SublevelId == Sublevel && x.TestTypeId == (int)TestTypeEnum.subLevel).OrderBy(r => Guid.NewGuid()).Take(5).FirstOrDefaultAsync();
         }
 
         public async Task<Test> GetFinalLevelTestBySublevelAsync(int level)
         {
-            return await tests 
-            .Where(x => x.LevelId == level && x.TestTypeId == (int)TestTypeEnum.final).FirstOrDefaultAsync();
+            return await tests
+            .Where(x => x.LevelId == level && x.TestTypeId == (int)TestTypeEnum.final).OrderBy(r => Guid.NewGuid()).Take(5).FirstOrDefaultAsync();
         }
     }
 }

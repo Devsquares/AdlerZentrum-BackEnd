@@ -48,7 +48,7 @@ namespace Infrastructure.Persistence.Repositories
             return groupInstanceStudents.Where(x => x.StudentId == userId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDefault == true).FirstOrDefault()?.GroupInstanceId;
         }
 
-        public IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter,List<int>status,out int count)
+        public IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter, List<int> status, out int count)
         {
             bool noPaging = filteredRequestParameter.NoPaging;
             if (noPaging)
@@ -86,7 +86,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.GroupDefinition.Sublevel)
                 .Include(x => x.GroupDefinition.TimeSlot.TimeSlotDetails)
                 .Where(IsMatchedExpression(filteredRequestParameter))
-                .Where(x=>(status != null && status.Count>0 ? status.Contains(x.Status.Value):true))
+                .Where(x => (status != null && status.Count > 0 ? status.Contains(x.Status.Value) : true))
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
                     //.OrderBy(sortBy, sortASC)
@@ -119,6 +119,13 @@ namespace Infrastructure.Persistence.Repositories
                   .Include(x => x.GroupDefinition.Sublevel)
                   .Include(x => x.GroupDefinition.Sublevel.LessonDefinitions)
                   .Where(x => x.Id == id).FirstOrDefault();
+        }
+
+        public int? IsOtherActiveGroupInTheGroupDef(int groupDefinitionId)
+        {
+            var group = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId && x.Status == (int)GroupInstanceStatusEnum.Running).FirstOrDefault();
+            if (group == null) return null;
+            else return group.Id;
         }
 
         public GroupInstance GetByGroupDefinitionId(int groupDefinitionId)
@@ -195,7 +202,11 @@ namespace Infrastructure.Persistence.Repositories
         }
         public List<GroupInstance> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null)
         {
-            var groups = groupInstances.Where(x => x.GroupDefinitionId == groupDefinitionId
+            var groups = groupInstances
+            .Include(x => x.GroupDefinition.Sublevel)
+            .Include(x => x.LessonInstances)
+            .ThenInclude(x => x.LessonDefinition)
+            .Where(x => x.GroupDefinitionId == groupDefinitionId
                                         && (groupinstanceId != null ? x.Id == groupinstanceId : true)).ToList();
             return groups;
         }
