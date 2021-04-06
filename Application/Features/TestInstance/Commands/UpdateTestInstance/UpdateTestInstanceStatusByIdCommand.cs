@@ -37,7 +37,7 @@ namespace Application.Features
                     if (command.Status == (int)TestInstanceEnum.Pending)
                     {
                         item.Status = (int)TestInstanceEnum.Pending;
-                        item.StartDate = DateTime.Now;
+                        item.OpenDate = DateTime.Now;
                     }
                     else if (command.Status == (int)TestInstanceEnum.Missed)
                     {

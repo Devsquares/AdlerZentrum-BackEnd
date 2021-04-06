@@ -34,7 +34,7 @@ namespace Application.Features
                 else
                 {
                     testinstance.Status = (int)TestInstanceEnum.Pending;
-                    testinstance.StartDate = DateTime.Now;
+                    testinstance.OpenDate = DateTime.Now;
 
                     await _testinstanceRepository.UpdateAsync(testinstance);
                     return new Response<int>(testinstance.Id);
