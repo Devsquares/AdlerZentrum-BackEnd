@@ -1,4 +1,4 @@
-﻿using Application.Enums;
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -14,27 +14,26 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class GetCurrentProgressForStudent : IRequest<Response<CurrentProgressModel>>
+    public class GetCurrentProgressByGroupInstanceId : IRequest<Response<CurrentProgressModel>>
     {
         public string StudentId { get; set; }
-        public class GetCurrentProgressForStudentHandler : IRequestHandler<GetCurrentProgressForStudent, Response<CurrentProgressModel>>
+        public int GroupInstanceId { get; set; }
+        public class GetCurrentProgressByGroupInstanceIdHandler : IRequestHandler<GetCurrentProgressByGroupInstanceId, Response<CurrentProgressModel>>
         {
             private readonly ITestInstanceRepositoryAsync _testinstanceRepository;
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             private readonly IMapper _mapper;
-            public GetCurrentProgressForStudentHandler(ITestInstanceRepositoryAsync testinstanceRepository, IMapper mapper,
+            public GetCurrentProgressByGroupInstanceIdHandler(ITestInstanceRepositoryAsync testinstanceRepository, IMapper mapper,
                 IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync)
             {
                 _testinstanceRepository = testinstanceRepository;
                 _mapper = mapper;
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
             }
-            public async Task<Response<CurrentProgressModel>> Handle(GetCurrentProgressForStudent query, CancellationToken cancellationToken)
+            public async Task<Response<CurrentProgressModel>> Handle(GetCurrentProgressByGroupInstanceId query, CancellationToken cancellationToken)
             {
-
-                
-                var groupinstanceStudent = _groupInstanceStudentRepositoryAsync.GetgroupInstanceByStudentId(query.StudentId);
-                if(groupinstanceStudent== null)
+                var groupinstanceStudent = _groupInstanceStudentRepositoryAsync.GetgroupInstanceByStudentIdByGroupInstanceId(query.StudentId, query.GroupInstanceId);
+                if (groupinstanceStudent == null)
                 {
                     throw new ApiException("The student not in groupInstance");
                 }
@@ -43,8 +42,8 @@ namespace Application.Features
                 {
                     GIS = groupinstanceStudent.LastOrDefault();// final
                 }
-     
-               var groupInstanceIds = groupinstanceStudent.Select(x => x.GroupInstanceId).ToList();
+
+                var groupInstanceIds = groupinstanceStudent.Select(x => x.GroupInstanceId).ToList();
                 var testinstanceList = _testinstanceRepository.GetProgressByStudentId(query.StudentId, groupInstanceIds).Result;
                 CurrentProgressModel currentProgressModel = new CurrentProgressModel();
                 currentProgressModel.Quizzes.QuizInstances = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.quizz).ToList();
@@ -59,8 +58,8 @@ namespace Application.Features
                 var studentquizPercent = 0.0;
                 if (currentProgressModel.Quizzes.QuizInstances.Count > 0)
                 {
-                     quizPercent = GIS.GroupInstance.GroupDefinition.Sublevel.Quizpercent;
-                     studentquizPercent = quizPercent * (currentProgressModel.Quizzes.AchievedScore / currentProgressModel.Quizzes.TotalScore);
+                    quizPercent = GIS.GroupInstance.GroupDefinition.Sublevel.Quizpercent;
+                    studentquizPercent = quizPercent * (currentProgressModel.Quizzes.AchievedScore / currentProgressModel.Quizzes.TotalScore);
                     studentquizPercent = Math.Round(studentquizPercent, 2);
                 }
                 currentProgressModel.Sublevels.SubLevelTests = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.subLevel).ToList();
@@ -73,8 +72,8 @@ namespace Application.Features
                 var studentSublevelPercent = 0.0;
                 if (currentProgressModel.Sublevels.SubLevelTests.Count > 0)
                 {
-                     SublevelPercent = GIS.GroupInstance.GroupDefinition.Sublevel.SublevelTestpercent;
-                     studentSublevelPercent = SublevelPercent * (currentProgressModel.Sublevels.AchievedScore / currentProgressModel.Sublevels.TotalScore);
+                    SublevelPercent = GIS.GroupInstance.GroupDefinition.Sublevel.SublevelTestpercent;
+                    studentSublevelPercent = SublevelPercent * (currentProgressModel.Sublevels.AchievedScore / currentProgressModel.Sublevels.TotalScore);
                     studentSublevelPercent = Math.Round(studentSublevelPercent, 2);
                 }
                 currentProgressModel.Final.FinalTestInstances = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.final).ToList();
@@ -87,23 +86,23 @@ namespace Application.Features
                 var studentFinalPercent = 0.0;
                 if (currentProgressModel.Final.FinalTestInstances.Count > 0)
                 {
-                     FinalPercent = GIS.GroupInstance.GroupDefinition.Sublevel.FinalTestpercent;
-                     studentFinalPercent = FinalPercent * (currentProgressModel.Final.AchievedScore / currentProgressModel.Final.TotalScore);
+                    FinalPercent = GIS.GroupInstance.GroupDefinition.Sublevel.FinalTestpercent;
+                    studentFinalPercent = FinalPercent * (currentProgressModel.Final.AchievedScore / currentProgressModel.Final.TotalScore);
                     studentFinalPercent = Math.Round(studentFinalPercent, 2);
                 }
                 currentProgressModel.TotalScore = 100;
                 currentProgressModel.AchievedScore = studentquizPercent + studentSublevelPercent + studentFinalPercent;
-                if(groupinstanceStudent.Count == 1)
+                if (groupinstanceStudent.Count == 1)
                 {
                     groupinstanceStudent[0].AchievedScore = currentProgressModel.AchievedScore;
                     await _groupInstanceStudentRepositoryAsync.UpdateAsync(groupinstanceStudent[0]);
                 }
-                else if(groupinstanceStudent.Count > 1)
+                else if (groupinstanceStudent.Count > 1)
                 {
                     var groupstudent = groupinstanceStudent.LastOrDefault();
                     groupstudent.AchievedScore = currentProgressModel.AchievedScore;
                     await _groupInstanceStudentRepositoryAsync.UpdateAsync(groupstudent);
-                } 
+                }
                 return new Response<CurrentProgressModel>(currentProgressModel);
             }
         }
