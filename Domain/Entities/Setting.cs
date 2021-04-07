@@ -11,5 +11,6 @@ namespace Domain.Entities
         public double PlacementA2 { get; set; }
         public double PlacementB1 { get; set; }
         public double PlacementB2 { get; set; }
+        public double PlacementC1 { get; set; }
     }
 }
