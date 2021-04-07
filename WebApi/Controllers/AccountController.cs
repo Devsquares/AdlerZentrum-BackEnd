@@ -258,6 +258,12 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetSuccessGroupInstancesQuery() { Id = studentId }));
         }
 
+        [HttpGet("GetCurrentProgressByGroupInstanceId")]
+        public async Task<IActionResult> GetCurrentProgressByGroupInstanceId(string studentId, int groupInstanceId)
+        {
+            return Ok(await Mediator.Send(new GetCurrentProgressByGroupInstanceId() { StudentId = studentId, GroupInstanceId = groupInstanceId }));
+        }
+
         [HttpGet("GetLateTeacherSubmissions")]
         public async Task<IActionResult> GetLateTeacherSubmissions([FromQuery] GetLateSubmissionsQuery query)
         {

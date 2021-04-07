@@ -260,6 +260,25 @@ namespace Infrastructure.Persistence.Repositories
             return list;
         }
 
+        public List<GroupInstanceStudents> GetgroupInstanceByStudentIdByGroupInstanceId(string studentId, int groupInstanceId)
+        {
+            List<GroupInstanceStudents> list = new List<GroupInstanceStudents>();
+            var groupinstancestudent = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+                .Where(x => x.StudentId == studentId && x.GroupInstanceId == groupInstanceId).FirstOrDefault();
+            list.Add(groupinstancestudent);
+            if (groupinstancestudent == null)
+            {
+                return null;
+            }
+            if (groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.IsFinal)
+            {
+                list = new List<GroupInstanceStudents>();
+                list = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+                 .Where(x => x.StudentId == studentId && x.GroupInstanceId == groupInstanceId && x.GroupInstance.GroupDefinition.Sublevel.Level.Id == groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.LevelId).ToList();
+            }
+            return list;
+        }
+
 
     }
 }
