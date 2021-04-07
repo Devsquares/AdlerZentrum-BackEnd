@@ -94,17 +94,21 @@ namespace Application.Features
                         // TODO: set the right order.
 
                         //(x >= 1 && x <= 100)
-                        if (precetnge >= settings[0].PlacementB2)
+                        if (precetnge >= settings[0].PlacementC1)
+                        {
+                            sublevel = _sublevel.GetByOrder(13);
+                        }
+                        else if (precetnge >= settings[0].PlacementB2 && precetnge < settings[0].PlacementC1)
+                        {
+                            sublevel = _sublevel.GetByOrder(10);
+                        }
+                        else if (precetnge >= settings[0].PlacementB1 && precetnge < settings[0].PlacementB2)
+                        {
+                            sublevel = _sublevel.GetByOrder(7);
+                        }
+                        else if (precetnge >= settings[0].PlacementA2 && precetnge < settings[0].PlacementB1)
                         {
                             sublevel = _sublevel.GetByOrder(4);
-                        }
-                        else if (precetnge >= settings[0].PlacementB1 && precetnge <= settings[0].PlacementB2)
-                        {
-                            sublevel = _sublevel.GetByOrder(3);
-                        }
-                        else if (precetnge >= settings[0].PlacementA2 && precetnge <= settings[0].PlacementB1)
-                        {
-                            sublevel = _sublevel.GetByOrder(2);
                         }
                         else
                         {

@@ -24,5 +24,6 @@ namespace Application.Interfaces.Repositories
         List<IGrouping<int, GroupInstanceStudents>> GetAllByGroupDefinition(int? groupDefinitionId = null, int? groupInstanceId = null);
         List<GroupInstanceStudents> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null);
         List<GroupInstanceStudents> GetgroupInstanceByStudentId(string studentId);
+        Task<List<GroupInstanceModel>> GetSuccessGroupInstances(string studentId);
     }
 }
