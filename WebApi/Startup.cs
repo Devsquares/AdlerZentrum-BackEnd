@@ -66,13 +66,12 @@ namespace WebApi
             Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", _config["AWS:AccessKey"]);
             Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", _config["AWS:SecretKey"]);
             services.AddAuthorization(options =>
-         options.AddPolicy("AdlerCardPolicy",policy => policy.RequireClaim("AddAdlerCard")));
+            options.AddPolicy("AdlerCardPolicy", policy => policy.RequireClaim("AddAdlerCard")));
 
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -82,7 +81,6 @@ namespace WebApi
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -101,7 +99,7 @@ namespace WebApi
             //     RequestPath = new PathString("/ListeningAudioFiles")
             // });
             app.UseAuthentication();
-            app.UseAuthorization(); 
+            app.UseAuthorization();
             app.UseSwaggerExtension();
             app.UseErrorHandlingMiddleware();
             app.UseHealthChecks("/health");
