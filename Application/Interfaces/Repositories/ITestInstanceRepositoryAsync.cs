@@ -29,5 +29,6 @@ namespace Application.Interfaces.Repositories
         Test GetSubLevelTestByGroupInstance(int groupinstanceId);
         Test GetFinalLevelTestByGroupInstance(int groupinstanceId);
         Test GetQuizTestByGroupInstanceByLessonDef(int groupinstanceId, int lessonDefinationdId);
+        Task<List<TestInstance>> GetAllTestInstancesByListGroup(List<int> groupInstanceIds);
     }
 }

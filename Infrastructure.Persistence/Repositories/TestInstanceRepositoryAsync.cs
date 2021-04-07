@@ -207,7 +207,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance)
         {
-            return await _testInstances.Where(x => x.LessonInstance.GroupInstanceId == groupInstance).ToListAsync();
+            return await _testInstances.Include(x=>x.Test).Where(x => x.LessonInstance.GroupInstanceId == groupInstance).ToListAsync();
         }
 
         public async Task<List<TestInstance>> GetAllTestInstancesByGroupAndTest(int groupInstance, int testId)
@@ -296,6 +296,11 @@ namespace Infrastructure.Persistence.Repositories
                  ExpectedDate = x.CorrectionDueDate,
                  DelayDuration = (x.SubmissionDate - x.CorrectionDueDate).Hours
              }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
+
+        public async Task<List<TestInstance>> GetAllTestInstancesByListGroup(List<int> groupInstanceIds)
+        {
+            return await _testInstances.Include(x => x.Test).Where(x => groupInstanceIds.Contains(x.LessonInstance.GroupInstanceId)).ToListAsync();
         }
     }
 }

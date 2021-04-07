@@ -7,6 +7,7 @@ namespace Application.Enums
     public enum TestStatusEnum
     {
         Draft = 0,
-        Final = 1
+        Final = 1,
+        Cancel = 2
     }
 }
