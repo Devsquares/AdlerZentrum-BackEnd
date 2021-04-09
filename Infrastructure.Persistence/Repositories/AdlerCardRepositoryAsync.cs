@@ -38,7 +38,7 @@ namespace Infrastructure.Persistence.Repositories
                     AdlerCardTypeId = item.Key.AdlerCardsTypeId,
                     LevelId = item.Key.LevelId,
                     NoOfCards = item.Count(),
-                    LevelName = item.Select(x=>x.Level.Name).FirstOrDefault()
+                    LevelName = item.Select(x => x.Level.Name).FirstOrDefault()
                 });
             }
             return lst;
@@ -56,7 +56,8 @@ namespace Infrastructure.Persistence.Repositories
                          join acs in _context.AdlerCardSubmissions on ac.Id equals acs.AdlerCardId into gj
                          from x in gj.DefaultIfEmpty()
                          where ac.AdlerCardsUnitId == adlerCardUnitId || x.StudentId == studentId
-                         select new AdlerCardModel() {
+                         select new AdlerCardModel()
+                         {
                              Name = ac.Name,
                              AdlerCardsUnitId = ac.AdlerCardsUnitId,
                              Question = ac.Question,
@@ -104,6 +105,11 @@ namespace Infrastructure.Persistence.Repositories
                     .AsNoTracking()
                     .ToListAsync();
 
+        }
+
+        public virtual async Task<AdlerCard> GetByIdAsync(int id)
+        {
+            return await _adlercards.Include(x => x.Question).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
     }

@@ -6,7 +6,7 @@ namespace Application.Enums
 {
     public enum AdlerCardSubmissionEnum
     {
-        NotCorrected = 0,
+        Solved = 0,
         Corrected = 1
     }
 }
