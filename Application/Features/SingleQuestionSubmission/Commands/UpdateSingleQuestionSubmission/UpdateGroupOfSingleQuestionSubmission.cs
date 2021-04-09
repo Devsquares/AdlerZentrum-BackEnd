@@ -53,7 +53,7 @@ namespace Application.Features
                 foreach (var item in command.SingleQuestionSubmission)
                 {
                     var d = await _medaitor.Send(item);
-                    testInstanceId = d.data;
+                    testInstanceId = d.data.Value;
                 }
 
                 var testInstance = await _testInstanceRepository.GetByIdAsync(testInstanceId);

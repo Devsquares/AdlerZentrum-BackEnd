@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class UpdateSingleQuestionSubmissionCommand : IRequest<Response<int>>
+    public class UpdateSingleQuestionSubmissionCommand : IRequest<Response<int?>>
     {
         public int Id { get; set; }
         public bool RightAnswer { get; set; }
         public double Points { get; set; }
         public string CorrectionText { get; set; }
 
-        public class UpdateSingleQuestionSubmissionCommandHandler : IRequestHandler<UpdateSingleQuestionSubmissionCommand, Response<int>>
+        public class UpdateSingleQuestionSubmissionCommandHandler : IRequestHandler<UpdateSingleQuestionSubmissionCommand, Response<int?>>
         {
             private readonly ISingleQuestionSubmissionRepositoryAsync _singlequestionsubmissionRepository;
             public UpdateSingleQuestionSubmissionCommandHandler(ISingleQuestionSubmissionRepositoryAsync singlequestionsubmissionRepository)
             {
                 _singlequestionsubmissionRepository = singlequestionsubmissionRepository;
             }
-            public async Task<Response<int>> Handle(UpdateSingleQuestionSubmissionCommand command, CancellationToken cancellationToken)
+            public async Task<Response<int?>> Handle(UpdateSingleQuestionSubmissionCommand command, CancellationToken cancellationToken)
             {
                 var singlequestionsubmission = await _singlequestionsubmissionRepository.GetByIdAsync(command.Id);
 
@@ -41,7 +41,7 @@ namespace Application.Features
                     singlequestionsubmission.Corrected = true;
 
                     await _singlequestionsubmissionRepository.UpdateAsync(singlequestionsubmission);
-                    return new Response<int>(singlequestionsubmission.TestInstanceId.Value);
+                    return new Response<int?>(singlequestionsubmission.TestInstanceId);
                 }
             }
         }
