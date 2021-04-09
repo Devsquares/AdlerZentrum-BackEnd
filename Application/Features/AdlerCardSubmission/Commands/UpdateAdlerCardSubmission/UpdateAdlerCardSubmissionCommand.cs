@@ -11,17 +11,17 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-	public class UpdateAdlerCardSubmissionCommand : IRequest<Response<int>>
+    public class UpdateAdlerCardSubmissionCommand : IRequest<Response<int>>
     {
-		public int Id { get; set; }
-		public Domain.Entities.AdlerCard AdlerCard { get; set; }
-		public int AdlerCardId { get; set; }
-		public ApplicationUser Student { get; set; }
-		public string StudentId { get; set; }
-		public ApplicationUser Teacher { get; set; }
-		public string TeacherId { get; set; }
-		public int Status { get; set; }
-		public double AchievedScore { get; set; }
+        public int Id { get; set; }
+        public Domain.Entities.AdlerCard AdlerCard { get; set; }
+        public int AdlerCardId { get; set; }
+        public ApplicationUser Student { get; set; }
+        public string StudentId { get; set; }
+        public ApplicationUser Teacher { get; set; }
+        public string TeacherId { get; set; }
+        public int Status { get; set; }
+        public double AchievedScore { get; set; }
 
         public class UpdateAdlerCardSubmissionCommandHandler : IRequestHandler<UpdateAdlerCardSubmissionCommand, Response<int>>
         {
@@ -40,14 +40,14 @@ namespace Application.Features
                 }
                 else
                 {
-				adlercardsubmission.AdlerCard = command.AdlerCard;
-				adlercardsubmission.AdlerCardId = command.AdlerCardId;
-				adlercardsubmission.Student = command.Student;
-				adlercardsubmission.StudentId = command.StudentId;
-				adlercardsubmission.Teacher = command.Teacher;
-				adlercardsubmission.TeacherId = command.TeacherId;
-				adlercardsubmission.Status = command.Status;
-				adlercardsubmission.AchievedScore = command.AchievedScore; 
+                    adlercardsubmission.AdlerCard = command.AdlerCard;
+                    adlercardsubmission.AdlerCardId = command.AdlerCardId;
+                    adlercardsubmission.Student = command.Student;
+                    adlercardsubmission.StudentId = command.StudentId;
+                    adlercardsubmission.Teacher = command.Teacher;
+                    adlercardsubmission.TeacherId = command.TeacherId;
+                    adlercardsubmission.Status = command.Status;
+                    adlercardsubmission.AchievedScore = command.AchievedScore;
 
                     await _adlercardsubmissionRepository.UpdateAsync(adlercardsubmission);
                     return new Response<int>(adlercardsubmission.Id);

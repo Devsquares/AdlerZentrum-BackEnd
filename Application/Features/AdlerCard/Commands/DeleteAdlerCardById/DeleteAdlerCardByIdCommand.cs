@@ -1,3 +1,4 @@
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
@@ -24,6 +25,7 @@ namespace Application.Features
             {
                 var adlercard = await _adlercardRepository.GetByIdAsync(command.Id);
                 if (adlercard == null) throw new ApiException($"AdlerCard Not Found.");
+                if (adlercard.Status != (int)AdlerCardEnum.Draft) throw new ApiException("Cann't edit adler card.");
                 await _adlercardRepository.DeleteAsync(adlercard);
                 return new Response<int>(adlercard.Id);
             }

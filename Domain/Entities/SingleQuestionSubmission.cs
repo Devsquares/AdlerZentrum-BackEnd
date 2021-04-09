@@ -18,7 +18,7 @@ namespace Domain.Entities
         public bool Corrected { get; set; }
         public bool RightAnswer { get; set; }
         public double Points { get; set; }
-        public int TestInstanceId { get; set; }
+        public int? TestInstanceId { get; set; }
         public TestInstance TestInstance { get; set; }
     }
 }
