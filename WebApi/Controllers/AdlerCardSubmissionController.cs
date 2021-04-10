@@ -102,7 +102,7 @@ namespace WebApi.Controllers
 
         [HttpPut("CorrectSubmission")]
         //[Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> CorrectSubmission(AssignTeacherToSubmissionCommand command)
+        public async Task<IActionResult> CorrectSubmission(CorrectSubmissionCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
