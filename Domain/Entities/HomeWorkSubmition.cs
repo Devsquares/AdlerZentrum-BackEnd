@@ -23,5 +23,6 @@ namespace Domain.Entities
         public double Points { get; set; }
         public string Comment { get; set; }
         public double BonusPoints { get; set; }
+        public bool DelaySeen { get; set; }
     }
 }

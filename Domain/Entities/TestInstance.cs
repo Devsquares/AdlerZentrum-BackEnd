@@ -29,5 +29,6 @@ namespace Domain.Entities
         public bool Reopened { get; set; }
         public DateTime CorrectionDueDate { get; set; }
         public DateTime CorrectionDate { get; set; }
+        public bool DelaySeen { get; set; }
     }
 }

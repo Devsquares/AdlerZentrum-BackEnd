@@ -17,6 +17,7 @@ namespace Application.Features
         public int PageSize { get; set; }
         public int SubmissionType { get; set; }
         public string TeacherName { get; set; }
+        public bool DelaySeen { get; set; } = false;
     }
     public class GetLateSubmissionsQueryHandler : IRequestHandler<GetLateSubmissionsQuery, PagedResponse<List<LateSubmissionsViewModel>>>
     {
@@ -45,16 +46,16 @@ namespace Application.Features
             switch (request.SubmissionType)
             {
                 case 1:
-                    output = await _lessonInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize);
-                    count = _lessonInstanceRepository.GetLateSubmissionsCount(request.TeacherName);
+                    output = await _lessonInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize,request.DelaySeen);
+                    count = _lessonInstanceRepository.GetLateSubmissionsCount(request.TeacherName,request.DelaySeen);
                     break;
                 case 2:
-                    output = await _homeWorkSubmitionRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize);
-                    count = _homeWorkSubmitionRepository.GetLateSubmissionsCount(request.TeacherName);
+                    output = await _homeWorkSubmitionRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize,request.DelaySeen);
+                    count = _homeWorkSubmitionRepository.GetLateSubmissionsCount(request.TeacherName,request.DelaySeen);
                     break;
                 case 3:
-                    output = await _testInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize);
-                    count = _testInstanceRepository.GetLateSubmissionsCount(request.TeacherName);
+                    output = await _testInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize,request.DelaySeen);
+                    count = _testInstanceRepository.GetLateSubmissionsCount(request.TeacherName,request.DelaySeen);
                     break;
 
                 default:

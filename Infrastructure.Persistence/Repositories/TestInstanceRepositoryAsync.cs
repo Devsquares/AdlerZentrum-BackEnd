@@ -274,17 +274,17 @@ namespace Infrastructure.Persistence.Repositories
                  x.Test.TestTypeId == (int)TestTypeEnum.placement).ToListAsync();
         }
 
-        public int GetLateSubmissionsCount(string TeacherName)
+        public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
             return _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
-                 && String.IsNullOrEmpty(TeacherName) ? true :
+                 && x.ManualCorrection && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
          (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
         }
 
-        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize)
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
             return await _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
-                   && x.ManualCorrection
+                   && x.ManualCorrection && x.DelaySeen == DelaySeen
                    && String.IsNullOrEmpty(TeacherName) ? true :
            (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName)))
              .Select(x => new LateSubmissionsViewModel()
