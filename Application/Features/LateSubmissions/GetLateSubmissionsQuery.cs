@@ -46,16 +46,16 @@ namespace Application.Features
             switch (request.SubmissionType)
             {
                 case 1:
-                    output = await _lessonInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize,request.DelaySeen);
-                    count = _lessonInstanceRepository.GetLateSubmissionsCount(request.TeacherName,request.DelaySeen);
+                    output = await _lessonInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize, request.DelaySeen);
+                    count = _lessonInstanceRepository.GetLateSubmissionsCount(request.TeacherName, request.DelaySeen);
                     break;
                 case 2:
-                    output = await _homeWorkSubmitionRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize,request.DelaySeen);
-                    count = _homeWorkSubmitionRepository.GetLateSubmissionsCount(request.TeacherName,request.DelaySeen);
+                    output = await _homeWorkSubmitionRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize, request.DelaySeen);
+                    count = _homeWorkSubmitionRepository.GetLateSubmissionsCount(request.TeacherName, request.DelaySeen);
                     break;
                 case 3:
-                    output = await _testInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize,request.DelaySeen);
-                    count = _testInstanceRepository.GetLateSubmissionsCount(request.TeacherName,request.DelaySeen);
+                    output = await _testInstanceRepository.GetLateSubmissions(request.TeacherName, request.PageNumber, request.PageSize, request.DelaySeen);
+                    count = _testInstanceRepository.GetLateSubmissionsCount(request.TeacherName, request.DelaySeen);
                     break;
 
                 default:

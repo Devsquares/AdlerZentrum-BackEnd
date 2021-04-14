@@ -17,7 +17,7 @@ namespace Application.DTOs
 {
     public class ActiveGroupInstanceCommand : IRequest<Response<bool>>
     {
-        public int GroupInstanceId { get; set; } 
+        public int GroupInstanceId { get; set; }
 
         public class ActiveGroupInstanceCommandHandler : IRequestHandler<ActiveGroupInstanceCommand, Response<bool>>
         {
@@ -147,6 +147,7 @@ namespace Application.DTOs
                             LessonDefinitionId = item.Id,
                             StartDate = timeslotsDetailed.GetValueOrDefault(item.Order).Start,
                             EndDate = timeslotsDetailed.GetValueOrDefault(item.Order).End,
+                            DueDate = timeslotsDetailed.GetValueOrDefault(item.Order).End.AddDays(1),
                             MaterialDone = string.Empty,
                             MaterialToDo = string.Empty,
                             Serial = item.Order.ToString()
