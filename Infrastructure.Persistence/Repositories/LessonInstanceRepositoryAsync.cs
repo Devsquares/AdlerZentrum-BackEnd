@@ -101,9 +101,10 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
+            //todo check addDays
             var data =  await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
             && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.SubmittedReportTeacher.FirstName.ToLower().Contains(TeacherName.ToLower()) || x.SubmittedReportTeacher.LastName.ToLower().Contains(TeacherName.ToLower()))
+           (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))
             )
               .Select(x => new LateSubmissionsViewModel()
               {
