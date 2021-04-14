@@ -154,6 +154,8 @@ namespace Application.Mappings
             CreateMap<GetAllAdlerCardsBundlesViewModel, AdlerCardsBundle>().ReverseMap();
             CreateMap<CreateAdlerCardsUnitCommand, AdlerCardsUnit>().ReverseMap();
             CreateMap<CreateAdlerCardCommand, AdlerCard>().ReverseMap();
+            CreateMap<GetAllAdlerCardSubmissionsParameter, GetAllAdlerCardSubmissionsQuery>().ReverseMap();
+            CreateMap<GetAllAdlerCardSubmissionsViewModel, AdlerCardSubmission>().ReverseMap();
         }
     }
 }
