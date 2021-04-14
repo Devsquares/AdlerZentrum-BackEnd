@@ -99,27 +99,29 @@ namespace Infrastructure.Persistence.Repositories
             return lessonDates;
         }
 
-        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize)
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            return await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
-            && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))
+            var data =  await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
+            && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
+           (x.SubmittedReportTeacher.FirstName.ToLower().Contains(TeacherName.ToLower()) || x.SubmittedReportTeacher.LastName.ToLower().Contains(TeacherName.ToLower()))
             )
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,
                   Teacher = x.SubmittedReportTeacher,
                   SubmissionDate = x.SubmissionDate.Value,
-                  ExpectedDate = x.EndDate.AddDays(1),
-                  DelayDuration = (x.SubmissionDate.Value - x.EndDate.AddDays(1)).Hours
+                  //ExpectedDate = x.EndDate.AddDays(1),
+                  //DelayDuration = (x.SubmissionDate.Value - x.EndDate.AddDays(1)).Hours,
+                  LessonInstance = x
               }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return new List<LateSubmissionsViewModel>();
         }
 
-        public int GetLateSubmissionsCount(string TeacherName)
+        public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
             return lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
-            && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))).Count();
+            && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
+           (x.SubmittedReportTeacher.FirstName.ToLower().Contains(TeacherName.ToLower()) || x.SubmittedReportTeacher.LastName.ToLower().Contains(TeacherName.ToLower()))).Count();
         }
 
     }

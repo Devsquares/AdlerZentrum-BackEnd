@@ -304,5 +304,12 @@ namespace WebApi.Controllers
                 }
             }
         }
+
+        [HttpPost("LateSubmissionReview")]
+        public async Task<IActionResult> LateSubmissionReview(LateSubmissionReviewCommand LateSubmissionReview)
+        {
+            return Ok(await Mediator.Send(LateSubmissionReview));
+        }
     }
 }
+
