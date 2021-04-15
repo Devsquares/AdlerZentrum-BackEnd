@@ -25,10 +25,12 @@ namespace Application.Features.TeacherAbsence.Commands.CreateTeacherAbsence
     {
         private readonly ITeacherAbsenceRepositoryAsync _teacherabsenceRepository;
         private readonly IMapper _mapper;
-        public CreateTeacherAbsenceCommandHandler(ITeacherAbsenceRepositoryAsync teacherabsenceRepository, IMapper mapper)
+        private readonly IMailJobRepositoryAsync _jobRepository;
+        public CreateTeacherAbsenceCommandHandler(ITeacherAbsenceRepositoryAsync teacherabsenceRepository, IMapper mapper, IMailJobRepositoryAsync jobRepository)
         {
             _teacherabsenceRepository = teacherabsenceRepository;
             _mapper = mapper;
+            _jobRepository = jobRepository;
         }
 
         public async Task<Response<int>> Handle(CreateTeacherAbsenceCommand request, CancellationToken cancellationToken)
@@ -36,6 +38,14 @@ namespace Application.Features.TeacherAbsence.Commands.CreateTeacherAbsence
             var teacherabsence = _mapper.Map<Domain.Entities.TeacherAbsence>(request);
             teacherabsence.Status = (int)TeacherAbsenceStatusEnum.New;
             await _teacherabsenceRepository.AddAsync(teacherabsence);
+
+            await _jobRepository.AddAsync(new Domain.Entities.MailJob
+            {
+                Type = (int)MailJobTypeEnum.RequestAbsenceToSuperVisor,
+                GroupInstanceId = teacherabsence.LessonInstance.GroupInstanceId,
+                TeacherId = request.TeacherId,
+                Status = (int)JobStatusEnum.New
+            });
             return new Response<int>(teacherabsence.Id);
         }
     }

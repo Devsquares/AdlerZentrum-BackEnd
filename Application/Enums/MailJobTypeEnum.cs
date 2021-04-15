@@ -19,6 +19,10 @@ namespace Application.Enums
         HomeworkCorrected,
         HomeworkSubmitted,
         TestSubmitted,
-        ContactUs
+        ContactUs,
+        AcceptTeacherAbsence,
+        RejectTeacherAbsence,
+        AcceptTeacherAbsenceWithAnotherTeacher,
+        RequestAbsenceToSuperVisor
     }
 }

@@ -16,7 +16,7 @@ namespace WebApi.Controllers.v1
     {
         // GET: api/<controller>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetAllTeacherAbsencesParameter filter)
+        public async Task<IActionResult> Get([FromQuery] GetAllTeacherAbsencesQuery filter)
         {
 
             return Ok(await Mediator.Send(new GetAllTeacherAbsencesQuery() {
@@ -68,6 +68,22 @@ namespace WebApi.Controllers.v1
         public async Task<IActionResult> Delete(int id)
         {
             return Ok(await Mediator.Send(new DeleteTeacherAbsenceByIdCommand { Id = id }));
+        }
+
+        [HttpPut("AcceptAbsenceRequest")]
+        //[Authorize(Roles = "SuperAdmin")]
+        //TODO: enable authorization
+        public async Task<IActionResult> AcceptAbsenceRequest(AcceptAbsenceRequestCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpPut("RejectAbsenceRequest")]
+        //[Authorize(Roles = "SuperAdmin")]
+        //TODO: enable authorization
+        public async Task<IActionResult> RejectAbsenceRequest(RejectAbsenceRequestCommand command)
+        {
+            return Ok(await Mediator.Send(command));
         }
 
     }

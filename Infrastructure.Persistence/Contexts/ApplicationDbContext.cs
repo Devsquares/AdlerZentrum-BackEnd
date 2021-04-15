@@ -74,6 +74,7 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<StudentInfo> StudentInfos { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<MailJob> MailJobs { get; set; }
+        public DbSet<TeacherAbsence> teacherAbsences { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

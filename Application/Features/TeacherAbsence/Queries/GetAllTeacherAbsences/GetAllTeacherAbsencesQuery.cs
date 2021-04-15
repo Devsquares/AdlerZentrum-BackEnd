@@ -15,6 +15,7 @@ namespace Application.Features.TeacherAbsence.Queries.GetAllTeacherAbsences
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public int? Status { get; set; }
         //public Dictionary<string, string> FilterValue { get; set; }
         //public Dictionary<string, string> FilterRange { get; set; }
         //public Dictionary<string, List<string>> FilterArray { get; set; }
@@ -35,14 +36,15 @@ namespace Application.Features.TeacherAbsence.Queries.GetAllTeacherAbsences
 
         public async Task<PagedResponse<IEnumerable<GetAllTeacherAbsencesViewModel>>> Handle(GetAllTeacherAbsencesQuery request, CancellationToken cancellationToken)
         {
-            var validFilter = _mapper.Map<GetAllTeacherAbsencesParameter>(request);
-            FilteredRequestParameter filteredRequestParameter = new FilteredRequestParameter();
-            Reflection.CopyProperties(validFilter, filteredRequestParameter);
-            int count = _teacherabsenceRepository.GetCount(validFilter);
-
-            var teacherabsence = await _teacherabsenceRepository.GetPagedReponseAsync(validFilter);
+            //var validFilter = _mapper.Map<GetAllTeacherAbsencesParameter>(request);
+            //FilteredRequestParameter filteredRequestParameter = new FilteredRequestParameter();
+            //Reflection.CopyProperties(validFilter, filteredRequestParameter);
+            //int count = _teacherabsenceRepository.GetCount(validFilter);
+            if (request.PageNumber == 0) request.PageNumber = 1;
+            if (request.PageSize == 0) request.PageSize = 10;
+            var teacherabsence = await _teacherabsenceRepository.GetAll(request.PageSize,request.PageSize,request.Status);
             var teacherabsenceViewModel = _mapper.Map<IEnumerable<GetAllTeacherAbsencesViewModel>>(teacherabsence);
-            return new Wrappers.PagedResponse<IEnumerable<GetAllTeacherAbsencesViewModel>>(teacherabsenceViewModel, request.PageNumber, request.PageSize, count);
+            return new Wrappers.PagedResponse<IEnumerable<GetAllTeacherAbsencesViewModel>>(teacherabsenceViewModel, request.PageNumber, request.PageSize, teacherabsence.Count);
         }
     }
 }
