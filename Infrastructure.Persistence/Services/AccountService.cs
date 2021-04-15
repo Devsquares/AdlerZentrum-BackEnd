@@ -46,6 +46,7 @@ namespace Infrastructure.Persistence.Services
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
         private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
         private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignmentRepositoryAsync;
+        private readonly IDuplicateExceptionRepositoryAsync _duplicateExceptionRepository;
 
         private readonly ApplicationDbContext _context;
 
@@ -61,7 +62,8 @@ namespace Infrastructure.Persistence.Services
             IGroupConditionRepositoryAsync groupConditionRepositoryAsync,
             ApplicationDbContext context,
             ISublevelRepositoryAsync sublevelRepositoryAsync,
-            ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignmentRepositoryAsync)
+            ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignmentRepositoryAsync,
+            IDuplicateExceptionRepositoryAsync duplicateExceptionRepositoryAsync)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -76,6 +78,7 @@ namespace Infrastructure.Persistence.Services
             _context = context;
             _teacherGroupInstanceAssignmentRepositoryAsync = teacherGroupInstanceAssignmentRepositoryAsync;
             _sublevelRepositoryAsync = sublevelRepositoryAsync;
+            _duplicateExceptionRepository = duplicateExceptionRepositoryAsync;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -120,7 +123,7 @@ namespace Infrastructure.Persistence.Services
             response.SubLevelId = user.SublevelId;
             response.PlacementTestId = user.PlacmentTestId;
             response.AdlerCardBalance = user.AdlerCardBalance;
-            response.Claims =   await _userManager.GetClaimsAsync(user);
+            response.Claims = await _userManager.GetClaimsAsync(user);
 
             if (user.SublevelId.HasValue && user.SublevelId != 0)
             {
@@ -179,7 +182,7 @@ namespace Infrastructure.Persistence.Services
             response.SubLevelId = user.SublevelId;
             response.PlacementTestId = user.PlacmentTestId;
             response.AdlerCardBalance = user.AdlerCardBalance;
-            response.Claims =   await _userManager.GetClaimsAsync(user);
+            response.Claims = await _userManager.GetClaimsAsync(user);
 
             if (user.SublevelId.HasValue && user.SublevelId != 0)
             {
@@ -228,7 +231,16 @@ namespace Infrastructure.Persistence.Services
             var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
             if (userWithSameUserName != null)
             {
-                throw new ApiException($"Username '{request.UserName}' is already taken.");
+                throw new ApiException($"Email '{request.UserName}' is already taken.");
+            }
+
+            if (IsDuplicate(request.FirstName, request.LastName, request.DateOfBirth, request.Country))
+            {
+                var haveExp = _duplicateExceptionRepository.check(request.Email);
+                if (!haveExp)
+                {
+                    throw new ApiException($"Duplicate Account detected, Kindly contanct the admin.");
+                }
             }
 
             var user = new ApplicationUser
@@ -278,6 +290,33 @@ namespace Infrastructure.Persistence.Services
             {
                 throw new ApiException($"Email {request.Email } is already registered.");
             }
+        }
+
+        private bool IsDuplicate(string firstName, string lastName, DateTime dateOfBirth, string country)
+        {
+            var firstCheck = _userManager.Users.Where(x => x.FirstName == firstName
+                            && x.LastName == lastName
+                            && x.DateOfBirth.Year == dateOfBirth.Year
+                                && x.DateOfBirth.Month == dateOfBirth.Month
+                                && x.DateOfBirth.Day == dateOfBirth.Day).FirstOrDefault();
+
+            var secondCheck = _userManager.Users.Where(x => x.FirstName == firstName
+                        && x.Country == country
+                        && x.DateOfBirth.Year == dateOfBirth.Year
+                        && x.DateOfBirth.Month == dateOfBirth.Month
+                            && x.DateOfBirth.Day == dateOfBirth.Day).FirstOrDefault();
+
+            var thirdCheck = _userManager.Users.Where(x => x.Country == country
+                            && x.LastName == lastName
+                            && x.DateOfBirth.Year == dateOfBirth.Year
+                            && x.DateOfBirth.Month == dateOfBirth.Month
+                                && x.DateOfBirth.Day == dateOfBirth.Day).FirstOrDefault();
+
+            if (firstCheck != null || secondCheck != null || thirdCheck != null)
+            {
+                return true;
+            }
+            else { return false; }
         }
 
         private bool checkeRole(RolesEnum registrationUserRole, int creatorUserRole)

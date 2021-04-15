@@ -310,6 +310,28 @@ namespace WebApi.Controllers
         {
             return Ok(await Mediator.Send(LateSubmissionReview));
         }
+
+        [HttpPost("AddDuplicateException")]
+        public async Task<IActionResult> AddDuplicateException(CreateDuplicateExceptionRequestCommand LateSubmissionReview)
+        {
+            return Ok(await Mediator.Send(LateSubmissionReview));
+        }
+
+        [HttpDelete("RemoveDuplicateException")]
+        public async Task<IActionResult> RemoveDuplicateException(RemoveDuplicateExceptionRequestCommand LateSubmissionReview)
+        {
+            return Ok(await Mediator.Send(LateSubmissionReview));
+        }
+
+        [HttpGet("GetAllDuplicateExceptions")]
+        public async Task<IActionResult> GetAllDuplicateExceptions([FromQuery] int PageNumber, int PageSize)
+        {
+            return Ok(await Mediator.Send(new GetAllDuplicateExceptionsQuery()
+            {
+                PageNumber = PageNumber,
+                PageSize = PageSize
+            }));
+        }
     }
 }
 

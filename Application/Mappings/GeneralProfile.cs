@@ -171,6 +171,9 @@ namespace Application.Mappings
             CreateMap<CreateTeacherAbsenceCommand, TeacherAbsence>().ReverseMap();
             CreateMap<GetAllTeacherAbsencesViewModel, TeacherAbsence>().ReverseMap();
             CreateMap<GetAllTeacherAbsencesParameter, GetAllTeacherAbsencesQuery>().ReverseMap();
+
+            // Duplicate exp
+            CreateMap<GetAllDuplicateExceptionsQuery, RequestParameter>().ReverseMap();
         }
     }
 }
