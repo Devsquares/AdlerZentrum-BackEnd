@@ -165,6 +165,31 @@ namespace Process
                     template.Body = template.Body.FormatWith(ContactUs);
                     to = _emailService.GetMail();
                     break;
+                case MailJobTypeEnum.RejectTeacherAbsence:
+                    var rejectedteacher = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.TeacherId).FirstOrDefault();
+                    var reject = "Your Request has been rejected";
+                    template.Body = template.Body.FormatWith(reject);
+                    to = rejectedteacher.Email;
+                    break;
+                case MailJobTypeEnum.AcceptTeacherAbsence:
+                    var acceptedteacher = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.TeacherId).FirstOrDefault();
+                    var accept = "Your Request has been Accepted";
+                    template.Body = template.Body.FormatWith(accept);
+                    to = acceptedteacher.Email;
+                    break;
+                case MailJobTypeEnum.AcceptTeacherAbsenceWithAnotherTeacher:
+                    var acceptedNewteacher = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.TeacherId).FirstOrDefault();
+                    var assigninglesson = "You have a new assigned lesson";
+                    template.Body = template.Body.FormatWith(assigninglesson);
+                    to = acceptedNewteacher.Email;
+                    break;
+                    // todo check superVisor
+                case MailJobTypeEnum.RequestAbsenceToSuperVisor:
+                    var requestteacher = dbContext.Set<ApplicationUser>().Where(x => x.Id == _job.TeacherId).FirstOrDefault();
+                    var absenceRequest = $"You have a new Absence Request from Teacher :{requestteacher.FirstName}{requestteacher.LastName}";
+                    template.Body = template.Body.FormatWith(absenceRequest);
+                    to = _emailService.GetMail();
+                    break;
                 default:
                     break;
             }

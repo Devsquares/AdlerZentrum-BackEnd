@@ -11,6 +11,8 @@ using System;
 using Application.Features;
 using Domain.Models;
 using Application.DTOs.Level.Queries;
+using Application.Features.TeacherAbsence.Commands.CreateTeacherAbsence;
+using Application.Features.TeacherAbsence.Queries.GetAllTeacherAbsences;
 
 namespace Application.Mappings
 {
@@ -164,6 +166,11 @@ namespace Application.Mappings
                .ForMember(destination => destination.LessonSerial, opts => opts.MapFrom(source => source.LessonInstance.Serial))
                .ForMember(destination => destination.GroupSerial, opts => opts.MapFrom(source => source.GroupInstance.Serial));
 
+
+            //teacher absence
+            CreateMap<CreateTeacherAbsenceCommand, TeacherAbsence>().ReverseMap();
+            CreateMap<GetAllTeacherAbsencesViewModel, TeacherAbsence>().ReverseMap();
+            CreateMap<GetAllTeacherAbsencesParameter, GetAllTeacherAbsencesQuery>().ReverseMap();
         }
     }
 }
