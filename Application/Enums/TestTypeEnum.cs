@@ -9,6 +9,7 @@ namespace Application.Enums
         quizz = 0,
         subLevel = 1,
         final = 2,
-        placement = 3
+        placement = 3,
+        Feedback = 4
     }
 }
