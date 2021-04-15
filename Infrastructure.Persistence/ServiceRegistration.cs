@@ -86,6 +86,7 @@ namespace Infrastructure.Persistence
             services.AddTransient<IMailJobRepositoryAsync, MailJobRepositoryAsync>();
             services.AddTransient<IClaimRepositoryAsync, ClaimRepositoryAsync>();
             services.AddTransient<ITeacherAbsenceRepositoryAsync, TeacherAbsenceRepositoryAsync>();
+            services.AddTransient<IDuplicateExceptionRepositoryAsync, DuplicateExceptionRepositoryAsync>();
             #endregion
 
             services.AddIdentity<ApplicationUser, IdentityRole>(o => {
