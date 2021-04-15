@@ -207,7 +207,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<TestInstance>> GetAllTestInstancesByGroup(int groupInstance)
         {
-            return await _testInstances.Include(x=>x.Test).Where(x => x.LessonInstance.GroupInstanceId == groupInstance).ToListAsync();
+            return await _testInstances.Include(x => x.Test).Where(x => x.LessonInstance.GroupInstanceId == groupInstance).ToListAsync();
         }
 
         public async Task<List<TestInstance>> GetAllTestInstancesByGroupAndTest(int groupInstance, int testId)
@@ -274,17 +274,17 @@ namespace Infrastructure.Persistence.Repositories
                  x.Test.TestTypeId == (int)TestTypeEnum.placement).ToListAsync();
         }
 
-        public int GetLateSubmissionsCount(string TeacherName)
+        public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
             return _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
-                 && String.IsNullOrEmpty(TeacherName) ? true :
+                 && x.ManualCorrection && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
          (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
         }
 
-        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize)
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
             return await _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
-                   && x.ManualCorrection
+                   && x.ManualCorrection && x.DelaySeen == DelaySeen
                    && String.IsNullOrEmpty(TeacherName) ? true :
            (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName)))
              .Select(x => new LateSubmissionsViewModel()
@@ -301,6 +301,82 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<List<TestInstance>> GetAllTestInstancesByListGroup(List<int> groupInstanceIds)
         {
             return await _testInstances.Include(x => x.Test).Where(x => groupInstanceIds.Contains(x.LessonInstance.GroupInstanceId)).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<TestInstance>> GetFeedbackSheetInstancesForStudentByGroupInstanceId(string StudentId, int GroupInstanceId)
+        {
+            return await _testInstances.Include(x => x.Test)
+            .Where(x => x.StudentId == StudentId && x.GroupInstanceId == GroupInstanceId && x.Test.IsArchived == false && x.Test.TestTypeId == (int)TestTypeEnum.Feedback).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<TestInstance>> GetFeedbackSheetInstancesForStudent(string StudentId)
+        {
+            return await _testInstances.Include(x => x.Test)
+            .Where(x => x.StudentId == StudentId && x.Test.IsArchived == false && x.Test.TestTypeId == (int)TestTypeEnum.Feedback).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<TestInstance>> GetFeedbackSheetsPagedReponseAsync(int pageNumber, int pageSize, int GroupInstanceId, string StudentName, TestInstanceEnum Status, int LessonInstanceId)
+        {
+            var query = _testInstances.AsQueryable();
+
+            if (GroupInstanceId != 0)
+            {
+                query = query.Where(x => x.GroupInstanceId == GroupInstanceId);
+            }
+            if (!String.IsNullOrEmpty(StudentName))
+            {
+                query = query.Where(x => x.Student.FirstName.Contains(StudentName) || x.Student.LastName.Contains(StudentName));
+            }
+            if (Status != 0)
+            {
+                query = query.Where(x => x.Status == (int)Status);
+            }
+            if (LessonInstanceId != 0)
+            {
+                query = query.Where(x => x.LessonInstanceId == LessonInstanceId);
+            }
+            return await query
+           .Include(x => x.Test)
+           .Include(x => x.Student)
+           .Include(x => x.LessonInstance)
+           .ThenInclude(x => x.GroupInstance)
+           .ThenInclude(x => x.GroupDefinition)
+           .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .Where(x => x.Test.TestTypeId == (int)TestTypeEnum.Feedback)
+           .ToListAsync();
+        }
+
+        public async Task<int> GetFeedbackSheetsPagedReponseCountAsync(int GroupInstanceId, string StudentName, TestInstanceEnum Status, int LessonInstanceId)
+        {
+            var query = _testInstances.AsQueryable();
+
+            if (GroupInstanceId != 0)
+            {
+                query = query.Where(x => x.GroupInstanceId == GroupInstanceId);
+            }
+            if (!String.IsNullOrEmpty(StudentName))
+            {
+                query = query.Where(x => x.Student.FirstName.Contains(StudentName) || x.Student.LastName.Contains(StudentName));
+            }
+            if (Status != 0)
+            {
+                query = query.Where(x => x.Status == (int)Status);
+            }
+            if (LessonInstanceId != 0)
+            {
+                query = query.Where(x => x.LessonInstanceId == LessonInstanceId);
+            }
+            return await query
+           .Include(x => x.Test)
+           .Include(x => x.Student)
+           .Include(x => x.LessonInstance)
+           .ThenInclude(x => x.GroupInstance)
+           .ThenInclude(x => x.GroupDefinition)
+            .AsNoTracking()
+            .Where(x => x.Test.TestTypeId == (int)TestTypeEnum.Feedback)
+           .CountAsync();
         }
     }
 }

@@ -53,11 +53,13 @@ namespace Infrastructure.Persistence.Repositories
         public List<AdlerCardModel> GetAdlerCardsForStudent(string studentId, int adlerCardUnitId)
         {
             var query = (from ac in _adlercards
+                         join sin in _context.SingleQuestions on ac.QuestionId equals sin.QuestionId
                          join acs in _context.AdlerCardSubmissions on ac.Id equals acs.AdlerCardId into gj
                          from x in gj.DefaultIfEmpty()
-                         where ac.AdlerCardsUnitId == adlerCardUnitId || x.StudentId == studentId
+                         where ac.AdlerCardsUnitId == adlerCardUnitId && x.StudentId == studentId
                          select new AdlerCardModel()
                          {
+                             Id = ac.Id,
                              Name = ac.Name,
                              AdlerCardsUnitId = ac.AdlerCardsUnitId,
                              Question = ac.Question,
@@ -67,7 +69,9 @@ namespace Infrastructure.Persistence.Repositories
                              Status = (x == null) ? "unsolved" : "solved",
                              AdlerCardsTypeId = ac.AdlerCardsTypeId,
                              LevelId = ac.LevelId,
-                             Level = ac.Level
+                             Level = ac.Level,
+                             AdlerCardSubmissionStatus = x.Status,
+                             SingleQuestions = ac.Question.SingleQuestions
                          }).ToList();
             return query;
         }
@@ -109,7 +113,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public virtual async Task<AdlerCard> GetByIdAsync(int id)
         {
-            return await _adlercards.Include(x => x.Question).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _adlercards.Include(x => x.Question.SingleQuestions).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
     }

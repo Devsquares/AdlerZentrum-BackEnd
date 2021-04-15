@@ -24,7 +24,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public AdlerCardSubmission GetAdlerCardForStudent(string studentId, int adlercardId)
         {
-            return _adlercardsubmissions.Include(x => x.AdlerCard.Question).Include(x => x.AdlerCard.Level).Where(x => x.AdlerCardId == adlercardId && x.StudentId == studentId).FirstOrDefault();
+            return _adlercardsubmissions.Include(x => x.AdlerCard.Question.SingleQuestions).Include(x => x.AdlerCard.Level).Where(x => x.AdlerCardId == adlercardId && x.StudentId == studentId).FirstOrDefault();
         }
 
         public IEnumerable<AdlerCardsSubmissionsForStaffModel> GetAdlerCardsSubmissionsForStaff(int pageNumber, int pageSize, string studentId, string studentName, int? levelId, string levelName, int? type, int? status, bool? assigned, string TeacherId, out int totalCount)

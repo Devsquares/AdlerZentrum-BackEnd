@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210413083545_add-delayseen-lessoninstance-testinstance-homeworksub")]
+    partial class adddelayseenlessoninstancetestinstancehomeworksub
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1319,9 +1321,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("DelaySeen")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("DueDate")
-                        .HasColumnType("datetime");
-
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime");
 
@@ -2019,47 +2018,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("SubLevels");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TeacherAbsence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<bool>("IsEmergency")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("LessonInstanceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TeacherId")
-                        .HasColumnType("varchar(85)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LessonInstanceId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("teacherAbsences");
-                });
-
             modelBuilder.Entity("Domain.Entities.TeacherGroupInstanceAssignment", b =>
                 {
                     b.Property<int>("Id")
@@ -2086,9 +2044,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("LessonInstanceId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TeacherId")
                         .HasColumnType("varchar(85)");
 
@@ -2096,8 +2051,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GroupInstanceId")
                         .IsUnique();
-
-                    b.HasIndex("LessonInstanceId");
 
                     b.HasIndex("TeacherId");
 
@@ -2119,9 +2072,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("varchar(256)")
@@ -2921,19 +2871,6 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.TeacherAbsence", b =>
-                {
-                    b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
-                        .WithMany()
-                        .HasForeignKey("LessonInstanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
-                        .WithMany()
-                        .HasForeignKey("TeacherId");
-                });
-
             modelBuilder.Entity("Domain.Entities.TeacherGroupInstanceAssignment", b =>
                 {
                     b.HasOne("Domain.Entities.GroupInstance", "GroupInstance")
@@ -2941,10 +2878,6 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("Domain.Entities.TeacherGroupInstanceAssignment", "GroupInstanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.LessonInstance", "LessonInstance")
-                        .WithMany()
-                        .HasForeignKey("LessonInstanceId");
 
                     b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
                         .WithMany()

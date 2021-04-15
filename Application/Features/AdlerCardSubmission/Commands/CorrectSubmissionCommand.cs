@@ -15,7 +15,7 @@ namespace Application.Features.AdlerCardSubmission.Commands
     {
         public int AdlerCardsSubmissionsId { get; set; }
         public double AchievedScore { get; set; }
-        public UpdateSingleQuestionSubmissionCommand SingleQuestionSubmission { get; set; }
+        public List<UpdateSingleQuestionSubmissionCommand> SingleQuestionSubmission { get; set; }
     }
     public class CorrectSubmissionCommandHandler : IRequestHandler<CorrectSubmissionCommand, Response<int>>
     {

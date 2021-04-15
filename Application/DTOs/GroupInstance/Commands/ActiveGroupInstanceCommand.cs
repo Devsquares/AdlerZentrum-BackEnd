@@ -17,7 +17,7 @@ namespace Application.DTOs
 {
     public class ActiveGroupInstanceCommand : IRequest<Response<bool>>
     {
-        public int GroupInstanceId { get; set; } 
+        public int GroupInstanceId { get; set; }
 
         public class ActiveGroupInstanceCommandHandler : IRequestHandler<ActiveGroupInstanceCommand, Response<bool>>
         {
@@ -147,6 +147,7 @@ namespace Application.DTOs
                             LessonDefinitionId = item.Id,
                             StartDate = timeslotsDetailed.GetValueOrDefault(item.Order).Start,
                             EndDate = timeslotsDetailed.GetValueOrDefault(item.Order).End,
+                            DueDate = timeslotsDetailed.GetValueOrDefault(item.Order).End.AddDays(1),
                             MaterialDone = string.Empty,
                             MaterialToDo = string.Empty,
                             Serial = item.Order.ToString()
@@ -259,6 +260,54 @@ namespace Application.DTOs
                             }
                         }
                     }
+
+                    // feedback sheet lesson 4
+                    if (lessonInstances[3] != null)
+                    {
+                        var feedbackSheetLesson4 = await _testRepository.GetFeedbackSheet();
+                        if (feedbackSheetLesson4 != null)
+                        {
+                            foreach (var student in lessonInstanceStudents)
+                            {
+                                TestInstance obj = new TestInstance
+                                {
+                                    LessonInstanceId = lessonInstances[3].Id,
+                                    StudentId = student.StudentId,
+                                    Status = (int)TestInstanceEnum.Closed,
+                                    TestId = feedbackSheetLesson4.Id,
+                                    CorrectionTeacherId = null,
+                                    GroupInstanceId = groupInstance.Id,
+                                    StartDate = lessonInstances[3].StartDate
+                                };
+                                testInstance.Add(obj);
+                            }
+                        }
+                    }
+
+
+                    if (lessonInstances[7] != null)
+                    {
+                        var feedbackSheetLesson8 = await _testRepository.GetFeedbackSheet();
+                        if (feedbackSheetLesson8 != null)
+                        {
+                            foreach (var student in lessonInstanceStudents)
+                            {
+                                TestInstance obj = new TestInstance
+                                {
+                                    LessonInstanceId = lessonInstances[7].Id,
+                                    StudentId = student.StudentId,
+                                    Status = (int)TestInstanceEnum.Closed,
+                                    TestId = feedbackSheetLesson8.Id,
+                                    CorrectionTeacherId = null,
+                                    GroupInstanceId = groupInstance.Id,
+                                    StartDate = lessonInstances[7].StartDate
+                                };
+                                testInstance.Add(obj);
+                            }
+                        }
+                    }
+
+
                     await _testInstanceRepository.AddBulkAsync(testInstance);
                 }
                 else

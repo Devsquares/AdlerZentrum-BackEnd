@@ -111,7 +111,7 @@ namespace Application.Mappings
             .ForMember(destination => destination.LessonInstanceSerial, opts => opts.MapFrom(source => source.LessonInstance.Serial));
 
             CreateMap<LessonInstance, LessonInstanceViewModel>().ReverseMap();
-            CreateMap<LessonInstanceStudent,LessonInstanceStudentViewModel>().ReverseMap();
+            CreateMap<LessonInstanceStudent, LessonInstanceStudentViewModel>().ReverseMap();
             CreateMap<GroupInstance, GroupInstanceViewModel>().ReverseMap();
             CreateMap<GetGroupInstanceByIdTeacherQuery, RequestParameter>().ReverseMap();
             CreateMap<TeacherGroupInstanceAssignment, TeacherGroupInstanceViewModel>().ReverseMap();
@@ -156,6 +156,16 @@ namespace Application.Mappings
             CreateMap<GetAllAdlerCardsBundlesViewModel, AdlerCardsBundle>().ReverseMap();
             CreateMap<CreateAdlerCardsUnitCommand, AdlerCardsUnit>().ReverseMap();
             CreateMap<CreateAdlerCardCommand, AdlerCard>().ReverseMap();
+            CreateMap<GetAllAdlerCardSubmissionsParameter, GetAllAdlerCardSubmissionsQuery>().ReverseMap();
+            CreateMap<GetAllAdlerCardSubmissionsViewModel, AdlerCardSubmission>().ReverseMap();
+
+            // Feedback sheet:
+            CreateMap<TestInstance, GetAllFeedbackSheetsViewModel>()
+               .ForMember(destination => destination.StudentName, opts => opts.MapFrom(source => source.Student.FirstName + source.Student.LastName))
+               .ForMember(destination => destination.DueDate, opts => opts.MapFrom(source => source.LessonInstance.EndDate))
+               .ForMember(destination => destination.LessonSerial, opts => opts.MapFrom(source => source.LessonInstance.Serial))
+               .ForMember(destination => destination.GroupSerial, opts => opts.MapFrom(source => source.GroupInstance.Serial));
+
 
             //teacher absence
             CreateMap<CreateTeacherAbsenceCommand, TeacherAbsence>().ReverseMap();

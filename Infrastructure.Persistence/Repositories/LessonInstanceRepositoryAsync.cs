@@ -99,10 +99,11 @@ namespace Infrastructure.Persistence.Repositories
             return lessonDates;
         }
 
-        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize)
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            return await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
-            && String.IsNullOrEmpty(TeacherName) ? true :
+            //todo check addDays
+            var data =  await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
+            && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
            (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))
             )
               .Select(x => new LateSubmissionsViewModel()
@@ -110,15 +111,17 @@ namespace Infrastructure.Persistence.Repositories
                   Id = x.Id,
                   Teacher = x.SubmittedReportTeacher,
                   SubmissionDate = x.SubmissionDate.Value,
-                  ExpectedDate = x.EndDate.AddDays(1),
-                  DelayDuration = (x.SubmissionDate.Value - x.EndDate.AddDays(1)).Hours
+                  ExpectedDate = x.DueDate.Value,
+                  DelayDuration = (x.SubmissionDate.Value - x.DueDate.Value).Hours,
+                  LessonInstance = x
               }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return new List<LateSubmissionsViewModel>(data);
         }
 
-        public int GetLateSubmissionsCount(string TeacherName)
+        public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
-            return lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.EndDate.AddDays(1)
-            && String.IsNullOrEmpty(TeacherName) ? true :
+            return lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
+            && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
            (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))).Count();
         }
 

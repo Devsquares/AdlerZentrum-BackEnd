@@ -24,11 +24,15 @@ namespace Application.Interfaces.Repositories
         Task<List<TestInstance>> GetProgressByStudentId(string studentID, List<int> groupInstanceIds);
         Task<List<TestInstance>> GetAllTestInstancesByGroupAndTest(int groupInstance, int testId);
         Task<List<TestInstance>> GetAllPlacementTestsByStudent(string studentId);
-        Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize);
-        int GetLateSubmissionsCount(string TeacherName);
+        Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen);
+        int GetLateSubmissionsCount(string TeacherName, bool DelaySeen);
         Test GetSubLevelTestByGroupInstance(int groupinstanceId);
         Test GetFinalLevelTestByGroupInstance(int groupinstanceId);
         Test GetQuizTestByGroupInstanceByLessonDef(int groupinstanceId, int lessonDefinationdId);
         Task<List<TestInstance>> GetAllTestInstancesByListGroup(List<int> groupInstanceIds);
+        Task<IReadOnlyList<TestInstance>> GetFeedbackSheetInstancesForStudentByGroupInstanceId(string StudentId, int GroupInstanceId);
+        Task<IReadOnlyList<TestInstance>> GetFeedbackSheetInstancesForStudent(string StudentId);
+        Task<IReadOnlyList<TestInstance>> GetFeedbackSheetsPagedReponseAsync(int pageNumber, int pageSize, int GroupInstanceId, string StudentName, TestInstanceEnum Status, int LessonInstanceId);
+        Task<int> GetFeedbackSheetsPagedReponseCountAsync(int GroupInstanceId, string StudentName, TestInstanceEnum Status, int LessonInstanceId);
     }
 }

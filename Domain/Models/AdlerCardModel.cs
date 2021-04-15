@@ -7,6 +7,7 @@ namespace Domain.Models
 {
     public class AdlerCardModel
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public int AdlerCardsUnitId { get; set; }
         public Question Question { get; set; }
@@ -17,5 +18,7 @@ namespace Domain.Models
         public int AdlerCardsTypeId { get; set; }
         public Level Level { get; set; }
         public int LevelId { get; set; }
+        public int AdlerCardSubmissionStatus { get; set; }
+        public ICollection<SingleQuestion> SingleQuestions { get; set; }
     }
 }

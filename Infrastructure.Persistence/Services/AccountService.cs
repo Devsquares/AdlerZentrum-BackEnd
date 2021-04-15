@@ -119,6 +119,8 @@ namespace Infrastructure.Persistence.Services
             response.BanComment = user.BanComment;
             response.SubLevelId = user.SublevelId;
             response.PlacementTestId = user.PlacmentTestId;
+            response.AdlerCardBalance = user.AdlerCardBalance;
+            response.Claims =   await _userManager.GetClaimsAsync(user);
 
             if (user.SublevelId.HasValue && user.SublevelId != 0)
             {
@@ -176,6 +178,8 @@ namespace Infrastructure.Persistence.Services
             response.ChangePassword = user.ChangePassword;
             response.SubLevelId = user.SublevelId;
             response.PlacementTestId = user.PlacmentTestId;
+            response.AdlerCardBalance = user.AdlerCardBalance;
+            response.Claims =   await _userManager.GetClaimsAsync(user);
 
             if (user.SublevelId.HasValue && user.SublevelId != 0)
             {
@@ -486,8 +490,8 @@ namespace Infrastructure.Persistence.Services
 
             var staff = (from user in _userManager.Users
                          join userrole in _context.UserRoles on user.Id equals userrole.UserId
-                         join roles in _context.Roles on userrole.RoleId equals roles.Id 
- 
+                         join roles in _context.Roles on userrole.RoleId equals roles.Id
+
                          where ((string.IsNullOrEmpty(role) || role == "Guest" || role == "Student") ? true : roles.NormalizedName.ToLower() == role.ToLower())
                          && roles.Name != "Student"
                          select new GetAllUsersViewModel
@@ -526,7 +530,7 @@ namespace Infrastructure.Persistence.Services
         }
 
         public async Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, int role)
-        { 
+        {
             ApplicationUser user = new ApplicationUser();
             Reflection.CopyProperties(request, user);
 

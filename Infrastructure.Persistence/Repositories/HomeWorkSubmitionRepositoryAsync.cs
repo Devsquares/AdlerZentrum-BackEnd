@@ -54,25 +54,28 @@ namespace Infrastructure.Persistence.Repositories
             return await homeWorkSubmitions.Include(x => x.Homework.LessonInstance).Include(x => x.Student).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
-        public int GetLateSubmissionsCount(string TeacherName)
+        public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
-            return homeWorkSubmitions.Where(x => x.CorrectionDate == null || x.CorrectionDate > x.CorrectionDueDate
-               && String.IsNullOrEmpty(TeacherName) ? true :
+            return homeWorkSubmitions.Where(x => (x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) || x.CorrectionDate > x.CorrectionDueDate
+              && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
        (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
         }
 
-        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize)
+        public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            return await homeWorkSubmitions.Where(x => x.CorrectionDate == null || x.CorrectionDate > x.CorrectionDueDate
-                   && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName)))
+            //(x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))
+            return await homeWorkSubmitions.Where(x => (x.CorrectionDate == null && x.CorrectionDueDate<DateTime.Now) || x.CorrectionDate > x.CorrectionDueDate
+                  && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
+          (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))
+          )
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,
                   Teacher = x.CorrectionTeacher,
-                  SubmissionDate = x.CorrectionDate,
-                  ExpectedDate = x.CorrectionDueDate.Value,
-                  DelayDuration = (x.CorrectionDate.Value - x.CorrectionDueDate.Value).Hours
+                  SubmissionDate = x.CorrectionDate.HasValue? x.CorrectionDate:null,
+                  ExpectedDate = x.CorrectionDueDate.HasValue ? x.CorrectionDueDate:null,
+                  DelayDuration = x.CorrectionDate.HasValue ? (x.CorrectionDate.Value - x.CorrectionDueDate.Value).Hours : (x.CorrectionDueDate.Value - DateTime.Now).Hours,
+                  homeworkSubmission = x
               })
               .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(); 
         }
