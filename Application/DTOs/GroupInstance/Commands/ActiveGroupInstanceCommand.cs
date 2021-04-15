@@ -260,6 +260,54 @@ namespace Application.DTOs
                             }
                         }
                     }
+
+                    // feedback sheet lesson 4
+                    if (lessonInstances[3] != null)
+                    {
+                        var feedbackSheetLesson4 = await _testRepository.GetFeedbackSheet();
+                        if (feedbackSheetLesson4 != null)
+                        {
+                            foreach (var student in lessonInstanceStudents)
+                            {
+                                TestInstance obj = new TestInstance
+                                {
+                                    LessonInstanceId = lessonInstances[3].Id,
+                                    StudentId = student.StudentId,
+                                    Status = (int)TestInstanceEnum.Closed,
+                                    TestId = feedbackSheetLesson4.Id,
+                                    CorrectionTeacherId = null,
+                                    GroupInstanceId = groupInstance.Id,
+                                    StartDate = lessonInstances[3].StartDate
+                                };
+                                testInstance.Add(obj);
+                            }
+                        }
+                    }
+
+
+                    if (lessonInstances[7] != null)
+                    {
+                        var feedbackSheetLesson8 = await _testRepository.GetFeedbackSheet();
+                        if (feedbackSheetLesson8 != null)
+                        {
+                            foreach (var student in lessonInstanceStudents)
+                            {
+                                TestInstance obj = new TestInstance
+                                {
+                                    LessonInstanceId = lessonInstances[7].Id,
+                                    StudentId = student.StudentId,
+                                    Status = (int)TestInstanceEnum.Closed,
+                                    TestId = feedbackSheetLesson8.Id,
+                                    CorrectionTeacherId = null,
+                                    GroupInstanceId = groupInstance.Id,
+                                    StartDate = lessonInstances[7].StartDate
+                                };
+                                testInstance.Add(obj);
+                            }
+                        }
+                    }
+
+
                     await _testInstanceRepository.AddBulkAsync(testInstance);
                 }
                 else

@@ -30,5 +30,9 @@ namespace Application.Interfaces.Repositories
         Test GetFinalLevelTestByGroupInstance(int groupinstanceId);
         Test GetQuizTestByGroupInstanceByLessonDef(int groupinstanceId, int lessonDefinationdId);
         Task<List<TestInstance>> GetAllTestInstancesByListGroup(List<int> groupInstanceIds);
+        Task<IReadOnlyList<TestInstance>> GetFeedbackSheetInstancesForStudentByGroupInstanceId(string StudentId, int GroupInstanceId);
+        Task<IReadOnlyList<TestInstance>> GetFeedbackSheetInstancesForStudent(string StudentId);
+        Task<IReadOnlyList<TestInstance>> GetFeedbackSheetsPagedReponseAsync(int pageNumber, int pageSize, int GroupInstanceId, string StudentName, TestInstanceEnum Status, int LessonInstanceId);
+        Task<int> GetFeedbackSheetsPagedReponseCountAsync(int GroupInstanceId, string StudentName, TestInstanceEnum Status, int LessonInstanceId);
     }
 }

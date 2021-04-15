@@ -22,5 +22,6 @@ namespace Domain.Entities
         public int Status { get; set; }
         public double TotalPoint { get; set; }
         public DateTime? PlacementStartDate { get; set; }
+        public bool IsArchived { get; set; } = false;
     }
 }

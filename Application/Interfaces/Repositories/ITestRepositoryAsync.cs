@@ -16,5 +16,7 @@ namespace Application.Interfaces.Repositories
         int GetCount(int? testtype = null, int? levelId = null, int? subLevelId = null, int? testStatus = null);
         Task<IReadOnlyList<TestsViewModel>> GetPlacementPagedReponseAsync(int pageNumber, int pageSize, int? testStatus = null);
         int GetPlacementCount();
+        Task<Test> GetFeedbackSheet();
+        Task<int> FeedbackSheetNotArchivedCount();
     }
 }
