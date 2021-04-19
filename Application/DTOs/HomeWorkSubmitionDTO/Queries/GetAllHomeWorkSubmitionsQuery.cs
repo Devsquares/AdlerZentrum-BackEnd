@@ -17,10 +17,14 @@ namespace Application.DTOs
     public class GetAllHomeWorkSubmitionsQueryHandler : IRequestHandler<GetAllHomeWorkSubmitionsQuery, IEnumerable<GetAllHomeWorkSubmitionsViewModel>>
     {
         private readonly IHomeWorkSubmitionRepositoryAsync _HomeWorkSubmitionRepository;
+        private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignment;
         private readonly IMapper _mapper;
-        public GetAllHomeWorkSubmitionsQueryHandler(IHomeWorkSubmitionRepositoryAsync HomeWorkSubmitionRepository, IMapper mapper)
+        public GetAllHomeWorkSubmitionsQueryHandler(IHomeWorkSubmitionRepositoryAsync HomeWorkSubmitionRepository,
+            ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignment,
+            IMapper mapper)
         {
             _HomeWorkSubmitionRepository = HomeWorkSubmitionRepository;
+            _teacherGroupInstanceAssignment = teacherGroupInstanceAssignment;
             _mapper = mapper;
         }
 
@@ -29,7 +33,15 @@ namespace Application.DTOs
             IReadOnlyList<HomeWorkSubmition> homeWorkSubmitions = null;
             if (request.GroupInstanceId == null)
             {
-                homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByTeacherIdAsync(request.TeacherId, request.Status);
+                var res = _teacherGroupInstanceAssignment.GetByTeacherId(request.TeacherId);
+                if (res.LessonInstanceId == null)
+                {
+                    homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByTeacherIdAsync(request.TeacherId, request.Status);
+                }
+                else
+                {
+                    homeWorkSubmitions = await _HomeWorkSubmitionRepository.GetAllByLessonIdAsync(res.LessonInstanceId.Value, request.Status);
+                }
             }
             else
             {

@@ -174,6 +174,8 @@ namespace Application.Mappings
 
             // Duplicate exp
             CreateMap<GetAllDuplicateExceptionsQuery, RequestParameter>().ReverseMap();
+
+            CreateMap<GetAllTeacerGroupInstanceAssignmentViewModel, TeacherGroupInstanceAssignment>().ReverseMap();
         }
     }
 }

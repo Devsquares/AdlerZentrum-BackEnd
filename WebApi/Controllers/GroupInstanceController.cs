@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application;
 using Application.DTOs;
 using Application.DTOs.GroupInstance.Commands;
 using Application.DTOs.GroupInstance.Queries;
 using Application.DTOs.GroupInstance.Queries.GetAll;
 using Application.DTOs.GroupInstance.Queries.GetById;
 using Application.Features;
-using Application.Filters; 
+using Application.Filters;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -175,6 +176,35 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(request));
         }
 
+        [HttpGet("GetAllTeacerGroupInstanceAssignments")]
+        public async Task<IActionResult> GetAllTeacerGroupInstanceAssignments([FromQuery] GetAllTeacerGroupInstanceAssignmentsQuery query)
+        {
+            if (query.PageNumber == 0)
+            {
+                query.PageNumber = 1;
+            }
+            if (query.PageSize == 0)
+            {
+                query.PageSize = 10;
+            }
+            return Ok(await Mediator.Send(new GetAllTeacerGroupInstanceAssignmentsQuery()
+            {
+                GroupDefinitionId = query.GroupDefinitionId,
+                SublevelId = query.SublevelId,
+                PageSize = query.PageSize,
+                PageNumber = query.PageNumber
+            }));
+        }
 
+        [HttpPost("AssignAdditionalTeacherToGroupInstance")]
+        public async Task<IActionResult> AssignAdditionalTeacherToGroupInstance([FromBody] AssignAdditionalTeacherToGroupInstanceCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+        [HttpDelete("RemoveTeacherGroupInstanceAssignment")]
+        public async Task<IActionResult> RemoveTeacherGroupInstanceAssignment([FromQuery] RemoveTeacherGroupInstanceAssignmentCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
     }
 }

@@ -12,5 +12,6 @@ namespace Application.Interfaces.Repositories
         Task<IReadOnlyList<HomeWorkSubmition>> GetAllByGroupInstanceAsync(int groupInstanceId, int? Status);
         Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string? TeacherName, int pageNumber, int pageSize, bool DelaySeen);
         int GetLateSubmissionsCount(string TeacherName, bool DelaySeen);
+        Task<IReadOnlyList<HomeWorkSubmition>> GetAllByLessonIdAsync(int lessonId, int? Status);
     }
 }
