@@ -41,8 +41,14 @@ namespace Application.Features.TeacherAbsence.Commands.CreateTeacherAbsence
             {
                 throw new ApiException("Teacher Absence object not found");
             }
+            var teachergroupinstance = _teacherGroupInstanceAssignmentRepository.GetByGroupInstanceIdWithoutDefault(teacherabsence.LessonInstance.GroupInstanceId);
+            if (teachergroupinstance != null)
+            {
+                throw new ApiException("This group is already assigned to a teacher");
+            }
             teacherabsence.Status = (int)TeacherAbsenceStatusEnum.Accepted;
             await _teacherabsenceRepository.UpdateAsync(teacherabsence);
+           
             await _teacherGroupInstanceAssignmentRepository.AddAsync(new Domain.Entities.TeacherGroupInstanceAssignment()
             {
                 TeacherId = request.TeacherId,

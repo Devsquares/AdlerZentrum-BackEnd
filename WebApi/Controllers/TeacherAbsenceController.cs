@@ -22,6 +22,7 @@ namespace WebApi.Controllers.v1
             return Ok(await Mediator.Send(new GetAllTeacherAbsencesQuery() {
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
+                Status = filter.Status
                 //FilterArray = filter.FilterArray,
                 //FilterRange = filter.FilterRange,
                 //FilterSearch = filter.FilterSearch,

@@ -38,11 +38,11 @@ namespace Application.Features.TeacherAbsence.Commands.CreateTeacherAbsence
             var teacherabsence = _mapper.Map<Domain.Entities.TeacherAbsence>(request);
             teacherabsence.Status = (int)TeacherAbsenceStatusEnum.New;
             await _teacherabsenceRepository.AddAsync(teacherabsence);
-
+            var absence = _teacherabsenceRepository.GetbyId(teacherabsence.Id);
             await _jobRepository.AddAsync(new Domain.Entities.MailJob
             {
                 Type = (int)MailJobTypeEnum.RequestAbsenceToSuperVisor,
-                GroupInstanceId = teacherabsence.LessonInstance.GroupInstanceId,
+                GroupInstanceId = absence.LessonInstance.GroupInstanceId,
                 TeacherId = request.TeacherId,
                 Status = (int)JobStatusEnum.New
             });
