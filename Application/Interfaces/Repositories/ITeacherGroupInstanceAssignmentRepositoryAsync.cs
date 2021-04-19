@@ -12,5 +12,6 @@ namespace Application.Interfaces.Repositories
         List<TeacherGroupInstanceAssignment> GetAll(int pageNumber, int pageSize, out int totalCount, int? sublevelId = null, int? groupDefinationId = null);
         TeacherGroupInstanceAssignment GetFirstNotIsDefault(int groupInstanceId);
         TeacherGroupInstanceAssignment GetByTeacherId(string TeacherId);
+        public TeacherGroupInstanceAssignment GetByGroupInstanceIdWithoutDefault(int groupInstanceId);
     }
 }

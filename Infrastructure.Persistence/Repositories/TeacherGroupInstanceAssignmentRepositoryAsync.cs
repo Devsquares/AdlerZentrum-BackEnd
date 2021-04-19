@@ -55,5 +55,9 @@ namespace Infrastructure.Persistence.Repositories
         {
             return groupInstances.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstanceId && x.IsDefault == false).FirstOrDefault();
         }
+        public TeacherGroupInstanceAssignment GetByGroupInstanceIdWithoutDefault(int groupInstanceId)
+        {
+            return groupInstances.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstanceId).FirstOrDefault();
+        }
     }
 }
