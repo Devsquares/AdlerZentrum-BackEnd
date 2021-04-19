@@ -9,5 +9,6 @@ namespace Application.Interfaces.Repositories
         TeacherGroupInstanceAssignment GetByGroupInstanceId(int groupInstanceId);
         TeacherGroupInstanceAssignment GetByTeachGroupInstanceId(string TeacherId, int groupInstanceId);
         List<TeacherGroupInstanceAssignment> GetListByGroupInstanceId(int groupInstanceId);
+        public TeacherGroupInstanceAssignment GetByGroupInstanceIdWithoutDefault(int groupInstanceId);
     }
 }

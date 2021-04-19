@@ -66,7 +66,7 @@ namespace Infrastructure.Persistence.Repositories
                    .Skip((pageNumber - 1) * pageSize)
                    .Take(pageSize)
                    //.OrderBy(sortBy, sortASC)
-                   .AsNoTracking()
+                  // .AsNoTracking()
                    .ToListAsync();
         }
 

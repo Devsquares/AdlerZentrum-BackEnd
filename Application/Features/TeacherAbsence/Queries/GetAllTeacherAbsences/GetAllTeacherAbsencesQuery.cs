@@ -42,7 +42,7 @@ namespace Application.Features.TeacherAbsence.Queries.GetAllTeacherAbsences
             //int count = _teacherabsenceRepository.GetCount(validFilter);
             if (request.PageNumber == 0) request.PageNumber = 1;
             if (request.PageSize == 0) request.PageSize = 10;
-            var teacherabsence = await _teacherabsenceRepository.GetAll(request.PageSize,request.PageSize,request.Status);
+            var teacherabsence = await _teacherabsenceRepository.GetAll(request.PageNumber,request.PageSize,request.Status);
             var teacherabsenceViewModel = _mapper.Map<IEnumerable<GetAllTeacherAbsencesViewModel>>(teacherabsence);
             return new Wrappers.PagedResponse<IEnumerable<GetAllTeacherAbsencesViewModel>>(teacherabsenceViewModel, request.PageNumber, request.PageSize, teacherabsence.Count);
         }
