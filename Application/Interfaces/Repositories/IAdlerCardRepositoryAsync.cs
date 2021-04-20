@@ -11,6 +11,6 @@ namespace Application.Interfaces.Repositories
     {
         List<GetAdlerCardGroupsForStudentViewModel> GetAdlerCardGroupsForStudent();
         List<AdlerCard> GetAllByUnitId(int unitId);
-        List<AdlerCardModel> GetAdlerCardsForStudent(string studentId, int adlerCardUnitId);
+        List<AdlerCardModel> GetAdlerCardsForStudent(int pageNumber, int pageSize, string studentId, int adlerCardUnitId, out int count);
     }
 }

@@ -89,9 +89,9 @@ namespace WebApi.Controllers
         [HttpGet("GetAllAdlerCardForStudent")]
         //[Authorize(Roles = "SuperAdmin")]
         
-        public async Task<IActionResult> GetALLAdlerCardForStudent(int adlerCardUnitId, string studentId)
+        public async Task<IActionResult> GetALLAdlerCardForStudent([FromQuery] GetAllAdlerCardsForStudent AdlerCardsForStudent)
         {
-            return Ok(await Mediator.Send(new GetAllAdlerCardsForStudent { AdlerCardUnitId = adlerCardUnitId , StudentId = studentId }));
+            return Ok(await Mediator.Send(AdlerCardsForStudent));
         }
 
     }
