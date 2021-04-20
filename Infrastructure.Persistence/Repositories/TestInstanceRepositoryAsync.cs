@@ -283,7 +283,11 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            return await _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
+            return await _testInstances
+                .Include(x => x.GroupInstance)
+                .Include(x => x.CorrectionTeacher)
+                .Include(x => x.Student)
+                .Where(x => x.SubmissionDate == null || x.SubmissionDate == DateTime.MinValue || x.SubmissionDate > x.CorrectionDueDate
                    && x.ManualCorrection && x.DelaySeen == DelaySeen
                    && String.IsNullOrEmpty(TeacherName) ? true :
            (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName)))
@@ -291,10 +295,14 @@ namespace Infrastructure.Persistence.Repositories
              {
                  Id = x.Id,
                  TestInstance = x,
-                 Teacher = x.CorrectionTeacher,
+                 Teacher = x.CorrectionTeacher == null ? string.Empty : x.CorrectionTeacher.FirstName.ToString() + " " + x.CorrectionTeacher.LastName.ToString(),
                  SubmissionDate = x.SubmissionDate,
                  ExpectedDate = x.CorrectionDueDate,
-                 DelayDuration = (x.SubmissionDate - x.CorrectionDueDate).Hours
+                 DelayDuration = (x.SubmissionDate - x.CorrectionDueDate).Hours,
+                 GroupInstance = x.GroupInstance,
+                 StudentEmail = x.Student.Email,
+                 Test = x.Test,
+                 StudentName = x.Student == null ? string.Empty : x.Student.FirstName.ToString() + " " + x.Student.LastName.ToString()
              }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 

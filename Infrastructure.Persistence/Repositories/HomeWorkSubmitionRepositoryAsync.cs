@@ -76,18 +76,29 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
             //(x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))
-            return await homeWorkSubmitions.Where(x => (x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) || x.CorrectionDate > x.CorrectionDueDate
-                  && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-          (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))
+            return await homeWorkSubmitions
+                .Include(x => x.CorrectionTeacher)
+                .Include(x => x.Homework.Teacher)
+                .Include(x => x.Student)
+                .Include(x => x.Homework.GroupInstance)
+                .Include(x => x.Homework.LessonInstance)
+                .Where(x => (x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) || x.CorrectionDate > x.CorrectionDueDate
+                    && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
+            (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))
           )
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,
-                  Teacher = x.CorrectionTeacher,
+                  Teacher = x.CorrectionTeacher == null ? x.Homework.Teacher.FirstName.ToString() + " " + x.Homework.Teacher.LastName.ToString() : x.CorrectionTeacher.FirstName.ToString() + " " + x.CorrectionTeacher.LastName.ToString(),
                   SubmissionDate = x.CorrectionDate.HasValue ? x.CorrectionDate : null,
                   ExpectedDate = x.CorrectionDueDate.HasValue ? x.CorrectionDueDate : null,
                   DelayDuration = x.CorrectionDate.HasValue ? (x.CorrectionDate.Value - x.CorrectionDueDate.Value).Hours : (x.CorrectionDueDate.Value - DateTime.Now).Hours,
-                  homeworkSubmission = x
+                  homeworkSubmission = x,
+                  GroupInstance = x.Homework.GroupInstance,
+                  LessonInstance = x.Homework.LessonInstance,
+                  Homework = x.Homework,
+                  StudentEmail = x.Student.Email,
+                  StudentName = x.Student.FirstName.ToString() + " " + x.Student.LastName.ToString()
               })
               .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }

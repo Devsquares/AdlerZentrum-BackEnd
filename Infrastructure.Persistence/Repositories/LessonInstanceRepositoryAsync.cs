@@ -102,18 +102,24 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
             //todo check addDays
-            var data =  await lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
+            var data = await lessonInstances
+                .Include(x => x.SubmittedReportTeacher)
+                .Include(x => x.GroupInstance.TeacherAssignment.Teacher)
+                .Include(x => x.LessonDefinition)
+                .Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
             && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
            (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))
             )
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,
-                  Teacher = x.SubmittedReportTeacher,
+                  Teacher = x.SubmittedReportTeacher == null ? x.GroupInstance.TeacherAssignment.Teacher.FirstName.ToString() + " " + x.GroupInstance.TeacherAssignment.Teacher.LastName.ToString()
+                  : x.SubmittedReportTeacher.FirstName.ToString() + " " + x.SubmittedReportTeacher.LastName.ToString(),
                   SubmissionDate = x.SubmissionDate.Value,
                   ExpectedDate = x.DueDate.Value,
                   DelayDuration = (x.SubmissionDate.Value - x.DueDate.Value).Hours,
-                  LessonInstance = x
+                  LessonInstance = x,
+                  GroupInstance = x.GroupInstance
               }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             return new List<LateSubmissionsViewModel>(data);
         }
