@@ -151,6 +151,10 @@ namespace Infrastructure.Persistence.Repositories
             {
                 throw new Exception("This promocode Instance was used before");
             }
+            if (promocodeInstanceObject.PromoCode.IsStrong)
+            {
+                return true;
+            }
             var promocodes = _groupconditionpromocodes.Include(x => x.GroupConditionDetails)
                 .Join(_dbContext.GroupInstances,
                 gcpc => gcpc.GroupConditionDetails.GroupConditionId,
@@ -160,7 +164,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Select(x => x.gcpc).ToList();
             var GroupConditionDetails = promocodes.GroupBy(x => x.GroupConditionDetailsId).ToList();
 
-            var interestedStudentsCount = _interestedStudent.Include(x => x.PromoCodeInstance).Where(x => x.GroupDefinitionId == groupDefinitionId && x.PromoCodeInstance.PromoCodeId == promocodeInstanceObject.PromoCodeId).Count();
+            var interestedStudentsCount = _interestedStudent.Include(x => x.PromoCodeInstance).Where(x => x.GroupDefinitionId == groupDefinitionId && x.PromoCodeInstance.PromoCodeId == promocodeInstanceObject.PromoCodeId && x.PromoCodeInstance.PromoCode.IsStrong == false).Count();
             foreach (var item in GroupConditionDetails)
             {
                 var validpromo = item.Where(x => x.PromoCodeId == promocodeInstanceObject.PromoCodeId).FirstOrDefault();
