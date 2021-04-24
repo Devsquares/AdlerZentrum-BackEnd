@@ -32,6 +32,5 @@
     <Folder Include="DTOs\DisqualificationDTO\" />
     <Folder Include="Features\Generic\" />
     <Folder Include="Features\GroupInstancesStudents\Queries\" />
-    <Folder Include="Features\TeacherActions\Queries\" />
   </ItemGroup>
 </Project>
