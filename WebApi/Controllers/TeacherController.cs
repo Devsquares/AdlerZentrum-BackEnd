@@ -3,6 +3,7 @@ using Application.DTOs.GroupInstance.Commands;
 using Application.Features;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace WebApi.Controllers
@@ -49,7 +50,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("GetAllTeachers")]
-        public async Task<IActionResult> GetAllTeachers(int PageSize, int PageNumber, string teacherName)
+        public async Task<IActionResult> GetAllTeachers( int PageSize, int PageNumber, string teacherName)
         {
             if (PageSize == 0)
             {
@@ -61,6 +62,12 @@ namespace WebApi.Controllers
             }
             var report = await _accountService.GetAllTeachers(PageNumber, PageSize, teacherName);
             return Ok(report);
+        }
+
+        [HttpGet("GetTeacherAnalysisReport")]
+        public async Task<IActionResult> GetTeacherAnalysisReport([FromQuery]GetTeacherAnalysisReportQuery TeacherAnalysisReportQuery)
+        {
+            return Ok(await Mediator.Send(TeacherAnalysisReportQuery));
         }
 
     }

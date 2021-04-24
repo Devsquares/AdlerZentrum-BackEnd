@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using Domain.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Application.Interfaces.Repositories
@@ -13,5 +15,8 @@ namespace Application.Interfaces.Repositories
         TeacherGroupInstanceAssignment GetFirstNotIsDefault(int groupInstanceId);
         TeacherGroupInstanceAssignment GetByTeacherId(string TeacherId);
         public TeacherGroupInstanceAssignment GetByGroupInstanceIdWithoutDefault(int groupInstanceId);
+        List<TeacherAnalysisReportModel> GetTeacherAnalysisReport(int pageNumber, int PageSize, string teacherName, DateTime? from, DateTime? to
+            , int? homeworksUploadDelayFrom, int? homeworksUploadDelayTo, int? homeworksCorrectionDelayFrom, int? homeworksCorrectionDelayTo,
+            int? testsCorrectionDelayFrom, int? testsCorrectionDelayTo, int? feedbackScoreFrom, int? feedbackScoreto, out int count);
     }
 }
