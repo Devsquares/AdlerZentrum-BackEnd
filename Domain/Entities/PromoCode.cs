@@ -11,5 +11,6 @@ namespace Domain.Entities
         public int? Status { get; set; }
         public int? GroupId { get; set; }
         public int Value { get; set; }
+        public bool IsStrong { get; set; }
     }
 }

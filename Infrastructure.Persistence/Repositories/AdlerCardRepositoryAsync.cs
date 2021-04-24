@@ -50,7 +50,7 @@ namespace Infrastructure.Persistence.Repositories
             return adlerCards;
         }
 
-        public List<AdlerCardModel> GetAdlerCardsForStudent(string studentId, int adlerCardUnitId)
+        public List<AdlerCardModel> GetAdlerCardsForStudent(int pageNumber,int pageSize,string studentId, int adlerCardUnitId,out int count)
         {
             var query = (from ac in _adlercards
                          join sin in _context.SingleQuestions on ac.QuestionId equals sin.QuestionId
@@ -72,8 +72,11 @@ namespace Infrastructure.Persistence.Repositories
                              Level = ac.Level,
                              AdlerCardSubmissionStatus = x.Status,
                              SingleQuestions = ac.Question.SingleQuestions
-                         }).ToList();
-            return query;
+                         });
+            count = query.Count();
+
+            return query.Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize).ToList();
         }
         public override async Task<IReadOnlyList<AdlerCard>> GetPagedReponseAsync(FilteredRequestParameter filteredRequestParameter)
         {

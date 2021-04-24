@@ -12,11 +12,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class GetAllAdlerCardsForStudent : IRequest<Response<IEnumerable<AdlerCardModel>>>
+    public class GetAllAdlerCardsForStudent : IRequest<PagedResponse<IEnumerable<AdlerCardModel>>>
     {
         public int AdlerCardUnitId { get; set; }
         public string StudentId { get; set; }
-        public class GetAllAdlerCardsForStudentHandler : IRequestHandler<GetAllAdlerCardsForStudent, Response<IEnumerable<AdlerCardModel>>>
+        public int pageNumber { get; set; }
+        public int pageSize { get; set; }
+        public class GetAllAdlerCardsForStudentHandler : IRequestHandler<GetAllAdlerCardsForStudent, PagedResponse<IEnumerable<AdlerCardModel>>>
         {
             private readonly IAdlerCardRepositoryAsync _adlercardRepository;
             private readonly IAdlerCardSubmissionRepositoryAsync _adlerCardSubmissionRepositoryAsync;
@@ -29,15 +31,18 @@ namespace Application.Features
                 _adlerCardsUnitRepositoryAsync = adlerCardsUnitRepositoryAsync;
             }
 
-            public async Task<Response<IEnumerable<AdlerCardModel>>> Handle(GetAllAdlerCardsForStudent request, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<AdlerCardModel>>> Handle(GetAllAdlerCardsForStudent request, CancellationToken cancellationToken)
             {
                 var adlercardunit = _adlerCardsUnitRepositoryAsync.GetByIdAsync(request.AdlerCardUnitId).Result;
                 if(adlercardunit == null)
                 {
                     throw new ApiException("No AdlerCard Unit Found");
                 }
-                var adlerCards = _adlercardRepository.GetAdlerCardsForStudent(request.StudentId, request.AdlerCardUnitId);
-                return new Response<IEnumerable<AdlerCardModel>>(adlerCards);
+                if (request.pageNumber == 0) request.pageNumber = 1;
+                if (request.pageSize == 0) request.pageSize = 10;
+                int count = 0;
+                var adlerCards = _adlercardRepository.GetAdlerCardsForStudent(request.pageNumber, request.pageSize,request.StudentId, request.AdlerCardUnitId,out count);
+                return new PagedResponse<IEnumerable<AdlerCardModel>>(adlerCards, request.pageNumber, request.pageSize,count);
             }
         }
     }
