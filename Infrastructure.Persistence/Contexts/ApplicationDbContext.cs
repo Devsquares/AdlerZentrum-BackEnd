@@ -12,13 +12,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Application.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Persistence.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        private readonly IDateTimeService _dateTime;
-        private readonly IAuthenticatedUserService _authenticatedUser;
+        private readonly IDateTimeService _dateTime; 
+        private readonly IAuthenticatedUserService _authenticatedUser; 
 
         public ApplicationDbContext()
         {
@@ -33,7 +34,7 @@ namespace Infrastructure.Persistence.Contexts
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             _dateTime = dateTime;
-            _authenticatedUser = authenticatedUser;
+            _authenticatedUser = authenticatedUser; 
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Bug> Bugs { get; set; }
@@ -160,6 +161,6 @@ namespace Infrastructure.Persistence.Contexts
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
 
-        }
+        } 
     }
 }

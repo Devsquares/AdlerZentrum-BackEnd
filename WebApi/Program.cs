@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Serilog;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
-
 using Microsoft.Extensions.DependencyInjection;
 using Domain.Entities;
 using MediatR;

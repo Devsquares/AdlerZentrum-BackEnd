@@ -36,15 +36,101 @@ namespace Infrastructure.Persistence.Repositories
                   .OrderBy(x => x.LessonInstanceId).ToListAsync();
         }
 
-        public virtual async Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin()
+        public virtual IReadOnlyList<TestInstance> GetTestInstanceToAssgin(string studentName, string testName, int? testType, bool assigend, int? groupInsatanceId, int? testInstanceId, int pageNumber, int pageSize, out int count)
         {
-            return await _testInstances
-            .Include(x => x.Test)
-            .Include(x => x.Student)
-            .Include(x => x.LessonInstance)
-            .ThenInclude(x => x.GroupInstance)
-             .Where(x => x.CorrectionTeacherId == null).ToListAsync();
+            var query = _testInstances.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(studentName))
+            {
+                query = query.Where(x => x.Student.FirstName.Contains(studentName) || x.Student.LastName.Contains(studentName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(testName))
+            {
+                query = query.Where(x => x.Test.Name.Contains(testName) || x.Test.Name.Contains(testName));
+            }
+
+            if (testType != null)
+            {
+                query = query.Where(x => x.Test.TestTypeId == testType);
+            }
+
+            if (groupInsatanceId != null)
+            {
+                query = query.Where(x => x.GroupInstanceId == groupInsatanceId);
+            }
+
+            if (testInstanceId != null)
+            {
+                query = query.Where(x => x.LessonInstanceId == testInstanceId);
+            }
+
+            if (assigend)
+            {
+                query = query.Where(x => x.CorrectionTeacherId != null);
+            }
+            else
+            {
+                query = query.Where(x => x.CorrectionTeacherId == null);
+            }
+            query = query.Where(x => x.Status <= (int)TestInstanceEnum.Solved);
+            count = query.Count();
+            return query
+                .Include(x => x.Test)
+                .Include(x => x.CorrectionTeacher)
+                .Include(x => x.GroupInstance)
+                .Include(x => x.LessonInstance)
+                .ThenInclude(x => x.GroupInstance)
+                .Include(x => x.Student)
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
+
+        public virtual IReadOnlyList<LessonInstance> GetLessonInstanceToAssign(int? groupInsatanceId, int pageNumber, int pageSize, out int count)
+        {
+            var query = _testInstances.AsQueryable();
+            if (groupInsatanceId != null)
+            {
+                query = query.Where(x => x.GroupInstanceId == groupInsatanceId);
+            }
+            query = query.Where(x => x.CorrectionTeacherId == null);
+
+            query = query.Where(x => x.Status <= (int)TestInstanceEnum.Solved);
+            count = query.Count();
+            return query
+                .Include(x => x.Test)
+                .Include(x => x.CorrectionTeacher)
+                .Include(x => x.GroupInstance)
+                .Include(x => x.LessonInstance)
+                .ThenInclude(x => x.GroupInstance)
+                .Include(x => x.Student)
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x => x.LessonInstance).Distinct().ToList();
+        }
+
+        public virtual IReadOnlyList<GroupInstance> GetGroupInstanceToAssign(int? sublevelId, int? groupDefinitionId, int pageNumber, int pageSize, out int count)
+        {
+            var query = _testInstances.AsQueryable();
+            if (groupDefinitionId != null)
+            {
+                query = query.Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId);
+            }
+            if (sublevelId != null)
+            {
+                query = query.Where(x => x.GroupInstance.GroupDefinition.SubLevelId == sublevelId);
+            }
+            query = query.Where(x => x.CorrectionTeacherId == null);
+
+            query = query.Where(x => x.Status <= (int)TestInstanceEnum.Solved);
+            count = query.Count();
+            return query
+                .Include(x => x.Test)
+                .Include(x => x.CorrectionTeacher)
+                .Include(x => x.GroupInstance)
+                .Include(x => x.LessonInstance)
+                .ThenInclude(x => x.GroupInstance)
+                .Include(x => x.Student)
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x => x.GroupInstance).Distinct().ToList();
+        }
+
 
         public Test GetSubLevelTestByGroupInstance(int groupinstanceId)
         {
@@ -176,8 +262,6 @@ namespace Infrastructure.Persistence.Repositories
             // var items = queryNumericRange.ToList();
         }
 
-
-
         public override Task<TestInstance> GetByIdAsync(int id)
         {
             return _testInstances
@@ -188,6 +272,7 @@ namespace Infrastructure.Persistence.Repositories
                    .Include(x => x.Student)
                    .Where(x => x.Id == id).FirstOrDefaultAsync();
         }
+
         public virtual async Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance)
         {
             return await _testInstances
@@ -196,6 +281,7 @@ namespace Infrastructure.Persistence.Repositories
                   .ThenInclude(x => x.GroupInstance)
                   .Where(x => x.LessonInstance.GroupInstanceId == groupInstance && x.Status == (int)TestInstanceEnum.Corrected).ToListAsync();
         }
+
         public virtual int GetAllTestInstancesResultsCount(int groupInstance)
         {
             return _testInstances

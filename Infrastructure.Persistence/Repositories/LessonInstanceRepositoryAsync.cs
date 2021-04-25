@@ -101,10 +101,10 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            //todo check addDays
+            //todo if not the default.
             var data = await lessonInstances
                 .Include(x => x.SubmittedReportTeacher)
-                .Include(x => x.GroupInstance.TeacherAssignment.Teacher)
+                .Include(x => x.GroupInstance.TeacherAssignment)
                 .Include(x => x.LessonDefinition)
                 .Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
             && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
@@ -113,7 +113,7 @@ namespace Infrastructure.Persistence.Repositories
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,
-                  Teacher = x.SubmittedReportTeacher == null ? x.GroupInstance.TeacherAssignment.Teacher.FirstName.ToString() + " " + x.GroupInstance.TeacherAssignment.Teacher.LastName.ToString()
+                  Teacher = x.SubmittedReportTeacher == null ? x.GroupInstance.TeacherAssignment[0].Teacher.FirstName.ToString() + " " + x.GroupInstance.TeacherAssignment[0].Teacher.LastName.ToString()
                   : x.SubmittedReportTeacher.FirstName.ToString() + " " + x.SubmittedReportTeacher.LastName.ToString(),
                   SubmissionDate = x.SubmissionDate.Value,
                   ExpectedDate = x.DueDate.Value,

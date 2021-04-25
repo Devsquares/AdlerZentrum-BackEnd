@@ -20,6 +20,7 @@ using System.Net;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 
 namespace WebApi
 {
@@ -43,7 +44,7 @@ namespace WebApi
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseMySQL(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence"));
+                options.UseMySQL(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence")).EnableSensitiveDataLogging();
             });
 
             services.Configure<ForwardedHeadersOptions>(options =>
@@ -66,8 +67,7 @@ namespace WebApi
             Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", _config["AWS:AccessKey"]);
             Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", _config["AWS:SecretKey"]);
             services.AddAuthorization(options =>
-            options.AddPolicy("AdlerCardPolicy", policy => policy.RequireClaim("AddAdlerCard")));
-
+            options.AddPolicy("AdlerCardPolicy", policy => policy.RequireClaim("AddAdlerCard"))); 
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -92,12 +92,6 @@ namespace WebApi
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
-            // app.UseStaticFiles();
-            // app.UseStaticFiles(new StaticFileOptions()
-            // {
-            //     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"ListeningAudioFiles")),
-            //     RequestPath = new PathString("/ListeningAudioFiles")
-            // });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSwaggerExtension();
@@ -106,7 +100,7 @@ namespace WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+            }); 
         }
     }
 }

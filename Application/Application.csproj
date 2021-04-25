@@ -30,6 +30,7 @@
   <ItemGroup>
     <Folder Include="DTOs\HomeWorkDTO\Queries\" />
     <Folder Include="DTOs\DisqualificationDTO\" />
+    <Folder Include="DTOs\TestInstanceDTO\" />
     <Folder Include="Features\Generic\" />
     <Folder Include="Features\GroupInstancesStudents\Queries\" />
     <Folder Include="Features\TeacherActions\Queries\" />

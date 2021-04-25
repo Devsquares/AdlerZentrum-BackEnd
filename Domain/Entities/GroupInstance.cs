@@ -17,8 +17,8 @@ namespace Domain.Entities
         public string Serial { get; set; }
         public int? Status { get; set; }
         public ICollection<GroupInstanceStudents> Students { get; set; }
-        public ICollection<LessonInstance> LessonInstances { get; set; } 
-        // TODO: change it to list.
-        public TeacherGroupInstanceAssignment TeacherAssignment { get; set; }
+        public ICollection<LessonInstance> LessonInstances { get; set; }
+
+        public virtual List<TeacherGroupInstanceAssignment> TeacherAssignment { get; set; }
     }
 }

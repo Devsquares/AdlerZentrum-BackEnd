@@ -11,7 +11,9 @@ namespace Application.Interfaces.Repositories
     public interface ITestInstanceRepositoryAsync : IGenericRepositoryAsync<TestInstance>
     {
         Task<IReadOnlyList<TestInstance>> GetAllTestsForStudentAsync(string student, int groupInstance, TestTypeEnum testType);
-        Task<IReadOnlyList<TestInstance>> GetTestInstanceToAssgin();
+        IReadOnlyList<TestInstance> GetTestInstanceToAssgin(string studentName, string testName, int? testType, bool assigend, int? groupInsatanceId, int? testInstanceId, int pageNumber, int pageSize, out int count);
+        IReadOnlyList<LessonInstance> GetLessonInstanceToAssign(int? groupInsatanceId, int pageNumber, int pageSize, out int count);
+        IReadOnlyList<GroupInstance> GetGroupInstanceToAssign(int? sublevelId, int? groupDefinitionId, int pageNumber, int pageSize, out int count);
         Task<IReadOnlyList<TestInstance>> GetTestInstanceByTeacher(string correctionTeacherId, int? status, int? TestType, int? GroupInstanceId);
         Task<IReadOnlyList<TestInstance>> GetAllTestInstancesResults(int groupInstance);
         int GetAllTestInstancesResultsCount(int groupInstance);

@@ -49,7 +49,7 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
-                TestType = Application.Enums.TestTypeEnum.quizz
+                TestType = TestTypeEnum.quizz
             }));
         }
 
@@ -66,7 +66,7 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = GroupInstanceId,
-                TestType = Application.Enums.TestTypeEnum.quizz
+                TestType = TestTypeEnum.quizz
             }));
         }
 
@@ -83,7 +83,7 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
-                TestType = Application.Enums.TestTypeEnum.final
+                TestType = TestTypeEnum.final
             }));
         }
 
@@ -99,7 +99,7 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = GroupInstanceId,
-                TestType = Application.Enums.TestTypeEnum.final
+                TestType = TestTypeEnum.final
             }));
         }
 
@@ -111,7 +111,7 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = AuthenticatedUserService.GroupInstanceId.Value,
-                TestType = Application.Enums.TestTypeEnum.subLevel
+                TestType = TestTypeEnum.subLevel
             }));
         }
 
@@ -123,7 +123,7 @@ namespace WebApi.Controller
             {
                 StudentId = AuthenticatedUserService.UserId,
                 GroupInstanceId = GroupInstanceId,
-                TestType = Application.Enums.TestTypeEnum.subLevel
+                TestType = TestTypeEnum.subLevel
             }));
         }
 
@@ -323,6 +323,55 @@ namespace WebApi.Controller
                 PageSize = query.PageSize
             }
             ));
+        }
+
+        [HttpPost("AssignTeacher")]
+        public async Task<IActionResult> AssignTeacherToTest([FromBody] AssignTeacherCommand assignTeacher)
+        {
+            return Ok(await Mediator.Send(assignTeacher));
+        }
+
+        [HttpGet("GetTestInstanceToAssign")]
+        public async Task<IActionResult> GetTestInstanceToAssign([FromQuery] GetTestInstanceToAssginQuery query)
+        {
+            return Ok(await Mediator.Send(new GetTestInstanceToAssginQuery()
+            {
+                Assigend = query.Assigend,
+                Count = query.Count,
+                GroupInsatanceId = query.GroupInsatanceId,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize,
+                StudentName = query.StudentName,
+                TestInstanceId = query.TestInstanceId,
+                TestName = query.TestName,
+                TestType = query.TestType
+            }));
+        }
+
+
+        [HttpGet("GetLessonInstanceToAssign")]
+        public async Task<IActionResult> GetLessonInstanceToAssign([FromQuery] GetLessonInstanceToAssignQuery query)
+        {
+            return Ok(await Mediator.Send(new GetLessonInstanceToAssignQuery()
+            {
+                Count = query.Count,
+                GroupInsatanceId = query.GroupInsatanceId,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize
+            }));
+        }
+
+        [HttpGet("GetGroupInstanceToAssign")]
+        public async Task<IActionResult> GetGroupInstanceToAssign([FromQuery] GetGroupInstanceToAssignQuery query)
+        {
+            return Ok(await Mediator.Send(new GetGroupInstanceToAssignQuery()
+            {
+                Count = query.Count,
+                PageNumber = query.PageNumber,
+                PageSize = query.PageSize,
+                sublevelId = query.sublevelId,
+                GroupDefinitionId = query.GroupDefinitionId
+            }));
         }
 
     }

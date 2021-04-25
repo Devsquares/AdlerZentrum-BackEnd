@@ -15,14 +15,14 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.GroupInstance.Queries
 {
-    public class GetAllTeacerGroupInstanceAssignmentsQuery : IRequest<PagedResponse<List<GetAllTeacerGroupInstanceAssignmentViewModel>>>
+    public class GetAllTeacerGroupInstanceAssignmentsQuery : IRequest<PagedResponse<object>>
     {
         public int? GroupDefinitionId { get; set; }
         public int? SublevelId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
 
-        public class GetAllTeacerGroupInstanceAssignmentsQueryHandler : IRequestHandler<GetAllTeacerGroupInstanceAssignmentsQuery, PagedResponse<List<GetAllTeacerGroupInstanceAssignmentViewModel>>>
+        public class GetAllTeacerGroupInstanceAssignmentsQueryHandler : IRequestHandler<GetAllTeacerGroupInstanceAssignmentsQuery, PagedResponse<object>>
         {
             private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignment;
             private readonly IMapper _mapper;
@@ -31,13 +31,13 @@ namespace Application.DTOs.GroupInstance.Queries
                 _teacherGroupInstanceAssignment = teacherGroupInstanceAssignment;
                 _mapper = mapper;
             }
-            public async Task<PagedResponse<List<GetAllTeacerGroupInstanceAssignmentViewModel>>> Handle(GetAllTeacerGroupInstanceAssignmentsQuery command, CancellationToken cancellationToken)
+            public async Task<PagedResponse<object>> Handle(GetAllTeacerGroupInstanceAssignmentsQuery command, CancellationToken cancellationToken)
             {
                 int totalCount = 0;
                 var groupInstance = _teacherGroupInstanceAssignment.GetAll(command.PageNumber, command.PageSize, out totalCount, command.SublevelId, command.GroupDefinitionId);
 
-                var viewmodel = _mapper.Map<List<GetAllTeacerGroupInstanceAssignmentViewModel>>(groupInstance);
-                return new PagedResponse<List<GetAllTeacerGroupInstanceAssignmentViewModel>>(viewmodel, command.PageNumber, command.PageSize, totalCount);
+                //var viewmodel = _mapper.Map<List<GetAllTeacerGroupInstanceAssignmentViewModel>>(groupInstance);
+                return new PagedResponse<object>(groupInstance, command.PageNumber, command.PageSize, totalCount);
             }
         }
     }
