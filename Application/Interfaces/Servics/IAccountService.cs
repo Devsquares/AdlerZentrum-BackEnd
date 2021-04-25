@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Account;
 using Application.DTOs.Account.Commands.UpdateAccount;
+using Application.DTOs.AccountDTO;
 using Application.Wrappers;
 using Domain.Entities;
 using Domain.Models;
@@ -36,5 +37,6 @@ namespace Application.Interfaces
         Task UpdateAdlerCardBalance(string studentId, int balance);
         Task<PagedResponse<IEnumerable<UserClaimsModel>>> GetNonAllUserClaims(int pageNumber, int pageSize, string email, string name, string claimtype);
         IList<GetAllUsersViewModel> GetPagedReponseStaffAsync(int pageNumber, int pageSize, string role, out int count);
+        Task AddPaymentTransaction(PaymentTransactionInputModel inputModel);
     }
 }

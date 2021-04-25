@@ -28,6 +28,8 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Domain.Models;
 using MediatR;
 using Application.DTOs;
+using AutoMapper;
+using Application.DTOs.AccountDTO;
 
 namespace Infrastructure.Persistence.Services
 {
@@ -39,46 +41,43 @@ namespace Infrastructure.Persistence.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
         private readonly JWTSettings _jwtSettings;
-        private readonly IDateTimeService _dateTimeService;
         private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
-        private readonly IGroupDefinitionRepositoryAsync _groupDefinitionRepositoryAsync;
-        private readonly IGroupConditionRepositoryAsync _groupConditionRepositoryAsync;
         private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
         private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
         private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroupInstanceAssignmentRepositoryAsync;
         private readonly IDuplicateExceptionRepositoryAsync _duplicateExceptionRepository;
+        private readonly IPaymentTransactionsRepositoryAsync _paymentTransactionsRepository;
+        private readonly IMapper _mapper;
 
         private readonly ApplicationDbContext _context;
 
-        public AccountService(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
-            Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager,
+        public AccountService(UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
-            IDateTimeService dateTimeService,
             SignInManager<ApplicationUser> signInManager,
             IEmailService emailService,
             IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
             IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
-            IGroupDefinitionRepositoryAsync groupDefinitionRepositoryAsync,
-            IGroupConditionRepositoryAsync groupConditionRepositoryAsync,
             ApplicationDbContext context,
             ISublevelRepositoryAsync sublevelRepositoryAsync,
             ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignmentRepositoryAsync,
-            IDuplicateExceptionRepositoryAsync duplicateExceptionRepositoryAsync)
+            IDuplicateExceptionRepositoryAsync duplicateExceptionRepositoryAsync,
+            IPaymentTransactionsRepositoryAsync paymentTransactionsRepository,
+            IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtSettings = jwtSettings.Value;
-            _dateTimeService = dateTimeService;
             _signInManager = signInManager;
             _emailService = emailService;
             _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
             _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
-            _groupDefinitionRepositoryAsync = groupDefinitionRepositoryAsync;
-            _groupConditionRepositoryAsync = groupConditionRepositoryAsync;
             _context = context;
             _teacherGroupInstanceAssignmentRepositoryAsync = teacherGroupInstanceAssignmentRepositoryAsync;
             _sublevelRepositoryAsync = sublevelRepositoryAsync;
             _duplicateExceptionRepository = duplicateExceptionRepositoryAsync;
+            _paymentTransactionsRepository = paymentTransactionsRepository;
+            _mapper = mapper;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -279,6 +278,10 @@ namespace Infrastructure.Persistence.Services
                         user.EmailConfirmed = true;
                         await _userManager.UpdateAsync(user);
                     }
+                    if (request.PaymentTransaction != null)
+                    {
+                        AddPaymentTransaction(request.PaymentTransaction);
+                    }
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
                 else
@@ -290,6 +293,12 @@ namespace Infrastructure.Persistence.Services
             {
                 throw new ApiException($"Email {request.Email } is already registered.");
             }
+        }
+
+        public async Task AddPaymentTransaction(PaymentTransactionInputModel inputModel)
+        {
+            var obj = _mapper.Map<PaymentTransaction>(inputModel);
+            await _paymentTransactionsRepository.AddAsync(obj);
         }
 
         private bool IsDuplicate(string firstName, string lastName, DateTime dateOfBirth, string country)

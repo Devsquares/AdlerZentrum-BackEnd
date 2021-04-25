@@ -11,7 +11,7 @@ namespace Application.Interfaces.Repositories
         TeacherGroupInstanceAssignment GetByGroupInstanceId(int groupInstanceId);
         TeacherGroupInstanceAssignment GetByTeachGroupInstanceId(string TeacherId, int groupInstanceId);
         List<TeacherGroupInstanceAssignment> GetListByGroupInstanceId(int groupInstanceId);
-        object GetAll(int pageNumber, int pageSize, out int totalCount, int? sublevelId = null, int? groupDefinationId = null);
+        public List<TeacherGroupInstanceAssignment> GetAll(int pageNumber, int pageSize, out int totalCount, int? sublevelId = null, int? groupDefinationId = null);
         TeacherGroupInstanceAssignment GetFirstNotIsDefault(int groupInstanceId);
         TeacherGroupInstanceAssignment GetByTeacherId(string TeacherId);
         public TeacherGroupInstanceAssignment GetByGroupInstanceIdWithoutDefault(int groupInstanceId);
