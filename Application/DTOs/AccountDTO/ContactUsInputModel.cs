@@ -9,7 +9,6 @@ namespace Application.DTOs
     {
         public string Subject { get; set; }
         public string Email { get; set; }
-        public string StudentId { get; set; }
         public string Message { get; set; }
     }
 }
