@@ -182,7 +182,7 @@ namespace Application.Mappings
             CreateMap<PaymentTransactionInputModel, PaymentTransaction>().ReverseMap();
 
             CreateMap<GetFinancialAnalysisReportParameter, GetFinancialAnalysisReportQuery>().ReverseMap();
-            CreateMap<GetFinancialAnalysisReportViewModel, PaymentTransaction>().ReverseMap();
+            CreateMap<PaymentTransactionViewModel, PaymentTransaction>().ReverseMap();
         }
     }
 }

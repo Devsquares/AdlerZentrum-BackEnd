@@ -5,13 +5,14 @@ using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class GetFinancialAnalysisReportQuery : IRequest<PagedResponse<IEnumerable<GetFinancialAnalysisReportViewModel>>>
+    public class GetFinancialAnalysisReportQuery : IRequest<PagedResponse<GetFinancialAnalysisReportViewModel>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
@@ -21,7 +22,7 @@ namespace Application.Features
         public int? GroupInstanceId { get; set; }
         public int? Category { get; set; }
     }
-    public class GetFinancialAnalysisReportQueryHandler : IRequestHandler<GetFinancialAnalysisReportQuery, PagedResponse<IEnumerable<GetFinancialAnalysisReportViewModel>>>
+    public class GetFinancialAnalysisReportQueryHandler : IRequestHandler<GetFinancialAnalysisReportQuery, PagedResponse<GetFinancialAnalysisReportViewModel>>
     {
         private readonly IPaymentTransactionsRepositoryAsync _paymentTransactionsRepository;
         private readonly IMapper _mapper;
@@ -31,17 +32,20 @@ namespace Application.Features
             _mapper = mapper;
         }
 
-        public async Task<PagedResponse<IEnumerable<GetFinancialAnalysisReportViewModel>>> Handle(GetFinancialAnalysisReportQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<GetFinancialAnalysisReportViewModel>> Handle(GetFinancialAnalysisReportQuery request, CancellationToken cancellationToken)
         {
             var validFilter = _mapper.Map<GetFinancialAnalysisReportParameter>(request);
             RequestParameter filteredRequestParameter = new RequestParameter();
             Reflection.CopyProperties(validFilter, filteredRequestParameter);
             int count = 0;
 
-            var singlequestionsubmission = _paymentTransactionsRepository.GetFinancialAnalysisReport(request.From, request.To, request.StudentName, request.GroupInstanceId, request.Category, validFilter.PageNumber, validFilter.PageSize, out count);
+            var data = _paymentTransactionsRepository.GetFinancialAnalysisReport(request.From, request.To, request.StudentName, request.GroupInstanceId, request.Category, validFilter.PageNumber, validFilter.PageSize, out count);
+            var viewModel = new GetFinancialAnalysisReportViewModel();
+            viewModel.PaymentTransactions = _mapper.Map<IEnumerable<PaymentTransactionViewModel>>(data);
+            viewModel.AmountSum = data.Sum(x => x.Amount);
+            viewModel.PaidAmountSum = data.Sum(x => x.PaidAmount);
 
-            var singlequestionsubmissionViewModel = _mapper.Map<IEnumerable<GetFinancialAnalysisReportViewModel>>(singlequestionsubmission);
-            return new Wrappers.PagedResponse<IEnumerable<GetFinancialAnalysisReportViewModel>>(singlequestionsubmissionViewModel, validFilter.PageNumber, validFilter.PageSize, count);
+            return new PagedResponse<GetFinancialAnalysisReportViewModel>(viewModel, validFilter.PageNumber, validFilter.PageSize, count);
         }
     }
 }

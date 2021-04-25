@@ -8,6 +8,12 @@ namespace Application.Features
 {
     public class GetFinancialAnalysisReportViewModel
     {
+        public IEnumerable<PaymentTransactionViewModel> PaymentTransactions { get; set; }
+        public decimal AmountSum { get; set; }
+        public decimal PaidAmountSum { get; set; }
+    }
+    public class PaymentTransactionViewModel
+    {
         public int Id { get; set; }
         public virtual AccountViewModel User { get; set; }
         public string UserId { get; set; }
@@ -19,5 +25,6 @@ namespace Application.Features
         public int? GroupDefinitionId { get; set; }
         public GroupDefinition GroupDefinition { get; set; }
         public DateTime PurchasingDate { get; set; }
+
     }
 }
