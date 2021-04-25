@@ -21,6 +21,7 @@ using System.Transactions;
 using Domain.Entities;
 using Application.Interfaces.Repositories;
 using Application.Enums;
+using Application.DTOs.AccountDTO;
 
 namespace WebApi.Controllers
 {
@@ -76,6 +77,28 @@ namespace WebApi.Controllers
                 return Ok();
             }
 
+        }
+
+        [HttpPost("addPayment")]
+        public async Task<IActionResult> AddPaymentTransaction(PaymentTransactionInputModel request)
+        {
+            await _accountService.AddPaymentTransaction(request);
+            return Ok();
+        }
+
+        [HttpGet("GetFinancialAnalysisReport")]
+        public async Task<IActionResult> GetFinancialAnalysisReport([FromQuery] GetFinancialAnalysisReportParameter filter)
+        {
+            return Ok(await Mediator.Send(new GetFinancialAnalysisReportQuery()
+            {
+                Category = filter.Category,
+                From = filter.From,
+                GroupInstanceId = filter.GroupInstanceId,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize,
+                StudentName = filter.StudentName,
+                To = filter.To
+            }));
         }
 
         [HttpPost("addAccount")]

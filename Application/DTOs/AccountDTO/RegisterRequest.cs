@@ -1,4 +1,5 @@
-﻿using Application.Enums;
+﻿using Application.DTOs.AccountDTO;
+using Application.Enums;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -26,5 +27,6 @@ namespace Application.DTOs.Account
         public int? PromoCodeInstanceID { get; set; }
         public int? GroupDefinitionId { get; set; }
         public int? AdlerCardsBundleId { get; set; }
+        public PaymentTransactionInputModel PaymentTransaction { get; set; }
     }
 }

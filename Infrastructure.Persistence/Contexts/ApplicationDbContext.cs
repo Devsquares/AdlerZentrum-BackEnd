@@ -18,8 +18,8 @@ namespace Infrastructure.Persistence.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        private readonly IDateTimeService _dateTime; 
-        private readonly IAuthenticatedUserService _authenticatedUser; 
+        private readonly IDateTimeService _dateTime;
+        private readonly IAuthenticatedUserService _authenticatedUser;
 
         public ApplicationDbContext()
         {
@@ -34,7 +34,7 @@ namespace Infrastructure.Persistence.Contexts
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             _dateTime = dateTime;
-            _authenticatedUser = authenticatedUser; 
+            _authenticatedUser = authenticatedUser;
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Bug> Bugs { get; set; }
@@ -77,7 +77,8 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<MailJob> MailJobs { get; set; }
         public DbSet<TeacherAbsence> TeacherAbsences { get; set; }
         public DbSet<DuplicateException> DuplicateExceptions { get; set; }
-        
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
@@ -161,6 +162,6 @@ namespace Infrastructure.Persistence.Contexts
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
 
-        } 
+        }
     }
 }

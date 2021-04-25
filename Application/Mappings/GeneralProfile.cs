@@ -13,6 +13,7 @@ using Domain.Models;
 using Application.DTOs.Level.Queries;
 using Application.Features.TeacherAbsence.Commands.CreateTeacherAbsence;
 using Application.Features.TeacherAbsence.Queries.GetAllTeacherAbsences;
+using Application.DTOs.AccountDTO;
 
 namespace Application.Mappings
 {
@@ -176,6 +177,12 @@ namespace Application.Mappings
             CreateMap<GetAllDuplicateExceptionsQuery, RequestParameter>().ReverseMap();
 
             CreateMap<GetAllTeacerGroupInstanceAssignmentViewModel, TeacherGroupInstanceAssignment>().ReverseMap();
+
+            // payment 
+            CreateMap<PaymentTransactionInputModel, PaymentTransaction>().ReverseMap();
+
+            CreateMap<GetFinancialAnalysisReportParameter, GetFinancialAnalysisReportQuery>().ReverseMap();
+            CreateMap<GetFinancialAnalysisReportViewModel, PaymentTransaction>().ReverseMap();
         }
     }
 }
