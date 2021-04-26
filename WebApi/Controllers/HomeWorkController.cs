@@ -22,15 +22,13 @@ namespace WebApi.Controllers
         [HttpPost("SubmitHomeWorkCorrection")]
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> SubmitHomeWorkCorrection(HomeworkCorrectionCommand command)
-        {
-            command.CorrectionTeacherId = AuthenticatedUserService.UserId;
+        { 
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPost("CreateAdditionalHomework")]
         public async Task<IActionResult> CreateAdditionalHomework(CreateHomeWorkCommand command)
-        {
-            command.TeacherId = AuthenticatedUserService.UserId;
+        { 
             return Ok(await Mediator.Send(command));
         }
 
@@ -90,12 +88,12 @@ namespace WebApi.Controllers
 
         [HttpGet("GetHomeworkSubmitions")]
         // [Authorize(Roles = "Teacher")]
-        public async Task<IActionResult> GetAllHomeworkSubmitions()
+        public async Task<IActionResult> GetAllHomeworkSubmitions([FromQuery] string TeacherId)
         {
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
             {
                 GroupInstanceId = null,
-                TeacherId = AuthenticatedUserService.UserId
+                TeacherId = TeacherId
             }));
         }
 

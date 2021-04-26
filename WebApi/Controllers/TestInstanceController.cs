@@ -190,7 +190,7 @@ namespace WebApi.Controller
             {
                 Status = command.Status,
                 TestType = command.TestType,
-                TeacherId = AuthenticatedUserService.UserId,
+                TeacherId = command.TeacherId,
                 GroupInstanceId = command.GroupInstanceId
             }));
         }

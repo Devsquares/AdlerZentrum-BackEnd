@@ -36,7 +36,7 @@ namespace WebApi.Controllers
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> LessonReport(CreateLessonInstanceReportCommand command)
         {
-            command.TeacherId = AuthenticatedUserService.UserId;
+            command.TeacherId = command.TeacherId;
             return Ok(await Mediator.Send(command));
         }
 
