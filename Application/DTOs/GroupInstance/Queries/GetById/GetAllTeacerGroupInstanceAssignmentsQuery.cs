@@ -35,9 +35,9 @@ namespace Application.DTOs.GroupInstance.Queries
             {
                 int totalCount = 0;
                 var groupInstance = _teacherGroupInstanceAssignment.GetAll(command.PageNumber, command.PageSize, out totalCount, command.SublevelId, command.GroupDefinitionId);
-
+                var group = groupInstance.GroupBy(x => x.GroupInstanceId);
                 //var viewmodel = _mapper.Map<List<GetAllTeacerGroupInstanceAssignmentViewModel>>(groupInstance);
-                return new PagedResponse<object>(groupInstance, command.PageNumber, command.PageSize, totalCount);
+                return new PagedResponse<object>(group, command.PageNumber, command.PageSize, totalCount);
             }
         }
     }
