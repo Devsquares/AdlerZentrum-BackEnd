@@ -14,9 +14,17 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\v1\**" />
+    <Compile Remove="ImageStorage\**" />
+    <Compile Remove="Logs\**" />
     <Content Remove="Controllers\v1\**" />
+    <Content Remove="ImageStorage\**" />
+    <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Controllers\v1\**" />
+    <EmbeddedResource Remove="ImageStorage\**" />
+    <EmbeddedResource Remove="Logs\**" />
     <None Remove="Controllers\v1\**" />
+    <None Remove="ImageStorage\**" />
+    <None Remove="Logs\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,11 +62,6 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure.Persistence\Infrastructure.Persistence.csproj" />
     <ProjectReference Include="..\Infrastructure.Shared\Infrastructure.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ImageStorage\" />
-    <Folder Include="Logs\" />
   </ItemGroup>
 
 </Project>
