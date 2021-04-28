@@ -34,6 +34,12 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Post([FromBody] UpdateFeedbackSheetCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
         [HttpGet("GetFeedbackSheetInstancesForStudentByGroupInstanceId")]
         public async Task<IActionResult> GetFeedbackSheetInstancesForStudentByGroupInstanceId([FromQuery] string studentId, [FromQuery] int groupInstanceId)
         {

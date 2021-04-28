@@ -50,8 +50,17 @@ namespace Application.DTOs
                 test.LevelId = command.LevelId;
                 test.TotalPoint = command.TotalPoint;
                 test.PlacementStartDate = null;
-                
-                test = await _TestRepository.AddAsync(test);
+                try
+                {
+                    test = await _TestRepository.AddAsync(test);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException.Message.Contains("Duplicate entry"))
+                    {
+                        return new Response<int>("Duplicate test name.");
+                    }
+                }
                 double total = 0;
                 foreach (var item in command.Questions)
                 {

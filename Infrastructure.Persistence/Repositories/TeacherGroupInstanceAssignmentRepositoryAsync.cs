@@ -21,9 +21,11 @@ namespace Infrastructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
-        public IEnumerable<TeacherGroupInstanceAssignment> GetByTeacher(string TeacherId)
+        public IEnumerable<TeacherGroupInstanceAssignment> GetByTeacher(string TeacherId, List<int> status, int pageNumber, int pageSize, out int totalCount)
         {
-            return groupInstances.Include(x => x.GroupInstance).Where(x => x.TeacherId == TeacherId);
+            var query = groupInstances.Include(x => x.GroupInstance).Where(x => x.TeacherId == TeacherId && (status != null && status.Count > 0 ? status.Contains(x.GroupInstance.Status.Value) : true)).AsQueryable();
+            totalCount = query.Count();
+            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(); 
         }
 
         public TeacherGroupInstanceAssignment GetByTeacherId(string TeacherId)
@@ -52,8 +54,7 @@ namespace Infrastructure.Persistence.Repositories
               && (groupDefinationId != null ? x.GroupInstance.GroupDefinitionId == groupDefinationId.Value : true))
               .AsQueryable();
             totalCount = query.Count();
-            var list = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-            return list;
+            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(); 
         }
 
         public TeacherGroupInstanceAssignment GetFirstNotIsDefault(int groupInstanceId)
@@ -65,9 +66,9 @@ namespace Infrastructure.Persistence.Repositories
             return groupInstances.Include(x => x.Teacher).Where(x => x.GroupInstanceId == groupInstanceId).FirstOrDefault();
         }
 
-        public List<TeacherAnalysisReportModel> GetTeacherAnalysisReport(int pageNumber,int PageSize,string teacherName, DateTime? from, DateTime? to
+        public List<TeacherAnalysisReportModel> GetTeacherAnalysisReport(int pageNumber, int PageSize, string teacherName, DateTime? from, DateTime? to
             , int? homeworksUploadDelayFrom, int? homeworksUploadDelayTo, int? homeworksCorrectionDelayFrom, int? homeworksCorrectionDelayTo,
-            int? testsCorrectionDelayFrom, int? testsCorrectionDelayTo, int? feedbackScoreFrom, int? feedbackScoreto,out int count)
+            int? testsCorrectionDelayFrom, int? testsCorrectionDelayTo, int? feedbackScoreFrom, int? feedbackScoreto, out int count)
         {
             var userListquery = (from user in _dbContext.ApplicationUsers
                                  join userroles in _dbContext.UserRoles
@@ -95,11 +96,11 @@ namespace Infrastructure.Persistence.Repositories
                     {
                         homeworksCount += item.Value;
                     }
-                    teacherAnalysisReportobject.HomeworksUpload =Math.Round( (homeworksCount / lessons.Count()),2);
+                    teacherAnalysisReportobject.HomeworksUpload = Math.Round((homeworksCount / lessons.Count()), 2);
                 }
 
-                var homeworkSub = _dbContext.HomeWorkSubmitions.Where(x => x.CorrectionTeacherId == userListquery[i].userId && x.Status == (int)HomeWorkSubmitionStatusEnum.Corrected && x.CorrectionDate != null && x.CorrectionDueDate !=null);
-                if(from != null && to!=null)
+                var homeworkSub = _dbContext.HomeWorkSubmitions.Where(x => x.CorrectionTeacherId == userListquery[i].userId && x.Status == (int)HomeWorkSubmitionStatusEnum.Corrected && x.CorrectionDate != null && x.CorrectionDueDate != null);
+                if (from != null && to != null)
                 {
                     homeworkSub = homeworkSub.Where(x => x.CorrectionDueDate >= from && x.CorrectionDueDate <= to);
                 }
@@ -109,9 +110,9 @@ namespace Infrastructure.Persistence.Repositories
                 {
                     homeworkDelayTotalHours += (item.CorrectionDueDate - item.CorrectionDate).Value.TotalHours;
                 }
-                teacherAnalysisReportobject.HomeworksCorrectionDelay = Math.Round(homeworkDelayTotalHours,2);
+                teacherAnalysisReportobject.HomeworksCorrectionDelay = Math.Round(homeworkDelayTotalHours, 2);
                 //lessons
-                var lessonsinstance = _dbContext.LessonInstances.Where(x => x.SubmittedReportTeacherId == userListquery[i].userId &&  x.DueDate != null && x.SubmissionDate != null);
+                var lessonsinstance = _dbContext.LessonInstances.Where(x => x.SubmittedReportTeacherId == userListquery[i].userId && x.DueDate != null && x.SubmissionDate != null);
                 if (from != null && to != null)
                 {
                     lessonsinstance = lessonsinstance.Where(x => x.DueDate >= from && x.DueDate <= to);
@@ -122,7 +123,7 @@ namespace Infrastructure.Persistence.Repositories
                 {
                     homeworkUploadDelayTotalHours += (item.DueDate - item.SubmissionDate).Value.TotalHours;
                 }
-                teacherAnalysisReportobject.HomeworksUploadDelay = Math.Round(homeworkUploadDelayTotalHours,2);
+                teacherAnalysisReportobject.HomeworksUploadDelay = Math.Round(homeworkUploadDelayTotalHours, 2);
                 //test
                 var tests = _dbContext.TestInstances.Where(x => x.CorrectionTeacherId == userListquery[i].userId && x.CorrectionDueDate != null && x.CorrectionDate != null);
                 if (from != null && to != null)
@@ -135,7 +136,7 @@ namespace Infrastructure.Persistence.Repositories
                 {
                     testsCorrectionDelayTotalHours += (item.CorrectionDueDate - item.CorrectionDate).TotalHours;
                 }
-                teacherAnalysisReportobject.TestsCorrectionDelay = Math.Round(testsCorrectionDelayTotalHours,2);
+                teacherAnalysisReportobject.TestsCorrectionDelay = Math.Round(testsCorrectionDelayTotalHours, 2);
 
                 teacherAnalysisReport.Add(teacherAnalysisReportobject);
             }
@@ -157,7 +158,7 @@ namespace Infrastructure.Persistence.Repositories
             }
             count = teacherAnalysisReport.Count();
             return teacherAnalysisReport.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToList();
-           
+
         }
     }
 }

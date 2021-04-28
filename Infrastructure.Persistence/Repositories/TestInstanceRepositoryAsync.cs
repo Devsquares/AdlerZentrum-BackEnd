@@ -186,6 +186,7 @@ namespace Infrastructure.Persistence.Repositories
             {
                 query = query.Where(x => x.ReCorrectionRequest == reCorrectionRequest);
             }
+            query = query.Where(x => x.Test.TestTypeId != (int)TestTypeEnum.Feedback);
             return await query
            .Include(x => x.Test)
            .Include(x => x.Student)
@@ -194,24 +195,8 @@ namespace Infrastructure.Persistence.Repositories
            .ThenInclude(x => x.GroupDefinition)
            .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .AsNoTracking()
-           //    .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
-           .ToListAsync();
-
-            // var queryNumericRange =
-            //     from test in _testInstances
-            //     group new AllTestsToManageViewModel()
-            //     {
-            //         GroupInstanceId = test.GroupInstanceId.Value,
-            //         Status = test.Status,
-            //         TestName = test.Test.Name,
-            //         TestId = test.Test.Id
-            //     } by new { test.GroupInstanceId, test.TestId } into percentGroup
-            //     orderby percentGroup.Key
-            //     select percentGroup;
-
-
-            // var items = queryNumericRange.ToList();
+            .AsNoTracking() 
+           .ToListAsync(); 
         }
 
         public virtual async Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, bool? reCorrectionRequest)
@@ -237,29 +222,14 @@ namespace Infrastructure.Persistence.Repositories
             {
                 query = query.Where(x => x.ReCorrectionRequest == reCorrectionRequest);
             }
+            query = query.Where(x => x.Test.TestTypeId != (int)TestTypeEnum.Feedback);
             return query
            .Include(x => x.Test)
            .Include(x => x.Student)
            .Include(x => x.LessonInstance)
            .ThenInclude(x => x.GroupInstance)
-           .ThenInclude(x => x.GroupDefinition)
-           //    .Where(x => x.Status == (int)TestInstanceEnum.Closed || x.Status == (int)TestInstanceEnum.Pending)
-           .Count();
-
-            // var queryNumericRange =
-            //     from test in _testInstances
-            //     group new AllTestsToManageViewModel()
-            //     {
-            //         GroupInstanceId = test.GroupInstanceId.Value,
-            //         Status = test.Status,
-            //         TestName = test.Test.Name,
-            //         TestId = test.Test.Id
-            //     } by new { test.GroupInstanceId, test.TestId } into percentGroup
-            //     orderby percentGroup.Key
-            //     select percentGroup;
-
-
-            // var items = queryNumericRange.ToList();
+           .ThenInclude(x => x.GroupDefinition) 
+           .Count(); 
         }
 
         public override Task<TestInstance> GetByIdAsync(int id)

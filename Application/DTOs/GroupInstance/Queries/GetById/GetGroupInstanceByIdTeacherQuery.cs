@@ -14,13 +14,14 @@ using AutoMapper;
 
 namespace Application.DTOs.GroupInstance.Queries
 {
-    public class GetGroupInstanceByIdTeacherQuery : IRequest<Response<IEnumerable<TeacherGroupInstanceViewModel>>>
+    public class GetGroupInstanceByIdTeacherQuery : IRequest<PagedResponse<IEnumerable<TeacherGroupInstanceViewModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public string TeacherId { get; set; }
+        public List<int> Status { get; set; }
 
-        public class GetGroupInstanceByIdTeacherQueryHandler : IRequestHandler<GetGroupInstanceByIdTeacherQuery, Response<IEnumerable<TeacherGroupInstanceViewModel>>>
+        public class GetGroupInstanceByIdTeacherQueryHandler : IRequestHandler<GetGroupInstanceByIdTeacherQuery, PagedResponse<IEnumerable<TeacherGroupInstanceViewModel>>>
         {
             private readonly ITeacherGroupInstanceAssignmentRepositoryAsync _teacherGroup;
             private readonly IMapper _mapper;
@@ -29,13 +30,14 @@ namespace Application.DTOs.GroupInstance.Queries
                 _teacherGroup = teacherGroup;
                 _mapper = mapper;
             }
-            public async Task<Response<IEnumerable<TeacherGroupInstanceViewModel>>> Handle(GetGroupInstanceByIdTeacherQuery query, CancellationToken cancellationToken)
+            public async Task<PagedResponse<IEnumerable<TeacherGroupInstanceViewModel>>> Handle(GetGroupInstanceByIdTeacherQuery query, CancellationToken cancellationToken)
             {
-                var groupInstance = _teacherGroup.GetByTeacher(query.TeacherId);
+                int count = 0;
+                var groupInstance = _teacherGroup.GetByTeacher(query.TeacherId, query.Status, query.PageNumber, query.PageSize, out count);
                 if (groupInstance == null) throw new ApiException($"Group Not Found.");
 
                 var viewmodel = _mapper.Map<IReadOnlyList<TeacherGroupInstanceViewModel>>(groupInstance);
-                return new Response<IEnumerable<TeacherGroupInstanceViewModel>>(viewmodel);
+                return new PagedResponse<IEnumerable<TeacherGroupInstanceViewModel>>(viewmodel, query.PageNumber, query.PageSize, count);
             }
         }
     }

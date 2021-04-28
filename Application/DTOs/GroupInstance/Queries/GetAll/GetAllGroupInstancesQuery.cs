@@ -41,7 +41,7 @@ namespace Application.DTOs.GroupInstance.Queries
             var validFilter = _mapper.Map<FilteredRequestParameter>(request);
             IReadOnlyList<Domain.Entities.GroupInstance> groupInstances;
             int count = 0;
-            groupInstances =  _groupInstanceRepositoryAsync.GetPagedGroupInstanceReponseAsync(validFilter,request.Status,out count);
+            groupInstances = _groupInstanceRepositoryAsync.GetPagedGroupInstanceReponseAsync(validFilter, request.Status, out count);
             var userViewModel = _mapper.Map<IEnumerable<GetAllGroupInstancesViewModel>>(groupInstances);
             return new FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>(userViewModel, validFilter, count);
         }

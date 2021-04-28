@@ -18,7 +18,7 @@ namespace Domain.Entities
         public string CorrectionTeacherId { get; set; }
         public ApplicationUser CorrectionTeacher { get; set; }
         public DateTime? OpenDate { get; set; }
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public DateTime SubmissionDate { get; set; }
         public int TestId { get; set; }
         public virtual Test Test { get; set; }
