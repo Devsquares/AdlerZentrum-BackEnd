@@ -7,7 +7,7 @@ namespace Application.Interfaces.Repositories
 {
     public interface ITeacherGroupInstanceAssignmentRepositoryAsync : IGenericRepositoryAsync<TeacherGroupInstanceAssignment>
     {
-        IEnumerable<TeacherGroupInstanceAssignment> GetByTeacher(string TeacherId);
+        IEnumerable<TeacherGroupInstanceAssignment> GetByTeacher(string TeacherId, List<int> status, int pageNumber, int pageSize, out int totalCount);
         TeacherGroupInstanceAssignment GetByGroupInstanceId(int groupInstanceId);
         TeacherGroupInstanceAssignment GetByTeachGroupInstanceId(string TeacherId, int groupInstanceId);
         List<TeacherGroupInstanceAssignment> GetListByGroupInstanceId(int groupInstanceId);

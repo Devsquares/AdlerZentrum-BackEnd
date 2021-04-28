@@ -39,7 +39,7 @@ namespace Application.Features
             {
                 if (ex.InnerException.Message.Contains("Duplicate entry"))
                 {
-                    return new Response<int>("This mail Already have record..");
+                    return new Response<int>("This mail Already have record.");
                 }
             }
             return new Response<int>(obj.Id);

@@ -28,6 +28,10 @@ namespace Application.Features
         {
 
             var res = _duplicateExceptionRepository.GetByEmail(request.Email);
+            if (res == null)
+            {
+                return new Response<bool>("This mail doesn't have exception recored.");
+            }
             await _duplicateExceptionRepository.DeleteAsync(res);
             return new Response<bool>(true);
         }

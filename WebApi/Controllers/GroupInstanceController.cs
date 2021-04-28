@@ -43,7 +43,8 @@ namespace WebApi.Controllers
             {
                 PageSize = filter.PageSize,
                 PageNumber = filter.PageNumber,
-                TeacherId = filter.teacherId
+                TeacherId = filter.teacherId,
+                Status = filter.Status
             }));
         }
 
