@@ -37,17 +37,25 @@ namespace Process
                 TimeSpan interval = new TimeSpan(0, 1, 0, 0);
                 using (var scope = _serviceProvider.CreateScope())
                 {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    var testInstances = dbContext.TestInstances
-                                        .Where(x => x.Status == (int)TestInstanceEnum.Pending
-                                        && x.StartDate.AddHours(HOURS) > DateTime.Now).ToList();
-
-                    foreach (var item in testInstances)
+                    try
                     {
-                        item.Status = (int)TestInstanceEnum.Missed;
+                        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                        var testInstances = dbContext.TestInstances
+                                            .Where(x => x.Status == (int)TestInstanceEnum.Pending
+                                            && x.StartDate.Value.AddHours(HOURS) > DateTime.Now).ToList();
+
+                        foreach (var item in testInstances)
+                        {
+                            item.Status = (int)TestInstanceEnum.Missed;
+                        }
+                        dbContext.TestInstances.UpdateRange(testInstances);
+                        dbContext.SaveChanges();
                     }
-                    dbContext.TestInstances.UpdateRange(testInstances);
-                    dbContext.SaveChanges();
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message);
+                    }
+
                 }
                 await Task.Delay(interval, stoppingToken);
             }

@@ -8,5 +8,7 @@ namespace Application.DTOs
     public class LessonsByGroupInstanceIdRequestParameter : RequestParameter
     {
         public int GroupInstanceId { get; set; }
+
+        public string TeacherId { get; set; }
     }
 }

@@ -249,7 +249,7 @@ namespace Application.DTOs
                                     TestId = subLevelTest.Id,
                                     CorrectionTeacherId = teacher?.TeacherId,
                                     GroupInstanceId = groupInstance.Id,
-                                    StartDate = lastLesson.StartDate
+                                    StartDate = null
                                 };
                                 testInstance.Add(obj);
                             }

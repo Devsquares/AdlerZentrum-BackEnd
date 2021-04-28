@@ -8,12 +8,9 @@ namespace WebApi.Controllers
     public class LessonInstanceController : BaseApiController
     {
         [HttpGet("GetByGroupInstance")]
-        public async Task<IActionResult> GetByGroupInstance([FromQuery] LessonsByGroupInstanceIdRequestParameter filter)
+        public async Task<IActionResult> GetByGroupInstance([FromQuery] GetLessonInstanceByGroupInstanceIdQuery query)
         {
-            return Ok(await Mediator.Send(new GetLessonInstanceByGroupInstanceIdQuery()
-            {
-                GroupInstanceId = filter.GroupInstanceId
-            }));
+            return Ok(await Mediator.Send(query));
         }
 
         [HttpGet("GetStudents")]

@@ -162,6 +162,10 @@ namespace Infrastructure.Persistence.Contexts
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.Id).HasMaxLength(85));
             builder.Entity<IdentityRoleClaim<string>>(entity => entity.Property(m => m.RoleId).HasMaxLength(85));
 
+            builder.Entity<Test>(entity => {
+                entity.HasIndex(e => e.Name).IsUnique();
+            });
+
         }
     }
 }
