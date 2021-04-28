@@ -4,6 +4,7 @@ using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,9 +31,18 @@ namespace Application.Features
             {
                 Email = request.Email
             };
-
-            var res = await _duplicateExceptionRepository.AddAsync(obj);
-            return new Response<int>(res.Id);
+            try
+            {
+                obj = await _duplicateExceptionRepository.AddAsync(obj);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException.Message.Contains("Duplicate entry"))
+                {
+                    return new Response<int>("This mail Already have record..");
+                }
+            }
+            return new Response<int>(obj.Id);
         }
     }
 }

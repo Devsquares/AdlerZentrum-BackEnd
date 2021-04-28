@@ -166,6 +166,10 @@ namespace Infrastructure.Persistence.Contexts
                 entity.HasIndex(e => e.Name).IsUnique();
             });
 
+            builder.Entity<DuplicateException>(entity => {
+                entity.HasIndex(e => e.Email).IsUnique();
+            });
+
         }
     }
 }
