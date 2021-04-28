@@ -770,6 +770,116 @@ namespace Infrastructure.Persistence.Services
                 .ToList();
             return new PagedResponse<IEnumerable<UserClaimsModel>>(queryData, pageNumber, pageSize, totalCount);
         }
+
+        public List<StudentAnalysisReportModel> GetStudentAnalysisReport(int pageNumber, int PageSize, string studentName, DateTime? from, DateTime? to
+           , int? attendancefrom, int? attendanceto, int? LateSubmissionsfrom, int? LateSubmissionsto,
+           int? MissedSubmissionsfrom, int? MissedSubmissionsto,int? CurrentProgressPointsfrom,int? CurrentProgressPointsTo, out int count)
+        {
+            var userListquery = (from user in _context.ApplicationUsers
+                                 join userroles in _context.UserRoles
+                                 on user.Id equals userroles.UserId
+                                 join roles in _context.Roles
+                                 on userroles.RoleId equals roles.Id
+                                 where roles.Name.ToLower() == "student" 
+                                 && (!string.IsNullOrEmpty(studentName)? user.FirstName.ToLower().Contains(studentName.ToLower())|| user.LastName.ToLower().Contains(studentName.ToLower()):true)
+                                 select new
+                                 {
+                                     userId = user.Id,
+                                     UserName = $"{user.FirstName} {user.LastName}"
+                                 }
+                         ).ToList();
+            List<StudentAnalysisReportModel> teacherAnalysisReport = new List<StudentAnalysisReportModel>();
+            StudentAnalysisReportModel teacherAnalysisReportobject = new StudentAnalysisReportModel();
+            for (int i = 0; i < userListquery.Count(); i++)
+            {
+                teacherAnalysisReportobject = new StudentAnalysisReportModel();
+                teacherAnalysisReportobject.StudentName = userListquery[i].UserName;
+
+                var alllessons = _context.LessonInstanceStudents.Where(x => x.StudentId == userListquery[i].userId);//.Count();
+                if (from != null && to != null)
+                {
+                    alllessons = alllessons.Where(x => x.CreatedDate >= from && x.CreatedDate <= to);
+                }
+                var alllessonsData = alllessons.Count();
+                var attendlessons = _context.LessonInstanceStudents.Where(x => x.StudentId == userListquery[i].userId && x.Attend == true);//.Count();
+                if (from != null && to != null)
+                {
+                    attendlessons = attendlessons.Where(x => x.CreatedDate >= from && x.CreatedDate <= to);
+                }
+                var attendlessonsData = attendlessons.Count();
+                if (alllessonsData != 0)
+                {
+                    teacherAnalysisReportobject.Attendance = Math.Round(double.Parse(attendlessonsData.ToString()) / double.Parse(alllessonsData.ToString()), 2);
+                }
+                var totalSubmission = _context.HomeWorkSubmitions.Where(x => x.StudentId == userListquery[i].userId);//.Count();
+                if (from != null && to != null)
+                {
+                    totalSubmission = totalSubmission.Where(x => x.CreatedDate >= from && x.CreatedDate <= to);
+                }
+                var totalSubmissionData = totalSubmission.Count();
+                var homeworkSub = _context.HomeWorkSubmitions.Where(x => x.StudentId == userListquery[i].userId && x.DueDate != null && x.SubmitionDate != null && x.DueDate < x.SubmitionDate);//.Count();
+                if (from != null && to != null)
+                {
+                    homeworkSub = homeworkSub.Where(x => x.CreatedDate >= from && x.CreatedDate <= to);
+                }
+                var homeworkSubData = homeworkSub.Count();
+                if (totalSubmissionData != 0)
+                {
+                    teacherAnalysisReportobject.LateSubmissions = double.Parse(homeworkSubData.ToString()) / double.Parse(totalSubmissionData.ToString());
+                }
+                //var homeworkSubResult = homeworkSub.ToList();
+                //double homeworkDelayTotalHours = 0;
+                //foreach (var item in homeworkSubResult)
+                //{
+                //    homeworkDelayTotalHours += (item.DueDate - item.SubmitionDate).Value.TotalHours;
+                //}
+                //teacherAnalysisReportobject.LateSubmissions = Math.Round(homeworkDelayTotalHours, 2);
+
+                // missed
+
+                var missedSubm = _context.HomeWorkSubmitions.Where(x => x.StudentId == userListquery[i].userId && x.DueDate != null && x.SubmitionDate == null);//.Count();
+                if (from != null && to != null)
+                {
+                    missedSubm = missedSubm.Where(x => x.CreatedDate >= from && x.CreatedDate <= to);
+                }
+                var missedSubmData = missedSubm.Count();
+                if (totalSubmissionData != 0)
+                {
+                    teacherAnalysisReportobject.MissedSubmissions = Math.Round(double.Parse(missedSubmData.ToString()) / double.Parse(totalSubmissionData.ToString()), 2);
+                }
+                var progreesPoint = _context.GroupInstanceStudents.Where(x => x.StudentId == userListquery[i].userId);//.Sum(x => x.AchievedScore);
+                if (from != null && to != null)
+                {
+                    progreesPoint = progreesPoint.Where(x => x.CreatedDate >= from && x.CreatedDate <= to);
+                }
+                var progreesPointData = progreesPoint.Sum(x => x.AchievedScore);
+                teacherAnalysisReportobject.CurrentProgressPoints = progreesPointData;
+                teacherAnalysisReport.Add(teacherAnalysisReportobject);
+            }
+            //if (!string.IsNullOrEmpty(studentName))
+            //{
+            //    teacherAnalysisReport = teacherAnalysisReport.Where(x => x.StudentName.ToLower().Contains(studentName.ToLower())).ToList();
+            //}
+            if (attendancefrom != null && attendanceto != null)
+            {
+                teacherAnalysisReport = teacherAnalysisReport.Where(x => x.Attendance >= attendancefrom && x.Attendance <= attendanceto).ToList();
+            }
+            if (LateSubmissionsfrom != null && LateSubmissionsto != null)
+            {
+                teacherAnalysisReport = teacherAnalysisReport.Where(x => x.LateSubmissions >= LateSubmissionsfrom && x.LateSubmissions <= LateSubmissionsto).ToList();
+            }
+            if (MissedSubmissionsfrom != null && MissedSubmissionsto != null)
+            {
+                teacherAnalysisReport = teacherAnalysisReport.Where(x => x.MissedSubmissions >= MissedSubmissionsfrom && x.MissedSubmissions <= MissedSubmissionsto).ToList();
+            }
+            if (CurrentProgressPointsfrom != null && CurrentProgressPointsTo != null)
+            {
+                teacherAnalysisReport = teacherAnalysisReport.Where(x => x.CurrentProgressPoints >= CurrentProgressPointsfrom && x.CurrentProgressPoints <= CurrentProgressPointsTo).ToList();
+            }
+            count = teacherAnalysisReport.Count();
+            return teacherAnalysisReport.Skip((pageNumber - 1) * PageSize).Take(PageSize).ToList();
+
+        }
     }
 
 }

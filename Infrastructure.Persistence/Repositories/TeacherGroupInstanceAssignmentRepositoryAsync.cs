@@ -74,7 +74,7 @@ namespace Infrastructure.Persistence.Repositories
                                  on user.Id equals userroles.UserId
                                  join roles in _dbContext.Roles
                                  on userroles.RoleId equals roles.Id
-                                 where roles.Name.ToLower() == "teacher"
+                                 where roles.Name.ToLower() == "teacher" && (!string.IsNullOrEmpty(teacherName) ? user.FirstName.ToLower().Contains(teacherName.ToLower()) || user.LastName.ToLower().Contains(teacherName.ToLower()) : true)
                                  select new
                                  {
                                      userId = user.Id,
@@ -139,10 +139,10 @@ namespace Infrastructure.Persistence.Repositories
 
                 teacherAnalysisReport.Add(teacherAnalysisReportobject);
             }
-            if(!string.IsNullOrEmpty(teacherName))
-            {
-                teacherAnalysisReport = teacherAnalysisReport.Where(x => x.TeacherName.ToLower().Contains(teacherName)).ToList();
-            }
+            //if(!string.IsNullOrEmpty(teacherName))
+            //{
+            //    teacherAnalysisReport = teacherAnalysisReport.Where(x => x.TeacherName.ToLower().Contains(teacherName)).ToList();
+            //}
             if(homeworksUploadDelayFrom !=null && homeworksUploadDelayTo != null)
             {
                 teacherAnalysisReport = teacherAnalysisReport.Where(x => x.HomeworksUploadDelay >= homeworksUploadDelayFrom && x.HomeworksUploadDelay <= homeworksUploadDelayTo).ToList();
