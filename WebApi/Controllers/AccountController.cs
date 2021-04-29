@@ -362,6 +362,12 @@ namespace WebApi.Controllers
                 PageSize = PageSize
             }));
         }
+
+        [HttpGet("GetStudentAnalysisReportQuery")]
+        public async Task<IActionResult> GetStudentAnalysisReportQuery([FromQuery] StudentAnalysisReportQuery studentAnalysisReportQuery)
+        {
+            return Ok(await Mediator.Send(studentAnalysisReportQuery));
+        }
     }
 }
 
