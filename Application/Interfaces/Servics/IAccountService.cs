@@ -6,6 +6,7 @@ using Application.Wrappers;
 using Domain.Entities;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Application.Interfaces
         Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress);
         Task<Response<AuthenticationResponse>> RefreshToken(string token, string ipAddress);
         Task<Response<string>> RegisterAsync(RegisterRequest request, string origin);
+        Task<Response<bool>> CheckRegisterAsync(RegisterRequest request, string origin);
         Task<Response<string>> AddApplicationUserAsync(AddAccountRequest request, string origin, int role);
         Task<Response<string>> ConfirmEmailAsync(string userId, string code);
         Task ForgotPassword(ForgotPasswordRequest model, string origin);

@@ -12,7 +12,8 @@ namespace Application.DTOs.AccountDTO
         public string Method { get; set; }
         public string TransactionId { get; set; }
         public int Category { get; set; }
-        public int? GroupDefinitionId { get; set; } 
+        public int? GroupDefinitionId { get; set; }
         public DateTime PurchasingDate { get; set; }
+        public string Email { get; set; }
     }
 }

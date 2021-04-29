@@ -15,5 +15,6 @@ namespace Domain.Entities
         public int? GroupDefinitionId { get; set; }
         public GroupDefinition GroupDefinition { get; set; }
         public DateTime PurchasingDate { get; set; }
+        public string Email { get; set; }
     }
 }

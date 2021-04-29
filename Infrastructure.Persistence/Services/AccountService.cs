@@ -280,7 +280,8 @@ namespace Infrastructure.Persistence.Services
                     }
                     if (request.PaymentTransaction != null)
                     {
-                        AddPaymentTransaction(request.PaymentTransaction);
+                        request.PaymentTransaction.UserId = user.Id;
+                        await AddPaymentTransaction(request.PaymentTransaction);
                     }
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
@@ -294,6 +295,55 @@ namespace Infrastructure.Persistence.Services
                 throw new ApiException($"Email {request.Email } is already registered.");
             }
         }
+
+
+        public async Task<Response<bool>> CheckRegisterAsync(RegisterRequest request, string origin)
+        {
+            if (request.Password == null ||
+             request.ConfirmPassword == null ||
+             request.Email == null ||
+             request.LastName == null ||
+             request.FirstName == null)
+            {
+                throw new ApiException($"One of this fields missing: Password, ConfirmPassword, Email, LastName, FirstName.");
+            }
+            if (request.Password.Length < 6)
+            {
+                throw new ApiException($"password Minimum length 6.");
+            }
+            if (request.ConfirmPassword != request.Password)
+            {
+                throw new ApiException($"Confirm Password wrong.");
+            }
+            if (!IsValidEmail(request.Email))
+            {
+                throw new ApiException($"Email Not Vaild.");
+            }
+            request.UserName = request.Email;
+            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
+            if (userWithSameUserName != null)
+            {
+                throw new ApiException($"Email '{request.UserName}' is already taken.");
+            }
+
+            if (IsDuplicate(request.FirstName, request.LastName, request.DateOfBirth, request.Country))
+            {
+                var haveExp = _duplicateExceptionRepository.check(request.Email);
+                if (!haveExp)
+                {
+                    throw new ApiException($"Duplicate Account detected, Kindly contanct the admin.");
+                }
+            }
+
+            var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
+
+            if (userWithSameEmail != null)
+            {
+                throw new ApiException($"Email {request.Email } is already registered.");
+            }
+            return new Response<bool>(true);
+        }
+
 
         public async Task AddPaymentTransaction(PaymentTransactionInputModel inputModel)
         {

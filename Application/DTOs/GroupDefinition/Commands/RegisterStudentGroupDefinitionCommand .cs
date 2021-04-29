@@ -1,8 +1,10 @@
-﻿using Application.Enums;
+﻿using Application.DTOs.AccountDTO;
+using Application.Enums;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -20,6 +22,8 @@ namespace Application.DTOs
         public int? PromoCodeInstanceId { get; set; }
         public int? PlacmentTestId { get; set; }
         public string Email { get; set; }
+        public PaymentTransactionInputModel PaymentTransaction { get; set; }
+
         public class RegisterStudentGroupDefinitionCommandHandler : IRequestHandler<RegisterStudentGroupDefinitionCommand, Response<int>>
         {
             private readonly IGroupDefinitionRepositoryAsync _GroupDefinitionRepositoryAsync;
@@ -32,6 +36,8 @@ namespace Application.DTOs
             private readonly IStudentInfoRepositoryAsync _studentInfoRepositoryAsync;
             private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
             private readonly IPlacementReleaseReopsitoryAsync _placementRelease;
+            private readonly IPaymentTransactionsRepositoryAsync _paymentTransactionsRepository;
+            private readonly IMapper _mapper;
             public RegisterStudentGroupDefinitionCommandHandler(IGroupDefinitionRepositoryAsync GroupDefinitionRepository,
                 IGroupInstanceRepositoryAsync groupInstanceRepositoryAsync,
                 IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync,
@@ -41,7 +47,9 @@ namespace Application.DTOs
                 IPromoCodeInstanceRepositoryAsync promoCodeInstanceRepositoryAsync,
                 IStudentInfoRepositoryAsync studentInfoRepositoryAsync,
                 ISublevelRepositoryAsync sublevelRepositoryAsync,
-                IPlacementReleaseReopsitoryAsync placementReleaseReopsitoryAsyncs)
+                IPlacementReleaseReopsitoryAsync placementReleaseReopsitoryAsyncs,
+                IPaymentTransactionsRepositoryAsync paymentTransactionsRepositoryAsync,
+                IMapper mapper)
             {
                 _GroupDefinitionRepositoryAsync = GroupDefinitionRepository;
                 _groupInstanceRepositoryAsync = groupInstanceRepositoryAsync;
@@ -53,6 +61,8 @@ namespace Application.DTOs
                 _studentInfoRepositoryAsync = studentInfoRepositoryAsync;
                 _sublevelRepositoryAsync = sublevelRepositoryAsync;
                 _placementRelease = placementReleaseReopsitoryAsyncs;
+                _paymentTransactionsRepository = paymentTransactionsRepositoryAsync;
+                _mapper = mapper;
             }
             public async Task<Response<int>> Handle(RegisterStudentGroupDefinitionCommand command, CancellationToken cancellationToken)
             {
@@ -265,6 +275,11 @@ namespace Application.DTOs
                         }
 
                     }
+                }
+                if (command.PaymentTransaction != null)
+                {
+                    var obj = _mapper.Map<PaymentTransaction>(command.PaymentTransaction);
+                    await _paymentTransactionsRepository.AddAsync(obj);
                 }
                 return new Response<int>(GroupDefinition.Id);
             }

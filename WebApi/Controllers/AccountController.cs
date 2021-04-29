@@ -79,6 +79,13 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost("check-register")]
+        public async Task<IActionResult> CheckRegisterAsync([FromBody] RegisterRequest inputModel)
+        {
+            var origin = Request.Headers["origin"];
+            return Ok(await _accountService.CheckRegisterAsync(inputModel, origin));
+        }
+
         [HttpPost("addPayment")]
         public async Task<IActionResult> AddPaymentTransaction(PaymentTransactionInputModel request)
         {
