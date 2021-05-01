@@ -145,9 +145,9 @@ namespace Application.DTOs
                         {
                             GroupInstanceId = groupInstance.Id,
                             LessonDefinitionId = item.Id,
-                            StartDate = timeslotsDetailed.GetValueOrDefault(item.Order).Start,
-                            EndDate = timeslotsDetailed.GetValueOrDefault(item.Order).End,
-                            DueDate = timeslotsDetailed.GetValueOrDefault(item.Order).End.AddDays(1),
+                            StartDate = timeslotsDetailed.GetValueOrDefault(item.Order % groupInstance.GroupDefinition.Sublevel.NumberOflessons).Start,
+                            EndDate = timeslotsDetailed.GetValueOrDefault(item.Order % groupInstance.GroupDefinition.Sublevel.NumberOflessons).End,
+                            DueDate = timeslotsDetailed.GetValueOrDefault(item.Order % groupInstance.GroupDefinition.Sublevel.NumberOflessons).End.AddDays(1),
                             MaterialDone = string.Empty,
                             MaterialToDo = string.Empty,
                             Serial = item.Order.ToString()
