@@ -37,7 +37,7 @@ namespace Application.DTOs
                 IEnumerable<LessonInstance> lessonInstances = new List<LessonInstance>();
                 var teacherGroup = _teacherGroupInstanceAssignmentRepository.GetByTeachGroupInstanceId(query.TeacherId, query.GroupInstanceId);
                 lessonInstances = _lessonInstanceRepository.GetByGroupInstanceId(query.GroupInstanceId);
-                if (!teacherGroup.IsDefault)
+                if (teacherGroup != null && !teacherGroup.IsDefault)
                 {
                     if (!teacherGroup.LessonInstanceId.HasValue)
                     {
