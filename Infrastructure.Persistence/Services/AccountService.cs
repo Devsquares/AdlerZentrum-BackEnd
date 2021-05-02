@@ -30,6 +30,7 @@ using MediatR;
 using Application.DTOs;
 using AutoMapper;
 using Application.DTOs.AccountDTO;
+using Application.Features;
 
 namespace Infrastructure.Persistence.Services
 {
@@ -48,7 +49,7 @@ namespace Infrastructure.Persistence.Services
         private readonly IDuplicateExceptionRepositoryAsync _duplicateExceptionRepository;
         private readonly IPaymentTransactionsRepositoryAsync _paymentTransactionsRepository;
         private readonly IMapper _mapper;
-
+        private IMediator _mediator;
         private readonly ApplicationDbContext _context;
 
         public AccountService(UserManager<ApplicationUser> userManager,
@@ -63,7 +64,8 @@ namespace Infrastructure.Persistence.Services
             ITeacherGroupInstanceAssignmentRepositoryAsync teacherGroupInstanceAssignmentRepositoryAsync,
             IDuplicateExceptionRepositoryAsync duplicateExceptionRepositoryAsync,
             IPaymentTransactionsRepositoryAsync paymentTransactionsRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IMediator mediator)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -78,6 +80,7 @@ namespace Infrastructure.Persistence.Services
             _duplicateExceptionRepository = duplicateExceptionRepositoryAsync;
             _paymentTransactionsRepository = paymentTransactionsRepository;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<Response<AuthenticationResponse>> AuthenticateAsync(AuthenticationRequest request, string ipAddress)
@@ -647,6 +650,7 @@ namespace Infrastructure.Persistence.Services
                     {
                         throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
                     }
+                    
                     await _userManager.AddToRoleAsync(user, userRole.ToString());
                     string verificationUri = string.Empty;
                     try
@@ -657,6 +661,15 @@ namespace Infrastructure.Persistence.Services
                     catch
                     {
 
+                    }
+                    if (userRole == RolesEnum.Teacher)
+                    {
+                        CreatePermitTeacherCommand teacherClaim = new CreatePermitTeacherCommand()
+                        {
+                            TeacherId = user.Id,
+                            Claim = ClaimsEnum.AddTests.ToString()
+                        };
+                        await _mediator.Send(teacherClaim);
                     }
                     return new Response<string>(user.Id, message: $"User Registered. Please confirm your ApplicationUser by visiting this URL {verificationUri}");
                 }
