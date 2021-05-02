@@ -68,14 +68,15 @@ namespace Infrastructure.Persistence.Repositories
 
         public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
-            return homeWorkSubmitions.Where(x => (x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) || x.CorrectionDate > x.CorrectionDueDate
-              && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-       (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
+            return homeWorkSubmitions.Where(x => 
+            ((x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) 
+              || x.CorrectionDate > x.CorrectionDueDate)
+              && x.DelaySeen == DelaySeen 
+              && (String.IsNullOrEmpty(TeacherName) ? true : (x.CorrectionTeacher.FirstName + " " +x.CorrectionTeacher.LastName).Contains(TeacherName))).Count();
         }
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            //(x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))
             return await homeWorkSubmitions
                 .Include(x => x.CorrectionTeacher)
                 .Include(x => x.Homework.Teacher)
@@ -84,8 +85,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.Homework.LessonInstance)
                 .Where(x => (x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) || x.CorrectionDate > x.CorrectionDueDate
                     && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-            (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))
-          )
+            (x.CorrectionTeacher.FirstName + " " + x.CorrectionTeacher.LastName).Contains(TeacherName))
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,

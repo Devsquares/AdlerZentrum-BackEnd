@@ -108,7 +108,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.LessonDefinition)
                 .Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
             && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))
+           (x.SubmittedReportTeacher.FirstName +" " +x.SubmittedReportTeacher.LastName).Contains(TeacherName)
             )
               .Select(x => new LateSubmissionsViewModel()
               {
@@ -128,7 +128,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
             && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.SubmittedReportTeacher.FirstName.Contains(TeacherName) || x.SubmittedReportTeacher.LastName.Contains(TeacherName))).Count();
+           (x.SubmittedReportTeacher.FirstName+" "+ x.SubmittedReportTeacher.LastName).Contains(TeacherName)).Count();
         }
 
     }

@@ -38,6 +38,8 @@ namespace Application.Features
             DoExecutionChecks();
 
             Execute();
+
+            dbContext.SaveChanges();
         }
 
         private void DoInitializationChecks()
@@ -53,6 +55,9 @@ namespace Application.Features
                 && x.IsDefault == true
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running)
                 .FirstOrDefault();
+
+            //Get student info
+            studentInfo = dbContext.Set<StudentInfo>().Where(x => x.StudentId == user.Id).FirstOrDefault();
 
             //checks whether the student is in a final sublevel
             isFinal = currentGroup.GroupInstance.GroupDefinition.Sublevel.IsFinal;
@@ -150,9 +155,14 @@ namespace Application.Features
         }
 
         public void fail()
-        {
-            currentGroup.Succeeded = false;
-            //he should be removed from the group, do we need here a disqualified column?
+        { 
+            DisqualificationRequest disqualificationRequest = new DisqualificationRequest()
+            {
+                Comment = "The student has exceeded the permitted absence percentage.",
+                DisqualificationRequestStatus = (int)DisqualificationRequestStatusEnum.Pending,
+                StudentId = studentInfo.StudentId
+            };
+            dbContext.Add(disqualificationRequest);
             dbContext.Update(currentGroup);
         }
 

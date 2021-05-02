@@ -35,7 +35,7 @@ namespace Infrastructure.Persistence.Repositories
 
             if (!string.IsNullOrWhiteSpace(StudentName))
             {
-                query = query.Where(x => x.User.FirstName.Contains(StudentName) || x.User.LastName.Contains(StudentName));
+                query = query.Where(x => (x.User.FirstName + " " + x.User.LastName).Contains(StudentName));
             }
 
             if (GroupDefinitionId.HasValue)

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Application.DTOs
 {
@@ -31,15 +32,19 @@ namespace Application.DTOs
             }
             public async Task<Response<bool>> Handle(ActiveGroupInstanceByGroupDefinationCommand command, CancellationToken cancellationToken)
             {
-                var groupInstances = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(command.Id);
-                if (groupInstances == null) throw new ApiException($"Group Not Found.");
-                foreach (var item in groupInstances)
+                using (TransactionScope scope = new TransactionScope())
                 {
-                    await _mediator.Send(new ActiveGroupInstanceCommand { GroupInstanceId = item.Id });
+                    var groupInstances = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(command.Id);
+                    if (groupInstances == null) throw new ApiException($"Group Not Found.");
+                    foreach (var item in groupInstances)
+                    {
+                        await _mediator.Send(new ActiveGroupInstanceCommand { GroupInstanceId = item.Id });
+                    }
+                    var groupDefinition = await _groupDefinitionRepositoryAsync.GetByIdAsync(command.Id);
+                    groupDefinition.Status = (int)GroupDefinationStatusEnum.Running;
+                    await _groupDefinitionRepositoryAsync.UpdateAsync(groupDefinition);
+                    scope.Complete();
                 }
-                var groupDefinition = await _groupDefinitionRepositoryAsync.GetByIdAsync(command.Id);
-                groupDefinition.Status = (int)GroupDefinationStatusEnum.Running;
-                await _groupDefinitionRepositoryAsync.UpdateAsync(groupDefinition);
                 return new Response<bool>(true);
             }
         }

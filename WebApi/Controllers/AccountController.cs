@@ -363,8 +363,8 @@ namespace WebApi.Controllers
             }));
         }
 
-        [HttpGet("GetStudentAnalysisReportQuery")]
-        public async Task<IActionResult> GetStudentAnalysisReportQuery([FromQuery] StudentAnalysisReportQuery studentAnalysisReportQuery)
+        [HttpGet("GetStudentAnalysisReport")]
+        public async Task<IActionResult> GetStudentAnalysisReport([FromQuery] StudentAnalysisReportQuery studentAnalysisReportQuery)
         {
             return Ok(await Mediator.Send(studentAnalysisReportQuery));
         }

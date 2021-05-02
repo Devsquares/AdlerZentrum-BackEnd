@@ -42,7 +42,7 @@ namespace Infrastructure.Persistence.Repositories
 
             if (!string.IsNullOrWhiteSpace(studentName))
             {
-                query = query.Where(x => x.Student.FirstName.Contains(studentName) || x.Student.LastName.Contains(studentName));
+                query = query.Where(x => (x.Student.FirstName + " " + x.Student.LastName).Contains(studentName));
             }
 
             if (!string.IsNullOrWhiteSpace(testName))
@@ -122,13 +122,11 @@ namespace Infrastructure.Persistence.Repositories
             query = query.Where(x => x.Status <= (int)TestInstanceEnum.Solved);
             count = query.Count();
             return query
-                .Include(x => x.Test)
-                .Include(x => x.CorrectionTeacher)
-                .Include(x => x.GroupInstance)
-                .Include(x => x.LessonInstance)
-                .ThenInclude(x => x.GroupInstance)
-                .Include(x => x.Student)
-                .Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x => x.GroupInstance).Distinct().ToList();
+                .Include(x=>x.GroupInstance)
+                .ThenInclude(x => x.GroupDefinition)
+                .ThenInclude(x => x.TimeSlot)
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x => x.GroupInstance)
+                .Distinct().ToList();
         }
 
 
@@ -195,8 +193,8 @@ namespace Infrastructure.Persistence.Repositories
            .ThenInclude(x => x.GroupDefinition)
            .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .AsNoTracking() 
-           .ToListAsync(); 
+            .AsNoTracking()
+           .ToListAsync();
         }
 
         public virtual async Task<int> GetAllTestsToManageCount(int? GroupDefinitionId, int? GroupInstanceId, int? TestTypeId, int? Status, bool? reCorrectionRequest)
@@ -228,8 +226,8 @@ namespace Infrastructure.Persistence.Repositories
            .Include(x => x.Student)
            .Include(x => x.LessonInstance)
            .ThenInclude(x => x.GroupInstance)
-           .ThenInclude(x => x.GroupDefinition) 
-           .Count(); 
+           .ThenInclude(x => x.GroupDefinition)
+           .Count();
         }
 
         public override Task<TestInstance> GetByIdAsync(int id)
@@ -334,7 +332,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return _testInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.CorrectionDueDate
                  && x.ManualCorrection && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-         (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName))).Count();
+         (x.CorrectionTeacher.FirstName + " " + x.CorrectionTeacher.LastName).Contains(TeacherName)).Count();
         }
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
@@ -346,7 +344,7 @@ namespace Infrastructure.Persistence.Repositories
                 .Where(x => x.SubmissionDate == null || x.SubmissionDate == DateTime.MinValue || x.SubmissionDate > x.CorrectionDueDate
                    && x.ManualCorrection && x.DelaySeen == DelaySeen
                    && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.CorrectionTeacher.FirstName.Contains(TeacherName) || x.CorrectionTeacher.LastName.Contains(TeacherName)))
+           (x.CorrectionTeacher.FirstName + " " + x.CorrectionTeacher.LastName).Contains(TeacherName))
              .Select(x => new LateSubmissionsViewModel()
              {
                  Id = x.Id,
@@ -389,7 +387,7 @@ namespace Infrastructure.Persistence.Repositories
             }
             if (!String.IsNullOrEmpty(StudentName))
             {
-                query = query.Where(x => x.Student.FirstName.Contains(StudentName) || x.Student.LastName.Contains(StudentName));
+                query = query.Where(x => (x.Student.FirstName + " " + x.Student.LastName).Contains(StudentName));
             }
             if (Status != 0)
             {
@@ -422,7 +420,7 @@ namespace Infrastructure.Persistence.Repositories
             }
             if (!String.IsNullOrEmpty(StudentName))
             {
-                query = query.Where(x => x.Student.FirstName.Contains(StudentName) || x.Student.LastName.Contains(StudentName));
+                query = query.Where(x => (x.Student.FirstName + " " + x.Student.LastName).Contains(StudentName));
             }
             if (Status != 0)
             {

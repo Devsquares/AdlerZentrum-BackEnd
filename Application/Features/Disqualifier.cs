@@ -14,6 +14,7 @@ namespace Application.Features
         private ApplicationUser user;
         private List<TestInstance> testInstances;
         private List<HomeWorkSubmition> homeworks;
+        private GroupInstanceStudents groupInstanceStudent;
 
         private List<LessonInstanceStudent> lessonInstances;
         private int groupInstanceId;
@@ -58,6 +59,8 @@ namespace Application.Features
             .Include(x => x.LessonInstance.GroupInstance)
             .Where(x => x.StudentId == user.Id && x.LessonInstance.GroupInstanceId == groupInstanceId)
             .ToList();
+
+            groupInstanceStudent = dbContext.Set<GroupInstanceStudents>().Where(x => x.StudentId == user.Id && x.GroupInstanceId == groupInstanceId).FirstOrDefault();
         }
 
         private void DoExecutionChecks()
@@ -82,9 +85,14 @@ namespace Application.Features
                 item.Disqualified = true;
             }
 
+            groupInstanceStudent.Disqualified = true;
+            groupInstanceStudent.IsDefault = false;
+            groupInstanceStudent.Succeeded = false;
+
             dbContext.UpdateRange(testInstances);
             dbContext.UpdateRange(homeworks);
             dbContext.UpdateRange(lessonInstances);
+            dbContext.Update(groupInstanceStudent);
             dbContext.SaveChanges();
         }
     }
