@@ -6,6 +6,7 @@ namespace Application.Enums
 {
     public enum ClaimsEnum
     {
-        AddAdlerCard
+        AddAdlerCard,
+        AddTests
     }
 }
