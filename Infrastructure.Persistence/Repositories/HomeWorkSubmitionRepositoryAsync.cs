@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using LinqKit;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -68,24 +69,46 @@ namespace Infrastructure.Persistence.Repositories
 
         public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
-            return homeWorkSubmitions.Where(x => 
-            ((x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) 
+            var query = homeWorkSubmitions.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(TeacherName))
+            {
+                var predicate = PredicateBuilder.New<HomeWorkSubmition>();
+                string[] searchWordsArr = TeacherName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.CorrectionTeacher.FirstName.ToLower().Contains(TeacherName.ToLower()) || x.CorrectionTeacher.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
+            }
+
+            return query.Where(x =>
+            ((x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now)
               || x.CorrectionDate > x.CorrectionDueDate)
-              && x.DelaySeen == DelaySeen 
-              && (String.IsNullOrEmpty(TeacherName) ? true : (x.CorrectionTeacher.FirstName + " " +x.CorrectionTeacher.LastName).Contains(TeacherName))).Count();
+              && x.DelaySeen == DelaySeen).Count();
         }
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            return await homeWorkSubmitions
+            var query = homeWorkSubmitions.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(TeacherName))
+            {
+                var predicate = PredicateBuilder.New<HomeWorkSubmition>();
+                string[] searchWordsArr = TeacherName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.Student.FirstName.ToLower().Contains(TeacherName.ToLower()) || x.Student.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
+            }
+
+            return await query
                 .Include(x => x.CorrectionTeacher)
                 .Include(x => x.Homework.Teacher)
                 .Include(x => x.Student)
                 .Include(x => x.Homework.GroupInstance)
                 .Include(x => x.Homework.LessonInstance)
                 .Where(x => (x.CorrectionDate == null && x.CorrectionDueDate < DateTime.Now) || x.CorrectionDate > x.CorrectionDueDate
-                    && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-            (x.CorrectionTeacher.FirstName + " " + x.CorrectionTeacher.LastName).Contains(TeacherName))
+                    && x.DelaySeen == DelaySeen)
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,

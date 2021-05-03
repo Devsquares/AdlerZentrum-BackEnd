@@ -5,6 +5,7 @@ using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -101,34 +102,42 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            //todo if not the default.
-            var data = await lessonInstances
+            var query = lessonInstances.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(TeacherName))
+            {
+                var predicate = PredicateBuilder.New<LessonInstance>();
+                string[] searchWordsArr = TeacherName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.GroupInstance.TeacherAssignment.Where(x => x.IsDefault).FirstOrDefault().Teacher.FirstName.ToLower().Contains(TeacherName.ToLower()) || x.GroupInstance.TeacherAssignment.Where(x => x.IsDefault).FirstOrDefault().Teacher.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
+            }
+
+            return await query
                 .Include(x => x.SubmittedReportTeacher)
                 .Include(x => x.GroupInstance.TeacherAssignment)
                 .Include(x => x.LessonDefinition)
                 .Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
-            && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.SubmittedReportTeacher.FirstName +" " +x.SubmittedReportTeacher.LastName).Contains(TeacherName)
-            )
+            && x.DelaySeen == DelaySeen)
               .Select(x => new LateSubmissionsViewModel()
               {
                   Id = x.Id,
-                  Teacher = x.SubmittedReportTeacher == null ? x.GroupInstance.TeacherAssignment[0].Teacher.FirstName.ToString() + " " + x.GroupInstance.TeacherAssignment[0].Teacher.LastName.ToString()
+                  Teacher = x.SubmittedReportTeacher == null ? (x.GroupInstance.TeacherAssignment != null ? x.GroupInstance.TeacherAssignment.Where(x => x.IsDefault).FirstOrDefault().Teacher.FirstName.ToString() + " " + x.GroupInstance.TeacherAssignment.Where(x => x.IsDefault).FirstOrDefault().Teacher.LastName.ToString() : null)
                   : x.SubmittedReportTeacher.FirstName.ToString() + " " + x.SubmittedReportTeacher.LastName.ToString(),
                   SubmissionDate = x.SubmissionDate.Value,
                   ExpectedDate = x.DueDate.Value,
                   DelayDuration = (x.SubmissionDate.Value - x.DueDate.Value).Hours,
                   LessonInstance = x,
                   GroupInstance = x.GroupInstance
-              }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new List<LateSubmissionsViewModel>(data);
+              }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(); 
         }
 
         public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
         {
             return lessonInstances.Where(x => x.SubmissionDate == null || x.SubmissionDate > x.DueDate
             && x.DelaySeen == DelaySeen && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.SubmittedReportTeacher.FirstName+" "+ x.SubmittedReportTeacher.LastName).Contains(TeacherName)).Count();
+           (x.SubmittedReportTeacher.FirstName + " " + x.SubmittedReportTeacher.LastName).Contains(TeacherName)).Count();
         }
 
     }

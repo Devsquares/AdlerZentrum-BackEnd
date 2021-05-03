@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -38,9 +39,15 @@ namespace Infrastructure.Persistence.Repositories
             {
                 query = query.Where(x => x.StudentId == studentId);
             }
-            if (!string.IsNullOrEmpty(studentName))
+            if (!string.IsNullOrWhiteSpace(studentName))
             {
-                query = query.Where(x => x.Student.FirstName.ToLower().Contains(studentName.ToLower()) || x.Student.LastName.ToLower().Contains(studentName.ToLower()));
+                var predicate = PredicateBuilder.New<AdlerCardSubmission>();
+                string[] searchWordsArr = studentName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.Student.FirstName.ToLower().Contains(studentName.ToLower()) || x.Student.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
             }
             if (levelId.HasValue)
             {

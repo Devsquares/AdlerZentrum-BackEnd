@@ -4,6 +4,7 @@ using Application.Interfaces.Repositories;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -39,15 +40,20 @@ namespace Infrastructure.Persistence.Repositories
         public virtual IReadOnlyList<TestInstance> GetTestInstanceToAssgin(string studentName, string testName, int? testType, bool assigend, int? groupInsatanceId, int? testInstanceId, int pageNumber, int pageSize, out int count)
         {
             var query = _testInstances.AsQueryable();
+            var predicate = PredicateBuilder.New<TestInstance>();
 
             if (!string.IsNullOrWhiteSpace(studentName))
             {
-                query = query.Where(x => (x.Student.FirstName + " " + x.Student.LastName).Contains(studentName));
+                string[] searchWordsArr = studentName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.Student.FirstName.ToLower().Contains(studentName.ToLower()) || x.Student.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
             }
-
             if (!string.IsNullOrWhiteSpace(testName))
             {
-                query = query.Where(x => x.Test.Name.Contains(testName) || x.Test.Name.Contains(testName));
+                query = query.Where(x => x.Test.Name.Contains(testName));
             }
 
             if (testType != null)
@@ -122,7 +128,7 @@ namespace Infrastructure.Persistence.Repositories
             query = query.Where(x => x.Status <= (int)TestInstanceEnum.Solved);
             count = query.Count();
             return query
-                .Include(x=>x.GroupInstance)
+                .Include(x => x.GroupInstance)
                 .ThenInclude(x => x.GroupDefinition)
                 .ThenInclude(x => x.TimeSlot)
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(x => x.GroupInstance)
@@ -337,14 +343,24 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<LateSubmissionsViewModel>> GetLateSubmissions(string TeacherName, int pageNumber, int pageSize, bool DelaySeen)
         {
-            return await _testInstances
+            var query = _testInstances.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(TeacherName))
+            {
+                var predicate = PredicateBuilder.New<TestInstance>();
+                string[] searchWordsArr = TeacherName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.CorrectionTeacher.FirstName.ToLower().Contains(TeacherName.ToLower()) || x.CorrectionTeacher.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
+            }
+
+            return await query
                 .Include(x => x.GroupInstance)
                 .Include(x => x.CorrectionTeacher)
                 .Include(x => x.Student)
                 .Where(x => x.SubmissionDate == null || x.SubmissionDate == DateTime.MinValue || x.SubmissionDate > x.CorrectionDueDate
-                   && x.ManualCorrection && x.DelaySeen == DelaySeen
-                   && String.IsNullOrEmpty(TeacherName) ? true :
-           (x.CorrectionTeacher.FirstName + " " + x.CorrectionTeacher.LastName).Contains(TeacherName))
+                   && x.ManualCorrection && x.DelaySeen == DelaySeen)
              .Select(x => new LateSubmissionsViewModel()
              {
                  Id = x.Id,
@@ -385,10 +401,18 @@ namespace Infrastructure.Persistence.Repositories
             {
                 query = query.Where(x => x.GroupInstanceId == GroupInstanceId);
             }
-            if (!String.IsNullOrEmpty(StudentName))
+
+            if (!string.IsNullOrWhiteSpace(StudentName))
             {
-                query = query.Where(x => (x.Student.FirstName + " " + x.Student.LastName).Contains(StudentName));
+                var predicate = PredicateBuilder.New<TestInstance>();
+                string[] searchWordsArr = StudentName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.Student.FirstName.ToLower().Contains(StudentName.ToLower()) || x.Student.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
             }
+
             if (Status != 0)
             {
                 query = query.Where(x => x.Status == (int)Status);

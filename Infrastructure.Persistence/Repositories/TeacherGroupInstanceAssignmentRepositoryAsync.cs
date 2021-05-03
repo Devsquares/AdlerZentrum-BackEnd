@@ -70,6 +70,7 @@ namespace Infrastructure.Persistence.Repositories
             , int? homeworksUploadDelayFrom, int? homeworksUploadDelayTo, int? homeworksCorrectionDelayFrom, int? homeworksCorrectionDelayTo,
             int? testsCorrectionDelayFrom, int? testsCorrectionDelayTo, int? feedbackScoreFrom, int? feedbackScoreto, out int count)
         {
+            // TODO: fix search with name.
             var userListquery = (from user in _dbContext.ApplicationUsers
                                  join userroles in _dbContext.UserRoles
                                  on user.Id equals userroles.UserId

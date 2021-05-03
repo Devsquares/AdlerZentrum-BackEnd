@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Models;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,11 +27,7 @@ namespace Infrastructure.Persistence.Repositories
             var promocodesInstancesquery = _promocodeinstances
                 .Include(x => x.Student)
                  .Include(x => x.GroupDefinition)
-                .Include(x => x.PromoCode).AsQueryable();
-            //.Where(x => (promocodeId != null ? x.PromoCodeId == promocodeId:true) &&
-            //            (!string.IsNullOrEmpty(promoCodeName)? x.PromoCode.Name == promoCodeName:true) &&
-            //            (!string.IsNullOrEmpty(studentName)?(x.Student.FirstName ==studentName || x.Student.LastName == studentName):true) && 
-            //            (isValid == true? (x.IsUsed == false && (x.EndDate !=null?x.EndDate >= DateTime.Now:true)):true ) && )
+                .Include(x => x.PromoCode).AsQueryable(); 
             if (promocodeId != null)
             {
                 promocodesInstancesquery = promocodesInstancesquery.Where(x => x.PromoCodeId == promocodeId);
@@ -39,9 +36,15 @@ namespace Infrastructure.Persistence.Repositories
             {
                 promocodesInstancesquery = promocodesInstancesquery.Where(x => x.PromoCode.Name == promoCodeName);
             }
-            if (!string.IsNullOrEmpty(studentName))
+            if (!string.IsNullOrWhiteSpace(studentName))
             {
-                promocodesInstancesquery = promocodesInstancesquery.Where(x => x.Student.FirstName == studentName || x.Student.LastName == studentName);
+                var predicate = PredicateBuilder.New<PromoCodeInstance>();
+                string[] searchWordsArr = studentName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.Student.FirstName.ToLower().Contains(studentName.ToLower()) || x.Student.LastName.ToLower().Contains(item.ToLower()));
+                }
+                promocodesInstancesquery = promocodesInstancesquery.Where(predicate);
             }
             if (isValid != null && isValid == true)
             {

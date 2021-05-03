@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Persistence.Repository;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,13 @@ namespace Infrastructure.Persistence.Repositories
 
             if (!string.IsNullOrWhiteSpace(StudentName))
             {
-                query = query.Where(x => (x.User.FirstName + " " + x.User.LastName).Contains(StudentName));
+                var predicate = PredicateBuilder.New<PaymentTransaction>();
+                string[] searchWordsArr = StudentName.Split(" ");
+                foreach (var item in searchWordsArr)
+                {
+                    predicate.Or(x => x.User.FirstName.ToLower().Contains(StudentName.ToLower()) || x.User.LastName.ToLower().Contains(item.ToLower()));
+                }
+                query = query.Where(predicate);
             }
 
             if (GroupDefinitionId.HasValue)
