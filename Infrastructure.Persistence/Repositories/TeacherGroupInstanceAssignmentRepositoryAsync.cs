@@ -25,7 +25,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             var query = groupInstances.Include(x => x.GroupInstance).Where(x => x.TeacherId == TeacherId && (status != null && status.Count > 0 ? status.Contains(x.GroupInstance.Status.Value) : true)).AsQueryable();
             totalCount = query.Count();
-            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(); 
+            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
         public TeacherGroupInstanceAssignment GetByTeacherId(string TeacherId)
@@ -49,12 +49,12 @@ namespace Infrastructure.Persistence.Repositories
 
         public List<TeacherGroupInstanceAssignment> GetAll(int pageNumber, int pageSize, out int totalCount, int? sublevelId = null, int? groupDefinationId = null)
         {
-            var query = groupInstances.Include(x => x.GroupInstance)
+            var query = groupInstances.Include(x => x.GroupInstance.GroupDefinition.TimeSlot)
              .Where(x => (sublevelId != null ? x.GroupInstance.GroupDefinition.SubLevelId == sublevelId.Value : true)
               && (groupDefinationId != null ? x.GroupInstance.GroupDefinitionId == groupDefinationId.Value : true))
               .AsQueryable();
             totalCount = query.Count();
-            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(); 
+            return query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
         }
 
         public TeacherGroupInstanceAssignment GetFirstNotIsDefault(int groupInstanceId)
@@ -145,7 +145,7 @@ namespace Infrastructure.Persistence.Repositories
             //{
             //    teacherAnalysisReport = teacherAnalysisReport.Where(x => x.TeacherName.ToLower().Contains(teacherName)).ToList();
             //}
-            if(homeworksUploadDelayFrom !=null && homeworksUploadDelayTo != null)
+            if (homeworksUploadDelayFrom != null && homeworksUploadDelayTo != null)
             {
                 teacherAnalysisReport = teacherAnalysisReport.Where(x => x.HomeworksUploadDelay >= homeworksUploadDelayFrom && x.HomeworksUploadDelay <= homeworksUploadDelayTo).ToList();
             }

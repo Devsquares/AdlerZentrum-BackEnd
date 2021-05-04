@@ -27,7 +27,8 @@ namespace Infrastructure.Persistence.Repositories
         public IEnumerable<LessonInstance> GetByGroupInstanceId(int GroupInstanceId)
         {
             return lessonInstances
-                .Include(x => x.GroupInstance)
+                .Include(x => x.GroupInstance.GroupDefinition.TimeSlot)
+                .Include(x => x.LessonDefinition)
                 .Where(x => x.GroupInstanceId == GroupInstanceId).OrderBy(x => x.LessonDefinitionId).ToList();
         }
         public async override Task<LessonInstance> GetByIdAsync(int id)
@@ -130,7 +131,7 @@ namespace Infrastructure.Persistence.Repositories
                   DelayDuration = (x.SubmissionDate.Value - x.DueDate.Value).Hours,
                   LessonInstance = x,
                   GroupInstance = x.GroupInstance
-              }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(); 
+              }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
 
         public int GetLateSubmissionsCount(string TeacherName, bool DelaySeen)
