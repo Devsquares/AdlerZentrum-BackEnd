@@ -31,6 +31,7 @@ using Application.DTOs;
 using AutoMapper;
 using Application.DTOs.AccountDTO;
 using Application.Features;
+using LinqKit;
 
 namespace Infrastructure.Persistence.Services
 {
@@ -650,7 +651,7 @@ namespace Infrastructure.Persistence.Services
                     {
                         throw new ApiException($"You are not autrized to create ApplicationUser with role {request.Role}.");
                     }
-                    
+
                     await _userManager.AddToRoleAsync(user, userRole.ToString());
                     string verificationUri = string.Empty;
                     try
@@ -710,8 +711,7 @@ namespace Infrastructure.Persistence.Services
             }
         }
         public async Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName)
-        {
-            // TODO: remove tolist()
+        { 
             var studentRoles = (from user in _userManager.Users
                                 join userrole in _context.UserRoles on user.Id equals userrole.UserId
                                 join role in _context.Roles on userrole.RoleId equals role.Id
@@ -719,10 +719,12 @@ namespace Infrastructure.Persistence.Services
 
                                 into gj
                                 from x in gj.DefaultIfEmpty()
-                                where role.NormalizedName.ToLower() == RolesEnum.Student.ToString().ToLower() &&
-                                ((groupDefinitionId != null ? x.GroupInstance.GroupDefinitionId == groupDefinitionId : true)) &&
-                                (groupInstanceId != null ? x.GroupInstanceId == groupInstanceId : true) &&
-                                (!string.IsNullOrEmpty(studentName) ? (user.FirstName.ToLower().Contains(studentName.ToLower()) || user.LastName.ToLower().Contains(studentName.ToLower())) : true)
+                                where
+                                role.NormalizedName.ToLower() == RolesEnum.Student.ToString().ToLower()
+                                && ((groupDefinitionId != null ? x.GroupInstance.GroupDefinitionId == groupDefinitionId : true))
+                                && (groupInstanceId != null ? x.GroupInstanceId == groupInstanceId : true)
+                                && (!string.IsNullOrEmpty(studentName) ? (user.FirstName.ToLower().Contains(studentName.ToLower()) || user.LastName.ToLower().Contains(studentName.ToLower())) : true)
+                                && x.IsDefault == true
                                 select new
                                 {
                                     Id = user.Id,
@@ -731,10 +733,10 @@ namespace Infrastructure.Persistence.Services
                                     Email = user.Email,
                                     PhoneNumber = user.PhoneNumber,
                                     GroupSerial = x.GroupInstance != null ? x.GroupInstance.Serial : string.Empty
-                                }).ToList();
+                                }).AsQueryable();
             int totalCount = studentRoles.Count();
-            studentRoles = studentRoles.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-            return new PagedResponse<IEnumerable<object>>(studentRoles, pageNumber, pageSize, totalCount);
+            var list = studentRoles.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            return new PagedResponse<IEnumerable<object>>(list, pageNumber, pageSize, totalCount);
         }
 
         public async Task<List<ApplicationUser>> GetAllRankedusers()
@@ -836,15 +838,15 @@ namespace Infrastructure.Persistence.Services
 
         public List<StudentAnalysisReportModel> GetStudentAnalysisReport(int pageNumber, int PageSize, string studentName, DateTime? from, DateTime? to
            , int? attendancefrom, int? attendanceto, int? LateSubmissionsfrom, int? LateSubmissionsto,
-           int? MissedSubmissionsfrom, int? MissedSubmissionsto,int? CurrentProgressPointsfrom,int? CurrentProgressPointsTo, out int count)
+           int? MissedSubmissionsfrom, int? MissedSubmissionsto, int? CurrentProgressPointsfrom, int? CurrentProgressPointsTo, out int count)
         {
             var userListquery = (from user in _context.ApplicationUsers
                                  join userroles in _context.UserRoles
                                  on user.Id equals userroles.UserId
                                  join roles in _context.Roles
                                  on userroles.RoleId equals roles.Id
-                                 where roles.Name.ToLower() == "student" 
-                                 && (!string.IsNullOrEmpty(studentName)? user.FirstName.ToLower().Contains(studentName.ToLower())|| user.LastName.ToLower().Contains(studentName.ToLower()):true)
+                                 where roles.Name.ToLower() == "student"
+                                 && (!string.IsNullOrEmpty(studentName) ? user.FirstName.ToLower().Contains(studentName.ToLower()) || user.LastName.ToLower().Contains(studentName.ToLower()) : true)
                                  select new
                                  {
                                      userId = user.Id,
