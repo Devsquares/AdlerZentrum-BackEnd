@@ -8,12 +8,13 @@ using System.Text;
 
 namespace Application.Features
 {
-   public class Downgrader
+    public class Downgrader
     {
         private DbContext dbContext;
         private ApplicationUser user;
         private GroupInstanceStudents currentGroup;
         private GroupInstanceStudents lastGroup;
+        private StudentInfo studentInfo;
 
         private bool completeExecution;
 
@@ -21,6 +22,7 @@ namespace Application.Features
         {
             this.dbContext = dbContext;
             this.user = user;
+            this.completeExecution = true;
         }
 
         public void CheckAndProcess()
@@ -58,11 +60,18 @@ namespace Application.Features
                 && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Finished)
                 .OrderByDescending(x => x.Id)
                 .FirstOrDefault();
+
+            studentInfo = dbContext.Set<StudentInfo>()
+                .Where(x => x.StudentId == user.Id).FirstOrDefault();
         }
 
         private void DoExecutionChecks()
         {
             //check that there is no current group
+            if (currentGroup != null)
+            {
+                completeExecution = false;
+            }
         }
 
         private void Execute()
@@ -70,11 +79,16 @@ namespace Application.Features
             if (!completeExecution)
                 return;
             //check the data of the last group and if more than 2 months ago then downgrade
-            //TODO: set the new sublevel id.
+            //set the new sublevel id.
+
+            if (lastGroup.GroupInstance.GroupDefinition.EndDate.AddMonths(2) > DateTime.Now)
+            {
+
+                var currentSublevel = dbContext.Set<Sublevel>().Where(x => x.Id == studentInfo.SublevelId).FirstOrDefault();
+                var preSublevel = dbContext.Set<Sublevel>().Where(x => x.Order == (currentSublevel.Order - 1)).FirstOrDefault();
+                studentInfo.SublevelId = preSublevel.Id;
+            }
             dbContext.SaveChanges();
         }
-
-
-
     }
 }
