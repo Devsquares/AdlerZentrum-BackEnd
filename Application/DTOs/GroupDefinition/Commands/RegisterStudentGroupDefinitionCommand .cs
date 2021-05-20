@@ -23,6 +23,7 @@ namespace Application.DTOs
         public int? PlacmentTestId { get; set; }
         public string Email { get; set; }
         public PaymentTransactionInputModel PaymentTransaction { get; set; }
+        public int? InterestedGroupDefinitionId { get; set; }
 
         public class RegisterStudentGroupDefinitionCommandHandler : IRequestHandler<RegisterStudentGroupDefinitionCommand, Response<int>>
         {
@@ -129,6 +130,13 @@ namespace Application.DTOs
                     }
                     canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstans.Id, command.PromoCodeInstanceId.Value);
                     canApplyInGroupDefinition = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeInGroupDefinitionGeneral(command.groupDefinitionId, command.PromoCodeInstanceId.Value);
+                    var totalpromocodeCount = _groupConditionPromoCodeRepositoryAsync.totalPromoCodesCount(GroupDefinition.GroupConditionId);
+                    var totalPromocodeStudent = _groupInstanceStudentRepositoryAsync.GetCountOfPromoCodeStudents(groupInstans.Id);
+                    if(totalPromocodeStudent == totalpromocodeCount)
+                    {
+                        GroupDefinition.ConditionsFulfilled = true;
+                        await _GroupDefinitionRepositoryAsync.UpdateAsync(GroupDefinition);
+                    }
                 }
                 if (studentCount < groupInstans.GroupDefinition.GroupCondition.NumberOfSlots)
                 {
@@ -142,7 +150,8 @@ namespace Application.DTOs
                             PromoCodeInstanceId = command.PromoCodeInstanceId,
                             IsDefault = false,
                             CreatedDate = DateTime.Now,
-                            IsEligible = isEligible
+                            IsEligible = isEligible,
+                            InterestedGroupDefinitionId = command.InterestedGroupDefinitionId
                         });
                         var promocodeinstance = _promoCodeInstanceRepositoryAsync.GetById(command.PromoCodeInstanceId.Value);
                         promocodeinstance.IsUsed = true;

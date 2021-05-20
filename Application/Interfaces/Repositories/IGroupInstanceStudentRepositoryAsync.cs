@@ -26,5 +26,7 @@ namespace Application.Interfaces.Repositories
         List<GroupInstanceStudents> GetgroupInstanceByStudentId(string studentId);
         Task<List<GroupInstanceModel>> GetSuccessGroupInstances(string studentId);
         List<GroupInstanceStudents> GetgroupInstanceByStudentIdByGroupInstanceId(string studentId, int groupInstanceId);
+        int GetCountOfPromoCodeStudents(int groupId);
+        GroupInstanceStudents GetDeletedInterestedStudent(string StudentId, int interestedGroupId);
     }
 }

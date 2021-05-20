@@ -37,5 +37,7 @@ namespace Domain.Entities
         public string Serial { get; set; }
 
         public int? Status { get; set; }
+
+        public bool ConditionsFulfilled { get; set; }
     }
 }

@@ -31,6 +31,7 @@ namespace Application.DTOs
             private readonly IUsersRepositoryAsync _usersRepositoryAsync;
             private readonly ISublevelRepositoryAsync _sublevelRepositoryAsync;
             private readonly IMailJobRepositoryAsync _jobRepository;
+            private readonly IInterestedStudentRepositoryAsync _interestedStudentRepositoryAsync;
 
             public ActiveGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
                 ILessonInstanceRepositoryAsync lessonInstanceRepository,
@@ -41,7 +42,8 @@ namespace Application.DTOs
                 IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
                 IUsersRepositoryAsync usersRepositoryAsync,
                 ISublevelRepositoryAsync sublevelRepositoryAsync,
-                IMailJobRepositoryAsync jobRepositoryAsync)
+                IMailJobRepositoryAsync jobRepositoryAsync,
+                 IInterestedStudentRepositoryAsync interestedStudentRepositoryAsync)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
                 _lessonInstanceRepositoryAsync = lessonInstanceRepository;
@@ -53,9 +55,8 @@ namespace Application.DTOs
                 _usersRepositoryAsync = usersRepositoryAsync;
                 _sublevelRepositoryAsync = sublevelRepositoryAsync;
                 _jobRepository = jobRepositoryAsync;
-            }
-
-            public async Task<Response<bool>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
+                _interestedStudentRepositoryAsync =  interestedStudentRepositoryAsync;
+            }  public async Task<Response<bool>> Handle(ActiveGroupInstanceCommand command, CancellationToken cancellationToken)
             {
                 var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId).Result;
                 if (groupInstance == null)
@@ -134,6 +135,8 @@ namespace Application.DTOs
                             GroupInstanceId = groupInstance.Id,
                             Status = (int)JobStatusEnum.New
                         });
+
+                        CheckAndDeleteInterested(item);
                     }
                     await _groupInstanceStudentRepositoryAsync.UpdateBulkAsync(groupInstance.Students.ToList());
 
@@ -315,6 +318,19 @@ namespace Application.DTOs
                     throw new Exception("Cann't active group please check the status.");
                 }
                 return new Response<bool>(true);
+            }
+
+
+            private async void CheckAndDeleteInterested(GroupInstanceStudents student)
+            {
+                if (student.InterestedGroupDefinitionId.HasValue)
+                {
+                    var interestedstudent = _interestedStudentRepositoryAsync.GetByStudentId(student.StudentId, student.InterestedGroupDefinitionId.Value);
+                    if (interestedstudent != null)
+                    {
+                        await _interestedStudentRepositoryAsync.DeleteAsync(interestedstudent);
+                    }
+                }
             }
         }
     }

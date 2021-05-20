@@ -17,6 +17,9 @@ namespace Domain.Entities
         public bool IsEligible { get; set; }
         public bool Disqualified { get; set; }
         public string DisqualifiedComment { get; set; }
-        public string DisqualifiedUserId {get;set;}
+        public string DisqualifiedUserId { get; set; }
+        public int? InterestedGroupDefinitionId { get; set; }
+        public virtual GroupDefinition GroupDefinition { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

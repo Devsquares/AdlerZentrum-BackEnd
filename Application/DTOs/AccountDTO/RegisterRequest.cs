@@ -28,5 +28,7 @@ namespace Application.DTOs.Account
         public int? GroupDefinitionId { get; set; }
         public int? AdlerCardsBundleId { get; set; }
         public PaymentTransactionInputModel PaymentTransaction { get; set; }
+        public int? InterestedGroupDefinitionId { get; set; }
+        public int? InterestedPromoCodeInstanceID { get; set; }
     }
 }

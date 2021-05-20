@@ -79,7 +79,7 @@ namespace Infrastructure.Persistence.Repositories
             //}
             else
             {
-                studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodeInstanceId != null && x.PromoCodeInstance.PromoCode.IsStrong==false)
+                studentsGroup = _groupInstanceStudents.Where(x => x.GroupInstanceId == groupInstanceId && x.PromoCodeInstanceId != null && x.PromoCodeInstance.PromoCode.IsStrong==false && x.IsDeleted == false)
              .GroupBy(x => x.PromoCodeInstance.PromoCodeId)//Modified
              .Select(x => new PromoCodeCountModel() { promocodeId = x.Key, count = x.Count() }).ToList();
             }
@@ -216,7 +216,10 @@ namespace Infrastructure.Persistence.Repositories
             }
         }
        
-
+        public int totalPromoCodesCount(int groupconditionId)
+        {
+            return _groupconditionpromocodes.Include(x => x.GroupConditionDetails.GroupCondition).Where(x => x.GroupConditionDetails.GroupConditionId == groupconditionId).Sum(x => x.Count);
+        }
     }
 
 }

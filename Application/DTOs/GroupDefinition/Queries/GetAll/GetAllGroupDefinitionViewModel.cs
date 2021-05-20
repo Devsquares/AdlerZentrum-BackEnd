@@ -43,5 +43,6 @@ namespace Application.DTOs
         public int TotalOverPaymentStudents { get; set; }
         public int TotalInterestedStudents { get; set; }
         public List<List<PromoCodeCountModel>> PromoCodes { get; set; } = new List<List<PromoCodeCountModel>>();
+        public bool ConditionsFulfilled { get; set; }
     }
 }

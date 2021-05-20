@@ -14,5 +14,6 @@ namespace Application.Interfaces.Repositories
         bool CheckPromoCodeInGroupDefinitionGeneral(int groupDefinitionId, int promocodeId, string promoCodeKey = null, bool isAutomaticCreate = false);
         List<IGrouping<int, GroupConditionPromoCode>> GetAllByGroupCondition(int groupConditionId);
         bool CheckStudentPromoCodeInstance(string email, string studentId, int promocodeInstanceId);
+        int totalPromoCodesCount(int groupconditionId);
     }
 }

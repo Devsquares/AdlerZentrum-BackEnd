@@ -32,37 +32,41 @@ namespace Infrastructure.Persistence.Repositories
 
         public GroupInstanceStudents GetByStudentIdIsDefault(string StudentId)
         {
-            return groupInstanceStudents.Where(x => x.StudentId == StudentId && x.IsDefault == true).FirstOrDefault();
+            return groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.StudentId == StudentId && x.IsDefault == true && x.IsDeleted == false).FirstOrDefault();
         }
 
         public int GetCountOfStudents(int groupId)
         {
-            return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId).Count();
+            return groupInstanceStudents.Where(x => x.GroupInstanceId == groupId && x.IsDeleted == false).Count();
+        }
+        public int GetCountOfPromoCodeStudents(int groupId)
+        {
+            return groupInstanceStudents.Include(x => x.PromoCodeInstance.PromoCode).Where(x => x.GroupInstanceId == groupId && x.PromoCodeInstanceId != null && x.PromoCodeInstance.PromoCode.IsStrong == false && x.IsDeleted == false).Count();
         }
 
         public List<string> GetEmailsByGroupDefinationId(int groupDefinationId)
         {
             var emailList = groupInstanceStudents.Include(x => x.GroupInstance)
                  .Include(x => x.Student)
-                 .Where(x => x.GroupInstance.GroupDefinitionId == groupDefinationId).Select(x => x.Student.Email).ToList();
+                 .Where(x => x.GroupInstance.GroupDefinitionId == groupDefinationId && x.IsDeleted == false).Select(x => x.Student.Email).ToList();
             return emailList;
         }
 
         public async Task<int> GetCountOfPlacmentTestStudents(int groupId)
         {
-            return await groupInstanceStudents.Where(x => x.GroupInstanceId == groupId && x.IsPlacementTest == true).CountAsync();
+            return await groupInstanceStudents.Where(x => x.GroupInstanceId == groupId && x.IsPlacementTest == true && x.IsDeleted == false).CountAsync();
         }
 
         public async Task<int> GetCountOfStudentsByGroupDefinitionId(int groupDefinitionId)
         {
-            return await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId).CountAsync();
+            return await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId && x.IsDeleted == false).CountAsync();
         }
 
         public GroupInstanceModel GetLastByStudentId(string studentId)
         {
             return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.TimeSlot)
                 .Include(x => x.GroupInstance.GroupDefinition.Sublevel)
-                .Where(x => x.StudentId == studentId && x.IsDefault == true && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running)
+                .Where(x => x.StudentId == studentId && x.IsDefault == true && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDeleted == false)
                 .Select(x => new GroupInstanceModel()
                 {
                     GroupDefinitionId = x.GroupInstance.GroupDefinitionId,
@@ -82,7 +86,7 @@ namespace Infrastructure.Persistence.Repositories
         public List<GroupInstanceModel> GetAllLastByStudentId(string studentId)
         {
             return groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.TimeSlot)
-                .Where(x => x.StudentId == studentId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running)
+                .Where(x => x.StudentId == studentId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDeleted == false)
                 .OrderByDescending(x => x.CreatedDate)
                 .Select(x => new GroupInstanceModel()
                 {
@@ -103,7 +107,7 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<List<GroupInstanceModel>> GetSuccessGroupInstances(string studentId)
         {
             return await groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.TimeSlot)
-                .Where(x => x.StudentId == studentId && x.Succeeded == true)
+                .Where(x => x.StudentId == studentId && x.Succeeded == true && x.IsDeleted == false)
                  .Select(x => new GroupInstanceModel()
                  {
                      GroupDefinitionId = x.GroupInstance.GroupDefinitionId,
@@ -127,7 +131,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<List<GroupInstanceStudents>> GetAllStudentInGroupInstanceByStudentId(string studentId)
         {
-            var groupinstance = await groupInstanceStudents.Where(x => x.StudentId == studentId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
+            var groupinstance = await groupInstanceStudents.Where(x => x.StudentId == studentId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDeleted == false).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
             if (groupinstance == null)
             {
                 return new List<GroupInstanceStudents>();
@@ -137,7 +141,7 @@ namespace Infrastructure.Persistence.Repositories
         }
         public async Task<List<GroupInstanceStudents>> GetAllStudentInGroupDefinitionByStudentId(string studentId)
         {
-            var groupinstance = await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.StudentId == studentId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
+            var groupinstance = await groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.StudentId == studentId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDeleted == false).OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
             if (groupinstance == null)
             {
                 return new List<GroupInstanceStudents>();
@@ -228,7 +232,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             var students = groupInstanceStudents.Where(x =>
                                                         (groupDefinitionId != null ? x.GroupInstance.GroupDefinitionId == groupDefinitionId : true)
-                                                        && (groupInstanceId != null ? (x.GroupInstanceId == groupInstanceId) : true)).ToList();
+                                                        && (groupInstanceId != null ? (x.GroupInstanceId == groupInstanceId) : true) && x.IsDeleted == false).ToList();
             var groupedStudents = students.GroupBy(x => x.GroupInstanceId).ToList();
             return groupedStudents;
         }
@@ -236,7 +240,7 @@ namespace Infrastructure.Persistence.Repositories
         public List<GroupInstanceStudents> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null)
         {
             var students = groupInstanceStudents.Where(x => x.GroupInstance.GroupDefinitionId == groupDefinitionId
-                                                        && (groupinstanceId != null ? x.GroupInstanceId == groupinstanceId : true)).ToList();
+                                                        && (groupinstanceId != null ? x.GroupInstanceId == groupinstanceId : true) && x.IsDeleted == false).ToList();
             return students;
 
         }
@@ -245,7 +249,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             List<GroupInstanceStudents> list = new List<GroupInstanceStudents>();
             var groupinstancestudent = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
-                .Where(x => x.StudentId == studentId && x.IsDefault == true).FirstOrDefault();
+                .Where(x => x.StudentId == studentId && x.IsDefault == true && x.IsDeleted == false).FirstOrDefault();
             list.Add(groupinstancestudent);
             if (groupinstancestudent == null)
             {
@@ -255,7 +259,7 @@ namespace Infrastructure.Persistence.Repositories
             {
                 list = new List<GroupInstanceStudents>();
                 list = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
-                 .Where(x => x.StudentId == studentId && x.GroupInstance.GroupDefinition.Sublevel.Level.Id == groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.LevelId).ToList();
+                 .Where(x => x.StudentId == studentId && x.GroupInstance.GroupDefinition.Sublevel.Level.Id == groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.LevelId && x.IsDeleted == false).ToList();
             }
             return list;
         }
@@ -264,7 +268,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             List<GroupInstanceStudents> list = new List<GroupInstanceStudents>();
             var groupinstancestudent = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
-                .Where(x => x.StudentId == studentId && x.GroupInstanceId == groupInstanceId).FirstOrDefault();
+                .Where(x => x.StudentId == studentId && x.GroupInstanceId == groupInstanceId && x.IsDeleted == false).FirstOrDefault();
             list.Add(groupinstancestudent);
             if (groupinstancestudent == null)
             {
@@ -274,11 +278,15 @@ namespace Infrastructure.Persistence.Repositories
             {
                 list = new List<GroupInstanceStudents>();
                 list = groupInstanceStudents.Include(x => x.GroupInstance.GroupDefinition.Sublevel)
-                 .Where(x => x.StudentId == studentId && x.GroupInstanceId == groupInstanceId && x.GroupInstance.GroupDefinition.Sublevel.Level.Id == groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.LevelId).ToList();
+                 .Where(x => x.StudentId == studentId && x.GroupInstanceId == groupInstanceId && x.GroupInstance.GroupDefinition.Sublevel.Level.Id == groupinstancestudent.GroupInstance.GroupDefinition.Sublevel.LevelId && x.IsDeleted == false).ToList();
             }
             return list;
         }
 
+        public GroupInstanceStudents GetDeletedInterestedStudent(string StudentId, int interestedGroupId)
+        {
+            return groupInstanceStudents.Include(x => x.GroupInstance).Where(x => x.StudentId == StudentId && x.IsDeleted == true && (x.InterestedGroupDefinitionId.HasValue ? x.InterestedGroupDefinitionId == interestedGroupId : true)).FirstOrDefault();
+        }
 
     }
 }

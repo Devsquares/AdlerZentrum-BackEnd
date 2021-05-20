@@ -84,6 +84,7 @@ namespace Application.DTOs.GroupInstance.Commands
                             canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeInstanceId, interestedGroupInstanceStudents,isAutomaticCreate:true);
                             if (canApplyInSpecificGroup && studentCount < totalStudents)
                             {
+                                CheckAndDeleteLogicallyStudent(interestedStudent.Student.Id);
                                 interestedGroupInstanceStudents.Add(new GroupInstanceStudents
                                 {
                                     GroupInstanceId = groupInstanceobject.Id,
@@ -196,6 +197,18 @@ namespace Application.DTOs.GroupInstance.Commands
                 var groupInstanceStudents = _groupInstanceRepositoryAsync.GetListByGroupDefinitionId(command.GroupDefinitionId, groupInstanceId);
                 return new Response<StudentsGroupInstanceModel>((groupInstanceStudents != null && groupInstanceStudents.Count > 0) ? groupInstanceStudents[0] : null);
 
+            }
+
+            private async void CheckAndDeleteLogicallyStudent(string studentID)
+            {
+                var groupinstanceStudent = _groupInstanceStudentRepositoryAsync.GetByStudentIdIsDefault(studentID);
+                if(groupinstanceStudent !=null && groupinstanceStudent.GroupInstance.Status == (int)GroupInstanceStatusEnum.Pending)
+                {
+                    groupinstanceStudent.IsDeleted = true;
+                    groupinstanceStudent.IsDefault = false;
+                    await _groupInstanceStudentRepositoryAsync.UpdateAsync(groupinstanceStudent);
+
+                }
             }
         }
     }

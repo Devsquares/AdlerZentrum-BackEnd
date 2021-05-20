@@ -69,10 +69,14 @@ namespace WebApi.Controllers
                 var student = await _accountService.RegisterAsync(request, origin);
                 if (request.AdlerCardsBundleId.HasValue)
                 {
-                    var addstudentBundel = new CreateAdlerCardBundleStudentCommand() { AdlerCardsBundleId = request.AdlerCardsBundleId.Value, StudentId = student.data };
+                    var addstudentBundel = new CreateAdlerCardBundleStudentCommand() { AdlerCardsBundleId = request.AdlerCardsBundleId.Value, StudentId = student.data };                                                                                                                                                                                                                                                                       
                 }
 
                 await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email });
+                if (request.InterestedGroupDefinitionId.HasValue)
+                {
+                    await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.InterestedGroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.InterestedPromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = request.Email });
+                }
                 scope.Complete();
                 return Ok();
             }

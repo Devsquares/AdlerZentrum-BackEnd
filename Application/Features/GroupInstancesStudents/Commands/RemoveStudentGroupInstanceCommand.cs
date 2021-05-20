@@ -24,17 +24,20 @@ namespace Application.Features
             private readonly IGroupInstanceStudentRepositoryAsync _groupInstanceStudentRepositoryAsync;
             private readonly IOverPaymentStudentRepositoryAsync _overPaymentStudentRepositoryAsync;
             private readonly IInterestedStudentRepositoryAsync _InterestedStudentRepositoryAsync;
+            private readonly IGroupConditionPromoCodeRepositoryAsync _groupConditionPromoCodeRepositoryAsync;
             public RemoveStudentGroupInstanceCommandHandler(IGroupInstanceRepositoryAsync groupInstanceRepository,
                 IGroupInstanceStudentRepositoryAsync groupInstanceStudentRepositoryAsync,
                 IGroupDefinitionRepositoryAsync GroupDefinitionRepository,
                 IOverPaymentStudentRepositoryAsync overPaymentStudentRepositoryAsync,
-                IInterestedStudentRepositoryAsync InterestedStudentRepositoryAsync)
+                IInterestedStudentRepositoryAsync InterestedStudentRepositoryAsync,
+                 IGroupConditionPromoCodeRepositoryAsync groupConditionPromoCodeRepositoryAsync)
             {
                 _groupInstanceRepositoryAsync = groupInstanceRepository;
                 _groupInstanceStudentRepositoryAsync = groupInstanceStudentRepositoryAsync;
                 _GroupDefinitionRepository = GroupDefinitionRepository;
                 _InterestedStudentRepositoryAsync = InterestedStudentRepositoryAsync;
                 _overPaymentStudentRepositoryAsync = overPaymentStudentRepositoryAsync;
+                _groupConditionPromoCodeRepositoryAsync = groupConditionPromoCodeRepositoryAsync;
             }
             /// <summary>
             /// add only one student from  group instance to interested or overpayment tables then delete him
@@ -61,6 +64,8 @@ namespace Application.Features
                             RegisterDate = student.CreatedDate.Value,
                             IsEligible = student.IsEligible
                         });
+
+                        CheckAndUnDeleteStudent(student);
                     }
                     else
                     {
@@ -89,6 +94,21 @@ namespace Application.Features
                     scope.Complete();
                 }
                 return new Response<int>(groupInstance.Id);
+
+            }
+
+            private async void CheckAndUnDeleteStudent(GroupInstanceStudents student)
+            {
+                var canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(student.GroupInstanceId, student.PromoCodeInstanceId.Value);
+
+                var oldGroupInstance = _groupInstanceStudentRepositoryAsync.GetDeletedInterestedStudent(student.StudentId, student.GroupDefinition.Id);
+                if(oldGroupInstance != null)
+                {
+                    oldGroupInstance.IsDeleted = false;
+                    oldGroupInstance.IsDefault = true;
+                    await _groupInstanceStudentRepositoryAsync.UpdateAsync(oldGroupInstance);
+                }
+                // todo if not applied to the groupinstance should add to interested or not
 
             }
         }
