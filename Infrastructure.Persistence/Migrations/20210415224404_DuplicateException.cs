@@ -34,28 +34,28 @@ namespace Infrastructure.Persistence.Migrations
             //     table: "TeacherAbsences",
             //     newName: "IX_TeacherAbsences_LessonInstanceId");
 
-            migrationBuilder.AddColumn<bool>(
-                name: "DelaySeen",
-                table: "TestInstances",
-                nullable: false,
-                defaultValue: false);
+            // migrationBuilder.AddColumn<bool>(
+            //     name: "DelaySeen",
+            //     table: "TestInstances",
+            //     nullable: false,
+            //     defaultValue: false);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "DelaySeen",
-                table: "LessonInstances",
-                nullable: false,
-                defaultValue: false);
+            // migrationBuilder.AddColumn<bool>(
+            //     name: "DelaySeen",
+            //     table: "LessonInstances",
+            //     nullable: false,
+            //     defaultValue: false);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DueDate",
                 table: "LessonInstances",
                 nullable: true);
 
-            migrationBuilder.AddColumn<bool>(
-                name: "DelaySeen",
-                table: "HomeWorkSubmitions",
-                nullable: false,
-                defaultValue: false);
+            // migrationBuilder.AddColumn<bool>(
+            //     name: "DelaySeen",
+            //     table: "HomeWorkSubmitions",
+            //     nullable: false,
+            //     defaultValue: false);
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_TeacherAbsences",
