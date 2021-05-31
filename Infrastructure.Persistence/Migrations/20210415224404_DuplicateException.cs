@@ -35,12 +35,6 @@ namespace Infrastructure.Persistence.Migrations
                 newName: "IX_TeacherAbsences_LessonInstanceId");
 
             migrationBuilder.AddColumn<bool>(
-                name: "IsArchived",
-                table: "Tests",
-                nullable: false,
-                defaultValue: false);
-
-            migrationBuilder.AddColumn<bool>(
                 name: "DelaySeen",
                 table: "TestInstances",
                 nullable: false,
