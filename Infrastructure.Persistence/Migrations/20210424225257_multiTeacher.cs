@@ -6,9 +6,9 @@ namespace Infrastructure.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_TeacherGroupInstances_GroupInstanceId",
-                table: "TeacherGroupInstances");
+            // migrationBuilder.DropIndex(
+            //     name: "IX_TeacherGroupInstances_GroupInstanceId",
+            //     table: "TeacherGroupInstances");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeacherGroupInstances_GroupInstanceId",
