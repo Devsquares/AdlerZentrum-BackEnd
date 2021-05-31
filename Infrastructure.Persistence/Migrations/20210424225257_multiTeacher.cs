@@ -10,10 +10,10 @@ namespace Infrastructure.Persistence.Migrations
             //     name: "IX_TeacherGroupInstances_GroupInstanceId",
             //     table: "TeacherGroupInstances");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TeacherGroupInstances_GroupInstanceId",
-                table: "TeacherGroupInstances",
-                column: "GroupInstanceId");
+            // migrationBuilder.CreateIndex(
+            //     name: "IX_TeacherGroupInstances_GroupInstanceId",
+            //     table: "TeacherGroupInstances",
+            //     column: "GroupInstanceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
