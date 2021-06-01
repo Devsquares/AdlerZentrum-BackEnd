@@ -49,7 +49,7 @@ namespace WebApi
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.KnownProxies.Add(IPAddress.Parse("127.0.0.1"));
+                options.KnownProxies.Add(IPAddress.Parse("0.0.0.0"));
             });
 
             services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
