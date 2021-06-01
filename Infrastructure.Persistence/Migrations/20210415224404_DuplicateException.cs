@@ -57,43 +57,43 @@ namespace Infrastructure.Persistence.Migrations
             //     nullable: false,
             //     defaultValue: false);
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_TeacherAbsences",
-                table: "TeacherAbsences",
-                column: "Id");
+            // migrationBuilder.AddPrimaryKey(
+            //     name: "PK_TeacherAbsences",
+            //     table: "TeacherAbsences",
+            //     column: "Id");
 
-            migrationBuilder.CreateTable(
-                name: "DuplicateExceptions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true),
-                    LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: true),
-                    Email = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DuplicateExceptions", x => x.Id);
-                });
+            // migrationBuilder.CreateTable(
+            //     name: "DuplicateExceptions",
+            //     columns: table => new
+            //     {
+            //         Id = table.Column<int>(nullable: false)
+            //             .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+            //         CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+            //         CreatedDate = table.Column<DateTime>(nullable: true),
+            //         LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
+            //         LastModifiedDate = table.Column<DateTime>(nullable: true),
+            //         Email = table.Column<string>(nullable: true)
+            //     },
+            //     constraints: table =>
+            //     {
+            //         table.PrimaryKey("PK_DuplicateExceptions", x => x.Id);
+            //     });
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_TeacherAbsences_LessonInstances_LessonInstanceId",
-                table: "TeacherAbsences",
-                column: "LessonInstanceId",
-                principalTable: "LessonInstances",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            // migrationBuilder.AddForeignKey(
+            //     name: "FK_TeacherAbsences_LessonInstances_LessonInstanceId",
+            //     table: "TeacherAbsences",
+            //     column: "LessonInstanceId",
+            //     principalTable: "LessonInstances",
+            //     principalColumn: "Id",
+            //     onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_TeacherAbsences_ApplicationUsers_TeacherId",
-                table: "TeacherAbsences",
-                column: "TeacherId",
-                principalTable: "ApplicationUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            // migrationBuilder.AddForeignKey(
+            //     name: "FK_TeacherAbsences_ApplicationUsers_TeacherId",
+            //     table: "TeacherAbsences",
+            //     column: "TeacherId",
+            //     principalTable: "ApplicationUsers",
+            //     principalColumn: "Id",
+            //     onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

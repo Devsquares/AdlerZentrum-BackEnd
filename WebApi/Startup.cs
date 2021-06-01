@@ -89,7 +89,7 @@ namespace WebApi
 
             app.UseAuthentication();
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
