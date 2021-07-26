@@ -12,7 +12,7 @@ namespace Infrastructure.Persistence.Migrations
               table: "TestInstances",
               nullable: true,
               oldNullable: false);
-            migrationBuilder.Sql("ALTER TABLE adlerdb.testinstances MODIFY COLUMN StartDate datetime NULL;");
+            migrationBuilder.Sql("ALTER TABLE TestInstances MODIFY COLUMN StartDate datetime NULL;");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
