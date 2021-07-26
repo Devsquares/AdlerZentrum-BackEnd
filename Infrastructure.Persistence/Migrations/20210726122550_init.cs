@@ -11,8 +11,7 @@ namespace Infrastructure.Persistence.Migrations
               name: "StartDate",
               table: "TestInstances",
               nullable: true,
-              oldNullable: false);
-            migrationBuilder.Sql("ALTER TABLE TestInstances MODIFY COLUMN StartDate datetime NULL;");
+              oldNullable: false); 
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
