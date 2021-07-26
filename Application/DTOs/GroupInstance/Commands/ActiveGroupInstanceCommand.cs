@@ -141,17 +141,22 @@ namespace Application.DTOs
                     Dictionary<int, TimeFrame> timeslotsDetailed = await _lessonInstanceRepositoryAsync.GetTimeSlotInstancesSorted(groupInstance);
                     foreach (var item in LessonDefinitions)
                     {
+                        int index = (item.Order % groupInstance.GroupDefinition.Sublevel.NumberOflessons);
+                        if(index == 0)
+                        {
+                            index = item.Order;
+                        }
                         lessonInstances.Add(new LessonInstance
                         {
                             GroupInstanceId = groupInstance.Id,
                             LessonDefinitionId = item.Id,
-                            StartDate = timeslotsDetailed.GetValueOrDefault(item.Order % groupInstance.GroupDefinition.Sublevel.NumberOflessons).Start,
-                            EndDate = timeslotsDetailed.GetValueOrDefault(item.Order % groupInstance.GroupDefinition.Sublevel.NumberOflessons).End,
-                            DueDate = timeslotsDetailed.GetValueOrDefault(item.Order % groupInstance.GroupDefinition.Sublevel.NumberOflessons).End.AddDays(1),
+                            StartDate = timeslotsDetailed.GetValueOrDefault(index).Start,
+                            EndDate = timeslotsDetailed.GetValueOrDefault(index).End,
+                            DueDate = timeslotsDetailed.GetValueOrDefault(index).End.AddDays(1),
                             MaterialDone = string.Empty,
                             MaterialToDo = string.Empty,
                             Serial = item.Order.ToString()
-                        });
+                        }) ;
                     }
                     groupInstance.Status = (int)GroupInstanceStatusEnum.Running;
                     await _groupInstanceRepositoryAsync.UpdateAsync(groupInstance);
