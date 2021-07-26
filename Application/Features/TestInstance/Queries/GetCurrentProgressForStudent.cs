@@ -60,7 +60,11 @@ namespace Application.Features
                 if (currentProgressModel.Quizzes.QuizInstances.Count > 0)
                 {
                      quizPercent = GIS.GroupInstance.GroupDefinition.Sublevel.Quizpercent;
-                     studentquizPercent = quizPercent * (currentProgressModel.Quizzes.AchievedScore / currentProgressModel.Quizzes.TotalScore);
+                    if(currentProgressModel.Quizzes.TotalScore != 0)
+                    {
+                        studentquizPercent = quizPercent * (currentProgressModel.Quizzes.AchievedScore / currentProgressModel.Quizzes.TotalScore);
+                    }
+                   
                     studentquizPercent = Math.Round(studentquizPercent, 2);
                 }
                 currentProgressModel.Sublevels.SubLevelTests = testinstanceList.Where(x => x.Test.TestTypeId == (int)TestTypeEnum.subLevel).ToList();
