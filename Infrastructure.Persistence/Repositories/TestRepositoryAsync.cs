@@ -144,7 +144,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task<Test> GetFeedbackSheet()
         {
-            return await tests.Include(x => x.Questions).ThenInclude(x => x.SingleQuestions).Where(x => x.IsArchived == false && x.TestTypeId == (int)TestTypeEnum.Feedback).FirstOrDefaultAsync();
+            return await tests.Include(x => x.Questions).ThenInclude(x => x.SingleQuestions).ThenInclude(x=>x.Choices).Where(x => x.IsArchived == false && x.TestTypeId == (int)TestTypeEnum.Feedback).FirstOrDefaultAsync();
         }
 
         public async Task<Test> GetFinalLevelTestBySublevelAsync(int level)

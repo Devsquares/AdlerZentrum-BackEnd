@@ -16,6 +16,7 @@ namespace Application.DTOs
     {
         public string Name { get; set; } 
         public int value { get; set; }
+        public bool IsStrong { get; set; }
 
         public class CreatePromoCodeCommandHandler : IRequestHandler<CreatePromoCodeCommand, Response<int>>
         {
@@ -31,6 +32,7 @@ namespace Application.DTOs
                 Reflection.CopyProperties(command, promo);
                 promo.Status = 0;
                 promo.Value = command.value;
+                promo.IsStrong = command.IsStrong;
                 await _promoCodeRepository.AddAsync(promo);
                 return new Response<int>(promo.Id);
 
