@@ -46,10 +46,10 @@ namespace Infrastructure.Persistence.Migrations
             //     nullable: false,
             //     defaultValue: false);
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DueDate",
-                table: "LessonInstances",
-                nullable: true);
+            // migrationBuilder.AddColumn<DateTime>(
+            //     name: "DueDate",
+            //     table: "LessonInstances",
+            //     nullable: true);
 
             // migrationBuilder.AddColumn<bool>(
             //     name: "DelaySeen",
