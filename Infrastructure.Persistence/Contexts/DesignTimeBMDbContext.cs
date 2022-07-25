@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Infrastructure.Persistence.ApplicationDbContext;
 
 namespace Infrastructure.Persistence
 {
