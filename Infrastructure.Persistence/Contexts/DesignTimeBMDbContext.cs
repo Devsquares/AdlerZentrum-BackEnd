@@ -1,14 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design; 
-namespace Infrastructure.Persistence
+
+namespace Infrastructure.Persistence.Contexts
 {
-    public class DesignTimeBMDbContext : IDesignTimeDbContextFactory<Infrastructure.Persistence.ApplicationDbContext>
+    public class DesignTimeBMDbContext : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
-        public Infrastructure.Persistence.ApplicationDbContext CreateDbContext(string[] args)
+        public ApplicationDbContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<Infrastructure.Persistence.ApplicationDbContext>(); 
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>(); 
             optionsBuilder.UseMySql(configuration.GetConnectionString("DefaultConnection"));
-            return new Infrastructure.Persistence.ApplicationDbContext(optionsBuilder.Options);
+            return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
 }
