@@ -6,12 +6,7 @@ using Microsoft.Extensions.Configuration;
 namespace WebApi
 {
    public class DesignTimeApplicationDbContext : IDesignTimeDbContextFactory<ApplicationDbContext>
-    {
-        public IConfiguration _config { get; }
-       public DesignTimeApplicationDbContext(IConfiguration configuration){
-            _config = configuration;
-        }
-        
+    { 
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>(); 
