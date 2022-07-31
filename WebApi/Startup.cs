@@ -7,7 +7,6 @@ using Infrastructure.Shared.Services;
 using Infrastructure.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +20,9 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Serilog;
+using Pomelo.EntityFrameworkCore.MySql;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi
 {
@@ -40,12 +42,22 @@ namespace WebApi
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+            var connectionString = _config.GetConnectionString("DefaultConnection");
+            var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
 
+            // services.AddDbContext<ApplicationDbContext>(options =>
+            // {
+            //     options.UseMySQL(connectionString, serverVersion,
+            //     x => x.MigrationsAssembly("Infrastructure.Persistence")).EnableSensitiveDataLogging();
+            // });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseMySQL(_config.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Infrastructure.Persistence")).EnableSensitiveDataLogging();
-            });
+            services.AddDbContext<ApplicationDbContext>(
+                dbContextOptions => dbContextOptions
+                    .UseMySql(connectionString, serverVersion, x => x.MigrationsAssembly("Infrastructure.Persistence"))
+                    .LogTo(Console.WriteLine, LogLevel.Information)
+                    .EnableSensitiveDataLogging()
+                    .EnableDetailedErrors()
+             );
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -67,7 +79,7 @@ namespace WebApi
             Environment.SetEnvironmentVariable("AWS_ACCESS_KEY_ID", _config["AWS:AccessKey"]);
             Environment.SetEnvironmentVariable("AWS_SECRET_ACCESS_KEY", _config["AWS:SecretKey"]);
             services.AddAuthorization(options =>
-            options.AddPolicy("AdlerCardPolicy", policy => policy.RequireClaim("AddAdlerCard"))); 
+            options.AddPolicy("AdlerCardPolicy", policy => policy.RequireClaim("AddAdlerCard")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -100,7 +112,7 @@ namespace WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            }); 
+            });
         }
     }
 }
