@@ -100,7 +100,7 @@ namespace Infrastructure.Persistence.Repositories
             return groupInstances.Include(x => x.Students).Where(x => x.Id == groupId).FirstOrDefault()?.Students.Where(x => x.IsDefault == true).ToList();
         }
 
-        public async void AddStudentToTheGroupInstance(int groupId, string studentId)
+        public async Task AddStudentToTheGroupInstance(int groupId, string studentId)
         {
             await groupInstanceStudents.AddAsync(new GroupInstanceStudents
             {

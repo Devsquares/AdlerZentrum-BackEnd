@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Application.Wrappers;
 using Domain.Entities;
 using System.Net;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 
 namespace Infrastructure.Persistence
 {
@@ -32,9 +33,11 @@ namespace Infrastructure.Persistence
             }
             else
             {
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
                 services.AddDbContext<ApplicationDbContext>(options =>
                options.UseMySql(
-                   configuration.GetConnectionString("DefaultConnection"),
+                   connectionString,
+                   ServerVersion.AutoDetect(connectionString),
                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
             #region Repositories
@@ -90,7 +93,8 @@ namespace Infrastructure.Persistence
             services.AddTransient<IPaymentTransactionsRepositoryAsync, PaymentTransactionsRepositoryAsync>();
             #endregion
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(o => {
+            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+            {
                 // configure identity options
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;

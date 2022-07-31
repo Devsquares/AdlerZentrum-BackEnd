@@ -29,7 +29,7 @@ namespace Infrastructure.Persistence.Repositories
             timeSlotDetails.RemoveRange(data);
         }
 
-        public async void AddDetails(List<TimeSlotDetails> list)
+        public async Task AddDetails(List<TimeSlotDetails> list)
         {
             timeSlotDetails.AddRange(list);
             _dbContext.SaveChanges();

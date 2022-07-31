@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.Data.EntityFrameworkCore.Metadata;
+using MySql.EntityFrameworkCore.Metadata;
 
 namespace Infrastructure.Persistence.Migrations
 {
@@ -9,7 +9,7 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "teacherAbsences",
+                name: "TeacherAbsences",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     LastModifiedBy = table.Column<string>(maxLength: 256, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: true),
-                    TeacherId = table.Column<string>(nullable: true),
+                    TeacherId = table.Column<string>(maxLength: 256, nullable: true),
                     LessonInstanceId = table.Column<int>(nullable: false),
                     IsEmergency = table.Column<bool>(nullable: false),
                     Status = table.Column<int>(nullable: false)
@@ -42,19 +42,19 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_teacherAbsences_LessonInstanceId",
-                table: "teacherAbsences",
+                table: "TeacherAbsences",
                 column: "LessonInstanceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_teacherAbsences_TeacherId",
-                table: "teacherAbsences",
+                table: "TeacherAbsences",
                 column: "TeacherId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "teacherAbsences");
+                name: "TeacherAbsences");
         }
     }
 }

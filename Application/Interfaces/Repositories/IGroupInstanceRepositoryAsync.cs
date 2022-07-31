@@ -11,7 +11,7 @@ namespace Application.Interfaces.Repositories
     {
         IReadOnlyList<GroupInstanceStudents> GetStudents(int groupId);
         int? GetActiveGroupInstance(string userId);
-        void AddStudentToTheGroupInstance(int groupId, string studentId);
+        Task AddStudentToTheGroupInstance(int groupId, string studentId);
         Task<GroupInstance> GetByIdAsync(int id);
         GroupInstance GetByGroupDefinitionId(int groupDefinitionId);
         List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, List<int> groupInstancelist = null);
