@@ -7,12 +7,7 @@ namespace Infrastructure.Persistence.Migrations
     public partial class DuplicateException : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
-        { 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_TeacherAbsences",
-                table: "TeacherAbsences",
-                column: "Id");
-
+        {
             migrationBuilder.CreateTable(
                 name: "DuplicateExceptions",
                 columns: table => new
@@ -28,18 +23,14 @@ namespace Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DuplicateExceptions", x => x.Id);
-                }); 
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
-        { 
+        {
 
             migrationBuilder.DropTable(
-                name: "DuplicateExceptions");
-
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_TeacherAbsences",
-                table: "TeacherAbsences");
+                name: "DuplicateExceptions"); 
 
             migrationBuilder.DropColumn(
                 name: "IsArchived",
@@ -75,18 +66,13 @@ namespace Infrastructure.Persistence.Migrations
                 table: "TeacherAbsences",
                 newName: "IX_teacherAbsences_LessonInstanceId");
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_teacherAbsences",
-                table: "teacherAbsences",
-                column: "Id");
-
             migrationBuilder.AddForeignKey(
                 name: "FK_teacherAbsences_LessonInstances_LessonInstanceId",
                 table: "teacherAbsences",
                 column: "LessonInstanceId",
                 principalTable: "LessonInstances",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade); 
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

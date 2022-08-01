@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
@@ -27,8 +29,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -37,8 +39,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -51,7 +53,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCard", b =>
@@ -70,15 +72,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -106,7 +108,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("AdlerCards");
+                    b.ToTable("AdlerCards", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCardBundleStudent", b =>
@@ -119,15 +121,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -144,7 +146,53 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("AdlerCardBundleStudents");
+                    b.ToTable("AdlerCardBundleStudents", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCardsBundle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("AvailableFrom")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("AvailableTill")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<double>("DiscountPrice")
+                        .HasColumnType("double");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AdlerCardsBundles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCardSubmission", b =>
@@ -160,15 +208,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -190,53 +238,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("AdlerCardSubmissions");
-                });
-
-            modelBuilder.Entity("Domain.Entities.AdlerCardsBundle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("AvailableFrom")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("AvailableTill")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<double>("DiscountPrice")
-                        .HasColumnType("double");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AdlerCardsBundles");
+                    b.ToTable("AdlerCardSubmissions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCardsUnit", b =>
@@ -249,8 +251,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -262,8 +264,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -281,19 +283,19 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.ToTable("AdlerCardsUnits");
+                    b.ToTable("AdlerCardsUnits", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Active")
+                    b.Property<ulong>("Active")
                         .HasColumnType("bit");
 
                     b.Property<int?>("AddressId")
@@ -308,10 +310,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("BanComment")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Banned")
+                    b.Property<ulong>("Banned")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ChangePassword")
+                    b.Property<ulong>("ChangePassword")
                         .HasColumnType("bit");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -324,14 +326,14 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("Deleted")
+                    b.Property<ulong>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Email")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<bool>("EmailConfirmed")
+                    b.Property<ulong>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
@@ -340,19 +342,19 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
-                    b.Property<bool>("LockoutEnabled")
+                    b.Property<ulong>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
@@ -360,7 +362,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
+                    b.Property<ulong>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<int?>("PlacmentTestId")
@@ -378,29 +380,29 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("SublevelId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("TwoFactorEnabled")
+                    b.Property<ulong>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.HasIndex("RoleId");
 
                     b.HasIndex("SublevelId");
 
-                    b.ToTable("ApplicationUsers");
+                    b.ToTable("ApplicationUsers", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.BanRequest", b =>
@@ -416,15 +418,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -436,7 +438,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("BanRequests");
+                    b.ToTable("BanRequests", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Bug", b =>
@@ -449,8 +451,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -462,8 +464,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -485,7 +487,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bugs");
+                    b.ToTable("Bugs", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Choice", b =>
@@ -495,18 +497,18 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsCorrect")
+                    b.Property<ulong>("IsCorrect")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -521,7 +523,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SingleQuestionId");
 
-                    b.ToTable("Choice");
+                    b.ToTable("Choice", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ChoiceSubmission", b =>
@@ -534,15 +536,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -554,7 +556,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SingleQuestionSubmissionId");
 
-                    b.ToTable("ChoiceSubmissions");
+                    b.ToTable("ChoiceSubmissions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DisqualificationRequest", b =>
@@ -567,8 +569,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -577,8 +579,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -590,7 +592,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("DisqualificationRequests");
+                    b.ToTable("DisqualificationRequests", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DuplicateException", b =>
@@ -600,8 +602,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -611,8 +613,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("varchar(767)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -622,7 +624,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("DuplicateExceptions");
+                    b.ToTable("DuplicateExceptions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.EmailTemplate", b =>
@@ -635,8 +637,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -645,8 +647,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -659,7 +661,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailTemplates");
+                    b.ToTable("EmailTemplates", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumComment", b =>
@@ -669,8 +671,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -682,8 +684,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("varbinary(4000)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -700,7 +702,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("WriterId");
 
-                    b.ToTable("ForumComments");
+                    b.ToTable("ForumComments", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumReply", b =>
@@ -710,8 +712,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -723,8 +725,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("varbinary(4000)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -741,7 +743,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("WriterId");
 
-                    b.ToTable("ForumReplys");
+                    b.ToTable("ForumReplys", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumTopic", b =>
@@ -751,8 +753,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -773,8 +775,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("varbinary(4000)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -793,7 +795,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("WriterId");
 
-                    b.ToTable("ForumTopics");
+                    b.ToTable("ForumTopics", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupCondition", b =>
@@ -803,15 +805,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -830,7 +832,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GroupCondition");
+                    b.ToTable("GroupCondition", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupConditionDetail", b =>
@@ -840,8 +842,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -850,8 +852,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -860,7 +862,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GroupConditionId");
 
-                    b.ToTable("GroupConditionDetails");
+                    b.ToTable("GroupConditionDetails", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupConditionPromoCode", b =>
@@ -873,8 +875,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -883,8 +885,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -898,7 +900,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("PromoCodeId");
 
-                    b.ToTable("GroupConditionPromoCodes");
+                    b.ToTable("GroupConditionPromoCodes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupDefinition", b =>
@@ -908,8 +910,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -927,8 +929,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -964,7 +966,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TimeSlotId");
 
-                    b.ToTable("GroupDefinition");
+                    b.ToTable("GroupDefinition", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupInstance", b =>
@@ -974,8 +976,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -984,8 +986,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1000,7 +1002,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("GroupDefinitionId");
 
-                    b.ToTable("GroupInstances");
+                    b.ToTable("GroupInstances", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupInstanceStudents", b =>
@@ -1013,13 +1015,13 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("double");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("Disqualified")
+                    b.Property<ulong>("Disqualified")
                         .HasColumnType("bit");
 
                     b.Property<string>("DisqualifiedComment")
@@ -1031,18 +1033,18 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupInstanceId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDefault")
+                    b.Property<ulong>("IsDefault")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsEligible")
+                    b.Property<ulong>("IsEligible")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPlacementTest")
+                    b.Property<ulong>("IsPlacementTest")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1053,7 +1055,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("varchar(85)");
 
-                    b.Property<bool>("Succeeded")
+                    b.Property<ulong>("Succeeded")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -1064,7 +1066,62 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("GroupInstanceStudents");
+                    b.ToTable("GroupInstanceStudents", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Homework", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<double>("BonusPoints")
+                        .HasColumnType("double");
+
+                    b.Property<int>("BonusPointsStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("GroupInstanceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("LessonInstanceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinCharacters")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Points")
+                        .HasColumnType("double");
+
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("varchar(85)");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupInstanceId");
+
+                    b.HasIndex("LessonInstanceId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Homeworks", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.HomeWorkSubmition", b =>
@@ -1089,13 +1146,13 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("varchar(85)");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("DelaySeen")
+                    b.Property<ulong>("DelaySeen")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("DueDate")
@@ -1105,8 +1162,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1140,62 +1197,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("HomeWorkSubmitions");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Homework", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<double>("BonusPoints")
-                        .HasColumnType("double");
-
-                    b.Property<int>("BonusPointsStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("GroupInstanceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("LessonInstanceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MinCharacters")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Points")
-                        .HasColumnType("double");
-
-                    b.Property<string>("TeacherId")
-                        .HasColumnType("varchar(85)");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupInstanceId");
-
-                    b.HasIndex("LessonInstanceId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("Homeworks");
+                    b.ToTable("HomeWorkSubmitions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.InterestedStudent", b =>
@@ -1205,8 +1207,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1214,15 +1216,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupDefinitionId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsEligible")
+                    b.Property<ulong>("IsEligible")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPlacementTest")
+                    b.Property<ulong>("IsPlacementTest")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1244,7 +1246,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("InterestedStudents");
+                    b.ToTable("InterestedStudents", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Job", b =>
@@ -1254,8 +1256,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1273,8 +1275,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1296,7 +1298,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Jobs", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
@@ -1306,18 +1308,18 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("LastLesson")
+                    b.Property<ulong>("LastLesson")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1332,7 +1334,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SublevelId");
 
-                    b.ToTable("LessonDefinition");
+                    b.ToTable("LessonDefinition", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonInstance", b =>
@@ -1342,13 +1344,13 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("DelaySeen")
+                    b.Property<ulong>("DelaySeen")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("DueDate")
@@ -1361,8 +1363,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1385,7 +1387,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("SubmissionDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("SubmittedReport")
+                    b.Property<ulong>("SubmittedReport")
                         .HasColumnType("bit");
 
                     b.Property<string>("SubmittedReportTeacherId")
@@ -1407,7 +1409,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("LessonInstances");
+                    b.ToTable("LessonInstances", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonInstanceStudent", b =>
@@ -1416,25 +1418,25 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Attend")
+                    b.Property<ulong>("Attend")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("Disqualified")
+                    b.Property<ulong>("Disqualified")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Homework")
+                    b.Property<ulong>("Homework")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1451,7 +1453,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("LessonInstanceStudents");
+                    b.ToTable("LessonInstanceStudents", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Level", b =>
@@ -1461,15 +1463,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1479,7 +1481,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Levels");
+                    b.ToTable("Levels", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.MailJob", b =>
@@ -1489,8 +1491,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1514,8 +1516,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1552,7 +1554,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MailJobs");
+                    b.ToTable("MailJobs", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
@@ -1562,8 +1564,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1571,15 +1573,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupDefinitionId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsEligible")
+                    b.Property<ulong>("IsEligible")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPlacementTest")
+                    b.Property<ulong>("IsPlacementTest")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1596,7 +1598,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("OverPaymentStudents");
+                    b.ToTable("OverPaymentStudents", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentTransaction", b =>
@@ -1612,8 +1614,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1625,8 +1627,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1652,7 +1654,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PaymentTransactions");
+                    b.ToTable("PaymentTransactions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PlacementRelease", b =>
@@ -1661,19 +1663,19 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Cancel")
+                    b.Property<ulong>("Cancel")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1688,7 +1690,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("PlacementReleases");
+                    b.ToTable("PlacementReleases", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Pricing", b =>
@@ -1698,22 +1700,22 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<double>("Price")
                         .HasColumnType("double");
@@ -1723,7 +1725,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pricing");
+                    b.ToTable("Pricing", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PromoCode", b =>
@@ -1733,8 +1735,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1742,12 +1744,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsStrong")
+                    b.Property<ulong>("IsStrong")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1763,7 +1765,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PromoCodes");
+                    b.ToTable("PromoCodes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PromoCodeInstance", b =>
@@ -1773,8 +1775,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1785,12 +1787,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("GroupDefinitionId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsUsed")
+                    b.Property<ulong>("IsUsed")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1818,7 +1820,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("PromoCodeInstances");
+                    b.ToTable("PromoCodeInstances", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -1831,8 +1833,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -1840,12 +1842,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Header")
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsAdlerService")
+                    b.Property<ulong>("IsAdlerService")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1875,7 +1877,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Setting", b =>
@@ -1885,15 +1887,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1915,7 +1917,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
@@ -1924,19 +1926,19 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("AnswerIsTrueOrFalse")
+                    b.Property<ulong>("AnswerIsTrueOrFalse")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1957,7 +1959,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("SingleQuestions");
+                    b.ToTable("SingleQuestions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SingleQuestionSubmission", b =>
@@ -1969,22 +1971,22 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("AnswerText")
                         .HasColumnType("text");
 
-                    b.Property<bool>("Corrected")
+                    b.Property<ulong>("Corrected")
                         .HasColumnType("bit");
 
                     b.Property<string>("CorrectionText")
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -1992,7 +1994,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<double>("Points")
                         .HasColumnType("double");
 
-                    b.Property<bool>("RightAnswer")
+                    b.Property<ulong>("RightAnswer")
                         .HasColumnType("bit");
 
                     b.Property<int>("SingleQuestionId")
@@ -2004,7 +2006,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("TestInstanceId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("TrueOrFalseSubmission")
+                    b.Property<ulong?>("TrueOrFalseSubmission")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -2015,7 +2017,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TestInstanceId");
 
-                    b.ToTable("SingleQuestionSubmissions");
+                    b.ToTable("SingleQuestionSubmissions", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.StudentInfo", b =>
@@ -2025,15 +2027,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2044,7 +2046,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("SublevelId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("SublevelSuccess")
+                    b.Property<ulong>("SublevelSuccess")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -2053,7 +2055,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SublevelId");
 
-                    b.ToTable("StudentInfos");
+                    b.ToTable("StudentInfos", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>
@@ -2066,8 +2068,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -2075,12 +2077,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("FinalTestpercent")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsFinal")
+                    b.Property<ulong>("IsFinal")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2107,7 +2109,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LevelId");
 
-                    b.ToTable("SubLevels");
+                    b.ToTable("SubLevels", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeacherAbsence", b =>
@@ -2117,18 +2119,18 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsEmergency")
+                    b.Property<ulong>("IsEmergency")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2148,7 +2150,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherAbsences");
+                    b.ToTable("TeacherAbsences", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TeacherGroupInstanceAssignment", b =>
@@ -2158,8 +2160,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
@@ -2167,12 +2169,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("GroupInstanceId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDefault")
+                    b.Property<ulong>("IsDefault")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2191,7 +2193,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("TeacherGroupInstances");
+                    b.ToTable("TeacherGroupInstances", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Test", b =>
@@ -2200,22 +2202,22 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("AutoCorrect")
+                    b.Property<ulong>("AutoCorrect")
                         .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsArchived")
+                    b.Property<ulong>("IsArchived")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2258,7 +2260,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SublevelId");
 
-                    b.ToTable("Tests");
+                    b.ToTable("Tests", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TestInstance", b =>
@@ -2277,21 +2279,21 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("varchar(85)");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("DelaySeen")
+                    b.Property<ulong>("DelaySeen")
                         .HasColumnType("bit");
 
                     b.Property<int?>("GroupInstanceId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2299,7 +2301,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("LessonInstanceId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("ManualCorrection")
+                    b.Property<ulong>("ManualCorrection")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("OpenDate")
@@ -2308,10 +2310,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<double>("Points")
                         .HasColumnType("double");
 
-                    b.Property<bool>("ReCorrectionRequest")
+                    b.Property<ulong>("ReCorrectionRequest")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Reopened")
+                    b.Property<ulong>("Reopened")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("StartDate")
@@ -2342,7 +2344,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TestId");
 
-                    b.ToTable("TestInstances");
+                    b.ToTable("TestInstances", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlot", b =>
@@ -2352,15 +2354,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2373,7 +2375,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeSlot");
+                    b.ToTable("TimeSlot", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlotDetails", b =>
@@ -2383,15 +2385,15 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime");
@@ -2412,7 +2414,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TimeSlotId");
 
-                    b.ToTable("TimeSlotDetails");
+                    b.ToTable("TimeSlotDetails", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Settings.RefreshToken", b =>
@@ -2449,42 +2451,42 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("RefreshToken");
+                    b.ToTable("RefreshToken", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("int");
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -2494,22 +2496,22 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims");
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("int");
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -2519,78 +2521,78 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims");
+                    b.ToTable("UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins");
+                    b.ToTable("UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(85)")
-                        .HasMaxLength(85);
+                        .HasMaxLength(85)
+                        .HasColumnType("varchar(85)");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCard", b =>
@@ -2612,6 +2614,12 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdlerCardsUnit");
+
+                    b.Navigation("Level");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCardBundleStudent", b =>
@@ -2625,6 +2633,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
+
+                    b.Navigation("AdlerCardsBundle");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCardSubmission", b =>
@@ -2642,6 +2654,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId");
+
+                    b.Navigation("AdlerCard");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Domain.Entities.AdlerCardsUnit", b =>
@@ -2651,6 +2669,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("LevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Level");
                 });
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
@@ -2666,6 +2686,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.Sublevel", "Sublevel")
                         .WithMany()
                         .HasForeignKey("SublevelId");
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("Sublevel");
                 });
 
             modelBuilder.Entity("Domain.Entities.BanRequest", b =>
@@ -2673,6 +2699,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.Choice", b =>
@@ -2691,6 +2719,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("SingleQuestionSubmissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("SingleQuestionSubmission");
                 });
 
             modelBuilder.Entity("Domain.Entities.DisqualificationRequest", b =>
@@ -2698,6 +2728,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumComment", b =>
@@ -2711,6 +2743,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Writer")
                         .WithMany()
                         .HasForeignKey("WriterId");
+
+                    b.Navigation("ForumTopic");
+
+                    b.Navigation("Writer");
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumReply", b =>
@@ -2724,6 +2760,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Writer")
                         .WithMany()
                         .HasForeignKey("WriterId");
+
+                    b.Navigation("ForumComment");
+
+                    b.Navigation("Writer");
                 });
 
             modelBuilder.Entity("Domain.Entities.ForumTopic", b =>
@@ -2743,6 +2783,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Writer")
                         .WithMany()
                         .HasForeignKey("WriterId");
+
+                    b.Navigation("GroupDefinition");
+
+                    b.Navigation("GroupInstance");
+
+                    b.Navigation("Writer");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupConditionDetail", b =>
@@ -2752,6 +2798,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("GroupConditionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("GroupCondition");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupConditionPromoCode", b =>
@@ -2767,6 +2815,10 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("PromoCodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("GroupConditionDetails");
+
+                    b.Navigation("PromoCode");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupDefinition", b =>
@@ -2794,6 +2846,14 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("TimeSlotId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("GroupCondition");
+
+                    b.Navigation("Pricing");
+
+                    b.Navigation("Sublevel");
+
+                    b.Navigation("TimeSlot");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupInstance", b =>
@@ -2803,6 +2863,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("GroupDefinitionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("GroupDefinition");
                 });
 
             modelBuilder.Entity("Domain.Entities.GroupInstanceStudents", b =>
@@ -2820,23 +2882,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
-                });
 
-            modelBuilder.Entity("Domain.Entities.HomeWorkSubmition", b =>
-                {
-                    b.HasOne("Domain.Entities.ApplicationUser", "CorrectionTeacher")
-                        .WithMany()
-                        .HasForeignKey("CorrectionTeacherId");
+                    b.Navigation("GroupInstance");
 
-                    b.HasOne("Domain.Entities.Homework", "Homework")
-                        .WithMany()
-                        .HasForeignKey("HomeworkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("PromoCodeInstance");
 
-                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.Homework", b =>
@@ -2856,6 +2907,35 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId");
+
+                    b.Navigation("GroupInstance");
+
+                    b.Navigation("LessonInstance");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("Domain.Entities.HomeWorkSubmition", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "CorrectionTeacher")
+                        .WithMany()
+                        .HasForeignKey("CorrectionTeacherId");
+
+                    b.HasOne("Domain.Entities.Homework", "Homework")
+                        .WithMany()
+                        .HasForeignKey("HomeworkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.ApplicationUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("CorrectionTeacher");
+
+                    b.Navigation("Homework");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.InterestedStudent", b =>
@@ -2875,6 +2955,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
+
+                    b.Navigation("GroupDefinition");
+
+                    b.Navigation("PromoCodeInstance");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonDefinition", b =>
@@ -2884,6 +2970,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("SublevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Sublevel");
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonInstance", b =>
@@ -2907,6 +2995,14 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.Test", "Test")
                         .WithMany()
                         .HasForeignKey("TestId");
+
+                    b.Navigation("GroupInstance");
+
+                    b.Navigation("LessonDefinition");
+
+                    b.Navigation("SubmittedReportTeacher");
+
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Domain.Entities.LessonInstanceStudent", b =>
@@ -2920,6 +3016,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
+
+                    b.Navigation("LessonInstance");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.OverPaymentStudent", b =>
@@ -2933,6 +3033,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
+
+                    b.Navigation("GroupDefinition");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.PaymentTransaction", b =>
@@ -2944,6 +3048,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("GroupDefinition");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.PlacementRelease", b =>
@@ -2953,6 +3061,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Domain.Entities.PromoCodeInstance", b =>
@@ -2970,6 +3080,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId");
+
+                    b.Navigation("GroupDefinition");
+
+                    b.Navigation("PromoCode");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -3001,6 +3117,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.TestInstance", "TestInstance")
                         .WithMany()
                         .HasForeignKey("TestInstanceId");
+
+                    b.Navigation("SingleQuestion");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("TestInstance");
                 });
 
             modelBuilder.Entity("Domain.Entities.StudentInfo", b =>
@@ -3014,6 +3136,10 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("SublevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Sublevel");
                 });
 
             modelBuilder.Entity("Domain.Entities.Sublevel", b =>
@@ -3023,6 +3149,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("LevelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Level");
                 });
 
             modelBuilder.Entity("Domain.Entities.TeacherAbsence", b =>
@@ -3036,6 +3164,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId");
+
+                    b.Navigation("LessonInstance");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Domain.Entities.TeacherGroupInstanceAssignment", b =>
@@ -3053,6 +3185,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId");
+
+                    b.Navigation("GroupInstance");
+
+                    b.Navigation("LessonInstance");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Domain.Entities.Test", b =>
@@ -3068,6 +3206,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Domain.Entities.Sublevel", "Sublevel")
                         .WithMany()
                         .HasForeignKey("SublevelId");
+
+                    b.Navigation("LessonDefinition");
+
+                    b.Navigation("Level");
+
+                    b.Navigation("Sublevel");
                 });
 
             modelBuilder.Entity("Domain.Entities.TestInstance", b =>
@@ -3095,6 +3239,16 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("TestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CorrectionTeacher");
+
+                    b.Navigation("GroupInstance");
+
+                    b.Navigation("LessonInstance");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Domain.Entities.TimeSlotDetails", b =>
@@ -3162,6 +3316,75 @@ namespace Infrastructure.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.AdlerCardsUnit", b =>
+                {
+                    b.Navigation("AdlerCards");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ForumComment", b =>
+                {
+                    b.Navigation("ForumReplys");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ForumTopic", b =>
+                {
+                    b.Navigation("ForumComments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.GroupInstance", b =>
+                {
+                    b.Navigation("LessonInstances");
+
+                    b.Navigation("Students");
+
+                    b.Navigation("TeacherAssignment");
+                });
+
+            modelBuilder.Entity("Domain.Entities.LessonInstance", b =>
+                {
+                    b.Navigation("LessonInstanceStudents");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Level", b =>
+                {
+                    b.Navigation("SubLevels");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Question", b =>
+                {
+                    b.Navigation("SingleQuestions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SingleQuestion", b =>
+                {
+                    b.Navigation("Choices");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SingleQuestionSubmission", b =>
+                {
+                    b.Navigation("Choices");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Sublevel", b =>
+                {
+                    b.Navigation("LessonDefinitions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Test", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.TimeSlot", b =>
+                {
+                    b.Navigation("TimeSlotDetails");
                 });
 #pragma warning restore 612, 618
         }
