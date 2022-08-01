@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 using Application.Wrappers;
 using Domain.Entities;
 using System.Net;
-using Pomelo.EntityFrameworkCore.MySql.Storage;
+using Serilog;
 
 namespace Infrastructure.Persistence
 {
@@ -108,6 +108,7 @@ namespace Infrastructure.Persistence
             #endregion
 
             services.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
+            Log.Information(configuration["JWTSettings"]);
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
