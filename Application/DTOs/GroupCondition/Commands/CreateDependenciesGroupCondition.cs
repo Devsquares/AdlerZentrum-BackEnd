@@ -4,6 +4,7 @@ using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
@@ -18,7 +19,7 @@ namespace Application.DTOs
             _groupConditionDetailsRepository = groupConditionDetailsRepository;
             _groupConditionPromoCodeRepository = groupConditionPromoCodeRepository;
         }
-        public async void Create(int groupConditionId, List<List<GroupConditionPromoCodeInputModel>> PromoCodes)
+        public async Task Create(int groupConditionId, List<List<GroupConditionPromoCodeInputModel>> PromoCodes)
         {
             // add details
             List<GroupConditionDetail> groupConditionDetailsList = new List<GroupConditionDetail>();

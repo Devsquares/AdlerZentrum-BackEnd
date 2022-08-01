@@ -2050,7 +2050,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("teacherAbsences");
+                    b.ToTable("TeacherAbsences");
                 });
 
             modelBuilder.Entity("Domain.Entities.TeacherGroupInstanceAssignment", b =>
