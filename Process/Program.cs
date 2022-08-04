@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
+using System;
 
 namespace Process
 {
@@ -31,8 +32,10 @@ namespace Process
                 .ConfigureServices((hostContext, services) =>
                 {
                     var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                    var site = hostContext.Configuration.GetConnectionString("DefaultConnection");
-                    optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
+                    var connectionString = hostContext.Configuration.GetConnectionString("DefaultConnection");
+                    var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
+
+                    optionsBuilder.UseMySql(hostContext.Configuration.GetConnectionString("DefaultConnection"), serverVersion);
                     services.Configure<MailSettings>(hostContext.Configuration.GetSection("MailSettings"));
                     services.AddTransient<IEmailService, EmailService>();
                     services.AddScoped<ApplicationDbContext>(s => new ApplicationDbContext(optionsBuilder.Options));
