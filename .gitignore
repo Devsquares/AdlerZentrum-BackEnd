@@ -340,5 +340,5 @@ ASALocalRun/
 healthchecksdb
  
 VSIXCore/
-*.json
+Logs/*.json
 !Process/appsettings.json
