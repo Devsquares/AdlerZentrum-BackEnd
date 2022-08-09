@@ -19,7 +19,7 @@ namespace Infrastructure.Persistence
 
         public async Task<ICollection<LessonDefinition>> GetBySubLevelId(int SubLevelId)
         {
-            return lessonDefinitions.Where(x => x.SublevelId == SubLevelId).ToList();
+            return await lessonDefinitions.Where(x => x.SublevelId == SubLevelId).ToListAsync();
         }
     }
 }

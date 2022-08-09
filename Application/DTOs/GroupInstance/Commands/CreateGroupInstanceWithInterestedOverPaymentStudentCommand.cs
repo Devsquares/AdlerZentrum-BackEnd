@@ -60,7 +60,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     Status = (int)GroupInstanceStatusEnum.Pending,
 
                 };
-                using (TransactionScope transactionScope = new TransactionScope())
+                using (TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     await _groupInstanceRepositoryAsync.AddAsync(groupInstanceobject);
 

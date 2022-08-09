@@ -326,7 +326,7 @@ namespace WebApi.Controllers
                 registerRequest.FirstName = firstName;
                 registerRequest.LastName = lastName;
                 registerRequest.UserName = userName;
-                using (TransactionScope scope = new TransactionScope())
+                using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     var student = await _accountService.RegisterAsync(registerRequest, origin);
                     await Mediator.Send(new RegisterStudentGroupDefinitionCommand { groupDefinitionId = request.GroupDefinitionId.Value, StudentId = student.data, PromoCodeInstanceId = request.PromoCodeInstanceID, PlacmentTestId = request.PlacmentTestId, Email = registerRequest.Email });

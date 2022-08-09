@@ -34,8 +34,8 @@ namespace WebApi.Middlewares
                 var response = context.Response;
                 response.ContentType = "application/json";
                 var responseModel = new Response<string>() { succeeded = false, message = error?.Message };
-                
-                switch (error) 
+
+                switch (error)
                 {
                     case Application.Exceptions.ApiException e:
                         // custom application error
@@ -53,6 +53,13 @@ namespace WebApi.Middlewares
                     case Microsoft.IdentityModel.Tokens.SecurityTokenValidationException e:
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.ServiceUnavailable;
+                        break;
+                    case Microsoft.EntityFrameworkCore.DbUpdateException e:
+                        response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        if (error.InnerException.Message.Contains("Cannot delete or update a parent row: a foreign key constraint fails"))
+                        {
+                            responseModel.message = "Cannot delete or update because it used.";
+                        }
                         break;
                     default:
                         // unhandled error

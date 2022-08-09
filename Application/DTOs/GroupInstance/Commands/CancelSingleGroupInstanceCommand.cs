@@ -46,7 +46,7 @@ namespace Application.DTOs.GroupInstance.Commands
                 if (groupInstance == null) throw new ApiException($"Group definition Not Found.");
                 List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
                 List<OverPaymentStudent> overPaymentStudent = new List<OverPaymentStudent>();
-                using (TransactionScope scope = new TransactionScope())
+                using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     var allStudents = _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupInstance.GroupDefinitionId, groupInstance.Id);
                     if (allStudents != null && allStudents.Count > 0)
