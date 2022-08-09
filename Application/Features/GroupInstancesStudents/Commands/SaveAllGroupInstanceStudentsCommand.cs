@@ -49,7 +49,7 @@ namespace Application.Features
                     }
                 }
                 // List<GroupInstanceStudents>groupInstanceStidentObject = _mapper.Map<List<GroupInstanceStudents>>(command.GroupInstancesStudentList);
-                using (TransactionScope scope = new TransactionScope())
+                using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     List<GroupInstanceStudents> groupInstanceStudentsObject = new List<GroupInstanceStudents>();
                     var students = _groupInstanceStudentRepositoryAsync.SaveAllGroupInstanceStudents(command.GroupDefinitionId, command.GroupInstancesStudentList,out groupInstanceStudentsObject);

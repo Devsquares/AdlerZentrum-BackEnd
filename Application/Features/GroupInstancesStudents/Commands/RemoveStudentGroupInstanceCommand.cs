@@ -47,7 +47,7 @@ namespace Application.Features
                 var groupInstance = _groupInstanceRepositoryAsync.GetByIdAsync(command.GroupInstanceId).Result;
                 if (groupInstance == null) throw new ApiException($"Group Instance Not Found.");
                 var student = _groupInstanceStudentRepositoryAsync.GetByStudentId(command.StudentId, command.GroupInstanceId);
-                using (TransactionScope scope = new TransactionScope())
+                using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     if (student.PromoCodeInstanceId != null)
                     {

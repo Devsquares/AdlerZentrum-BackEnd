@@ -71,7 +71,7 @@ namespace Application.DTOs.GroupInstance.Commands
                 var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId, command.GroupInstanceId);
                 List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
                 List<OverPaymentStudent> overPaymentStudent = new List<OverPaymentStudent>();
-                using (TransactionScope scope = new TransactionScope())
+                using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     foreach (var group in allStudents)
                     {

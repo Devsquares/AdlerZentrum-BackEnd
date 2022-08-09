@@ -32,7 +32,7 @@ namespace Application.DTOs
             }
             public async Task<Response<bool>> Handle(ActiveGroupInstanceByGroupDefinationCommand command, CancellationToken cancellationToken)
             {
-                using (TransactionScope scope = new TransactionScope())
+                using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
                     var groupInstances = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(command.Id);
                     if (groupInstances == null) throw new ApiException($"Group Not Found.");

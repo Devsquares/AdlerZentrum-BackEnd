@@ -12,7 +12,7 @@ namespace Application.Interfaces.Repositories
         IReadOnlyList<GroupInstanceStudents> GetStudents(int groupId);
         int? GetActiveGroupInstance(string userId);
         Task AddStudentToTheGroupInstance(int groupId, string studentId);
-        Task<GroupInstance> GetByIdAsync(int id);
+        new Task<GroupInstance> GetByIdAsync(int id);
         GroupInstance GetByGroupDefinitionId(int groupDefinitionId);
         List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, List<int> groupInstancelist = null);
         int GetCountByGroupDefinitionId(int groupDefinitionId);

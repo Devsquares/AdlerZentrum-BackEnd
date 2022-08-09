@@ -16,6 +16,7 @@ namespace Infrastructure.Persistence.Repositories
     {
         private readonly DbSet<GroupDefinition> groupDefinitions;
         private readonly DbSet<Sublevel> sublevels;
+        private readonly DbSet<Level> levels;
         private readonly int SERIAL_DIGITS = 4;
         private readonly DbSet<PromoCodeInstance> promoCodeInstance;
         public GroupDefinitionRepositoryAsync(ApplicationDbContext dbContext) : base(dbContext)
@@ -23,7 +24,7 @@ namespace Infrastructure.Persistence.Repositories
             groupDefinitions = dbContext.Set<GroupDefinition>();
             sublevels = dbContext.Set<Sublevel>();
             promoCodeInstance = dbContext.Set<PromoCodeInstance>();
-
+            levels = dbContext.Set<Level>();
         }
 
         public new async Task<GroupDefinition> AddAsync(GroupDefinition entity)
@@ -95,21 +96,25 @@ namespace Infrastructure.Persistence.Repositories
         private async Task SetSerialNumberBeforeInsert(GroupDefinition groupDefinition)
         {
             string serial = "";
-            string sublevel, number;
+            string sublevelName, levelName, number;
+            Sublevel sublevel;
+            Level level;
             int count;
 
             if (groupDefinition.SubLevelId == 0)
                 throw new ApiException("Error while generating the serial number for the new " +
                     "group definition. Sublevel couldn't be found.");
-            sublevel = sublevels.Find(groupDefinition.SubLevelId).Name;
-            sublevel = sublevel.Replace(".", "");
+            sublevel = sublevels.Find(groupDefinition.SubLevelId);
+            sublevelName = sublevel.Name.Replace(".", "");
+            level = levels.Find(sublevel.LevelId);
+            levelName = level.Name.Replace(".", "");
 
             count = await groupDefinitions.Where(x => x.Serial != null && x.Serial != "" && x.Serial.Length == 7 && x.SubLevelId == groupDefinition.SubLevelId).CountAsync();
             if (count == 0)
                 number = "0".PadLeft(SERIAL_DIGITS, '0');
             else
                 number = _findNextSerial(groupDefinition.SubLevelId);
-            serial = sublevel + number;
+            serial =levelName +  sublevelName + number;
             groupDefinition.Serial = serial;
         }
 
