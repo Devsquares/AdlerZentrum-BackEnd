@@ -18,7 +18,7 @@ namespace Application.Features
         public int Id { get; set; }
         public string StudentId { get; set; }
         public string Comment { get; set; }
-        public int DisqualificationRequestStatus { get; set; }
+        public int status { get; set; }
 
         public class UpdateDisqualificationRequestCommandHandler : IRequestHandler<UpdateDisqualificationRequestCommand, Response<int>>
         {
@@ -46,13 +46,12 @@ namespace Application.Features
                 }
                 else
                 {
-                    disqualificationrequest.StudentId = command.StudentId;
                     disqualificationrequest.Comment = command.Comment;
-                    disqualificationrequest.DisqualificationRequestStatus = command.DisqualificationRequestStatus;
+                    disqualificationrequest.DisqualificationRequestStatus = command.status;
 
                     await _disqualificationrequestRepository.UpdateAsync(disqualificationrequest);
                     var student = _groupInstanceStudentRepositoryAsync.GetByStudentIdIsDefault(command.StudentId);
-                    if (command.DisqualificationRequestStatus == (int)DisqualificationRequestStatusEnum.Disqualified)
+                    if (command.status == (int)DisqualificationRequestStatusEnum.Disqualified)
                     {
                         student.Disqualified = true;
                         student.IsDefault = false;

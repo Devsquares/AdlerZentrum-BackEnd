@@ -55,7 +55,6 @@ namespace WebApi.Controllers
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         //[Authorize(Roles = "SuperAdmin")]
-        
         public async Task<IActionResult> Put(int id, UpdateBanRequestCommand command)
         {
             if (id != command.Id)

@@ -13,7 +13,7 @@ namespace Application.Features
     public class UpdateBanRequestCommand : IRequest<Response<int>>
     {
         public int Id { get; set; }
-        public int BanRequestStatus { get; set; }
+        public int status { get; set; }
         public string Comment { get; set; }
 
         public class UpdateBanRequestCommandHandler : IRequestHandler<UpdateBanRequestCommand, Response<int>>
@@ -39,7 +39,7 @@ namespace Application.Features
                 }
                 else
                 {
-                    banrequest.BanRequestStatus = command.BanRequestStatus;
+                    banrequest.BanRequestStatus = command.status;
                     banrequest.Comment = command.Comment;
                     if (banrequest.BanRequestStatus == (int)BanRequestStatusEnum.Approved)
                     {

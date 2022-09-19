@@ -56,11 +56,11 @@ namespace Application.DTOs
             for (int i = 1; i <= users.Count; i++)
             {
                 rank = i;
-                if(i > 1 && users[i-1].AchievedScore == users[i-2].AchievedScore)
+                if (i > 1 && users[i - 1].AchievedScore == users[i - 2].AchievedScore)
                 {
                     rank = i - 2;
                 }
-                rankedStudents.Add(new KeyValuePair<string, RankModel>(users[i-1].StudentId, new RankModel() { StudentName = users[i-1].Student.FirstName, Rank = rank }));
+                rankedStudents.Add(new KeyValuePair<string, RankModel>(users[i - 1].StudentId, new RankModel() { StudentName = users[i - 1].Student.FirstName + " " + users[i - 1].Student.LastName, Rank = rank }));
             }
             rankedStudents = rankedStudents.OrderBy(x => x.Value.Rank).ToList();
             return new List<KeyValuePair<string, RankModel>>(rankedStudents);

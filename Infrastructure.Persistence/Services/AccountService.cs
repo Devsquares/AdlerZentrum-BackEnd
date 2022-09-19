@@ -252,6 +252,8 @@ namespace Infrastructure.Persistence.Services
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 UserName = request.Email,
+                Country = request.Country,
+                PhoneNumber = request.PhoneNumber
             };
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
@@ -640,6 +642,7 @@ namespace Infrastructure.Persistence.Services
             if (userWithSameEmail == null)
             {
                 user.EmailConfirmed = true;
+                user.ChangePassword = true;
                 user.UserName = request.Email;
 
                 var result = await _userManager.CreateAsync(user, request.Password);
