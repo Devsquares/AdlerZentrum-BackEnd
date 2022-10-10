@@ -29,6 +29,7 @@ namespace WebApi.Controllers
         [HttpPost("CreateAdditionalHomework")]
         public async Task<IActionResult> CreateAdditionalHomework(CreateHomeWorkCommand command)
         { 
+            command.TeacherId = AuthenticatedUserService.UserId;
             return Ok(await Mediator.Send(command));
         }
 
@@ -82,7 +83,8 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(new GetAllHomeWorkSubmitionsQuery()
             {
                 GroupInstanceId = filter.GroupInstanceId,
-                Status = filter.Status
+                Status = filter.Status,
+                TeacherId = filter.TeacherId
             }));
         }
 

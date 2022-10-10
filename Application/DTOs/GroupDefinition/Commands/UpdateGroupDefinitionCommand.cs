@@ -46,6 +46,10 @@ namespace Application.DTOs
                 }
                 else
                 {
+                    DateTime startDate = groupDefinition.StartDate;
+                    DateTime endDate = groupDefinition.EndDate;
+
+                    if (startDate >= endDate) throw new ApiException("Start date can't be after the end date.");
 
                     groupDefinition.SubLevelId = command.SubLevelId;
                     groupDefinition.TimeSlotId = command.TimeSlotId;
