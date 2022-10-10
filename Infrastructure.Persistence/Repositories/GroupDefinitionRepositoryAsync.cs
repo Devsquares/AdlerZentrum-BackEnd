@@ -114,7 +114,7 @@ namespace Infrastructure.Persistence.Repositories
                 number = "0".PadLeft(SERIAL_DIGITS, '0');
             else
                 number = _findNextSerial(groupDefinition.SubLevelId);
-            serial =levelName +  sublevelName + number;
+            serial = sublevelName + number;
             groupDefinition.Serial = serial;
         }
 
