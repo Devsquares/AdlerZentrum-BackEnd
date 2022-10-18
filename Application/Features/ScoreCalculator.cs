@@ -33,7 +33,6 @@ namespace Application.Features
             this.dbContext = dbContext;
             this.user = user;
             this.isFinishedGroup = false;
-            this.grading = new Dictionary<TestTypeEnum, double>();
         }
         public void CheckAndProcess()
         {
@@ -61,6 +60,8 @@ namespace Application.Features
          */
         private void Initalize()
         {
+            this.grading = new Dictionary<TestTypeEnum, double>();
+
             //Get the current group for example A1.3
             currentGroup = dbContext.Set<GroupInstanceStudents>()
                 .Include(x => x.GroupInstance.GroupDefinition.Sublevel.Level)
@@ -125,16 +126,16 @@ namespace Application.Features
 
         private void Execute()
         {
-            Double quizAchievedScore = 0.0;
-            Double quizTotalScore = 0.0;
+            double quizAchievedScore = 0.0;
+            double quizTotalScore = 0.0;
 
-            Double sublevelTestAchievedScore = 0.0;
-            Double sublevelTestTotalScore = 0.0;
+            double sublevelTestAchievedScore = 0.0;
+            double sublevelTestTotalScore = 0.0;
 
-            Double finalTestAchievedScore = 0.0;
-            Double finalTestTotalScore = 0.0;
+            double finalTestAchievedScore = 0.0;
+            double finalTestTotalScore = 0.0;
 
-            Double score = 0.0;
+            double score = 0.0;
 
             //calculate quizzes
             foreach (var quiz in quizzes)
