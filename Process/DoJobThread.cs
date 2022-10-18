@@ -66,6 +66,27 @@ namespace Process
                             dbContext.SaveChanges();
                         }
                         break;
+                    case (int)JobTypeEnum.ScoreCalculatorForGroup:
+                        try
+                        {
+                            var studentList = dbContext.GroupInstanceStudents.Where(x => x.GroupInstanceId == _job.GroupInstanceId).ToList();
+                            foreach (var groupInstanceStudent in studentList)
+                            {
+                                var student = dbContext.ApplicationUsers.Where(x => x.Id == groupInstanceStudent.StudentId).FirstOrDefault();
+                                ScoreCalculator ScoreCalculator = new ScoreCalculator(dbContext, student);
+                                ScoreCalculator.CheckAndProcess();
+                            }
+                            _job.Status = (int)JobStatusEnum.Done;
+                            _job.FinishDate = DateTime.Now;
+                        }
+                        catch (System.Exception ex)
+                        {
+                            _job.Failure = ex.Message;
+                            _job.Status = (int)JobStatusEnum.Failed;
+                            dbContext.Update(_job);
+                            dbContext.SaveChanges();
+                        }
+                        break;
                     case (int)JobTypeEnum.Upgrader:
                         try
                         {

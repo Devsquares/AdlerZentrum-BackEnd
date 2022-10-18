@@ -33,6 +33,7 @@ namespace Application.Features
             this.dbContext = dbContext;
             this.user = user;
             this.isFinishedGroup = false;
+            this.grading = new Dictionary<TestTypeEnum, double>();
         }
         public void CheckAndProcess()
         {
@@ -124,16 +125,16 @@ namespace Application.Features
 
         private void Execute()
         {
-            var quizAchievedScore = 0.0;
-            var quizTotalScore = 0.0;
+            Double quizAchievedScore = 0.0;
+            Double quizTotalScore = 0.0;
 
-            var sublevelTestAchievedScore = 0.0;
-            var sublevelTestTotalScore = 0.0;
+            Double sublevelTestAchievedScore = 0.0;
+            Double sublevelTestTotalScore = 0.0;
 
-            var finalTestAchievedScore = 0.0;
-            var finalTestTotalScore = 0.0;
+            Double finalTestAchievedScore = 0.0;
+            Double finalTestTotalScore = 0.0;
 
-            var score = 0.0;
+            Double score = 0.0;
 
             //calculate quizzes
             foreach (var quiz in quizzes)
@@ -161,10 +162,10 @@ namespace Application.Features
                 score += grading.GetValueOrDefault(TestTypeEnum.quizz) * (quizAchievedScore / quizTotalScore);
 
             if (sublevelTestTotalScore != 0)
-                score += grading.GetValueOrDefault(TestTypeEnum.subLevel) * (sublevelTestAchievedScore / quizTotalScore);
+                score += grading.GetValueOrDefault(TestTypeEnum.subLevel) * (sublevelTestAchievedScore / sublevelTestTotalScore);
 
             if (finalTestTotalScore != 0)
-                score += grading.GetValueOrDefault(TestTypeEnum.subLevel) * (sublevelTestAchievedScore / quizTotalScore);
+                score += grading.GetValueOrDefault(TestTypeEnum.subLevel) * (sublevelTestAchievedScore / finalTestTotalScore);
 
             achievedScore = score;
         }

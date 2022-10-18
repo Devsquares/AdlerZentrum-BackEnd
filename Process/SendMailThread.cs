@@ -3,11 +3,9 @@ using System.Linq;
 using Application.Enums;
 using Domain.Entities;
 using Infrastructure.Persistence.Contexts;
-using Microsoft.Extensions.DependencyInjection;
-using Application.Features;
+using Microsoft.Extensions.DependencyInjection; 
 using Microsoft.Extensions.Logging;
-using FormatWith;
-using Infrastructure.Shared.Services;
+using FormatWith; 
 using Microsoft.EntityFrameworkCore;
 using Application.Interfaces;
 

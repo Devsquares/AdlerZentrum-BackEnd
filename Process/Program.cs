@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting; 
 using Serilog;
 using System;
 
@@ -29,6 +29,7 @@ namespace Process
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSystemd()
                 .ConfigureServices((hostContext, services) =>
                 {
                     var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();

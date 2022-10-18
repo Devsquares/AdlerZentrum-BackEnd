@@ -89,6 +89,7 @@ namespace Infrastructure.Persistence.Services
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
+                // TODO msg need to be changed.
                 throw new ApiException($"No ApplicationUsers Registered with {request.Email}.");
             }
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
@@ -298,7 +299,7 @@ namespace Infrastructure.Persistence.Services
             }
             else
             {
-                throw new ApiException($"Email {request.Email } is already registered.");
+                throw new ApiException($"Email {request.Email} is already registered.");
             }
         }
 
@@ -345,7 +346,7 @@ namespace Infrastructure.Persistence.Services
 
             if (userWithSameEmail != null)
             {
-                throw new ApiException($"Email {request.Email } is already registered.");
+                throw new ApiException($"Email {request.Email} is already registered.");
             }
             return new Response<bool>(true);
         }
@@ -515,6 +516,7 @@ namespace Infrastructure.Persistence.Services
         public async Task<Response<string>> ChangePassword(VerifyEmailRequest model)
         {
             var ApplicationUser = await _userManager.FindByEmailAsync(model.Email);
+            // TODO msg need to be changed.
             if (ApplicationUser == null) throw new ApiException($"No ApplicationUsers Registered with {model.Email}.");
             //string tok = _userManager.GeneratePasswordResetTokenAsync(ApplicationUser).Result;
             //await _userManager.ResetPasswordAsync(ApplicationUser, tok, "P@$$w0rd");
@@ -684,7 +686,7 @@ namespace Infrastructure.Persistence.Services
             }
             else
             {
-                throw new ApiException($"Email {request.Email } is already registered.");
+                throw new ApiException($"Email {request.Email} is already registered.");
             }
         }
 
@@ -714,7 +716,7 @@ namespace Infrastructure.Persistence.Services
             }
         }
         public async Task<PagedResponse<IEnumerable<object>>> GetPagedReponseStudentUsersAsync(int pageNumber, int pageSize, int? groupDefinitionId, int? groupInstanceId, string studentName)
-        { 
+        {
             var studentRoles = (from user in _userManager.Users
                                 join userrole in _context.UserRoles on user.Id equals userrole.UserId
                                 join role in _context.Roles on userrole.RoleId equals role.Id

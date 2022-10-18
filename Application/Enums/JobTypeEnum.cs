@@ -11,6 +11,7 @@ namespace Application.Enums
         Upgrader = 2,
         Downgrader = 3,
         GroupFinish = 4,
-        Disqualifier = 5
+        Disqualifier = 5,
+        ScoreCalculatorForGroup = 6
     }
 }
