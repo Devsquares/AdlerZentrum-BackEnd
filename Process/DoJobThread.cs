@@ -22,6 +22,8 @@ namespace Process
         public void Run(object job)
         {
             Job _job = (Job)job;
+            JobTypeEnum jobType = (JobTypeEnum)_job.Type;
+            _logger.LogInformation($"New Job run with id {_job.Id} and type {jobType.ToString()}");
             using (var scope = _serviceProvider.CreateScope())
             {
                 // update job to running.
@@ -31,9 +33,9 @@ namespace Process
                 dbContext.Update(_job);
                 dbContext.SaveChanges();
 
-                switch (_job.Type)
+                switch (jobType)
                 {
-                    case (int)JobTypeEnum.TestCorrection:
+                    case JobTypeEnum.TestCorrection:
                         try
                         {
                             AutoCorrection autoCorrection = new AutoCorrection();
@@ -49,7 +51,7 @@ namespace Process
                             dbContext.SaveChanges();
                         }
                         break;
-                    case (int)JobTypeEnum.ScoreCalculator:
+                    case JobTypeEnum.ScoreCalculator:
                         try
                         {
                             var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
@@ -66,7 +68,7 @@ namespace Process
                             dbContext.SaveChanges();
                         }
                         break;
-                    case (int)JobTypeEnum.ScoreCalculatorForGroup:
+                    case JobTypeEnum.ScoreCalculatorForGroup:
                         try
                         {
                             var studentList = dbContext.GroupInstanceStudents.Where(x => x.GroupInstanceId == _job.GroupInstanceId).ToList();
@@ -87,7 +89,7 @@ namespace Process
                             dbContext.SaveChanges();
                         }
                         break;
-                    case (int)JobTypeEnum.Upgrader:
+                    case JobTypeEnum.Upgrader:
                         try
                         {
                             var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
@@ -104,7 +106,7 @@ namespace Process
                             dbContext.SaveChanges();
                         }
                         break;
-                    case (int)JobTypeEnum.Downgrader:
+                    case JobTypeEnum.Downgrader:
                         try
                         {
                             var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
@@ -121,7 +123,7 @@ namespace Process
                         }
                         break;
 
-                    case (int)JobTypeEnum.GroupFinish:
+                    case JobTypeEnum.GroupFinish:
                         try
                         {
                             FinishedGroup finishedGroup = new FinishedGroup(dbContext, _job.GroupInstanceId.Value);
@@ -137,7 +139,7 @@ namespace Process
                             dbContext.SaveChanges();
                         }
                         break;
-                    case (int)JobTypeEnum.Disqualifier:
+                    case JobTypeEnum.Disqualifier:
                         try
                         {
                             var student = dbContext.ApplicationUsers.Where(x => x.Id == _job.StudentId).FirstOrDefault();
@@ -157,6 +159,8 @@ namespace Process
                 }
                 dbContext.Update(_job);
                 dbContext.SaveChanges();
+
+                _logger.LogInformation($"Job finished with id {_job.Id} and type {jobType.ToString()}");
             }
         }
 
