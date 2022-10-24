@@ -15,6 +15,7 @@ namespace Application.Features
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+        public int status { get; set; }
     }
     public class GetAllNewBanRequestsQueryHandler : IRequestHandler<GetAllNewBanRequestsQuery, PagedResponse<IEnumerable<GetAllBanRequestsViewModel>>>
     {

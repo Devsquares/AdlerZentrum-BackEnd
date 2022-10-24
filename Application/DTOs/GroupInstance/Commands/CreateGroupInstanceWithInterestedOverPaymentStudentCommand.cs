@@ -52,6 +52,11 @@ namespace Application.DTOs.GroupInstance.Commands
                 {
                     throw new ApiException($"Group definition finished or canceled");
                 }
+                var groupInstancesByGroupDefinition = await _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstanceAsync(command.GroupDefinitionId);
+                if (groupInstancesByGroupDefinition.Count >= groupDefinitionobject.MaxInstances)
+                {
+                    throw new ApiException($"You have exceeded the allowed number {groupDefinitionobject.MaxInstances}");
+                }
 
                 Domain.Entities.GroupInstance groupInstanceobject = new Domain.Entities.GroupInstance()
                 {
@@ -81,7 +86,7 @@ namespace Application.DTOs.GroupInstance.Commands
                         foreach (var interestedStudent in interestedStudentsList)
                         {
                             //Modified
-                            canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeInstanceId, interestedGroupInstanceStudents,isAutomaticCreate:true);
+                            canApplyInSpecificGroup = _groupConditionPromoCodeRepositoryAsync.CheckPromoCodeCountInGroupInstance(groupInstanceobject.Id, interestedStudent.PromoCodeInstanceId, interestedGroupInstanceStudents, isAutomaticCreate: true);
                             if (canApplyInSpecificGroup && studentCount < totalStudents)
                             {
                                 interestedGroupInstanceStudents.Add(new GroupInstanceStudents
@@ -120,7 +125,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     // Add placementTest Students
                     List<GroupInstanceStudents> PlacementTestGroupInstanceStudents = new List<GroupInstanceStudents>();
                     List<OverPaymentStudent> acceptedPlacementTestStudent = new List<OverPaymentStudent>();
-                    if (placemetTestStudentList !=null && placemetTestStudentList.Count>0)
+                    if (placemetTestStudentList != null && placemetTestStudentList.Count > 0)
                     {
 
                         foreach (var placemetTestStudent in placemetTestStudentList)

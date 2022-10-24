@@ -56,6 +56,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     var groupDefinitionInstance = _GroupDefinitionRepository.GetById(command.GroupDefinitionId.Value);
                     if (groupDefinitionInstance == null) throw new ApiException($"Group definition Not Found.");
                     groupDefinitionID = groupDefinitionInstance.Id;
+                    groupDefinitionInstance = null;
                 }
                 if (command.GroupInstanceId != null)
                 {
@@ -68,11 +69,12 @@ namespace Application.DTOs.GroupInstance.Commands
                     groupDefinitionID = groupInstance.GroupDefinitionId;
                     groupInstanceId = groupInstance.Id;
                 }
-                var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId, command.GroupInstanceId);
-                List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
-                List<OverPaymentStudent> overPaymentStudent = new List<OverPaymentStudent>();
+
                 using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
+                    var allStudents = _groupInstanceStudentRepositoryAsync.GetAllByGroupDefinition(command.GroupDefinitionId, command.GroupInstanceId);
+                    List<InterestedStudent> interestedStudents = new List<InterestedStudent>();
+                    List<OverPaymentStudent> overPaymentStudent = new List<OverPaymentStudent>();
                     foreach (var group in allStudents)
                     {
                         var students = group.ToList();
@@ -109,12 +111,11 @@ namespace Application.DTOs.GroupInstance.Commands
                     await _overPaymentStudentRepositoryAsync.ADDList(overPaymentStudent);
                     var groupStudents = _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
                     await _groupInstanceStudentRepositoryAsync.DeleteBulkAsync(groupStudents);
-                    var groups = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
+                    var groups = await _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstanceAsync(groupDefinitionID, groupInstanceId);
                     await _groupInstanceRepositoryAsync.DeleteBulkAsync(groups);
                     scope.Complete();
                 }
                 return new Response<int>(groupDefinitionID);
-
             }
         }
     }

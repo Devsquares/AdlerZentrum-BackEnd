@@ -99,7 +99,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     //var groups = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionInstance.Id, null);
                     //await _groupInstanceRepositoryAsync.DeleteBulkAsync(groups);
                     
-                    var groups = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionInstance.Id, null);
+                    var groups = await _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstanceAsync(groupDefinitionInstance.Id, null);
                     foreach (var group in groups)
                     {
                         group.Status = (int)GroupInstanceStatusEnum.Canceld;

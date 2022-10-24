@@ -34,7 +34,7 @@ namespace Application.DTOs
             {
                 using (TransactionScope scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    var groupInstances = _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstance(command.Id);
+                    var groupInstances = await _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstanceAsync(command.Id);
                     if (groupInstances == null) throw new ApiException($"Group Not Found.");
                     foreach (var item in groupInstances)
                     {

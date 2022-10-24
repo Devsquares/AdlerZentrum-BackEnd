@@ -39,9 +39,8 @@ namespace Application.DTOs
             {
                 var groupDefinition = new Domain.Entities.GroupDefinition();
 
-                await checkTimeSlots(groupDefinition);
-
                 Reflection.CopyProperties(command, groupDefinition);
+                await checkTimeSlots(groupDefinition);
                 groupDefinition.Status = (int)GroupDefinationStatusEnum.New;
                 await _GroupDefinitionRepository.AddAsync(groupDefinition);
                 return new Response<int>(groupDefinition.Id);

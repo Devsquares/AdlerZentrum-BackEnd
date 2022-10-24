@@ -28,8 +28,7 @@ namespace Process
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
-            {
-                _logger.LogInformation("Job Task stared");
+            { 
                 TimeSpan interval = new TimeSpan(0, 0, 0, 10);
                 using (var scope = _serviceProvider.CreateScope())
                 {

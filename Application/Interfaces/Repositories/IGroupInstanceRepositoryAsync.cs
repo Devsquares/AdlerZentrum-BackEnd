@@ -17,7 +17,7 @@ namespace Application.Interfaces.Repositories
         List<StudentsGroupInstanceModel> GetListByGroupDefinitionId(int groupDefinitionId, List<int> groupInstancelist = null);
         int GetCountByGroupDefinitionId(int groupDefinitionId);
         Task<GroupInstance> GetByIdPendingorCompleteAsync(int id);
-        List<GroupInstance> GetByGroupDefinitionAndGroupInstance(int groupDefinitionId, int? groupinstanceId = null);
+        Task<List<GroupInstance>> GetByGroupDefinitionAndGroupInstanceAsync(int groupDefinitionId, int? groupinstanceId = null);
         IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter, List<int> status, out int count);
         int? IsOtherActiveGroupInTheGroupDef(int groupDefinitionId);
     }

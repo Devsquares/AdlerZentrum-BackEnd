@@ -45,6 +45,7 @@ namespace Process
                         }
                         catch (System.Exception ex)
                         {
+                            _logger.LogError($"Error in Do Job ${ex.Message}");
                             _job.Failure = ex.Message;
                             _job.Status = (int)JobStatusEnum.Failed;
                             dbContext.Update(_job);
@@ -62,6 +63,7 @@ namespace Process
                         }
                         catch (System.Exception ex)
                         {
+                            _logger.LogError($"Error in Do Job ${ex.Message}");
                             _job.Failure = ex.Message;
                             _job.Status = (int)JobStatusEnum.Failed;
                             dbContext.Update(_job);
@@ -83,6 +85,7 @@ namespace Process
                         }
                         catch (System.Exception ex)
                         {
+                            _logger.LogError($"Error in Do Job ${ex.Message}");
                             _job.Failure = ex.Message;
                             _job.Status = (int)JobStatusEnum.Failed;
                             dbContext.Update(_job);
@@ -100,6 +103,7 @@ namespace Process
                         }
                         catch (System.Exception ex)
                         {
+                            _logger.LogError($"Error in Do Job ${ex.Message}");
                             _job.Failure = ex.Message;
                             _job.Status = (int)JobStatusEnum.Failed;
                             dbContext.Update(_job);
@@ -116,6 +120,7 @@ namespace Process
                         }
                         catch (System.Exception ex)
                         {
+                            _logger.LogError($"Error in Do Job ${ex.Message}");
                             _job.Failure = ex.Message;
                             _job.Status = (int)JobStatusEnum.Failed;
                             dbContext.Update(_job);
@@ -133,6 +138,7 @@ namespace Process
                         }
                         catch (System.Exception ex)
                         {
+                            _logger.LogError($"Error in Do Job ${ex.Message}");
                             _job.Failure = ex.Message;
                             _job.Status = (int)JobStatusEnum.Failed;
                             dbContext.Update(_job);
@@ -150,6 +156,7 @@ namespace Process
                         }
                         catch (System.Exception ex)
                         {
+                            _logger.LogError($"Error in Do Job ${ex.Message}");
                             _job.Failure = ex.Message;
                             _job.Status = (int)JobStatusEnum.Failed;
                         }
