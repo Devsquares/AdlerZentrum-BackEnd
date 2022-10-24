@@ -210,6 +210,15 @@ namespace Infrastructure.Persistence.Repositories
                                         && (groupinstanceId != null ? x.Id == groupinstanceId : true)).ToList();
         }
 
+        public async Task<List<GroupInstance>> GetByGroupDefinitionAndGroupInstanceWithoutSublevelAsync(int groupDefinitionId, int? groupinstanceId = null)
+        {
+            return groupInstances
+            .Include(x => x.LessonInstances)
+            .ThenInclude(x => x.LessonDefinition)
+            .Where(x => x.GroupDefinitionId == groupDefinitionId
+                                        && (groupinstanceId != null ? x.Id == groupinstanceId : true)).ToList();
+        }
+
         public new async Task<GroupInstance> AddAsync(GroupInstance entity)
         {
             await SetSerialNumberBeforeInsert(entity);

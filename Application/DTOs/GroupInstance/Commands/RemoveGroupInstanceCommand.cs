@@ -111,7 +111,7 @@ namespace Application.DTOs.GroupInstance.Commands
                     await _overPaymentStudentRepositoryAsync.ADDList(overPaymentStudent);
                     var groupStudents = _groupInstanceStudentRepositoryAsync.GetByGroupDefinitionAndGroupInstance(groupDefinitionID, groupInstanceId);
                     await _groupInstanceStudentRepositoryAsync.DeleteBulkAsync(groupStudents);
-                    var groups = await _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstanceAsync(groupDefinitionID, groupInstanceId);
+                    var groups = await _groupInstanceRepositoryAsync.GetByGroupDefinitionAndGroupInstanceWithoutSublevelAsync(groupDefinitionID, groupInstanceId);
                     await _groupInstanceRepositoryAsync.DeleteBulkAsync(groups);
                     scope.Complete();
                 }

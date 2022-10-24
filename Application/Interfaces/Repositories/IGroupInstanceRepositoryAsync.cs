@@ -18,6 +18,8 @@ namespace Application.Interfaces.Repositories
         int GetCountByGroupDefinitionId(int groupDefinitionId);
         Task<GroupInstance> GetByIdPendingorCompleteAsync(int id);
         Task<List<GroupInstance>> GetByGroupDefinitionAndGroupInstanceAsync(int groupDefinitionId, int? groupinstanceId = null);
+        Task<List<GroupInstance>> GetByGroupDefinitionAndGroupInstanceWithoutSublevelAsync(int groupDefinitionId, int? groupinstanceId = null);
+        
         IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter, List<int> status, out int count);
         int? IsOtherActiveGroupInTheGroupDef(int groupDefinitionId);
     }
