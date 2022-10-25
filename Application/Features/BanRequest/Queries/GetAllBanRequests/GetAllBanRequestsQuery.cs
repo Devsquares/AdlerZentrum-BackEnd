@@ -11,19 +11,13 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class GetAllBanRequestsQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllBanRequestsViewModel>>>
+    public class GetAllBanRequestsQuery : IRequest<PagedResponse<IEnumerable<GetAllBanRequestsViewModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public Dictionary<string, string> FilterValue { get; set; }
-        public Dictionary<string, string> FilterRange { get; set; }
-        public Dictionary<string, List<string>> FilterArray { get; set; }
-        public Dictionary<string, string> FilterSearch { get; set; }
-        public string SortBy { get; set; }
-        public string SortType { get; set; }
-        public bool NoPaging { get; set; }
+        public int? status { get; set; }
     }
-    public class GetAllBanRequestsQueryHandler : IRequestHandler<GetAllBanRequestsQuery, FilteredPagedResponse<IEnumerable<GetAllBanRequestsViewModel>>>
+    public class GetAllBanRequestsQueryHandler : IRequestHandler<GetAllBanRequestsQuery, PagedResponse<IEnumerable<GetAllBanRequestsViewModel>>>
     {
         private readonly IBanRequestRepositoryAsync _banrequestRepository;
         private readonly IMapper _mapper;
@@ -33,16 +27,17 @@ namespace Application.Features
             _mapper = mapper;
         }
 
-        public async Task<FilteredPagedResponse<IEnumerable<GetAllBanRequestsViewModel>>> Handle(GetAllBanRequestsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<IEnumerable<GetAllBanRequestsViewModel>>> Handle(GetAllBanRequestsQuery request, CancellationToken cancellationToken)
         {
-            var validFilter = _mapper.Map<GetAllBanRequestsParameter>(request);
-            FilteredRequestParameter filteredRequestParameter = new FilteredRequestParameter();
-            Reflection.CopyProperties(validFilter, filteredRequestParameter);
-            int count = _banrequestRepository.GetCount(validFilter);
 
-            var banrequest = await _banrequestRepository.GetPagedReponseAsync(validFilter);
+            request.PageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
+            request.PageSize = request.PageSize < 1 ? 10 : request.PageSize;
+
+            int count = _banrequestRepository.GetAllCount(request.status);
+
+            var banrequest = await _banrequestRepository.GetAll(request.PageNumber, request.PageSize, request.status);
             var banrequestViewModel = _mapper.Map<IEnumerable<GetAllBanRequestsViewModel>>(banrequest);
-            return new Wrappers.FilteredPagedResponse<IEnumerable<GetAllBanRequestsViewModel>>(banrequestViewModel, validFilter, count);
+            return new Wrappers.PagedResponse<IEnumerable<GetAllBanRequestsViewModel>>(banrequestViewModel, request.PageNumber, request.PageSize, count);
         }
     }
 }

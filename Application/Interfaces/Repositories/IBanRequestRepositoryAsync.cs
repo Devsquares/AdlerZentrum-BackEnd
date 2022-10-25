@@ -10,5 +10,7 @@ namespace Application.Interfaces.Repositories
     {
         Task<IReadOnlyList<BanRequest>> GetAllNew(int pageNumber, int pageSize);
         int GetAllNewCount();
+        Task<IReadOnlyList<BanRequest>> GetAll(int pageNumber, int pageSize, int? status);
+        int GetAllCount(int? status);
     }
 }

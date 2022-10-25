@@ -37,6 +37,38 @@ namespace Infrastructure.Persistence.Repositories
         {
             return _banrequests.Where(x => x.BanRequestStatus == (int)BanRequestStatusEnum.New).Count();
         }
+
+        public async Task<IReadOnlyList<BanRequest>> GetAll(int pageNumber, int pageSize, int? status)
+        {
+            var banrequests = new List<BanRequest>();
+            if (status == null)
+            {
+                banrequests = await _banrequests
+                                .Where(x => (status == null ? true : x.BanRequestStatus == (int)status))
+                                .Include(x => x.Student)
+                                .OrderBy(x => x.BanRequestStatus)
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+            }
+            else
+            {
+                banrequests = await _banrequests
+                                .Where(x => (status == null ? true : x.BanRequestStatus == (int)status))
+                                .Include(x => x.Student).Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+            }
+
+
+            return banrequests;
+        }
+
+        public int GetAllCount(int? status)
+        {
+
+            return _banrequests.Where(x => (status == null ? true : x.BanRequestStatus == (int)status)).Count();
+        }
     }
 
 }

@@ -13,8 +13,9 @@ namespace Application.Features
 {
     public class GetAllDisqualificationRequestsQuery : IRequest<PagedResponse<IEnumerable<GetAllDisqualificationRequestsViewModel>>>
     {
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
+        public int pageNumber { get; set; }
+        public int pageSize { get; set; }
+        public int? status { get; set; }
     }
     public class GetAllDisqualificationRequestsQueryHandler : IRequestHandler<GetAllDisqualificationRequestsQuery, PagedResponse<IEnumerable<GetAllDisqualificationRequestsViewModel>>>
     {
@@ -28,14 +29,13 @@ namespace Application.Features
 
         public async Task<PagedResponse<IEnumerable<GetAllDisqualificationRequestsViewModel>>> Handle(GetAllDisqualificationRequestsQuery request, CancellationToken cancellationToken)
         {
-            var validFilter = _mapper.Map<GetAllDisqualificationRequestsParameter>(request);
-            RequestParameter RequestParameter = new RequestParameter();
-            Reflection.CopyProperties(validFilter, RequestParameter);
-            int count = _disqualificationrequestRepository.GetCount(validFilter);
+            if (request.pageNumber == 0) request.pageNumber = 1;
+            if (request.pageSize == 0) request.pageSize = 10;
+            int count = _disqualificationrequestRepository.GetAllCount(request.status);
 
-            var disqualificationrequest = await _disqualificationrequestRepository.GetPagedReponseAsync(validFilter);
+            var disqualificationrequest = await _disqualificationrequestRepository.GetAll(request.pageNumber, request.pageSize, request.status);
             var disqualificationrequestViewModel = _mapper.Map<IEnumerable<GetAllDisqualificationRequestsViewModel>>(disqualificationrequest);
-            return new PagedResponse<IEnumerable<GetAllDisqualificationRequestsViewModel>>(disqualificationrequestViewModel, validFilter.PageNumber, validFilter.PageSize, count);
+            return new PagedResponse<IEnumerable<GetAllDisqualificationRequestsViewModel>>(disqualificationrequestViewModel, request.pageNumber, request.pageSize, count);
         }
     }
 }

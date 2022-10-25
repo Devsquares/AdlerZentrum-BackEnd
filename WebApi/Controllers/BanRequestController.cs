@@ -8,20 +8,9 @@ namespace WebApi.Controllers
     {
         // GET: api/<controller>
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] GetAllBanRequestsParameter filter)
+        public async Task<IActionResult> Get([FromQuery] GetAllBanRequestsQuery query)
         {
-
-            return Ok(await Mediator.Send(new GetAllBanRequestsQuery() {
-                PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber,
-                FilterArray = filter.FilterArray,
-                FilterRange = filter.FilterRange,
-                FilterSearch = filter.FilterSearch,
-                FilterValue = filter.FilterValue,
-                SortBy = filter.SortBy,
-                SortType = filter.SortType,
-                NoPaging = filter.NoPaging
-            }));
+            return Ok(await Mediator.Send(query));
         }
 
         [HttpGet("GetAllNewRequests")]
@@ -46,7 +35,7 @@ namespace WebApi.Controllers
         // POST api/<controller>
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
-        
+
         public async Task<IActionResult> Post(CreateBanRequestCommand command)
         {
             return Ok(await Mediator.Send(command));
@@ -62,7 +51,7 @@ namespace WebApi.Controllers
                 return BadRequest();
             }
             return Ok(await Mediator.Send(command));
-        } 
+        }
 
     }
 }

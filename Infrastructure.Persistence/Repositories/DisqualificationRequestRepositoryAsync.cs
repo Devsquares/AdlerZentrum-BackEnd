@@ -52,6 +52,38 @@ namespace Infrastructure.Persistence.Repositories
                     .AsNoTracking()
                     .ToListAsync();
         }
+
+        public async Task<IReadOnlyList<DisqualificationRequest>> GetAll(int pageNumber, int pageSize, int? status)
+        {
+            var disqualificationrequests = new List<DisqualificationRequest>();
+            if (status == null)
+            {
+                disqualificationrequests = await _disqualificationrequests
+                                .Where(x => (status == null ? true : x.DisqualificationRequestStatus == (int)status))
+                                .Include(x => x.Student)
+                                .OrderBy(x => x.DisqualificationRequestStatus)
+                                .Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+            }
+            else
+            {
+                disqualificationrequests = await _disqualificationrequests
+                                .Where(x => (status == null ? true : x.DisqualificationRequestStatus == (int)status))
+                                .Include(x => x.Student).Skip((pageNumber - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync();
+            }
+
+
+            return disqualificationrequests;
+        }
+
+        public int GetAllCount(int? status)
+        {
+
+            return _disqualificationrequests.Where(x => (status == null ? true : x.DisqualificationRequestStatus == (int)status)).Count();
+        }
     }
 
 }

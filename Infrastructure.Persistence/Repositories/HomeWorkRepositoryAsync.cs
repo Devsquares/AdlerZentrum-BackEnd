@@ -17,16 +17,47 @@ namespace Infrastructure.Persistence.Repositories
             homework = dbContext.Set<Homework>();
         }
 
-        public ICollection<Homework> GetAllBounsRequests()
+        public ICollection<Homework> GetAllBounsRequests(int pageNumber, int pageSize, int? status)
+        {
+            var homeworks = new List<Homework>();
+            if (status == null)
+            {
+                homeworks = homework
+                               .Include(x => x.Teacher)
+                               .Include(x => x.LessonInstance)
+                               .Include(x => x.GroupInstance)
+                               .Include(x => x.GroupInstance.GroupDefinition)
+                               .Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+                               .Where(x => x.BonusPoints > 0 && (status == null ? true : x.BonusPointsStatus == (int)status))
+                               .OrderBy(x => x.BonusPointsStatus)
+                               .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            }
+            else
+            {
+                homeworks = homework
+                               .Include(x => x.Teacher)
+                               .Include(x => x.LessonInstance)
+                               .Include(x => x.GroupInstance)
+                               .Include(x => x.GroupInstance.GroupDefinition)
+                               .Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+                               .Where(x => x.BonusPoints > 0 && (status == null ? true : x.BonusPointsStatus == (int)status))
+                               .Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            }
+
+            return homeworks;
+        }
+
+        public int GetAllBounsRequestsCount(int? status)
         {
             return homework
-            .Include(x => x.Teacher)
-            .Include(x => x.LessonInstance)
-            .Include(x => x.GroupInstance)
-            .Include(x => x.GroupInstance.GroupDefinition)
-            .Include(x => x.GroupInstance.GroupDefinition.Sublevel)
-            .Where(x => x.BonusPointsStatus == (int)BonusPointsStatusEnum.New && x.BonusPoints > 0).ToList();
+                    .Include(x => x.Teacher)
+                    .Include(x => x.LessonInstance)
+                    .Include(x => x.GroupInstance)
+                    .Include(x => x.GroupInstance.GroupDefinition)
+                    .Include(x => x.GroupInstance.GroupDefinition.Sublevel)
+                    .Where(x => x.BonusPoints > 0 && (status == null ? true : x.BonusPointsStatus == (int)status)).Count();
         }
+
         public Homework GetByLessonInstance(int LessonInstanceId)
         {
             return homework.Where(x => x.LessonInstanceId == LessonInstanceId).FirstOrDefault();

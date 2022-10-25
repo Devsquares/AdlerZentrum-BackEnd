@@ -62,9 +62,9 @@ namespace WebApi.Controllers
 
         [HttpGet("GetBounsRequests")]
         // [Authorize(Roles = "Supervisor")]
-        public async Task<IActionResult> GetBounsRequests()
+        public async Task<IActionResult> GetBounsRequests([FromQuery]GetHomeworkBounsRequestsQuery query)
         {
-            return Ok(await Mediator.Send(new GetHomeworkBounsRequestsQuery()));
+            return Ok(await Mediator.Send(query));
         }
 
 

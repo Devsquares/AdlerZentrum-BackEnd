@@ -6,6 +6,12 @@ namespace Application.Wrappers
 {
     public class PagedResponse<T> : Response<T>
     {
+        PagedResponse()
+        {
+            PageNumber = 1;
+            PageSize = 5;
+        }
+        
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int Count { get; set; }

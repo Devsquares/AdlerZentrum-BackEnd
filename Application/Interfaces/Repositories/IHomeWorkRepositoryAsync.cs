@@ -6,7 +6,9 @@ namespace Application.Interfaces.Repositories
 {
     public interface IHomeWorkRepositoryAsync : IGenericRepositoryAsync<Homework>
     {
-        ICollection<Homework> GetAllBounsRequests();
+        ICollection<Homework> GetAllBounsRequests(int pageNumber, int pageSize, int? status);
+
+        int GetAllBounsRequestsCount(int? status);
         Homework GetByLessonInstance(int LessonInstanceId);
     }
 }

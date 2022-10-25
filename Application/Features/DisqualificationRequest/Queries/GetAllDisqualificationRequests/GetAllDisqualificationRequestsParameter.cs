@@ -7,5 +7,6 @@ namespace Application.Features
 {
     public class GetAllDisqualificationRequestsParameter : FilteredRequestParameter
     {
+        int? status;
     }
 }

@@ -143,7 +143,9 @@ namespace Application.Mappings
             CreateMap<GetAllGroupConditionsQuery, FilteredRequestParameter>();
             CreateMap<GetAllBanRequestsQuery, GetAllBanRequestsParameter>().ReverseMap();
             CreateMap<BanRequest, CreateBanRequestCommand>().ReverseMap();
-            CreateMap<BanRequest, GetAllBanRequestsViewModel>().ReverseMap();
+            CreateMap<BanRequest, GetAllBanRequestsViewModel>()
+                 .ForMember(destination => destination.status, opts => opts.MapFrom(source => source.BanRequestStatus))
+                 .ReverseMap();
             CreateMap<TestInstance, TestInstanceViewModel>().ReverseMap();
             CreateMap<DisqualificationRequest, GetAllDisqualificationRequestsViewModel>().ReverseMap();
             CreateMap<GetAllDisqualificationRequestsQuery, GetAllDisqualificationRequestsParameter>().ReverseMap();
