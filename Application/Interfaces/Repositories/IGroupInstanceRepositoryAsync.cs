@@ -19,8 +19,7 @@ namespace Application.Interfaces.Repositories
         Task<GroupInstance> GetByIdPendingorCompleteAsync(int id);
         Task<List<GroupInstance>> GetByGroupDefinitionAndGroupInstanceAsync(int groupDefinitionId, int? groupinstanceId = null);
         Task<List<GroupInstance>> GetByGroupDefinitionAndGroupInstanceWithoutSublevelAsync(int groupDefinitionId, int? groupinstanceId = null);
-        
-        IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter, List<int> status, out int count);
+        public IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(int pageNumber, int pageSize, int? groupDefinationId, List<int> status, out int count);
         int? IsOtherActiveGroupInTheGroupDef(int groupDefinitionId);
     }
 }

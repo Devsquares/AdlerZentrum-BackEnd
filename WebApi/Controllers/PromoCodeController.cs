@@ -21,7 +21,13 @@ namespace WebApi.Controllers
         // }
 
         [HttpPost("CreatePromoCodeInstance")]
-        public async Task<IActionResult> CheckPromoCode([FromQuery] CreatePromoCodeInstanceCommand command)
+        public async Task<IActionResult> CreatePromoCodeInstance([FromQuery] CreatePromoCodeInstanceCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpDelete("DeletePromoCodeInstance")]
+        public async Task<IActionResult> DeletePromoCodeInstance([FromQuery] DeletePromoCodeInstanceByIdCommand command)
         {
             return Ok(await Mediator.Send(command));
         }
@@ -29,7 +35,7 @@ namespace WebApi.Controllers
         [HttpGet("GetAllPromocodeInstances")]
         public async Task<IActionResult> GetAllPromocodeInstances([FromQuery] GetAllPromoCodeInstancesQuery command)
         {
-            if(command.PageNumber == 0)
+            if (command.PageNumber == 0)
             {
                 command.PageNumber = 1;
             }
@@ -51,10 +57,16 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetAllPromoCode([FromQuery] GetAllPromoCodesQuery command)
         {
             return Ok(await Mediator.Send(command));
-        } 
+        }
 
         [HttpPost("CreatePromoCode")]
         public async Task<IActionResult> CreatePromoCode([FromQuery] CreatePromoCodeCommand command)
+        {
+            return Ok(await Mediator.Send(command));
+        }
+
+        [HttpDelete("DeletePromoCode")]
+        public async Task<IActionResult> DeletePromoCode([FromQuery] DeletePromoCodeByIdCommand command)
         {
             return Ok(await Mediator.Send(command));
         }

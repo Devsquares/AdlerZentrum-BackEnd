@@ -13,20 +13,14 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.GroupInstance.Queries
 {
-    public class GetAllGroupInstancesQuery : IRequest<FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>>
+    public class GetAllGroupInstancesQuery : IRequest<PagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public Dictionary<string, string> FilterValue { get; set; }
-        public Dictionary<string, string> FilterRange { get; set; }
-        public Dictionary<string, List<string>> FilterArray { get; set; }
-        public Dictionary<string, string> FilterSearch { get; set; }
-        public string SortBy { get; set; }
-        public string SortType { get; set; }
-        public bool NoPaging { get; set; }
+        public int? groupDefinationId { get; set; }
         public List<int> Status { get; set; }
     }
-    public class GetAllGroupInstancesQueryHandler : IRequestHandler<GetAllGroupInstancesQuery, FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>>
+    public class GetAllGroupInstancesQueryHandler : IRequestHandler<GetAllGroupInstancesQuery, PagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>>
     {
         private readonly IGroupInstanceRepositoryAsync _groupInstanceRepositoryAsync;
         private readonly IMapper _mapper;
@@ -36,14 +30,15 @@ namespace Application.DTOs.GroupInstance.Queries
             _mapper = mapper;
         }
 
-        public async Task<FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>> Handle(GetAllGroupInstancesQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>> Handle(GetAllGroupInstancesQuery request, CancellationToken cancellationToken)
         {
-            var validFilter = _mapper.Map<FilteredRequestParameter>(request);
+            if (request.PageNumber == 0) request.PageNumber = 1;
+            if (request.PageSize == 0) request.PageSize = 10;
             IReadOnlyList<Domain.Entities.GroupInstance> groupInstances;
             int count = 0;
-            groupInstances = _groupInstanceRepositoryAsync.GetPagedGroupInstanceReponseAsync(validFilter, request.Status, out count);
+            groupInstances = _groupInstanceRepositoryAsync.GetPagedGroupInstanceReponseAsync(request.PageNumber, request.PageSize, request.groupDefinationId, request.Status, out count);
             var userViewModel = _mapper.Map<IEnumerable<GetAllGroupInstancesViewModel>>(groupInstances);
-            return new FilteredPagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>(userViewModel, validFilter, count);
+            return new PagedResponse<IEnumerable<GetAllGroupInstancesViewModel>>(userViewModel, request.PageNumber, request.PageSize, count);
         }
     }
 }

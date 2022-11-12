@@ -48,36 +48,16 @@ namespace Infrastructure.Persistence.Repositories
             return groupInstanceStudents.Where(x => x.StudentId == userId && x.GroupInstance.Status == (int)GroupInstanceStatusEnum.Running && x.IsDefault == true).FirstOrDefault()?.GroupInstanceId;
         }
 
-        public IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(FilteredRequestParameter filteredRequestParameter, List<int> status, out int count)
+        public IReadOnlyList<GroupInstance> GetPagedGroupInstanceReponseAsync(int pageNumber, int pageSize, int? groupDefinationId, List<int> status, out int count)
         {
-            bool noPaging = filteredRequestParameter.NoPaging;
-            if (noPaging)
-            {
-                filteredRequestParameter.PageNumber = 1;
-                filteredRequestParameter.PageSize = FilteredRequestParameter.MAX_ELEMENTS;
-            }
-            int pageNumber = filteredRequestParameter.PageNumber;
-            int pageSize = filteredRequestParameter.PageSize;
 
-            string sortBy = filteredRequestParameter.SortBy;
-            if (sortBy == null)
-            {
-                sortBy = "ID";
-            }
-            string sortType = filteredRequestParameter.SortType;
-            bool sortASC = true;
-
-            if (sortType.ToUpper().Equals("DESC"))
-            {
-                sortASC = false;
-            }
             count = groupInstances
                 .Include(x => x.GroupDefinition)
                 .Include(x => x.GroupDefinition.GroupCondition)
                 .Include(x => x.GroupDefinition.TimeSlot)
                 .Include(x => x.GroupDefinition.Sublevel)
                 .Include(x => x.GroupDefinition.TimeSlot.TimeSlotDetails)
-                .Where(IsMatchedExpression(filteredRequestParameter))
+                .Where(x => (groupDefinationId != null ? x.GroupDefinitionId == groupDefinationId : true))
                 .Where(x => (status != null && status.Count > 0 ? status.Contains(x.Status.Value) : true)).Count();
             return groupInstances
                 .Include(x => x.GroupDefinition)
@@ -85,14 +65,12 @@ namespace Infrastructure.Persistence.Repositories
                 .Include(x => x.GroupDefinition.TimeSlot)
                 .Include(x => x.GroupDefinition.Sublevel)
                 .Include(x => x.GroupDefinition.TimeSlot.TimeSlotDetails)
-                .Where(IsMatchedExpression(filteredRequestParameter))
+                  .Where(x => (groupDefinationId != null ? x.GroupDefinitionId == groupDefinationId : true))
                 .Where(x => (status != null && status.Count > 0 ? status.Contains(x.Status.Value) : true))
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    //.OrderBy(sortBy, sortASC)
                     .AsNoTracking()
                     .ToList();
-
         }
 
         public IReadOnlyList<GroupInstanceStudents> GetStudents(int groupId)

@@ -19,21 +19,9 @@ namespace WebApi.Controllers
     {
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromQuery] GroupInstanceRequestParameter filter)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllGroupInstancesQuery query)
         {
-            return Ok(await Mediator.Send(new GetAllGroupInstancesQuery()
-            {
-                PageSize = filter.PageSize,
-                PageNumber = filter.PageNumber,
-                FilterArray = filter.FilterArray,
-                FilterRange = filter.FilterRange,
-                FilterSearch = filter.FilterSearch,
-                FilterValue = filter.FilterValue,
-                SortBy = filter.SortBy,
-                SortType = filter.SortType,
-                NoPaging = filter.NoPaging,
-                Status = filter.Status
-            }));
+            return Ok(await Mediator.Send(query));
         }
 
         [HttpGet("GetByTeacher")]

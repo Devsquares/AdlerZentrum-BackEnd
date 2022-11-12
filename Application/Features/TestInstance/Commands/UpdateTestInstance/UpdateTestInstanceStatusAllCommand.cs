@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features
 {
-    public class UpdateTestInstanceStatusAllCommand : IRequest<Response<bool>>
+    public class  UpdateTestInstanceStatusAllCommand : IRequest<Response<bool>>
     {
         public int GroupInstanceId { get; set; }
         public int TestId { get; set; }

@@ -42,9 +42,8 @@ namespace Application.DTOs
                 Reflection.CopyProperties(command, groupCondition);
                 await _groupConditionRepository.AddAsync(groupCondition);
                 CreateDependenciesGroupCondition _createDependenciesGroupCondition = new CreateDependenciesGroupCondition(_groupConditionDetailsRepository, _groupConditionPromoCodeRepository);
-                _createDependenciesGroupCondition.Create(groupCondition.Id, command.PromoCodes);
+                await _createDependenciesGroupCondition.Create(groupCondition.Id, command.PromoCodes);
                 return new Response<int>(groupCondition.Id);
-
             }
         }
     }

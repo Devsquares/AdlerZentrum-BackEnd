@@ -1,15 +1,11 @@
 ﻿using Application.Exceptions;
-using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Application.Wrappers;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Level.Commands
+namespace Application.DTOs
 {
     public class DeletePromoCodeByIdCommand : IRequest<Response<int>>
     {
@@ -23,10 +19,10 @@ namespace Application.DTOs.Level.Commands
             }
             public async Task<Response<int>> Handle(DeletePromoCodeByIdCommand command, CancellationToken cancellationToken)
             {
-                var Level = await _promoCodeRepository.GetByIdAsync(command.Id);
-                if (Level == null) throw new ApiException($"PromoCode Not Found.");
-                await _promoCodeRepository.DeleteAsync(Level);
-                return new Response<int>(Level.Id);
+                var promoCode = await _promoCodeRepository.GetByIdAsync(command.Id);
+                if (promoCode == null) throw new ApiException($"PromoCode Not Found.");
+                await _promoCodeRepository.DeleteAsync(promoCode);
+                return new Response<int>(promoCode.Id);
             }
         }
     }

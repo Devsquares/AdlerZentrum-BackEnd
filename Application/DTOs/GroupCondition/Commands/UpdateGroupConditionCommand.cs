@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Application.DTOs
 {
@@ -58,7 +59,7 @@ namespace Application.DTOs
                     await _groupConditionDetailsRepository.DeleteBulkAsync(deletedGroupConditionDetail);
                     // add new ones
                     CreateDependenciesGroupCondition _createDependenciesGroupCondition = new CreateDependenciesGroupCondition(_groupConditionDetailsRepository, _groupConditionPromoCodeRepository);
-                    _createDependenciesGroupCondition.Create(GroupCondition.Id, command.PromoCodes);
+                    await _createDependenciesGroupCondition.Create(GroupCondition.Id, command.PromoCodes);
                     await _GroupConditionRepositoryAsync.UpdateAsync(GroupCondition);
                     return new Response<int>(GroupCondition.Id);
                 }

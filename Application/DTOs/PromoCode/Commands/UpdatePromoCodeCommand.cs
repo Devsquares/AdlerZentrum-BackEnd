@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Level.Commands
+namespace Application.DTOs
 {
     public class UpdatePromoCodeCommand : IRequest<Response<int>>
     {
